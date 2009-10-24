@@ -5,7 +5,6 @@ using AlmWitt.Web.ResourceManagement.ContentFiltering;
 using AlmWitt.Web.ResourceManagement.UnitTests.TestObjects;
 
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace AlmWitt.Web.ResourceManagement.UnitTests
 {

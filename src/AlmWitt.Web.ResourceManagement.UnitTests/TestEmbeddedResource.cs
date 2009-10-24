@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace AlmWitt.Web.ResourceManagement.UnitTests
 {
