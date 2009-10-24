@@ -1,0 +1,115 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AlmWitt.Web.ResourceManagement</RootNamespace>
+    <AssemblyName>AlmWitt.Web.ResourceManagement</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\AlmWitt.Web.ResourceManagement.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\AlmWitt.Web.ResourceManagement.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Depends\Microsoft.AjaxExtensions\1.0.61025\System.Web.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BuildSupport\ILogger.cs" />
+    <Compile Include="BuildSupport\MSBuild\PreConsolidateResources.cs" />
+    <Compile Include="BuildSupport\NullLogger.cs" />
+    <Compile Include="CachingResourceCollector.cs" />
+    <Compile Include="CompositeResourceFilter.cs" />
+    <Compile Include="CompositeResourceFinder.cs" />
+    <Compile Include="Configuration\AssemblyElement.cs" />
+    <Compile Include="Configuration\AssemblyElementCollection.cs" />
+    <Compile Include="Configuration\ClientScriptGroupElement.cs" />
+    <Compile Include="Configuration\ClientScriptGroupElementCollection.cs" />
+    <Compile Include="Configuration\ConfigurationHelper.cs" />
+    <Compile Include="Configuration\CssGroupElement.cs" />
+    <Compile Include="Configuration\CssGroupElementCollection.cs" />
+    <Compile Include="Configuration\ResourceGroupElement.cs" />
+    <Compile Include="Configuration\ResourceGroupElementCollection.cs" />
+    <Compile Include="Configuration\ResourceMatchElement.cs" />
+    <Compile Include="Configuration\ResourceMatchElementCollection.cs" />
+    <Compile Include="Configuration\UrlType.cs" />
+    <Compile Include="BuildSupport\PreConsolidateCommand.cs" />
+    <Compile Include="ConsolidatedResource.cs" />
+    <Compile Include="ContentFiltering\JSMin\JavaScriptMinifier.cs" />
+    <Compile Include="ContentFiltering\IContentFilter.cs" />
+    <Compile Include="ContentFiltering\JSMinFilter.cs" />
+    <Compile Include="ContentFiltering\NullContentFilter.cs" />
+    <Compile Include="Controls\ClientScriptInclude.cs" />
+    <Compile Include="Controls\CssInclude.cs" />
+    <Compile Include="Controls\WebResourceInclude.cs" />
+    <Compile Include="IResourceIncluderFactory.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="WebForms\ScriptManagerResolver.cs" />
+    <Compile Include="EmbeddedResource.cs" />
+    <Compile Include="EmbeddedResourceFinder.cs" />
+    <Compile Include="FileResourceFinder.cs" />
+    <Compile Include="IResourceIncluder.cs" />
+    <Compile Include="IRequestContext.cs" />
+    <Compile Include="IResourceCollector.cs" />
+    <Compile Include="Configuration\ResourceManagementConfiguration.cs" />
+    <Compile Include="IResourceFilter.cs" />
+    <Compile Include="IResourceFinder.cs" />
+    <Compile Include="ResourceFilters.cs" />
+    <Compile Include="ResourceHttpHandler.cs" />
+    <Compile Include="WebForms\CssInclude.cs" />
+    <Compile Include="WebForms\ClientScriptInclude.cs" />
+    <Compile Include="WebForms\WebFormsCssIncluder.cs" />
+    <Compile Include="WebForms\WebFormsIncluderBase.cs" />
+    <Compile Include="WebForms\WebFormsIncluderFactory.cs" />
+    <Compile Include="WebForms\WebResourceIncludeControl.cs" />
+    <Compile Include="IResource.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FileResource.cs" />
+    <Compile Include="ResourceCollection.cs" />
+    <Compile Include="ResourceHandler.cs" />
+    <Compile Include="ResourceFinderFactory.cs" />
+    <Compile Include="ResourceType.cs" />
+    <Compile Include="VirtualPathResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebForms\WebFormsAjaxScriptIncluder.cs" />
+    <Compile Include="WebForms\WebFormsClientScriptIncluder.cs" />
+    <Compile Include="WebResourceManager.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
