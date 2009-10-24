@@ -1,0 +1,2 @@
+﻿function excludedFunction() { alert('excluded');}
+
