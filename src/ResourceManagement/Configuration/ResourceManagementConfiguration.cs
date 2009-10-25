@@ -15,6 +15,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
         private string _rootFilePath;
 		private static readonly ResourceManagementConfiguration _defaultSection = new ResourceManagementConfiguration();
 		private static ResourceManagementConfiguration _config = null;
+	    private static IConfigLoader _configLoader = new DefaultConfigLoader();
 
 		/// <summary>
 		/// Gets the current configuration.
@@ -25,11 +26,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			{
 				if(_config == null)
 				{
-					_config = WebConfigurationManager.GetSection(SECTION_NAME) as ResourceManagementConfiguration;
-					if (_config == null)
-						_config = _defaultSection;
+				    _config = _configLoader.GetSection<ResourceManagementConfiguration>(SECTION_NAME) ?? _defaultSection;
 				}
-				
 
 				return _config;
 			}
@@ -38,6 +36,22 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				_config = value;
 			}
 		}
+
+	    /// <summary>
+	    /// Gets or sets the <see cref="IConfigLoader"/> that is used by the resource consolidation framework
+	    /// to load config settings.
+	    /// </summary>
+        public static IConfigLoader ConfigLoader
+	    {
+	        get
+	        {
+	            return _configLoader;
+	        }
+            set
+            {
+                _configLoader = value;
+            }
+	    }
 		
 		/// <summary>
 		/// Opens an instance of the configuration to be edited.
@@ -45,11 +59,9 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <param name="configFilePath">The physical path to the config file.</param>
 		/// <param name="configuration">The <see cref="Configuration"/> object used to manage the configuration.</param>
 		/// <returns></returns>
-		public static ResourceManagementConfiguration OpenForEditing(string configFilePath, out System.Configuration.Configuration configuration)
+		public static ResourceManagementConfiguration OpenForEditing(out System.Configuration.Configuration configuration)
 		{
-			configuration = ConfigurationHelper.OpenWebConfiguration(configFilePath);
-
-			return ConfigurationHelper.OpenForEditing<ResourceManagementConfiguration>(SECTION_NAME, configuration);
+		    return _configLoader.GetSectionForEditing<ResourceManagementConfiguration>(SECTION_NAME, out configuration);
 		}
 
         /// <summary>

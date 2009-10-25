@@ -9,7 +9,7 @@
     <resource:ClientScriptInclude ScriptUrl="~/Script3.js" runat="server" />
     <resource:ClientScriptInclude ScriptUrl="~/Secondary1.js" runat="server" />
     <resource:ClientScriptInclude ScriptUrl="~/ExcludedScript.js" runat="server" />
-    <resource:ClientScriptInclude AssemblyName="TestWebLib" ResourceName="TestWebLib.EmbeddedScript1.js" runat="server" />
+    <resource:ClientScriptInclude AssemblyName="WebsiteLib" ResourceName="WebsiteLib.EmbeddedScript1.js" runat="server" />
     <resource:CssInclude StylesheetUrl="~/MyStyles.css" runat="server" />
 </head>
 <body>

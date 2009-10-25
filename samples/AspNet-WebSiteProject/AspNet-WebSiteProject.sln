@@ -1,0 +1,110 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteLib", "WebsiteLib\WebsiteLib.csproj", "{F853FC33-CE3C-4501-8177-4BF2EF557826}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Website", "Website", "{95E65F42-B642-4252-9B3A-FE00836F662D}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
+		TargetFramework = "3.5"
+		ProjectReferences = "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}|AlmWitt.Web.ResourceManagement.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/Website"
+		Debug.AspNetCompiler.PhysicalPath = "Website\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Website\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Website"
+		Release.AspNetCompiler.PhysicalPath = "Website\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Website\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "49813"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResourceManagement", "ResourceManagement", "{CE45046E-30AF-4FC2-BEC7-BCEFCD4A2CE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement", "..\..\src\ResourceManagement\ResourceManagement.csproj", "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{907AA67C-3E35-4B09-8591-E59ACCABE93D}"
+	ProjectSection(SolutionItems) = preProject
+		WebDeploymentProject\TestWeb_Deployment.wdproj = WebDeploymentProject\TestWeb_Deployment.wdproj
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs03.codeplex.com/
+		SccProjectUniqueName0 = ..\\..\\src\\ResourceManagement\\ResourceManagement.csproj
+		SccProjectTopLevelParentUniqueName0 = AspNet-WebSiteProject.sln
+		SccProjectName0 = ../../src/ResourceManagement
+		SccAuxPath0 = https://tfs03.codeplex.com
+		SccLocalPath0 = ..\\..\\src\\ResourceManagement
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccWebProject1 = true
+		SccProjectUniqueName1 = Website
+		SccProjectName1 = Website
+		SccAuxPath1 = https://tfs03.codeplex.com
+		SccLocalPath1 = Website
+		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectEnlistmentChoice1 = 2
+		SccProjectUniqueName2 = WebsiteLib\\WebsiteLib.csproj
+		SccProjectName2 = WebsiteLib
+		SccAuxPath2 = https://tfs03.codeplex.com
+		SccLocalPath2 = WebsiteLib
+		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|.NET = Debug|.NET
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Release|.NET = Release|.NET
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Release|.NET.ActiveCfg = Release|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Debug|.NET.ActiveCfg = Debug|.NET
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Debug|.NET.Build.0 = Debug|.NET
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Debug|Any CPU.ActiveCfg = Debug|.NET
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Debug|Mixed Platforms.ActiveCfg = Debug|.NET
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Debug|Mixed Platforms.Build.0 = Debug|.NET
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Release|.NET.ActiveCfg = Debug|.NET
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Release|.NET.Build.0 = Debug|.NET
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Release|Any CPU.ActiveCfg = Debug|.NET
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Release|Mixed Platforms.ActiveCfg = Debug|.NET
+		{95E65F42-B642-4252-9B3A-FE00836F662D}.Release|Mixed Platforms.Build.0 = Debug|.NET
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Release|.NET.ActiveCfg = Release|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A} = {CE45046E-30AF-4FC2-BEC7-BCEFCD4A2CE1}
+	EndGlobalSection
+EndGlobal

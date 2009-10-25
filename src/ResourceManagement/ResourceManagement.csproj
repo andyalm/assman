@@ -67,6 +67,7 @@
     <Compile Include="Configuration\CssGroupElementCollection.cs" />
     <Compile Include="Configuration\CustomFinderElement.cs" />
     <Compile Include="Configuration\CustomFinderElementCollection.cs" />
+    <Compile Include="Configuration\MappedConfigLoader.cs" />
     <Compile Include="Configuration\ResourceGroupElement.cs" />
     <Compile Include="Configuration\ResourceGroupElementCollection.cs" />
     <Compile Include="Configuration\ResourceMatchElement.cs" />
@@ -78,6 +79,8 @@
     <Compile Include="ContentFiltering\IContentFilter.cs" />
     <Compile Include="ContentFiltering\JSMinFilter.cs" />
     <Compile Include="ContentFiltering\NullContentFilter.cs" />
+    <Compile Include="Configuration\DefaultConfigLoader.cs" />
+    <Compile Include="Configuration\IConfigLoader.cs" />
     <Compile Include="IResourceFinderFactory.cs" />
     <Compile Include="IResourceIncluderFactory.cs" />
     <Compile Include="Util.cs" />

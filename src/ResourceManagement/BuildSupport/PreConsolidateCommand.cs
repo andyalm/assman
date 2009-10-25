@@ -1,5 +1,5 @@
 using System;
-using AlmWitt.Web.ResourceManagement.BuildSupport;
+
 using AlmWitt.Web.ResourceManagement.Configuration;
 
 namespace AlmWitt.Web.ResourceManagement.BuildSupport
@@ -54,19 +54,13 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
         /// <returns></returns>
         public void Execute()
         {
-            _resolver = GetResolver();
-            _finder = ResourceFinderFactory.GetInstance(WebRoot);
             LogMessage("Begin consolidating resources...");
-            ResourceManagementConfiguration configSection = GetConfigSection();
+            ResourceManagementConfiguration configSection = GetConfigSection(WebRoot);
+            _resolver = GetResolver(configSection.RootFilePath);
+            _finder = ResourceFinderFactory.GetInstance(configSection.RootFilePath);
             _finder = configSection.AddCustomFinders(_finder);
-            configSection.ClientScripts.ProcessEach(delegate(ClientScriptGroupElement groupElement, IResourceFilter excludeFilter)
-                                                        {
-                                                            ConsolidateGroup(groupElement, excludeFilter, ".js");
-                                                        });
-            configSection.CssFiles.ProcessEach(delegate(CssGroupElement groupElement, IResourceFilter excludeFilter)
-                                                   {
-                                                       ConsolidateGroup(groupElement, excludeFilter, ".css");
-                                                   });
+            configSection.ClientScripts.ProcessEach((groupElement, excludeFilter) => ConsolidateGroup(groupElement, excludeFilter, ".js"));
+            configSection.CssFiles.ProcessEach((groupElement, excludeFilter) => ConsolidateGroup(groupElement, excludeFilter, ".css"));
             configSection.PreConsolidated = true;
             SaveConfigChanges(configSection);
             LogMessage("End consolidating resources.");
@@ -74,8 +68,8 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
 
         private void ConsolidateGroup(ResourceGroupElement groupElement, IResourceFilter excludeFilter, string extension)
         {
+            var consolidatedResource = groupElement.GetResource(_finder, extension, excludeFilter);
             string consolidatedPath = _resolver.MapPath(groupElement.ConsolidatedUrl);
-            ConsolidatedResource consolidatedResource = groupElement.GetResource(_finder, extension, excludeFilter);
             consolidatedResource.WriteToFile(consolidatedPath);
             LogConsolidation(consolidatedResource, groupElement.ConsolidatedUrl);
         }
@@ -94,9 +88,12 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
             _logger.LogMessage(message);
         }
 
-        private ResourceManagementConfiguration GetConfigSection()
+        private ResourceManagementConfiguration GetConfigSection(string webRoot)
         {
-            ResourceManagementConfiguration configSection = ResourceManagementConfiguration.OpenForEditing(WebRoot, out _config);
+            ResourceManagementConfiguration.ConfigLoader = new MappedConfigLoader(webRoot);
+
+            ResourceManagementConfiguration configSection = ResourceManagementConfiguration.OpenForEditing(out _config);
+            configSection.RootFilePath = webRoot;
             //set this instance of the config section to current so that the components
             //that need to read from configuration can see it.
             ResourceManagementConfiguration.Current = configSection;
@@ -109,9 +106,9 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
             configSection.SaveChanges(_config);
         }
 
-        private VirtualPathResolver GetResolver()
+        private VirtualPathResolver GetResolver(string webRoot)
         {
-            return new VirtualPathResolver(WebRoot);
+            return new VirtualPathResolver(webRoot);
         }
     }
 }

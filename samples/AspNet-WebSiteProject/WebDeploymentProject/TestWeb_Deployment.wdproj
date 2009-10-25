@@ -2,15 +2,15 @@
   Microsoft Visual Studio 2005 Web Deployment Project 
   http://go.microsoft.com/fwlink/?LinkId=55111
 -->
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.60403</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{83BA746A-0A64-4ABF-BC3B-E2C19C144E2F}</ProjectGuid>
-    <SourceWebPhysicalPath>..\TestWeb</SourceWebPhysicalPath>
-    <SourceWebProject>{896255E7-5426-4DF6-8478-7913888D7F2E}|M:\Projects\OpenSource\jscssconsolidate\Tests\TestWeb</SourceWebProject>
+    <SourceWebPhysicalPath>..\Website</SourceWebPhysicalPath>
+    <SourceWebProject>{896255E7-5426-4DF6-8478-7913888D7F2E}|..\Website</SourceWebProject>
     <SourceWebVirtualPath>/TestWeb</SourceWebVirtualPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,17 +30,17 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\AlmWitt.Web.ResourceManagement.csproj">
+    <ProjectReference Include="..\..\..\src\ResourceManagement\ResourceManagement.csproj">
       <Project>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</Project>
       <Name>AlmWitt.Web.ResourceManagement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestWebLib\TestWebLib.csproj">
+    <ProjectReference Include="..\WebsiteLib\WebsiteLib.csproj">
       <Project>{F853FC33-CE3C-4501-8177-4BF2EF557826}</Project>
       <Name>TestWebLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WebDeployment\v8.0\Microsoft.WebDeployment.targets" />
-  <UsingTask TaskName="PreConsolidateResources" AssemblyFile="..\TestWeb\Bin\AlmWitt.Web.ResourceManagement.dll"/>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WebDeployment\v9.0\Microsoft.WebDeployment.targets" />
+  <UsingTask TaskName="PreConsolidateResources" AssemblyFile="..\Website\Bin\AlmWitt.Web.ResourceManagement.dll"/>
   <Target Name="AfterBuild">
     <PreConsolidateResources WebRoot="$(OutputPath)" />
   </Target>
