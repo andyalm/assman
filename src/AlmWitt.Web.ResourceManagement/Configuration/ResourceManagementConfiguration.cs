@@ -11,7 +11,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 	public class ResourceManagementConfiguration : ConfigurationSection
 	{
 		private const string SECTION_NAME = "almWitt.web.resourceManagement";
-		private static readonly ResourceManagementConfiguration defaultSection = new ResourceManagementConfiguration();
+		private static readonly ResourceManagementConfiguration _defaultSection = new ResourceManagementConfiguration();
 		private static ResourceManagementConfiguration _config = null;
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				{
 					_config = WebConfigurationManager.GetSection(SECTION_NAME) as ResourceManagementConfiguration;
 					if (_config == null)
-						_config = defaultSection;
+						_config = _defaultSection;
 				}
 				
 
@@ -109,13 +109,30 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
                 return assemblies;
             }
 	    }
+
+        [ConfigurationProperty(PropertyNames.CustomResourceFinders, IsRequired = false)]
+        [ConfigurationCollection(typeof(CustomFinderElementCollection), AddItemName = "add", RemoveItemName = "remove", ClearItemsName = "clear")]
+        public CustomFinderElementCollection CustomResourceFinders
+        {
+            get
+            {
+                var finders = this[PropertyNames.CustomResourceFinders] as CustomFinderElementCollection;
+                if (finders == null)
+                {
+                    finders = new CustomFinderElementCollection();
+                    this[PropertyNames.CustomResourceFinders] = finders;
+                }
+
+                return finders;
+            }
+        }
         
         /// <summary>
         /// Adds the configured assemblies to the finder so that embedded resources will be found in those assemblies.
         /// </summary>
         /// <param name="finder"></param>
         /// <returns></returns>
-        public IResourceFinder AddAssembliesToFinder(IResourceFinder finder)
+        public IResourceFinder AddCustomFinders(IResourceFinder finder)
         {
             CompositeResourceFinder compositeFinder = new CompositeResourceFinder();
             compositeFinder.AddFinder(finder);
@@ -124,6 +141,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
             {
                 compositeFinder.AddFinder(ResourceFinderFactory.GetInstance(assembly));
             }
+
+            compositeFinder.AddFinders(CustomResourceFinders.GetFinders());
 
             return compositeFinder;
         }
@@ -176,6 +195,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			public const string CssFiles = "cssFiles";
 			public const string PreConsolidated = "preConsolidated";
 		    public const string Assemblies = "assemblies";
+            public const string CustomResourceFinders = "customResourceFinders";
 		}
 	}
 }

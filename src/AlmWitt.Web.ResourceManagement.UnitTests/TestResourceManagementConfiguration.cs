@@ -1,6 +1,7 @@
 using System;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
+using AlmWitt.Web.ResourceManagement.UnitTests.TestObjects;
 
 using NUnit.Framework;
 
@@ -95,15 +96,38 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
 		}
 
         [Test]
-        public void AddAssembliesAllowsEmbeddedResourcesToBeFound()
+        public void AddCustomFindersAllowsEmbeddedResourcesToBeFound()
         {
             _instance.Assemblies.Add(this.GetType().Assembly.GetName().Name);
             IResourceFinder finder = ResourceFinderFactory.Null;
-            finder = _instance.AddAssembliesToFinder(finder);
+            finder = _instance.AddCustomFinders(finder);
 
             ResourceCollection resources = finder.FindResources(".css");
             Assert.That(resources, Is.Not.Null);
             Assert.That(resources.Count, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void AddCustomFindersAllowsCustomFindersToBeFound()
+        {
+            _instance.CustomResourceFinders.AddFinderType<MyCustomResourceFinder>();
+            IResourceFinder finder = ResourceFinderFactory.Null;
+            finder = _instance.AddCustomFinders(finder);
+
+            ResourceCollection resources = finder.FindResources(".js");
+            Assert.IsNotNull(resources);
+            Assert.IsTrue(resources.Count > 0, "Resource count should be greater than zero.");
+        }
+
+        private class MyCustomResourceFinder : IResourceFinder
+        {
+            public ResourceCollection FindResources(string extension)
+            {
+                return new ResourceCollection
+                {
+                    new StubResource("customcontent")
+                };
+            }
         }
 	}
 }

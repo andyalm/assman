@@ -25,7 +25,7 @@ namespace AlmWitt.Web.ResourceManagement
 			string basePath = HttpContext.Current.Server.MapPath("~");
             IResourceFinder finder = ResourceFinderFactory.GetInstance(basePath);
 			ResourceManagementConfiguration config = ResourceManagementConfiguration.Current;
-		    finder = config.AddAssembliesToFinder(finder);
+		    finder = config.AddCustomFinders(finder);
 			DateTime minLastModified = ConfigurationHelper.GetLastModified(config);
 
 			_handlerRegistry = new Dictionary<string,ResourceHandler>();

@@ -58,7 +58,7 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
             _finder = ResourceFinderFactory.GetInstance(WebRoot);
             LogMessage("Begin consolidating resources...");
             ResourceManagementConfiguration configSection = GetConfigSection();
-            _finder = configSection.AddAssembliesToFinder(_finder);
+            _finder = configSection.AddCustomFinders(_finder);
             configSection.ClientScripts.ProcessEach(delegate(ClientScriptGroupElement groupElement, IResourceFilter excludeFilter)
                                                         {
                                                             ConsolidateGroup(groupElement, excludeFilter, ".js");

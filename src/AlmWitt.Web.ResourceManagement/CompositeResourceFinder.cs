@@ -23,5 +23,10 @@ namespace AlmWitt.Web.ResourceManagement
         {
             _finders.Add(finder);
         }
+
+        public void AddFinders(IEnumerable<IResourceFinder> finders)
+        {
+            _finders.AddRange(finders);
+        }
     }
 }

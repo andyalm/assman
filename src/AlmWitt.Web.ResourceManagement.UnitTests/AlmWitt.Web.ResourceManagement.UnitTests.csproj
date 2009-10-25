@@ -63,11 +63,13 @@
     <Compile Include="TestCachingResourceCollector.cs" />
     <Compile Include="TestCompositeResourceFilter.cs" />
     <Compile Include="TestConsolidatedResource.cs" />
+    <Compile Include="TestCustomFinderElement.cs" />
     <Compile Include="TestEmbeddedResource.cs" />
     <Compile Include="TestEmbeddedResourceFinder.cs" />
     <Compile Include="TestObjects\StubRequestContext.cs" />
     <Compile Include="TestObjects\StubResourceCollector.cs" />
     <Compile Include="TestObjects\StubResourceFinder.cs" />
+    <Compile Include="TestObjects\StubResourceFinderFactory.cs" />
     <Compile Include="TestObjects\TempDirectoryManager.cs" />
     <Compile Include="TestObjects\StubResource.cs" />
     <Compile Include="TestResource.cs" />
