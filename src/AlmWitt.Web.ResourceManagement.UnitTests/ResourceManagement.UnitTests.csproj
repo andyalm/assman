@@ -85,9 +85,9 @@
     <Compile Include="TestVirtualPathResolver.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlmWitt.Web.ResourceManagement\AlmWitt.Web.ResourceManagement.csproj">
+    <ProjectReference Include="..\AlmWitt.Web.ResourceManagement\ResourceManagement.csproj">
       <Project>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</Project>
-      <Name>AlmWitt.Web.ResourceManagement</Name>
+      <Name>ResourceManagement</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

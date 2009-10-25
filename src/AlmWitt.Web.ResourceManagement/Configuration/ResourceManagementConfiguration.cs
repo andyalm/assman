@@ -1,6 +1,7 @@
 using System;
 using System.Configuration;
 using System.Reflection;
+using System.Web;
 using System.Web.Configuration;
 
 namespace AlmWitt.Web.ResourceManagement.Configuration
@@ -11,6 +12,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 	public class ResourceManagementConfiguration : ConfigurationSection
 	{
 		private const string SECTION_NAME = "almWitt.web.resourceManagement";
+        private string _rootFilePath;
 		private static readonly ResourceManagementConfiguration _defaultSection = new ResourceManagementConfiguration();
 		private static ResourceManagementConfiguration _config = null;
 
@@ -49,6 +51,26 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 			return ConfigurationHelper.OpenForEditing<ResourceManagementConfiguration>(SECTION_NAME, configuration);
 		}
+
+        /// <summary>
+        /// Gets the full filesytem path to the root of the website.
+        /// </summary>
+        public string RootFilePath
+        {
+            get
+            {
+                if (_rootFilePath == null)
+                {
+                    _rootFilePath = HttpContext.Current.Server.MapPath("~");
+                }
+
+                return _rootFilePath;
+            }
+            set
+            {
+                _rootFilePath = value;
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets whether consolidation should be enabled.
