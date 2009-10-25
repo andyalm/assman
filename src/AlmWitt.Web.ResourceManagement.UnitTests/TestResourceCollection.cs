@@ -2,7 +2,7 @@ using System;
 using System.IO;
 
 using AlmWitt.Web.ResourceManagement.ContentFiltering;
-using AlmWitt.Web.ResourceManagement.UnitTests.TestObjects;
+using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
 
 using NUnit.Framework;
 

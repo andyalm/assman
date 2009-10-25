@@ -6,6 +6,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmWitt.Web.ResourceManagement.UnitTests", "AlmWitt.Web.ResourceManagement.UnitTests\AlmWitt.Web.ResourceManagement.UnitTests.csproj", "{2298DCFD-8253-4964-9720-CB561D5ACCAE}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs03.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = AlmWitt.Web.ResourceManagement\\AlmWitt.Web.ResourceManagement.csproj
+		SccProjectName1 = AlmWitt.Web.ResourceManagement
+		SccLocalPath1 = AlmWitt.Web.ResourceManagement
+		SccProjectUniqueName2 = AlmWitt.Web.ResourceManagement.UnitTests\\AlmWitt.Web.ResourceManagement.UnitTests.csproj
+		SccProjectName2 = AlmWitt.Web.ResourceManagement.UnitTests
+		SccLocalPath2 = AlmWitt.Web.ResourceManagement.UnitTests
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

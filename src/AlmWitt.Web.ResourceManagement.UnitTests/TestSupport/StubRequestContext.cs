@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests.TestObjects
+namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
 {
 	public class StubRequestContext : IRequestContext
 	{

@@ -14,6 +14,10 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,9 +78,6 @@
     <Compile Include="ContentFiltering\IContentFilter.cs" />
     <Compile Include="ContentFiltering\JSMinFilter.cs" />
     <Compile Include="ContentFiltering\NullContentFilter.cs" />
-    <Compile Include="Controls\ClientScriptInclude.cs" />
-    <Compile Include="Controls\CssInclude.cs" />
-    <Compile Include="Controls\WebResourceInclude.cs" />
     <Compile Include="IResourceFinderFactory.cs" />
     <Compile Include="IResourceIncluderFactory.cs" />
     <Compile Include="Util.cs" />

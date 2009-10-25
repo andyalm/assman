@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Text;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
-using AlmWitt.Web.ResourceManagement.UnitTests.TestObjects;
+using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
 
 using NUnit.Framework;
 

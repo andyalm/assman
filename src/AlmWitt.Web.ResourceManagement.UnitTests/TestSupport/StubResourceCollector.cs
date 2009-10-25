@@ -1,6 +1,6 @@
 using System;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests.TestObjects
+namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
 {
 	internal class StubResourceCollector : IResourceCollector
 	{

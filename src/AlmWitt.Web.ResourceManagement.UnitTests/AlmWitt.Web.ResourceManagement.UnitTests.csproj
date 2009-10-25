@@ -29,6 +29,10 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,7 +54,7 @@
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.5.2.9222, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\NUnit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\dependencies\NUnit\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -66,12 +70,12 @@
     <Compile Include="TestCustomFinderElement.cs" />
     <Compile Include="TestEmbeddedResource.cs" />
     <Compile Include="TestEmbeddedResourceFinder.cs" />
-    <Compile Include="TestObjects\StubRequestContext.cs" />
-    <Compile Include="TestObjects\StubResourceCollector.cs" />
-    <Compile Include="TestObjects\StubResourceFinder.cs" />
-    <Compile Include="TestObjects\StubResourceFinderFactory.cs" />
-    <Compile Include="TestObjects\TempDirectoryManager.cs" />
-    <Compile Include="TestObjects\StubResource.cs" />
+    <Compile Include="TestSupport\StubRequestContext.cs" />
+    <Compile Include="TestSupport\StubResourceCollector.cs" />
+    <Compile Include="TestSupport\StubResourceFinder.cs" />
+    <Compile Include="TestSupport\StubResourceFinderFactory.cs" />
+    <Compile Include="TestSupport\TempDirectoryManager.cs" />
+    <Compile Include="TestSupport\StubResource.cs" />
     <Compile Include="TestResource.cs" />
     <Compile Include="TestResourceCollection.cs" />
     <Compile Include="TestResourceGroupElement.cs" />

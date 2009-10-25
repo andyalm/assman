@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests.TestObjects
+namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
 {
 	internal class TempDirectoryManager : IDisposable
 	{
