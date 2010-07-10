@@ -32,19 +32,11 @@ namespace AlmWitt.Web.ResourceManagement.Less.UnitTests
         }
 
         [Test]
-        public void WhenFileExtensionEndsWithCss_EmptyCollectionIsReturned()
-        {
-            var resources = _finder.FindResources(".css");
-
-            Assert.That(resources.Count, Is.EqualTo(0));
-        }
-
-        [Test]
-        public void WhenFileExtensionEndsWithLess_LessFilesAreFound()
+        public void WhenFileExtensionEndsWithCss_LessFilesAreFound()
         {
             _fileFinder.Setup(f => f.FindFilesRecursively(_directory, ".less")).Returns(new[] { "myfile1.less", "myfile2.less" });
             
-            var resources = _finder.FindResources(".less");
+            var resources = _finder.FindResources(".css");
 
             Assert.That(resources.Count, Is.EqualTo(2));
             Assert.IsInstanceOf<LessResource>(resources[0]);

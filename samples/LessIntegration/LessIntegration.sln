@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LessIntegrationSampleWebApp", "LessIntegrationSampleWebApp.csproj", "{ED8F004B-9730-48DF-BEEB-A5E90C2A8CF5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResourceManagement Framework", "ResourceManagement Framework", "{8B0BE72C-D961-44E6-BBE4-9626465CAE2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement", "..\..\src\ResourceManagement\ResourceManagement.csproj", "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Less", "..\..\src\ResourceManagement.Less\ResourceManagement.Less.csproj", "{31F16E4E-7DAA-410B-970A-D26C270C3012}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs03.codeplex.com/
+		SccProjectUniqueName0 = ..\\..\\src\\ResourceManagement\\ResourceManagement.csproj
+		SccProjectTopLevelParentUniqueName0 = LessIntegration.sln
+		SccProjectName0 = ../../src/ResourceManagement
+		SccLocalPath0 = ..\\..\\src\\ResourceManagement
+		SccProjectUniqueName1 = ..\\..\\src\\ResourceManagement.Less\\ResourceManagement.Less.csproj
+		SccProjectTopLevelParentUniqueName1 = LessIntegration.sln
+		SccProjectName1 = ../../src/ResourceManagement.Less
+		SccLocalPath1 = ..\\..\\src\\ResourceManagement.Less
+		SccLocalPath2 = .
+		SccProjectUniqueName3 = LessIntegrationSampleWebApp.csproj
+		SccLocalPath3 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED8F004B-9730-48DF-BEEB-A5E90C2A8CF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED8F004B-9730-48DF-BEEB-A5E90C2A8CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED8F004B-9730-48DF-BEEB-A5E90C2A8CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED8F004B-9730-48DF-BEEB-A5E90C2A8CF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31F16E4E-7DAA-410B-970A-D26C270C3012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31F16E4E-7DAA-410B-970A-D26C270C3012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31F16E4E-7DAA-410B-970A-D26C270C3012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31F16E4E-7DAA-410B-970A-D26C270C3012}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3A84EC12-7997-417E-AE49-CB7ADFB06B8A} = {8B0BE72C-D961-44E6-BBE4-9626465CAE2B}
+		{31F16E4E-7DAA-410B-970A-D26C270C3012} = {8B0BE72C-D961-44E6-BBE4-9626465CAE2B}
+	EndGlobalSection
+EndGlobal

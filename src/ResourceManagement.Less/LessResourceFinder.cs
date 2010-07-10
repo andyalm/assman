@@ -18,12 +18,12 @@ namespace AlmWitt.Web.ResourceManagement.Less
 
         public ResourceCollection FindResources(string extension)
         {
-            if(extension != ".less")
+            if(extension != ".css")
             {
                 return new ResourceCollection();
             }
 
-            return (from filePath in _fileFinder.FindFilesRecursively(_directory, extension)
+            return (from filePath in _fileFinder.FindFilesRecursively(_directory, ".less")
                     select new LessResource(filePath, _directory)).ToResourceCollection();
         }
     }
