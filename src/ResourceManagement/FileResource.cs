@@ -57,7 +57,7 @@ namespace AlmWitt.Web.ResourceManagement
 		/// Gets the content of the file.
 		/// </summary>
 		/// <returns></returns>
-		public string GetContent()
+		public virtual string GetContent()
 		{
 			using(StreamReader reader = new StreamReader(FileInfo.OpenRead()))
 			{
@@ -74,7 +74,7 @@ namespace AlmWitt.Web.ResourceManagement
 			return Name;
 		}
 
-		private FileInfo FileInfo
+		protected FileInfo FileInfo
 		{
 			get
 			{

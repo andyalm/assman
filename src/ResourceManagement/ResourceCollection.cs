@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.ContentFiltering;
 
@@ -216,5 +217,13 @@ namespace AlmWitt.Web.ResourceManagement
 
 			return new ResourceCollection(list);
     	}
+    }
+
+    public static class ResourceCollectionExtensions
+    {
+        public static ResourceCollection ToResourceCollection<TResource>(this IEnumerable<TResource> resources) where TResource : IResource
+        {
+            return new ResourceCollection(resources.Cast<IResource>());
+        }
     }
 }
