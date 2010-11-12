@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
@@ -78,7 +79,7 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
 			CreateResources("file1.js", "file2.js", "file3.js",
 				"file4.js", "file5.js");
 
-			_element.EnableConsolidation = true;
+			_element.Consolidate = true;
 			_element.Include.Add("file3.js");
 			_element.Include.Add("file2.js");
 			_element.Include.Add("file1.js");
@@ -101,7 +102,7 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
 		{
 			CreateResources("file1.js", "file2.js", "file3.js", "file4.js", "file5.js");
 
-			_element.EnableConsolidation = true;
+			_element.Consolidate = true;
 			_element.Include.Add("file2.js");
 			_element.Include.Add("file3.js");
 			_element.Include.Add("file4.js");

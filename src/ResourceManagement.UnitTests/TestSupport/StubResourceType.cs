@@ -1,4 +1,5 @@
 using AlmWitt.Web.ResourceManagement;
+using AlmWitt.Web.ResourceManagement.Configuration;
 
 namespace AlmWitt.Web.Test.ResourceManagement.TestObjects
 {
@@ -21,6 +22,16 @@ namespace AlmWitt.Web.Test.ResourceManagement.TestObjects
 		public override string DefaultFileExtension
 		{
 			get { return _defaultFileExtension; }
+		}
+
+		public override string GetResourceUrl(ResourceManagementConfiguration config, string resourcePath)
+		{
+			return null;
+		}
+
+		public override IResourceIncluder GetIncluder(IResourceIncluderFactory includerFactory)
+		{
+			return null;
 		}
 	}
 }

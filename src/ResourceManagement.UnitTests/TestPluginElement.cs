@@ -6,7 +6,6 @@ using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.Test.ResourceManagement.TestObjects;
 
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace AlmWitt.Web.Test.ResourceManagement
 {

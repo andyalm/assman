@@ -12,10 +12,12 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
             resource.VirtualPath = virtualPath;
             _resources.Add(resource);
         }
-        
-        public ResourceCollection FindResources(string extension)
-        {
-            return _resources;
-        }
+
+		public ResourceCollection Resources { get { return _resources; } }
+
+    	public ResourceCollection FindResources(ResourceType resourceType)
+    	{
+    		return _resources;
+    	}
     }
 }

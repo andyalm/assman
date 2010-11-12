@@ -1,13 +1,21 @@
 using System;
+using System.IO;
 
 namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
 {
 	internal class StubResource : IResource
 	{
-		private string _content;
-		private string _name;
+		public static StubResource WithPath(string virtualPath)
+		{
+			return new StubResource("")
+			{
+				VirtualPath = virtualPath
+			};
+		}
+
+		private readonly string _content;
 		private string _virtualPath;
-		private DateTime _lastModified;
+		private DateTime _lastModified = DateTime.Now;
 
 		public StubResource(string content)
 		{
@@ -16,8 +24,16 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
 
 		public string Name
 		{
-			get { return _name; }
-			set { _name = value; }
+			get
+			{
+				if (_virtualPath == null)
+					return null;
+
+				if (!_virtualPath.Contains("/"))
+					return _virtualPath;
+
+				return _virtualPath.Substring(_virtualPath.LastIndexOf("/") + 1);
+			}
 		}
 
 		public string VirtualPath
@@ -30,6 +46,11 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
 		{
 			get { return _lastModified; }
 			set { _lastModified = value; }
+		}
+
+		public string FileExtension
+		{
+			get { return Path.GetExtension(VirtualPath); }
 		}
 
 		public string GetContent()

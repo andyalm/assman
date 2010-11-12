@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 
-using AlmWitt.TestAssertions;
 using AlmWitt.Web.ResourceManagement.Configuration;
-using AlmWitt.Web.TestSupport;
+using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
 
 using Moq;
 

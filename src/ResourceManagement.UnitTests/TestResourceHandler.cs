@@ -1,6 +1,11 @@
 using System;
+using System.Web.Configuration;
 
+using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
+using AlmWitt.Web.Test.ResourceManagement.TestObjects;
+
+using Moq;
 
 using NUnit.Framework;
 
@@ -34,7 +39,7 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
 			
 			_compilationSection = new CompilationSection();
 			_compilationSection.Debug = true;
-			var configLoader = new Mock<ConfigurationLoader>();
+			var configLoader = new Mock<IConfigLoader>();
 			configLoader.Setup(l => l.GetSection<CompilationSection>(It.IsAny<string>())).Returns(_compilationSection);
 
 			var configContext = ResourceManagementContext.Create();
