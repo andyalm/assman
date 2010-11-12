@@ -3,30 +3,30 @@ using System.Collections.Generic;
 
 namespace AlmWitt.Web.ResourceManagement
 {
-    internal class CompositeResourceFinder : IResourceFinder
-    {
-        List<IResourceFinder> _finders = new List<IResourceFinder>();
-        
-        public ResourceCollection FindResources(string extension)
-        {
-            ResourceCollection combined = new ResourceCollection();
-            foreach (IResourceFinder finder in _finders)
-            {
-                ResourceCollection found = finder.FindResources(extension);
-                combined.AddRange(found);
-            }
+	public class CompositeResourceFinder : IResourceFinder
+	{
+		List<IResourceFinder> _finders = new List<IResourceFinder>();
 
-            return combined;
-        }
+		public ResourceCollection FindResources(ResourceType resourceType)
+		{
+			ResourceCollection combined = new ResourceCollection();
+			foreach (IResourceFinder finder in _finders)
+			{
+				ResourceCollection found = finder.FindResources(resourceType);
+				combined.AddRange(found);
+			}
 
-        public void AddFinder(IResourceFinder finder)
-        {
-            _finders.Add(finder);
-        }
+			return combined;
+		}
 
-        public void AddFinders(IEnumerable<IResourceFinder> finders)
-        {
-            _finders.AddRange(finders);
-        }
-    }
+		public void AddFinder(IResourceFinder finder)
+		{
+			_finders.Add(finder);
+		}
+
+		public void AddFinders(IEnumerable<IResourceFinder> finders)
+		{
+			_finders.AddRange(finders);
+		}
+	}
 }

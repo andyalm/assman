@@ -52,7 +52,10 @@ namespace AlmWitt.Web.ResourceManagement
         {
             get { return GetVirtualPath(_assembly.GetName().Name, _resourceName); }
         }
-
+public string FileExtension
+		{
+			get { return Path.GetExtension(_resourceName); }
+		}
         /// <summary>
         /// Gets the date that the resource was last modified.
         /// </summary>
@@ -88,7 +91,7 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <returns></returns>
     	public override string ToString()
 		{
-			return Name;
+			return VirtualPath;
 		}
 
         private string ToLocationPath(string fileUri)

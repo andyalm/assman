@@ -1,20 +1,26 @@
 using System;
+using System.Web.Configuration;
+
+using AlmWitt.Web.ResourceManagement.Configuration;
+
+using AlmWitt.Web.ResourceManagement.Configuration;
 
 namespace AlmWitt.Web.ResourceManagement
 {
-	internal abstract class ResourceHandler
+	internal class ResourceHandler : IResourceHandler
 	{
-		private IResourceFinder _finder;
-		private IResourceCollector _collector;
-		private IResourceFilter _excludeFilter;
+		private readonly string _path;
+		private readonly ResourceManagementContext _configContext;
+		private readonly GroupTemplateContext _groupTemplateContext;
 		private DateTime _minLastModified = DateTime.MinValue;
+		private ConsolidatedResource _cachedConsolidatedResource;
+		internal Func<IConfigLoader> GetConfigurationLoader = () => new DefaultConfigLoader();
 
-
-		protected ResourceHandler(IResourceFinder finder, IResourceCollector collector, IResourceFilter excludeFilter)
+		public ResourceHandler(string path, ResourceManagementContext configContext, GroupTemplateContext groupTemplateContext)
 		{
-            _finder = finder;
-			_collector = collector;
-			_excludeFilter = excludeFilter;
+			_path = path;
+			_configContext = configContext;
+			_groupTemplateContext = groupTemplateContext;
 		}
 
 		public DateTime MinLastModified
@@ -23,12 +29,9 @@ namespace AlmWitt.Web.ResourceManagement
 			set { _minLastModified = value.ToUniversalTime(); }
 		}
 
-		protected abstract string Extension { get; }
-		protected abstract string ContentType { get; }
-
 		public void HandleRequest(IRequestContext context)
 		{
-			ConsolidatedResource resource = _collector.GetResource(_finder, Extension, _excludeFilter);
+			var resource = GetConsolidatedResource();
 			DateTime lastModified = resource.LastModified.ToUniversalTime();
 			if (lastModified < _minLastModified)
 				lastModified = _minLastModified;
@@ -44,8 +47,8 @@ namespace AlmWitt.Web.ResourceManagement
 			else
 			{
 				context.SetLastModified(lastModified);
-				context.ContentType = ContentType;
-				resource.ContentStream.WriteTo(context.OutputStream);
+				context.ContentType = _groupTemplateContext.GroupTemplate.ResourceType.ContentType;
+				resource.WriteTo(context.OutputStream);
 			}
 		}
 
@@ -53,35 +56,30 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
 		}
-	}
 
-	internal class ClientScriptResourceHandler : ResourceHandler
-	{
-		public ClientScriptResourceHandler(IResourceFinder finder, IResourceCollector collector, IResourceFilter excludeFilter) : base(finder, collector, excludeFilter) { }
-
-		protected override string Extension
+		private ConsolidatedResource GetConsolidatedResource()
 		{
-			get { return ".js"; }
+			if(_cachedConsolidatedResource != null)
+			{
+				return _cachedConsolidatedResource;
+			}
+
+			var consolidatedResource = _configContext.ConsolidatedGroup(_path, _groupTemplateContext);
+			if(CachingEnabled)
+			{
+				_cachedConsolidatedResource = consolidatedResource;
+			}
+
+			return consolidatedResource;
 		}
 
-		protected override string ContentType
+		private bool CachingEnabled
 		{
-			get { return "text/javascript"; }
-		}
-	}
-
-	internal class CssResourceHandler : ResourceHandler
-	{
-		public CssResourceHandler(IResourceFinder finder, IResourceCollector collector, IResourceFilter excludeFilter) : base(finder, collector, excludeFilter) { }
-
-		protected override string Extension
-		{
-			get { return ".css"; }
-		}
-
-		protected override string ContentType
-		{
-			get { return "text/css"; }
+			get
+			{
+				var compilationSection = GetConfigurationLoader().GetSection<CompilationSection>("system.web/compilation");
+				return !compilationSection.Debug;
+			}
 		}
 	}
 }

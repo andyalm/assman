@@ -50,10 +50,10 @@ namespace AlmWitt.Web.ResourceManagement
             {
             }
 
-            public ResourceCollection FindResources(string extension)
-            {
-                return new ResourceCollection();
-            }
-        }
+			public ResourceCollection FindResources(ResourceType resourceType)
+			{
+				return new ResourceCollection();
+			}
+		}
 	}
 }

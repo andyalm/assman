@@ -1,11 +1,7 @@
-using AlmWitt.Web.ResourceManagement.Configuration;
-using AlmWitt.Web.ResourceManagement.ContentFiltering;
-
-namespace AlmWitt.Web.ResourceManagement
+namespace AlmWitt.Web.ResourceManagement.ContentFiltering
 {
-    public interface IContentFilterFactory
-    {
-        IContentFilter CreateClientScriptFilter(ClientScriptGroupElement groupElement);
-        IContentFilter CreateCssFilter(CssGroupElement groupElement);
-    }
+	public interface IContentFilterFactory
+	{
+		IContentFilter CreateFilter(IResourceGroupTemplate group);
+	}
 }

@@ -15,10 +15,14 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -65,6 +69,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Depends\Microsoft.AjaxExtensions\1.0.61025\System.Web.Extensions.dll</HintPath>
@@ -83,29 +88,45 @@
     <Compile Include="Configuration\ClientScriptGroupElement.cs" />
     <Compile Include="Configuration\ClientScriptGroupElementCollection.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
+    <Compile Include="Configuration\ConsolidatedUrlTemplate.cs" />
     <Compile Include="Configuration\CssGroupElement.cs" />
     <Compile Include="Configuration\CssGroupElementCollection.cs" />
     <Compile Include="Configuration\CustomFinderElement.cs" />
     <Compile Include="Configuration\CustomFinderElementCollection.cs" />
+    <Compile Include="Configuration\IResourceManagementPlugin.cs" />
     <Compile Include="Configuration\MappedConfigLoader.cs" />
+    <Compile Include="Configuration\PluginElement.cs" />
+    <Compile Include="Configuration\PluginElementCollection.cs" />
+    <Compile Include="Configuration\ResourceGroupCollection.cs" />
     <Compile Include="Configuration\ResourceGroupElement.cs" />
     <Compile Include="Configuration\ResourceGroupElementCollection.cs" />
+    <Compile Include="Configuration\ResourceManagementContext.cs" />
     <Compile Include="Configuration\ResourceMatchElement.cs" />
     <Compile Include="Configuration\ResourceMatchElementCollection.cs" />
     <Compile Include="Configuration\UrlType.cs" />
     <Compile Include="BuildSupport\PreConsolidateCommand.cs" />
     <Compile Include="ConsolidatedResource.cs" />
+    <Compile Include="ContentFiltering\JSMinContentFilterFactory.cs" />
     <Compile Include="ContentFiltering\JSMin\JavaScriptMinifier.cs" />
     <Compile Include="ContentFiltering\IContentFilter.cs" />
     <Compile Include="ContentFiltering\JSMinFilter.cs" />
     <Compile Include="ContentFiltering\NullContentFilter.cs" />
     <Compile Include="Configuration\DefaultConfigLoader.cs" />
     <Compile Include="Configuration\IConfigLoader.cs" />
-    <Compile Include="DefaultContentFilterFactory.cs" />
     <Compile Include="IContentFilterFactory.cs" />
     <Compile Include="IO\IFileFinder.cs" />
     <Compile Include="IResourceFinderFactory.cs" />
+    <Compile Include="IResourceGroup.cs" />
+    <Compile Include="IResourceGroupTemplate.cs" />
+    <Compile Include="IResourceHandler.cs" />
+    <Compile Include="IResourceHandlerFactory.cs" />
     <Compile Include="IResourceIncluderFactory.cs" />
+    <Compile Include="IResourceMatch.cs" />
+    <Compile Include="NullContentFilterFactory.cs" />
+    <Compile Include="RegexResourceMatch.cs" />
+    <Compile Include="ResourceCollectionExtensions.cs" />
+    <Compile Include="ResourceGroupTemplateCollection.cs" />
+    <Compile Include="StaticResourceGroup.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="WebForms\ScriptManagerResolver.cs" />
     <Compile Include="EmbeddedResource.cs" />

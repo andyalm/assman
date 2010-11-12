@@ -1,8 +1,11 @@
 using System;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+
+using AlmWitt.Web.ResourceManagement.ContentFiltering;
 
 namespace AlmWitt.Web.ResourceManagement.Configuration
 {
@@ -105,6 +108,16 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		}
 
 		/// <summary>
+		/// Gets or sets the version number that will be appended to the end of all resource url's.
+		/// </summary>
+		[ConfigurationProperty(PropertyNames.Version)]
+		public string Version
+		{
+			get { return (string)this[PropertyNames.Version]; }
+			set { this[PropertyNames.Version] = value; }
+		}
+
+		/// <summary>
 		/// Gets the <see cref="ClientScriptGroupElement"/> used to configure client script resources.
 		/// </summary>
 		[ConfigurationProperty(PropertyNames.ClientScripts, IsRequired = false)]
@@ -144,42 +157,56 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
             }
 	    }
 
-        [ConfigurationProperty(PropertyNames.CustomResourceFinders, IsRequired = false)]
-        [ConfigurationCollection(typeof(CustomFinderElementCollection), AddItemName = "add", RemoveItemName = "remove", ClearItemsName = "clear")]
-        public CustomFinderElementCollection CustomResourceFinders
-        {
-            get
-            {
-                var finders = this[PropertyNames.CustomResourceFinders] as CustomFinderElementCollection;
-                if (finders == null)
-                {
-                    finders = new CustomFinderElementCollection();
-                    this[PropertyNames.CustomResourceFinders] = finders;
-                }
+		[ConfigurationProperty(PropertyNames.Plugins, IsRequired = false)]
+		[ConfigurationCollection(typeof(PluginElementCollection), AddItemName = "add", RemoveItemName = "remove", ClearItemsName = "clear")]
+		public PluginElementCollection Plugins
+		{
+			get
+			{
+				var finders = this[PropertyNames.Plugins] as PluginElementCollection;
+				if(finders == null)
+				{
+					finders = new PluginElementCollection();
+					this[PropertyNames.Plugins] = finders;
+				}
 
-                return finders;
-            }
-        }
-        
-        /// <summary>
-        /// Adds the configured assemblies to the finder so that embedded resources will be found in those assemblies.
-        /// </summary>
-        /// <param name="finder"></param>
-        /// <returns></returns>
-        public IResourceFinder AddCustomFinders(IResourceFinder finder)
-        {
-            CompositeResourceFinder compositeFinder = new CompositeResourceFinder();
-            compositeFinder.AddFinder(finder);
+				return finders;
+			}
+		}
 
-            foreach(Assembly assembly in Assemblies.GetAssemblies())
-            {
-                compositeFinder.AddFinder(ResourceFinderFactory.GetInstance(assembly));
-            }
+		private DateTime? _lastModified;
+		public DateTime LastModified()
+		{
+			return _lastModified ?? ConfigurationHelper.GetLastModified(this);
+		}
 
-            compositeFinder.AddFinders(CustomResourceFinders.GetFinders());
+		public void LastModified(DateTime value)
+		{
+			_lastModified = value;
+		}
 
-            return compositeFinder;
-        }
+		public ResourceManagementContext BuildContext()
+		{
+			return BuildContext(ResourceFinderFactory.GetInstance(RootFilePath));
+		}
+
+		public ResourceManagementContext BuildContext(IResourceFinder fileFinder)
+		{
+			var context = ResourceManagementContext.Create();
+
+			context.AddFinder(fileFinder);
+			context.AddAssemblies(Assemblies.GetAssemblies());
+			context.ClientScriptGroups.AddRange(ClientScripts.Cast<IResourceGroupTemplate>());
+			context.CssFileGroups.AddRange(CssFiles.Cast<IResourceGroupTemplate>());
+			context.MapExtensionToFilter(".js", JSMinContentFilterFactory.GetInstance());
+
+			foreach (var plugin in Plugins.GetPlugins())
+			{
+				plugin.Initialize(context);
+			}
+			
+			return context;
+		}
 
 		/// <summary>
 		/// Saves the configuration.
@@ -207,10 +234,14 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				foreach (ResourceGroupElement groupElement in groupElements)
 				{
 					if(groupElement.IsMatch(resourceUrl))
-						return groupElement.GetResourceUrl(resourceUrl, ConsolidatedUrlType);
+					{
+						resourceUrl = groupElement.GetResourceUrl(resourceUrl, ConsolidatedUrlType);
+						break;
+					}
 				}
 			}
-				
+			if (!String.IsNullOrEmpty(Version) && !resourceUrl.Contains("?"))
+				resourceUrl += "?v=" + HttpUtility.UrlEncode(Version);	
 			return resourceUrl;
 		}
 
@@ -228,8 +259,9 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			public const string ClientScripts = "clientScripts";
 			public const string CssFiles = "cssFiles";
 			public const string PreConsolidated = "preConsolidated";
-		    public const string Assemblies = "assemblies";
-            public const string CustomResourceFinders = "customResourceFinders";
+			public const string Version = "version";
+			public const string Assemblies = "assemblies";
+			public const string Plugins = "plugins";
 		}
 	}
 }

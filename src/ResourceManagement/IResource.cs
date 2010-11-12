@@ -23,6 +23,11 @@ namespace AlmWitt.Web.ResourceManagement
 		DateTime LastModified { get; }
 
 		/// <summary>
+		/// Gets the file extension of the resource.  This is used when figuring out which <see cref="IContentFilter"/> to create for the resource.
+		/// </summary>
+		string FileExtension { get; }
+
+		/// <summary>
 		/// Gets the content of the resource.
 		/// </summary>
 		/// <returns></returns>

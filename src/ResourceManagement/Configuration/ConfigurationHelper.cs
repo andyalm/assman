@@ -3,7 +3,6 @@ using System.Configuration;
 using System.IO;
 using System.Web;
 using System.Web.Configuration;
-using System.Xml;
 
 namespace AlmWitt.Web.ResourceManagement.Configuration
 {
@@ -48,9 +47,9 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			string configSource = configSection.SectionInformation.ConfigSource;
 			string configFile;
 			if (String.IsNullOrEmpty(configSource))
-				configFile = "web.config";
+				configFile = "~/web.config";
 			else
-				configFile = configSource;
+				configFile = "~/" + configSource;
 
 			string filePath = HttpContext.Current.Server.MapPath(configFile);
 			return File.GetLastWriteTime(filePath).ToUniversalTime();

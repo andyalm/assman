@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 namespace AlmWitt.Web.ResourceManagement.Configuration
 {
@@ -14,7 +16,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <param name="pattern">A regular expression pattern.</param>
 		public void Add(string pattern)
 		{
-			ResourceMatchElement element = new ResourceMatchElement();
+			var element = new ResourceMatchElement();
 			element.Pattern = pattern;
 			BaseAdd(element);
 		}
@@ -27,7 +29,19 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <returns></returns>
 		public bool IsMatch(string resourcePath)
 		{
-			return GetMatchIndex(resourcePath) >= 0;
+			return this.Cast<ResourceMatchElement>().Any(element => element.IsMatch(resourcePath));
+		}
+
+		public IResourceMatch GetMatch(string resourcePath)
+		{
+			foreach (ResourceMatchElement element in this)
+			{
+				var match = element.GetMatch(resourcePath);
+				if (match.IsMatch)
+					return match;
+			}
+
+			return ResourceMatches.False(resourcePath);
 		}
 
 		/// <summary>
@@ -38,12 +52,12 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <returns></returns>
 		public int GetMatchIndex(string resourcePath)
 		{
-			int matchIndex = 0;
+			int i = 0;
 			foreach (ResourceMatchElement element in this)
 			{
 				if (element.IsMatch(resourcePath))
-					return matchIndex;
-				matchIndex++;
+					return i;
+				i += 1;
 			}
 
 			return -1;

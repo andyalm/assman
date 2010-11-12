@@ -2,7 +2,7 @@ using System;
 
 namespace AlmWitt.Web.ResourceManagement
 {
-	internal interface IResourceFilter
+	public interface IResourceFilter
 	{
 		bool IsMatch(IResource resource);
 	}

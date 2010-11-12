@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AlmWitt.Web.ResourceManagement
 {
@@ -14,18 +15,12 @@ namespace AlmWitt.Web.ResourceManagement
 		
 		public bool IsMatch(IResource resource)
 		{
-			foreach (IResourceFilter filter in _filters)
-			{
-				if (filter.IsMatch(resource))
-					return true;
-			}
-
-			return false;
+			return _filters.Any(filter => filter.IsMatch(resource));
 		}
 
 		public CompositeResourceFilter Clone()
 		{
-			CompositeResourceFilter clone = new CompositeResourceFilter();
+			var clone = new CompositeResourceFilter();
 			foreach (IResourceFilter filter in _filters)
 			{
 				clone.AddFilter(filter);

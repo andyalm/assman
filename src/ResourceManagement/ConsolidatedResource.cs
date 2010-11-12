@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using AlmWitt.Web.ResourceManagement.ContentFiltering;
 
 namespace AlmWitt.Web.ResourceManagement
 {
@@ -10,37 +10,15 @@ namespace AlmWitt.Web.ResourceManagement
 	/// </summary>
 	public class ConsolidatedResource
 	{
-		private ResourceCollection _resources;
-		private DateTime _lastModified;
-		private MemoryStream _contentStream;
+		private readonly ResourceCollection _resources;
+		private readonly DateTime _lastModified;
+		private readonly MemoryStream _contentStream;
 
-		private ConsolidatedResource(ResourceCollection resources, IContentFilter filter, string separator)
+		internal ConsolidatedResource(ResourceCollection resources, MemoryStream consolidatedContent)
 		{
 			_resources = resources;
 			_lastModified = resources.LastModified;
-			ConsolidateResources(filter, separator);
-		}
-
-		/// <summary>
-		/// Returns a consolidated resource from the given resources.
-		/// </summary>
-		/// <param name="resources"></param>
-		/// <returns></returns>
-		public static ConsolidatedResource FromResources(ResourceCollection resources)
-		{
-			return new ConsolidatedResource(resources, null, null);
-		}
-
-		/// <summary>
-		/// Returns a consolidated resource from the given resources.
-		/// </summary>
-		/// <param name="resources"></param>
-		/// <param name="filter"></param>
-		/// <param name="separator"></param>
-		/// <returns></returns>
-		public static ConsolidatedResource FromResources(ResourceCollection resources, IContentFilter filter, string separator)
-		{
-			return new ConsolidatedResource(resources, filter, separator);
+			_contentStream = consolidatedContent;
 		}
 
 		/// <summary>
@@ -54,7 +32,7 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <summary>
 		/// Gets the resources that were consolidated.
 		/// </summary>
-		public ResourceCollection Resources
+		public IEnumerable<IResource> Resources
 		{
 			get { return _resources; }
 		}
@@ -76,13 +54,17 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <param name="path">The full path of the file to be written to.</param>
 		public void WriteToFile(string path)
 		{
-		    string directory = Path.GetDirectoryName(path);
-		    //ensure the destination directory exists
-            Directory.CreateDirectory(directory);
-            
-            using(Stream outputStream = new FileStream(path, FileMode.Create))
+			using(Stream outputStream = new FileStream(path, FileMode.Create))
 			{
-				ContentStream.WriteTo(outputStream);
+				WriteTo(outputStream);
+			}
+		}
+
+		public void WriteTo(Stream outputStream)
+		{
+			if(ContentStream.Length > 0)
+			{
+				ContentStream.WriteTo(outputStream);	
 			}
 		}
 
@@ -117,13 +99,5 @@ namespace AlmWitt.Web.ResourceManagement
 		}
 
 		#endregion
-
-		private void ConsolidateResources(IContentFilter filter, string separator)
-		{
-			_contentStream = new MemoryStream();
-			StreamWriter writer = new StreamWriter(_contentStream);
-			_resources.Consolidate(writer, filter, separator);
-			writer.Flush();
-		}
 	}
 }

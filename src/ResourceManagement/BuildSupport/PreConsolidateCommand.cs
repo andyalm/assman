@@ -23,8 +23,9 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
         private readonly string _webRoot;
         private VirtualPathResolver _resolver;
         private System.Configuration.Configuration _config;
-        private IResourceFinder _finder;
+    	private ResourceManagementContext _context;
         private ILogger _logger = NullLogger.Instance;
+    	private bool? _enableCompression;
 
         private PreConsolidateCommand(string webRoot)
         {
@@ -38,6 +39,8 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
         {
             get { return _webRoot; }
         }
+
+    	public bool AutoVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the build logger used to log the progress of the command.
@@ -57,22 +60,46 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
             LogMessage("Begin consolidating resources...");
             ResourceManagementConfiguration configSection = GetConfigSection(WebRoot);
             _resolver = GetResolver(configSection.RootFilePath);
-            _finder = ResourceFinderFactory.GetInstance(configSection.RootFilePath);
-            _finder = configSection.AddCustomFinders(_finder);
-            configSection.ClientScripts.ProcessEach((groupElement, excludeFilter) => ConsolidateGroup(groupElement, excludeFilter, ".js"));
-            configSection.CssFiles.ProcessEach((groupElement, excludeFilter) => ConsolidateGroup(groupElement, excludeFilter, ".css"));
-            configSection.PreConsolidated = true;
-            SaveConfigChanges(configSection);
+			
+			SetCompression(configSection);
+			ConsolidateAll(configSection);
+			SetVersion(configSection); 
+			
+			SaveConfigChanges(configSection);
             LogMessage("End consolidating resources.");
         }
 
-        private void ConsolidateGroup(ResourceGroupElement groupElement, IResourceFilter excludeFilter, string extension)
-        {
-            var consolidatedResource = groupElement.GetResource(_finder, extension, excludeFilter);
-            string consolidatedPath = _resolver.MapPath(groupElement.ConsolidatedUrl);
-            consolidatedResource.WriteToFile(consolidatedPath);
-            LogConsolidation(consolidatedResource, groupElement.ConsolidatedUrl);
-        }
+		private void SetCompression(ResourceManagementConfiguration configSection)
+		{
+			if (_enableCompression != null)
+			{
+				configSection.ClientScripts.Compress = _enableCompression.Value;
+				configSection.CssFiles.Compress = _enableCompression.Value;
+			}
+		}
+
+		private void SetVersion(ResourceManagementConfiguration section)
+		{
+			if (AutoVersion)
+			{
+				string version = DateTime.Now.ToString("MMdd");
+				section.Version = version;
+			}
+		}
+
+		private void ConsolidateAll(ResourceManagementConfiguration configSection)
+		{
+			_context = configSection.BuildContext();
+			_context.ConsolidateAll(WriteConsolidatedResource);
+			configSection.PreConsolidated = true;
+		}
+
+		private void WriteConsolidatedResource(ConsolidatedResource consolidatedResource, IResourceGroup group)
+		{
+			string consolidatedPath = _resolver.MapPath(group.ConsolidatedUrl);
+			consolidatedResource.WriteToFile(consolidatedPath);
+			LogConsolidation(consolidatedResource, group.ConsolidatedUrl);
+		}
 
         private void LogConsolidation(ConsolidatedResource consolidatedResource, string consolidatedUrl)
         {

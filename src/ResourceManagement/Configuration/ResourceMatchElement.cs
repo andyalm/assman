@@ -30,7 +30,12 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			return Rx.IsMatch(resourcePath);
 		}
-		
+
+		public IResourceMatch GetMatch(string resourcePath)
+		{
+			return new RegexResourceMatch(Rx.Match(resourcePath));
+		}
+
 		private Regex Rx
 		{
 			get

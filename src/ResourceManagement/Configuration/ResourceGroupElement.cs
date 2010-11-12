@@ -1,14 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
-using AlmWitt.Web.ResourceManagement.ContentFiltering;
+using System.Linq;
 
 namespace AlmWitt.Web.ResourceManagement.Configuration
 {
 	/// <summary>
 	/// Represents the base class for configuring a specific type of resource.
 	/// </summary>
-	public abstract class ResourceGroupElement : ConfigurationElement, IResourceCollector, IResourceFilter
+	public abstract class ResourceGroupElement : ConfigurationElement, IResourceGroupTemplate
 	{
+		private ConsolidatedUrlTemplate _consolidatedUrlTemplate;
+		
 		/// <summary>
 		/// Gets or sets the resources that are to be included from consolidation.
 		/// </summary>
@@ -46,49 +49,78 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public string ConsolidatedUrl
 		{
 			get { return (string)this[PropertyNames.ConsolidatedUrl]; }
-			set { this[PropertyNames.ConsolidatedUrl] = value; }
-		}
-
-		/// <summary>
-		/// Gets the <see cref="IContentFilter"/> used to filter the content when it is consolidated.
-		/// </summary>
-		protected virtual IContentFilter ContentFilter
-		{
-			get { return null; }
-		}
-
-		/// <summary>
-		/// Gets the separator string that is put between resources when consolidated.
-		/// </summary>
-		protected virtual string Separator
-		{
-			get { return Environment.NewLine; }
-		}
-
-		ConsolidatedResource IResourceCollector.GetResource(IResourceFinder finder, string extension, IResourceFilter exclude)
-		{
-			return GetResource(finder, extension, exclude);
-		}
-
-		internal ConsolidatedResource GetResource(IResourceFinder finder, string extension)
-		{
-			return GetResource(finder, extension, null);
-		}
-
-		internal ConsolidatedResource GetResource(IResourceFinder finder, string extension, IResourceFilter exclude)
-		{
-			if (exclude == null)
-				exclude = ResourceFilters.False;
-            ResourceCollection resources = finder.FindResources(extension).Where(IsMatch);
-			resources = resources.Where(ResourceFilters.Not(exclude));
-			resources = resources.Sort(delegate(IResource x, IResource y)
+			set
 			{
-				return Include.GetMatchIndex(x.VirtualPath) - Include.GetMatchIndex(y.VirtualPath);
-			});
-			return ConsolidatedResource.FromResources(resources, ContentFilter, Separator);
+				this[PropertyNames.ConsolidatedUrl] = value;
+				_consolidatedUrlTemplate = null;
+			}
 		}
 
-		internal string GetResourceUrl(string resourceUrl, UrlType urlType)
+		private bool? _compress;
+
+		/// <summary>
+		/// Gets or sets whether the scripts will be compressed when they are consolidated.
+		/// </summary>
+		public bool Compress
+		{
+			get
+			{
+				return _compress ?? CompressDefaultValue;
+			}
+			set { _compress = value; }
+		}
+
+		private ConsolidatedUrlTemplate ConsolidatedUrlTemplate
+		{
+			get
+			{
+				if (_consolidatedUrlTemplate == null)
+					_consolidatedUrlTemplate = ConsolidatedUrlTemplate.GetInstance(ConsolidatedUrl);
+
+				return _consolidatedUrlTemplate;
+			}
+		}
+
+		internal bool CompressDefaultValue { get; set; }
+
+		public abstract ResourceType ResourceType { get; }
+
+		protected override bool OnDeserializeUnrecognizedAttribute(string name, string value)
+		{
+			bool compress;
+			if (name == PropertyNames.Compress && Boolean.TryParse(value, out compress))
+			{
+				_compress = compress;
+				return true;
+			}
+			else
+			{
+				return base.OnDeserializeUnrecognizedAttribute(name, value);
+			}
+		}
+
+		public bool MatchesConsolidatedUrl(string consolidatedUrl)
+		{
+			return ConsolidatedUrlTemplate.Matches(consolidatedUrl);
+		}
+
+		public IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources)
+		{
+			return  from resource in allResources
+					let match = GetMatch(resource.VirtualPath)
+					where match.IsMatch
+					let resourceWithUrl = new { Resource = resource, ConsolidatedUrl = GetConsolidatedUrl(match) }
+					group resourceWithUrl by resourceWithUrl.ConsolidatedUrl into @group
+					select (IResourceGroup)new StaticResourceGroup(@group.Key,
+						@group.Select(g => g.Resource).Sort(IncludePatternOrder()));
+		}
+
+		private string GetConsolidatedUrl(IResourceMatch match)
+		{
+			return ConsolidatedUrlTemplate.Format(match);
+		}
+
+		public string GetResourceUrl(string resourceUrl, UrlType urlType)
 		{
 			if (Consolidate && IsMatch(resourceUrl))
 				return urlType.ConvertUrl(ConsolidatedUrl);
@@ -112,11 +144,38 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				&& !Exclude.IsMatch(resourceUrl);
 		}
 
+		internal IResourceMatch GetMatch(string resourceUrl)
+		{
+			if(Include.Count == 0)
+			{
+				return Exclude.GetMatch(resourceUrl).Inverse();
+			}
+
+			var includeMatch = Include.GetMatch(resourceUrl);
+			var excludeMatch = Exclude.GetMatch(resourceUrl);
+			if (includeMatch.IsMatch && !excludeMatch.IsMatch)
+				return includeMatch;
+
+			return ResourceMatches.False(resourceUrl);
+		}
+
+		private Comparison<IResource> IncludePatternOrder()
+		{
+			return (IResource x, IResource y) =>
+			{
+				int xIndex = Include.GetMatchIndex(x.VirtualPath);
+				int yIndex = Include.GetMatchIndex(y.VirtualPath);
+
+				return xIndex - yIndex;
+			};
+		}
+
 		private static class PropertyNames
 		{
 			public const string Consolidate = "consolidate";
 			public const string Exclude = "exclude";
 			public const string Include = "include";
+			public const string Compress = "compress";
 			public const string ConsolidatedUrl = "consolidatedUrl";
 		}
 	}

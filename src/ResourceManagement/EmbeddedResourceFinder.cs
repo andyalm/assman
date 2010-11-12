@@ -1,27 +1,28 @@
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace AlmWitt.Web.ResourceManagement
 {
-    internal class EmbeddedResourceFinder : IResourceFinder
-    {
-        private Assembly _assembly;
+	internal class EmbeddedResourceFinder : IResourceFinder
+	{
+		private readonly Assembly _assembly;
 
-        internal EmbeddedResourceFinder(Assembly assembly)
-        {
-            _assembly = assembly;
-        }
+		internal EmbeddedResourceFinder(Assembly assembly)
+		{
+			_assembly = assembly;
+		}
 
-        public ResourceCollection FindResources(string extension)
-        {
-            ResourceCollection resources = new ResourceCollection();
-            foreach(string resourceName in _assembly.GetManifestResourceNames())
-            {
-                if(resourceName.EndsWith(extension))
-                    resources.Add(new EmbeddedResource(_assembly, resourceName));
-            }
+		public ResourceCollection FindResources(ResourceType resourceType)
+		{
+			return (from resourceName in _assembly.GetManifestResourceNames()
+			        where resourceType.FileExtensions.Any(resourceName.EndsWith)
+			        select CreateEmbeddedResource(resourceName)).ToResourceCollection();
+		}
 
-            return resources;
-        }
-    }
+		private IResource CreateEmbeddedResource(string resourceName)
+		{
+			return new EmbeddedResource(_assembly, resourceName);
+		}
+	}
 }

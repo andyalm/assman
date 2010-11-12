@@ -11,60 +11,21 @@ namespace AlmWitt.Web.ResourceManagement
 	/// </summary>
 	public class ResourceHttpHandler : IHttpHandler
 	{
-		private static IDictionary<string, ResourceHandler> _handlerRegistry;
+		private readonly IResourceHandlerFactory _handlerFactory;
+		private readonly IDictionary<string, IResourceHandler> _handlerRegistry;
+		private readonly ResourceManagementContext _resourceContext;
+		private readonly DateTime _minLastModified;
+		internal Func<string, string> ToAppRelativePath = path => VirtualPathUtility.ToAppRelative(path);
 
-		#region Static Init
+		public ResourceHttpHandler() : this(ResourceManagementConfiguration.Current, new ResourceHandlerFactory()) {}
 
-		static ResourceHttpHandler()
+		internal ResourceHttpHandler(ResourceManagementConfiguration config, IResourceHandlerFactory handlerFactory)
 		{
-			Init();
+			_handlerFactory = handlerFactory;
+			_resourceContext = config.BuildContext();
+			_minLastModified = config.LastModified();
+			_handlerRegistry = new Dictionary<string, IResourceHandler>(StringComparer.OrdinalIgnoreCase);
 		}
-
-		private static void Init()
-		{
-			string basePath = HttpContext.Current.Server.MapPath("~");
-            IResourceFinder finder = ResourceFinderFactory.GetInstance(basePath);
-			ResourceManagementConfiguration config = ResourceManagementConfiguration.Current;
-		    finder = config.AddCustomFinders(finder);
-			DateTime minLastModified = ConfigurationHelper.GetLastModified(config);
-
-			_handlerRegistry = new Dictionary<string,ResourceHandler>();
-			config.ClientScripts.ProcessEach(delegate(ClientScriptGroupElement groupElement, IResourceFilter excludeFilter)
-			{
-				ClientScriptResourceHandler scriptHandler = new ClientScriptResourceHandler(finder, GetCollector(groupElement), excludeFilter);
-				RegisterHandler(groupElement.ConsolidatedUrl, scriptHandler, minLastModified);
-			});
-			
-			config.CssFiles.ProcessEach(delegate(CssGroupElement groupElement, IResourceFilter excludeFilter)
-			{
-				CssResourceHandler cssHandler = new CssResourceHandler(finder, GetCollector(groupElement), excludeFilter);
-				RegisterHandler(groupElement.ConsolidatedUrl, cssHandler, minLastModified);
-			});
-		}
-
-		private static void RegisterHandler(string consolidatedUrl, ResourceHandler handler, DateTime minLastModified)
-		{
-			handler.MinLastModified = minLastModified;
-			_handlerRegistry.Add(UrlType.Dynamic.ConvertUrl(consolidatedUrl), handler);
-		}
-
-		private static IResourceCollector GetCollector(IResourceCollector element)
-		{
-			if (CachingEnabled)
-				return new CachingResourceCollector(element);
-			else
-				return element;
-		}
-
-		private static bool CachingEnabled
-		{
-			get
-			{
-				return !Util.IsDebugMode;
-			}
-		}
-
-		#endregion
 
 		/// <summary>
 		/// 
@@ -72,12 +33,40 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <param name="context"></param>
 		public void ProcessRequest(HttpContext context)
 		{
-			string appRelativePath = VirtualPathUtility.ToAppRelative(context.Request.Path);
-			if (!_handlerRegistry.ContainsKey(appRelativePath))
-				return;
+			ProcessRequest(new HttpContextWrapper(context));
+		}
 
-			ResourceHandler handler = _handlerRegistry[appRelativePath];
-			handler.HandleRequest(new HttpRequestContext(context));
+		public void ProcessRequest(HttpContextBase httpContext)
+		{
+			string appRelativePath = ToAppRelativePath(httpContext.Request.Path);
+			var handler = GetHandler(appRelativePath);
+			if (handler == null)
+			{
+				httpContext.Response.StatusCode = 404;
+				return;
+			}
+
+			handler.HandleRequest(new HttpRequestContext(httpContext));
+		}
+
+		private IResourceHandler GetHandler(string appRelativePath)
+		{
+			if (_handlerRegistry.ContainsKey(appRelativePath))
+			{
+				return _handlerRegistry[appRelativePath];
+			}
+
+			var templateContext = _resourceContext.FindGroupTemplate(UrlType.Static.ConvertUrl(appRelativePath));
+			if(templateContext == null)
+			{
+				return null;
+			}
+			var handler = _handlerFactory.CreateHandler(appRelativePath, _resourceContext, templateContext);
+			handler.MinLastModified = _minLastModified;
+			
+			_handlerRegistry[appRelativePath] = handler;
+
+			return handler;
 		}
 
 		/// <summary>
@@ -90,9 +79,9 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private class HttpRequestContext : IRequestContext
 		{
-			private HttpContext _httpContext;
+			private readonly HttpContextBase _httpContext;
 
-			public HttpRequestContext(HttpContext httpContext)
+			public HttpRequestContext(HttpContextBase httpContext)
 			{
 				_httpContext = httpContext;
 			}

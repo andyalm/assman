@@ -45,6 +45,11 @@ namespace AlmWitt.Web.ResourceManagement
 			}
 		}
 
+		public string FileExtension
+		{
+			get { return Path.GetExtension(_filePath); }
+		}
+
 		/// <summary>
 		/// Gets the time this file was last modified.
 		/// </summary>
@@ -66,15 +71,15 @@ namespace AlmWitt.Web.ResourceManagement
 		}
 
 		/// <summary>
-		/// Returns a string representation of the <see cref="FileResource"/>.
+		/// Returns the virtual path of the file.
 		/// </summary>
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return Name;
+			return VirtualPath;
 		}
 
-		protected FileInfo FileInfo
+		private FileInfo FileInfo
 		{
 			get
 			{

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
@@ -27,11 +29,44 @@ namespace AlmWitt.Web.ResourceManagement
     	{
     		get { return _css; }
     	}
+public static ResourceType FromPath(string path)
+		{
+			var extension = Path.GetExtension(path).ToLowerInvariant();
+			if (ClientScript.DefaultFileExtension == extension)
+				return ClientScript;
+			if (Css.DefaultFileExtension == extension)
+				return Css;
 
-    	/// <summary>
-    	/// Gets the file extension of this resource type.
-    	/// </summary>
-		public abstract string Extension { get; }
+			throw new ArgumentException("The path with extension '" + extension + "' does not map to a known ResourceType.");
+		}
+
+		private readonly List<string> _fileExtensions = new List<string>();
+		
+		public void AddFileExtension(string fileExtension)
+		{
+			_fileExtensions.Add(fileExtension);
+		}
+
+		public IEnumerable<string> FileExtensions
+		{
+			get
+			{
+				yield return DefaultFileExtension;
+				foreach (var fileExtension in _fileExtensions)
+				{
+					yield return fileExtension;
+				}
+			}
+		}
+
+		public string Separator
+		{
+			get { return Environment.NewLine; }
+		}
+
+		public abstract string ContentType { get; }
+		public abstract string DefaultFileExtension { get; }
+
         
 		/// <summary>
 		/// Gets the consolidated url of the given resource path using the given configuration.
@@ -51,10 +86,15 @@ namespace AlmWitt.Web.ResourceManagement
 
 	internal class ClientScriptResourceType : ResourceType
 	{
-		public override string Extension
-		{
-			get { return ".js"; }
-		}
+		public override string ContentType
+			{
+				get { return "text/javascript"; }
+			}
+
+			public override string DefaultFileExtension
+			{
+				get { return ".js"; }
+			}
 
 		public override string GetResourceUrl(ResourceManagementConfiguration config, string resourcePath)
 		{
@@ -69,10 +109,15 @@ namespace AlmWitt.Web.ResourceManagement
 
 	internal class CssResourceType : ResourceType
 	{
-		public override string Extension
-		{
-			get { return ".css"; }
-		}
+		public override string ContentType
+			{
+				get { return "text/css"; }
+			}
+
+			public override string DefaultFileExtension
+			{
+				get { return ".css"; }
+			}
 
 		public override string GetResourceUrl(ResourceManagementConfiguration config, string resourcePath)
 		{

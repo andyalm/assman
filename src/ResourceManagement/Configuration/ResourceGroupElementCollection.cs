@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 
@@ -35,6 +36,23 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		}
 
 		/// <summary>
+		/// Gets or sets whether the scripts will be compressed when they are consolidated.
+		/// </summary>
+		[ConfigurationProperty(PropertyNames.Compress, DefaultValue = false)]
+		public bool Compress
+		{
+			get { return (bool)this[PropertyNames.Compress]; }
+			set
+			{
+				this[PropertyNames.Compress] = value;
+				foreach (ResourceGroupElement groupElement in this)
+				{
+					groupElement.CompressDefaultValue = value;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Adds the given <see cref="ResourceGroupElement"/> to the collection.
 		/// </summary>
 		/// <param name="element"></param>
@@ -43,15 +61,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			BaseAdd(element);
 		}
 
-		internal void ProcessEach(ResourceGroupElementProcessor<TGroupElement> processor)
-		{
-			CompositeResourceFilter previousGroupFilters = new CompositeResourceFilter();
-			foreach (TGroupElement groupElement in this)
-			{
-				processor(groupElement, previousGroupFilters.Clone());
-				previousGroupFilters.AddFilter(groupElement);
-			}
-		}
 
 		/// <summary>
 		/// 
@@ -59,7 +68,12 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <returns></returns>
 		protected override ConfigurationElement CreateNewElement()
 		{
-			return new TGroupElement();
+			var element = new TGroupElement();
+			//set the compress property so that it defaults to the value
+			//set by its parent (i.e. this collection).
+			element.CompressDefaultValue = Compress;
+
+			return element;
 		}
 
 		/// <summary>
@@ -75,6 +89,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		private static class PropertyNames
 		{
 			public const string Consolidate = "consolidate";
+			public const string Compress = "compress";
 		}
 
 		#region IEnumerable<ResourceGroupElement> implimentation
