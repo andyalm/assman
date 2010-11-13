@@ -1,0 +1,5 @@
+﻿
+relre:bin/(Debug|Release)/.+
+relre:obj/(Debug|Release)/.+
+glob:*.user
+glob:*.suo
