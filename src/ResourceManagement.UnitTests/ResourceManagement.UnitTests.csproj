@@ -8,7 +8,7 @@
     <ProjectGuid>{2298DCFD-8253-4964-9720-CB561D5ACCAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AlmWitt.Web.ResourceManagement.UnitTests</RootNamespace>
+    <RootNamespace>AlmWitt.Web.ResourceManagement</RootNamespace>
     <AssemblyName>AlmWitt.Web.ResourceManagement.UnitTests</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>

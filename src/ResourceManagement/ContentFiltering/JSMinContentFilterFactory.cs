@@ -9,7 +9,7 @@ namespace AlmWitt.Web.ResourceManagement.ContentFiltering
 
 		internal JSMinContentFilterFactory() { }
 
-		public IContentFilter CreateFilter(IResourceGroupTemplate group)
+		public IContentFilter CreateFilter(IResourceGroup group)
 		{
 			if (group.Compress)
 			{

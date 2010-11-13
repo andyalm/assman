@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
+namespace AlmWitt.Web.ResourceManagement.TestSupport
 {
 	public static class AssertionExtensions
 	{

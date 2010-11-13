@@ -4,7 +4,7 @@ using AlmWitt.Web.ResourceManagement.Configuration;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.Test.ResourceManagement
+namespace AlmWitt.Web.ResourceManagement
 {
 	[TestFixture]
 	public class TestClientScriptGroupElementCollection

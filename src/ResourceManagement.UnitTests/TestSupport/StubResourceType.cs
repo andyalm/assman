@@ -1,7 +1,7 @@
 using AlmWitt.Web.ResourceManagement;
 using AlmWitt.Web.ResourceManagement.Configuration;
 
-namespace AlmWitt.Web.Test.ResourceManagement.TestObjects
+namespace AlmWitt.Web.ResourceManagement.TestObjects
 {
 	public class StubResourceType : ResourceType
 	{

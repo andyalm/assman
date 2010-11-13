@@ -2,14 +2,14 @@ using System;
 using System.Web.Configuration;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
-using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
-using AlmWitt.Web.Test.ResourceManagement.TestObjects;
+using AlmWitt.Web.ResourceManagement.TestSupport;
+using AlmWitt.Web.ResourceManagement.TestObjects;
 
 using Moq;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests
+namespace AlmWitt.Web.ResourceManagement
 {
 	[TestFixture]
 	public class TestResourceHandler

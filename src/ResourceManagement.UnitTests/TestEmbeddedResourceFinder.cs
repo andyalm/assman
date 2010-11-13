@@ -1,16 +1,16 @@
 using System;
 
-using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
-using AlmWitt.Web.Test.ResourceManagement.TestObjects;
+using AlmWitt.Web.ResourceManagement.TestSupport;
+using AlmWitt.Web.ResourceManagement.TestObjects;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests
+namespace AlmWitt.Web.ResourceManagement
 {
     [TestFixture]
     public class TestEmbeddedResourceFinder
     {
-        private const string _embeddedNs = "AlmWitt.Web.ResourceManagement.UnitTests.EmbeddedResources";
+        private const string _embeddedNs = "AlmWitt.Web.ResourceManagement.EmbeddedResources";
         private IResourceFinder _instance;
 
         [SetUp]

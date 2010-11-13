@@ -3,11 +3,11 @@ using System.Configuration;
 using System.Text;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
-using AlmWitt.Web.Test.ResourceManagement.TestObjects;
+using AlmWitt.Web.ResourceManagement.TestObjects;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.Test.ResourceManagement
+namespace AlmWitt.Web.ResourceManagement
 {
 	[TestFixture]
 	public class TestPluginElement

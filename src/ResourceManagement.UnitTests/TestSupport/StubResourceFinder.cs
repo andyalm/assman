@@ -1,6 +1,6 @@
 using System;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
+namespace AlmWitt.Web.ResourceManagement.TestSupport
 {
     public class StubResourceFinder : IResourceFinder
     {

@@ -22,9 +22,9 @@ namespace AlmWitt.Web.ResourceManagement.Spark
 			_actionFinder = actionFinder;
 		}
 
-		public ResourceCollection FindResources(string extension)
+		public ResourceCollection FindResources(ResourceType resourceType)
 		{
-			if(!extension.EndsWith(".js"))
+			if(resourceType != ResourceType.ClientScript)
 			{
 				return _emptyResourceCollection;
 			}

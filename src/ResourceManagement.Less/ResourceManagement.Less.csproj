@@ -52,9 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LessResource.cs" />
-    <Compile Include="LessResourceFinder.cs" />
-    <Compile Include="LessResourceFinderFactory.cs" />
+    <Compile Include="LessContentFilter.cs" />
+    <Compile Include="LessContentFilterFactory.cs" />
+    <Compile Include="LessResourceManagementPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

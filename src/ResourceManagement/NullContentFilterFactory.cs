@@ -11,7 +11,7 @@ namespace AlmWitt.Web.ResourceManagement.ContentFiltering
 
 		private NullContentFilterFactory() {}
 		
-		public IContentFilter CreateFilter(IResourceGroupTemplate group)
+		public IContentFilter CreateFilter(IResourceGroup group)
 		{
 			return NullContentFilter.Instance;
 		}

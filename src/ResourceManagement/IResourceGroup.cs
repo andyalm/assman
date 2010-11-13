@@ -5,6 +5,8 @@ namespace AlmWitt.Web.ResourceManagement
 	public interface IResourceGroup : IResourceFilter
 	{
 		string ConsolidatedUrl { get; }
+		
+		bool Compress { get; }
 
 		/// <summary>
 		/// Gets the resources that belong to the group.

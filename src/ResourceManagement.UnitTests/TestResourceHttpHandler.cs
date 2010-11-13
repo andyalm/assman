@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
-using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
+using AlmWitt.Web.ResourceManagement.TestSupport;
 
 using Moq;
 

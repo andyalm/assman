@@ -3,7 +3,7 @@ using System.IO;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests
+namespace AlmWitt.Web.ResourceManagement
 {
 	[TestFixture]
 	public class TestResource

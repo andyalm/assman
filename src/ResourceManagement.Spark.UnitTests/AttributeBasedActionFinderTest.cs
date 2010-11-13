@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 
-using AlmWitt.Web.ResourceManagement.Spark.UnitTests.TestSupport;
+using AlmWitt.Web.ResourceManagement.Spark.TestSupport;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.Spark.UnitTests
+namespace AlmWitt.Web.ResourceManagement.Spark
 {
 	[TestFixture]
 	public class AttributeBasedActionFinderTest

@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
-using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
-using AlmWitt.Web.Test.ResourceManagement.TestObjects;
+using AlmWitt.Web.ResourceManagement.TestSupport;
+using AlmWitt.Web.ResourceManagement.TestObjects;
 
 using NUnit.Framework;
 

@@ -2,7 +2,7 @@ using System;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.ResourceManagement.ContentFiltering;
-using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
+using AlmWitt.Web.ResourceManagement.TestSupport;
 
 using Moq;
 

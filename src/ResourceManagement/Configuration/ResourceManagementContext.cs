@@ -97,7 +97,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			Func<IResource, IContentFilter> createContentFilter = resource =>
 			{
 				var contentFilterFactory = GetFilterFactoryForExtension(resource.FileExtension);
-				return contentFilterFactory.CreateFilter(groupTemplateContext.GroupTemplate);
+				return contentFilterFactory.CreateFilter(group);
 			};
 
 			return group.GetResources()

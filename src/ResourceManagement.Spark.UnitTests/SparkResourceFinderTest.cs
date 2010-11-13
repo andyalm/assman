@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 
 
-namespace AlmWitt.Web.ResourceManagement.Spark.UnitTests
+namespace AlmWitt.Web.ResourceManagement.Spark
 {
 	[TestFixture]
 	public class SparkResourceFinderTest
@@ -27,9 +27,9 @@ namespace AlmWitt.Web.ResourceManagement.Spark.UnitTests
 		}
 
 		[Test]
-		public void WhenExtensionEndsWithCss_EmptyResourceCollectionReturned()
+		public void WhenResourceTypeIsCss_EmptyResourceCollectionReturned()
 		{
-			int resourceCount = _resourceFinder.FindResources(".css").Count;
+			int resourceCount = _resourceFinder.FindResources(ResourceType.Css).Count;
 
             Assert.That(resourceCount, Is.EqualTo(0));
 		}
@@ -65,7 +65,7 @@ namespace AlmWitt.Web.ResourceManagement.Spark.UnitTests
 				}
 			});
 
-			var resources = _resourceFinder.FindResources(".js");
+			var resources = _resourceFinder.FindResources(ResourceType.ClientScript);
 
 			Assert.That(resources.Count, Is.EqualTo(4));
 			Assert.That(resources[0].Name, Is.EqualTo("MyFirst/Action1"));

@@ -98,6 +98,10 @@
     <Compile Include="TestSupport\AssertionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ResourceManagement.Spark\ResourceManagement.Spark.csproj">
+      <Project>{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F}</Project>
+      <Name>ResourceManagement.Spark</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ResourceManagement\ResourceManagement.csproj">
       <Project>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</Project>
       <Name>ResourceManagement</Name>

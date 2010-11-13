@@ -12,8 +12,8 @@ namespace AlmWitt.Web.ResourceManagement.Spark
 		private readonly SparkJavascriptAction _action;
 		private readonly string _controllerName;
 		private readonly string _actionName;
-		private DateTime _lastModified;
-		private ISparkResourceContentFetcher _contentFetcher;
+		private readonly DateTime _lastModified;
+		private readonly ISparkResourceContentFetcher _contentFetcher;
 		
 		public SparkResource(string controllerName, SparkJavascriptAction action, ISparkResourceContentFetcher contentFetcher)
 		{
@@ -40,6 +40,11 @@ namespace AlmWitt.Web.ResourceManagement.Spark
 			{
 				return _lastModified;
 			}
+		}
+
+		public string FileExtension
+		{
+			get { return ResourceType.ClientScript.DefaultFileExtension; }
 		}
 
 		public string GetContent()

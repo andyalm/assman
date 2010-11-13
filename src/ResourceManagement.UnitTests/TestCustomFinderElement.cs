@@ -3,11 +3,11 @@ using System.Configuration;
 using System.Text;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
-using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
+using AlmWitt.Web.ResourceManagement.TestSupport;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests
+namespace AlmWitt.Web.ResourceManagement
 {
 	[TestFixture]
 	public class TestCustomFinderElement

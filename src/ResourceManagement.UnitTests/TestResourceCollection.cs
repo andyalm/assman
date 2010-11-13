@@ -2,11 +2,11 @@ using System;
 using System.IO;
 
 using AlmWitt.Web.ResourceManagement.ContentFiltering;
-using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
+using AlmWitt.Web.ResourceManagement.TestSupport;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests
+namespace AlmWitt.Web.ResourceManagement
 {
     [TestFixture]
     public class TestResourceCollection

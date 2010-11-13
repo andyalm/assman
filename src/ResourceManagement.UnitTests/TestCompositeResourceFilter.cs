@@ -2,7 +2,7 @@ using System;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests
+namespace AlmWitt.Web.ResourceManagement
 {
 	[TestFixture]
 	public class TestCompositeResourceFilter

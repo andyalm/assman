@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using AlmWitt.Web.ResourceManagement;
 
-namespace AlmWitt.Web.Test.ResourceManagement.TestObjects
+namespace AlmWitt.Web.ResourceManagement.TestObjects
 {
 	public class StubResourceGroup : IResourceGroup
 	{

@@ -2,16 +2,16 @@ using System;
 using System.IO;
 using System.Reflection;
 
-using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
+using AlmWitt.Web.ResourceManagement.TestSupport;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.UnitTests
+namespace AlmWitt.Web.ResourceManagement
 {
     [TestFixture]
     public class TestEmbeddedResource
     {
-        private const string _embeddedNs = "AlmWitt.Web.ResourceManagement.UnitTests.EmbeddedResources";
+        private const string _embeddedNs = "AlmWitt.Web.ResourceManagement.EmbeddedResources";
         
         [Test]
         public void GetContentGetsWholeContent()

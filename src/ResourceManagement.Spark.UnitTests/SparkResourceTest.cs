@@ -1,12 +1,12 @@
 using System;
 
-using AlmWitt.Web.ResourceManagement.Spark.UnitTests.TestSupport;
+using AlmWitt.Web.ResourceManagement.Spark.TestSupport;
 
 using Moq;
 
 using NUnit.Framework;
 
-namespace AlmWitt.Web.ResourceManagement.Spark.UnitTests
+namespace AlmWitt.Web.ResourceManagement.Spark
 {
 	[TestFixture]
 	public class SparkResourceTest
