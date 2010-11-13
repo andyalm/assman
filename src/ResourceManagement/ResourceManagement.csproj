@@ -80,7 +80,6 @@
     <Compile Include="BuildSupport\ILogger.cs" />
     <Compile Include="BuildSupport\MSBuild\PreConsolidateResources.cs" />
     <Compile Include="BuildSupport\NullLogger.cs" />
-    <Compile Include="CachingResourceCollector.cs" />
     <Compile Include="CompositeResourceFilter.cs" />
     <Compile Include="CompositeResourceFinder.cs" />
     <Compile Include="Configuration\AssemblyElement.cs" />
@@ -134,7 +133,6 @@
     <Compile Include="FileResourceFinder.cs" />
     <Compile Include="IResourceIncluder.cs" />
     <Compile Include="IRequestContext.cs" />
-    <Compile Include="IResourceCollector.cs" />
     <Compile Include="Configuration\ResourceManagementConfiguration.cs" />
     <Compile Include="IResourceFilter.cs" />
     <Compile Include="IResourceFinder.cs" />

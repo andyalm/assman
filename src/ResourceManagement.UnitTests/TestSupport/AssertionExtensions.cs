@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
 using NUnit.Framework;
 
 namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
@@ -6,24 +11,77 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests.TestSupport
 	{
 		public static void ShouldEqual<T>(this T actual, T expected)
 		{
-			Assert.That(actual, Is.EqualTo(expected));
+			Assert.AreEqual(expected, actual);
+		}
+
+		public static void ShouldNotEqual<T>(this T actual, T expected)
+		{
+			Assert.AreNotEqual(expected, actual);
+		}
+
+		public static void ShouldMatch(this string actual, string regexExpression)
+		{
+			actual.ShouldMatch(regexExpression, RegexOptions.None);
+		}
+
+		public static void ShouldMatch(this string actual, string regexExpression, RegexOptions options)
+		{
+			Assert.IsTrue(Regex.IsMatch(actual, regexExpression, options), "The string '" + actual + "' does not match the regex expression '" + regexExpression + "'.");
+		}
+
+		public static void ShouldBeNull(this object obj)
+		{
+			Assert.IsNull(obj);
+		}
+
+		public static void ShouldNotBeNull(this object obj)
+		{
+			Assert.IsNotNull(obj);
+		}
+
+		public static void ShouldBeTrue(this bool actual)
+		{
+			Assert.IsTrue(actual);
+		}
+
+		public static void ShouldBeFalse(this bool actual)
+		{
+			Assert.IsFalse(actual);
 		}
 
 		public static void ShouldBeSameAs<T>(this T actual, T expected)
 		{
 			Assert.That(actual, Is.SameAs(expected));
 		}
-		
-		public static void ShouldNotBeNull(this object obj)
+
+		public static void ShouldNotBeSameAs<T>(this T actual, T expected)
 		{
-			Assert.That(obj, Is.Not.Null);
+			Assert.That(actual, Is.Not.SameAs(expected));
 		}
 
 		public static T ShouldBeInstanceOf<T>(this object obj)
 		{
-			Assert.That(obj, Is.InstanceOf<T>());
+			return obj.ShouldBeInstanceOf<T>("Expected the object of type '" + obj.GetType().FullName +
+											  "' to be assignable to type '" + typeof(T).FullName + "'.");
+		}
 
-			return (T) obj;
+		public static T ShouldBeInstanceOf<T>(this object obj, string message)
+		{
+			obj.ShouldNotBeNull();
+			Assert.IsInstanceOfType(typeof(T), obj, message);
+
+			return (T)obj;
+		}
+
+		public static void ShouldContain<T>(this IEnumerable<T> collection, Func<T, bool> predicate)
+		{
+			collection.Any<T>(predicate).ShouldEqual(true);
+		}
+
+		public static void ShouldContainAll<T>(this IEnumerable<T> collection, IEnumerable<T> otherCollection)
+		{
+			Assert.That(collection, Is.SubsetOf(otherCollection));
+			Assert.That(otherCollection, Is.SubsetOf(collection));
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
 

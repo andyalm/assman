@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Reflection;
 
+using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
+
 using NUnit.Framework;
 
 namespace AlmWitt.Web.ResourceManagement.UnitTests

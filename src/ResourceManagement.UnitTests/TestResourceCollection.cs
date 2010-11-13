@@ -33,7 +33,7 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
             AddResourceContent(resources, "my other content", expectedWriter);
 
             StringWriter actualWriter = new StringWriter();
-            resources.Consolidate(actualWriter);
+            resources.ConsolidateContentTo(actualWriter);
 
             Assert.That(actualWriter.ToString(), Is.EqualTo(expectedWriter.ToString()));
         }
@@ -50,7 +50,7 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
             AddResourceContent(resources, "my other content", expectedWriter);
 
             StringWriter actualWriter = new StringWriter();
-            resources.Consolidate(actualWriter, separator);
+            resources.ConsolidateContentTo(actualWriter, separator);
 
             Assert.That(actualWriter.ToString(), Is.EqualTo(expectedWriter.ToString()));
         }
@@ -67,7 +67,7 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
             resources.Add(new StubResource(contentB));
 
             StringWriter actualWriter = new StringWriter();
-            resources.Consolidate(actualWriter, new RemoveSpacesFilter(), separator);
+            resources.ConsolidateContentTo(actualWriter, g => new RemoveSpacesFilter(), separator);
 
             Assert.That(actualWriter.ToString(), Is.EqualTo(String.Format("aaa{0}bbb", Environment.NewLine)));
         }

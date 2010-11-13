@@ -74,8 +74,17 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private void ProcessRequest(string path)
 		{
-			_httpContext = HttpMoqFactory.HttpContext(new Uri("http://www.AlmWitt.com" + path));
+			_httpContext = CreateHttpContext(path);
 			_httpHandler.ProcessRequest(_httpContext.Object);
+		}
+
+		private Mock<HttpContextBase> CreateHttpContext(string path)
+		{
+			var httpContext = new Mock<HttpContextBase>();
+			httpContext.Setup(c => c.Request.Path).Returns(path);
+			httpContext.SetupProperty(c => c.Response.StatusCode);
+
+			return httpContext;
 		}
 
 		private class FakeHandlerFactory : IResourceHandlerFactory

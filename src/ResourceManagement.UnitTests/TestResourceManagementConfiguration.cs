@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
@@ -55,7 +56,7 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
 		public void AppendsVersionNumberToConsolidatedUrl()
 		{
 			const string version = "2";
-			_instance.EnableConsolidation = true;
+			_instance.Consolidate = true;
 			_instance.Version = version;
 			string scriptToInclude = _instance.GetScriptUrl(myScript);
 
@@ -66,7 +67,7 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
 		public void AppendsVersionNumberToUnConsolidatedUrl()
 		{
 			const string version = "2";
-			_instance.EnableConsolidation = false;
+			_instance.Consolidate = false;
 			_instance.Version = version;
 			string scriptToInclude = _instance.GetScriptUrl(myScript);
 
@@ -77,7 +78,7 @@ namespace AlmWitt.Web.ResourceManagement.UnitTests
 		public void VersionParameterIsUrlEncoded()
 		{
 			const string version = "2 2";
-			_instance.EnableConsolidation = true;
+			_instance.Consolidate = true;
 			_instance.Version = version;
 			string scriptToInclude = _instance.GetScriptUrl(myScript);
 

@@ -1,5 +1,8 @@
 using System;
 
+using AlmWitt.Web.ResourceManagement.UnitTests.TestSupport;
+using AlmWitt.Web.Test.ResourceManagement.TestObjects;
+
 using NUnit.Framework;
 
 namespace AlmWitt.Web.ResourceManagement.UnitTests
