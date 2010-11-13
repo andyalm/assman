@@ -48,7 +48,7 @@ namespace AlmWitt.Web.ResourceManagement.Spark.TestSupport
         public static T ShouldBeInstanceOfType<T>(this object obj, string message)
         {
             obj.ShouldNotBeNull();
-            Assert.IsInstanceOfType(typeof(T), obj, message);
+            Assert.IsInstanceOf<T>(obj, message);
 
             return (T)obj;
         }

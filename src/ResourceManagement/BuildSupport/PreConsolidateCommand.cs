@@ -42,6 +42,12 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
 
     	public bool AutoVersion { get; set; }
 
+    	public bool EnableCompression
+    	{
+			get { return _enableCompression ?? false; }
+			set { _enableCompression = value; }
+    	}
+
         /// <summary>
         /// Gets or sets the build logger used to log the progress of the command.
         /// </summary>

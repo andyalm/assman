@@ -27,7 +27,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 			var finder = _element.CreatePlugin();
 
-			Assert.That(finder, Is.InstanceOfType(typeof(StubPlugin)));
+			Assert.That(finder, Is.InstanceOf<StubPlugin>());
 		}
 
 		[Test]

@@ -68,7 +68,7 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 		public static T ShouldBeInstanceOf<T>(this object obj, string message)
 		{
 			obj.ShouldNotBeNull();
-			Assert.IsInstanceOfType(typeof(T), obj, message);
+			Assert.IsInstanceOf<T>(obj, message);
 
 			return (T)obj;
 		}
