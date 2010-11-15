@@ -111,13 +111,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 					where match.IsMatch
 					let resourceWithUrl = new { Resource = resource, ConsolidatedUrl = GetConsolidatedUrl(match) }
 					group resourceWithUrl by resourceWithUrl.ConsolidatedUrl into @group
-					select (IResourceGroup)new StaticResourceGroup(@group.Key,
+					select CreateGroup(@group.Key,
 						@group.Select(g => g.Resource).Sort(IncludePatternOrder()));
-		}
-
-		private string GetConsolidatedUrl(IResourceMatch match)
-		{
-			return ConsolidatedUrlTemplate.Format(match);
 		}
 
 		public string GetResourceUrl(string resourceUrl, UrlType urlType)
@@ -126,6 +121,19 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				return urlType.ConvertUrl(ConsolidatedUrl);
 			else
 				return resourceUrl;
+		}
+
+		private string GetConsolidatedUrl(IResourceMatch match)
+		{
+			return ConsolidatedUrlTemplate.Format(match);
+		}
+
+		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resourcesInGroup)
+		{
+			return new StaticResourceGroup(consolidatedUrl, resourcesInGroup)
+			{
+				Compress = this.Compress
+			};
 		}
 
 		bool IResourceFilter.IsMatch(IResource resource)

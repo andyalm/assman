@@ -170,6 +170,17 @@ namespace AlmWitt.Web.ResourceManagement
 			_element.MatchesConsolidatedUrl("~/consolidated/bycontroller/search/other.js").ShouldBeFalse();
 		}
 
+		[Test]
+		public void GroupHasCompressionSetCorrectly()
+		{
+			CreateResources("file1.js", "file2.js");
+			_element.Compress = true;
+
+			var group = _element.GetGroups(_allResources).Single();
+
+			group.Compress.ShouldBeTrue();
+		}
+
 		private void CreateResources(params string[] paths)
 		{
 			foreach (var path in paths)
