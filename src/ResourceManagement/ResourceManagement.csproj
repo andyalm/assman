@@ -96,7 +96,6 @@
     <Compile Include="Configuration\MappedConfigLoader.cs" />
     <Compile Include="Configuration\PluginElement.cs" />
     <Compile Include="Configuration\PluginElementCollection.cs" />
-    <Compile Include="Configuration\ResourceGroupCollection.cs" />
     <Compile Include="Configuration\ResourceGroupElement.cs" />
     <Compile Include="Configuration\ResourceGroupElementCollection.cs" />
     <Compile Include="Configuration\ResourceManagementContext.cs" />
@@ -125,7 +124,7 @@
     <Compile Include="RegexResourceMatch.cs" />
     <Compile Include="ResourceCollectionExtensions.cs" />
     <Compile Include="ResourceGroupTemplateCollection.cs" />
-    <Compile Include="StaticResourceGroup.cs" />
+    <Compile Include="ResourceGroup.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="WebForms\ScriptManagerResolver.cs" />
     <Compile Include="EmbeddedResource.cs" />

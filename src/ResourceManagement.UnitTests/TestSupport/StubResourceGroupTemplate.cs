@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using AlmWitt.Web.ResourceManagement;
 using AlmWitt.Web.ResourceManagement.Configuration;
 
 namespace AlmWitt.Web.ResourceManagement.TestObjects
@@ -23,7 +22,7 @@ namespace AlmWitt.Web.ResourceManagement.TestObjects
 
 		public bool IsMatch(IResource resource)
 		{
-			return Groups.Any(group => group.IsMatch(resource));
+			return Groups.Any(group => group.Contains(resource));
 		}
 
 		public bool MatchesConsolidatedUrl(string consolidatedUrl)
@@ -37,10 +36,16 @@ namespace AlmWitt.Web.ResourceManagement.TestObjects
 
 		public IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources)
 		{
-			foreach (var group in _groups)
+			return from @group in _groups
+				   select CreateGroup(@group.ConsolidatedUrl, allResources.Where(@group.Contains));
+		}
+
+		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resources)
+		{
+			return new ResourceGroup(consolidatedUrl, resources)
 			{
-				yield return new StaticResourceGroup(group.ConsolidatedUrl, allResources.Where(group));
-			}
+				Compress = this.Compress
+			};
 		}
 	}
 }

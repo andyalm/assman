@@ -130,7 +130,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resourcesInGroup)
 		{
-			return new StaticResourceGroup(consolidatedUrl, resourcesInGroup)
+			return new ResourceGroup(consolidatedUrl, resourcesInGroup)
 			{
 				Compress = this.Compress
 			};

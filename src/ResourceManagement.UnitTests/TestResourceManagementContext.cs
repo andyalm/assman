@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
@@ -14,16 +13,14 @@ namespace AlmWitt.Web.ResourceManagement
 	public class TestResourceManagementContext
 	{
 		[Test]
-		public void GetConsolidatedResourceExcludesGivenMatchFilter()
+		public void ConsolidateGroupExcludesResourcesMatchingGivenExcludeFilter()
 		{
 			var stubFinder = new StubResourceFinder();
 			stubFinder.AddResource("~/file1.js", "");
 			stubFinder.AddResource("~/file2.js", "");
 			stubFinder.AddResource("~/file3.js", "");
 			
-			var group = new StubResourceGroup();
-			group.ConsolidatedUrl = "~/consolidated.js";
-			group.Resources.AddRange(stubFinder.Resources);
+			var group = new ResourceGroup("~/consolidated.js", stubFinder.Resources);
 			var groupTemplate = new StubResourceGroupTemplate(group);
 			groupTemplate.ResourceType = ResourceType.ClientScript;
 			

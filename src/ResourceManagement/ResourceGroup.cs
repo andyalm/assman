@@ -2,11 +2,11 @@ using System.Collections.Generic;
 
 namespace AlmWitt.Web.ResourceManagement
 {
-	public class StaticResourceGroup : IResourceGroup
+	public class ResourceGroup : IResourceGroup
 	{
 		private readonly ResourceCollection _resources;
 
-		public StaticResourceGroup(string consolidatedUrl, IEnumerable<IResource> resources)
+		public ResourceGroup(string consolidatedUrl, IEnumerable<IResource> resources)
 		{
 			ConsolidatedUrl = consolidatedUrl;
 			_resources = resources.ToResourceCollection();
@@ -21,7 +21,7 @@ namespace AlmWitt.Web.ResourceManagement
 			return _resources;
 		}
 
-		public bool IsMatch(IResource resource)
+		public bool Contains(IResource resource)
 		{
 			return _resources.Contains(resource);
 		}

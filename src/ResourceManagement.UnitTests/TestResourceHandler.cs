@@ -34,7 +34,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_finder = new Mock<IResourceFinder>();
 			_finder.Setup(f => f.FindResources(_resourceType)).Returns(resources);
 			
-			var groupTemplate = new StubResourceGroupTemplate(new StaticResourceGroup(VirtualPath, resources));
+			var groupTemplate = new StubResourceGroupTemplate(new ResourceGroup(VirtualPath, resources));
 			groupTemplate.ResourceType = _resourceType;
 			
 			_compilationSection = new CompilationSection();
