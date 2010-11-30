@@ -54,6 +54,10 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <param name="path">The full path of the file to be written to.</param>
 		public void WriteToFile(string path)
 		{
+			//ensure the destination directory exists
+			string directory = Path.GetDirectoryName(path);
+			Directory.CreateDirectory(directory);
+			
 			using(Stream outputStream = new FileStream(path, FileMode.Create))
 			{
 				WriteTo(outputStream);
