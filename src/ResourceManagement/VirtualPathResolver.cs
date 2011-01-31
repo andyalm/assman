@@ -3,11 +3,16 @@ using System.IO;
 
 namespace AlmWitt.Web.ResourceManagement
 {
-	internal class VirtualPathResolver
+	public class VirtualPathResolver
 	{
-		private string _appPath;
+		public static VirtualPathResolver GetInstance(string appPath)
+		{
+			return new VirtualPathResolver(appPath);
+		}
 
-		public VirtualPathResolver(string appPath)
+		private readonly string _appPath;
+
+		internal VirtualPathResolver(string appPath)
 		{
 			_appPath = appPath;
 		}

@@ -141,7 +141,7 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
 
         private VirtualPathResolver GetResolver(string webRoot)
         {
-            return new VirtualPathResolver(webRoot);
+            return VirtualPathResolver.GetInstance(webRoot);
         }
     }
 }

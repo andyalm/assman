@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -56,6 +57,7 @@
     <Compile Include="LessContentFilterFactory.cs" />
     <Compile Include="LessResourceManagementPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VirtualPathFileReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ResourceManagement\ResourceManagement.csproj">

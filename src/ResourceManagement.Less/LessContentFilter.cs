@@ -1,3 +1,5 @@
+using System.Web;
+
 using AlmWitt.Web.ResourceManagement.ContentFiltering;
 
 using dotless.Core.configuration;
@@ -17,7 +19,10 @@ namespace AlmWitt.Web.ResourceManagement.Less
 		{
 			var config = new DotlessConfiguration
 			{
-				MinifyOutput = _resourceGroup.Compress
+				MinifyOutput = _resourceGroup.Compress,
+				Web = HttpContext.Current != null,
+				LessSource = typeof(VirtualPathFileReader),
+				CacheEnabled = false /* no need to cache as we let ResourceManagement framework manage its own cache */
 			};
 			return dotless.Core.Less.Parse(content, config);
 		}

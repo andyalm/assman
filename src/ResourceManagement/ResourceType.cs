@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
@@ -29,7 +30,8 @@ namespace AlmWitt.Web.ResourceManagement
     	{
     		get { return _css; }
     	}
-public static ResourceType FromPath(string path)
+
+		public static ResourceType FromPath(string path)
 		{
 			var extension = Path.GetExtension(path).ToLowerInvariant();
 			if (ClientScript.DefaultFileExtension == extension)
@@ -44,7 +46,8 @@ public static ResourceType FromPath(string path)
 		
 		public void AddFileExtension(string fileExtension)
 		{
-			_fileExtensions.Add(fileExtension);
+			if(!_fileExtensions.Any(extension => extension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)))
+				_fileExtensions.Add(fileExtension);
 		}
 
 		public IEnumerable<string> FileExtensions
