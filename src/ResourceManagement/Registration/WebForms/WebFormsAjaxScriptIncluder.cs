@@ -3,9 +3,9 @@ using System.Web.UI;
 
 namespace AlmWitt.Web.ResourceManagement.WebForms
 {
-	internal class WebFormsAjaxScriptIncluder : WebFormsClientScriptIncluder
+	internal class WebFormsAjaxScriptIncluder : WebFormsClientScriptRegistry
 	{
-		private ScriptManager _scriptManager;
+		private readonly ScriptManager _scriptManager;
 
 		public WebFormsAjaxScriptIncluder(Control control, ScriptManager scriptManager)
 			: base(control)

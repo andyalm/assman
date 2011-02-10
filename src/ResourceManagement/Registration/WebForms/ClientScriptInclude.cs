@@ -16,12 +16,9 @@ namespace AlmWitt.Web.ResourceManagement.WebForms
 			set { ResourceUrl = value; }
 		}
 
-		/// <summary>
-		/// Gets the type of resource the control will register on the page.
-		/// </summary>
-		protected override ResourceType ResourceType
+		protected override IResourceRegistry GetRegistryWithName(string name)
 		{
-			get { return ResourceType.ClientScript; }
+			return ResourceRegistries.NamedScriptRegistry(name);
 		}
 	}
 }

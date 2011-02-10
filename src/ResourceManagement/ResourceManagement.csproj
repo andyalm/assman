@@ -118,31 +118,39 @@
     <Compile Include="IResourceGroupTemplate.cs" />
     <Compile Include="IResourceHandler.cs" />
     <Compile Include="IResourceHandlerFactory.cs" />
-    <Compile Include="IResourceIncluderFactory.cs" />
+    <Compile Include="Lazy.cs" />
+    <Compile Include="Registration\GenericResourceRegistry.cs" />
+    <Compile Include="Registration\GenericResourceRegistryAccessor.cs" />
+    <Compile Include="Registration\IReadableResourceRegistry.cs" />
+    <Compile Include="Registration\IStyleRegistry.cs" />
+    <Compile Include="Registration\IResourceRegistryAccessor.cs" />
     <Compile Include="IResourceMatch.cs" />
     <Compile Include="NullContentFilterFactory.cs" />
     <Compile Include="RegexResourceMatch.cs" />
+    <Compile Include="Registration\IScriptRegistry.cs" />
+    <Compile Include="Registration\ResourceRegistryExtensions.cs" />
+    <Compile Include="Registration\ResourceRegistryMap.cs" />
+    <Compile Include="Registration\TextWriterExtensions.cs" />
     <Compile Include="ResourceCollectionExtensions.cs" />
     <Compile Include="ResourceGroupTemplateCollection.cs" />
     <Compile Include="ResourceGroup.cs" />
     <Compile Include="Util.cs" />
-    <Compile Include="WebForms\ScriptManagerResolver.cs" />
     <Compile Include="EmbeddedResource.cs" />
     <Compile Include="EmbeddedResourceFinder.cs" />
     <Compile Include="FileResourceFinder.cs" />
-    <Compile Include="IResourceIncluder.cs" />
+    <Compile Include="Registration\IResourceRegistry.cs" />
     <Compile Include="IRequestContext.cs" />
     <Compile Include="Configuration\ResourceManagementConfiguration.cs" />
     <Compile Include="IResourceFilter.cs" />
     <Compile Include="IResourceFinder.cs" />
     <Compile Include="ResourceFilters.cs" />
     <Compile Include="ResourceHttpHandler.cs" />
-    <Compile Include="WebForms\CssInclude.cs" />
-    <Compile Include="WebForms\ClientScriptInclude.cs" />
-    <Compile Include="WebForms\WebFormsCssIncluder.cs" />
-    <Compile Include="WebForms\WebFormsIncluderBase.cs" />
-    <Compile Include="WebForms\WebFormsIncluderFactory.cs" />
-    <Compile Include="WebForms\WebResourceIncludeControl.cs" />
+    <Compile Include="Registration\WebForms\CssInclude.cs" />
+    <Compile Include="Registration\WebForms\ClientScriptInclude.cs" />
+    <Compile Include="Registration\WebForms\WebFormsCssRegistry.cs" />
+    <Compile Include="Registration\WebForms\WebFormsRegistryBase.cs" />
+    <Compile Include="Registration\WebForms\WebFormsRegistryAccessor.cs" />
+    <Compile Include="Registration\WebForms\WebResourceIncludeControl.cs" />
     <Compile Include="IResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileResource.cs" />
@@ -153,9 +161,8 @@
     <Compile Include="VirtualPathResolver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WebForms\WebFormsAjaxScriptIncluder.cs" />
-    <Compile Include="WebForms\WebFormsClientScriptIncluder.cs" />
-    <Compile Include="WebResourceManager.cs" />
+    <Compile Include="Registration\WebForms\WebFormsAjaxScriptIncluder.cs" />
+    <Compile Include="Registration\WebForms\WebFormsClientScriptRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -174,6 +181,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

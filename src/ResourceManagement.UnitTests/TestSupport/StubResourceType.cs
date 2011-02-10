@@ -28,10 +28,5 @@ namespace AlmWitt.Web.ResourceManagement.TestObjects
 		{
 			return null;
 		}
-
-		public override IResourceIncluder GetIncluder(IResourceIncluderFactory includerFactory)
-		{
-			return null;
-		}
 	}
 }

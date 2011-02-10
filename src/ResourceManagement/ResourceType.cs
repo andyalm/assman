@@ -78,13 +78,6 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <param name="resourcePath"></param>
 		/// <returns></returns>
 		public abstract string GetResourceUrl(ResourceManagementConfiguration config, string resourcePath);
-    	
-		/// <summary>
-		/// Gets an instance of a <see cref="IResourceIncluder"/> for this resource type.
-		/// </summary>
-		/// <param name="includerFactory"></param>
-		/// <returns></returns>
-		public abstract IResourceIncluder GetIncluder(IResourceIncluderFactory includerFactory);
     }
 
 	internal class ClientScriptResourceType : ResourceType
@@ -103,11 +96,6 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			return config.GetScriptUrl(resourcePath);
 		}
-
-		public override IResourceIncluder GetIncluder(IResourceIncluderFactory includerFactory)
-		{
-			return includerFactory.CreateClientScriptIncluder();
-		}
 	}
 
 	internal class CssResourceType : ResourceType
@@ -125,11 +113,6 @@ namespace AlmWitt.Web.ResourceManagement
 		public override string GetResourceUrl(ResourceManagementConfiguration config, string resourcePath)
 		{
 			return config.GetStylesheetUrl(resourcePath);
-		}
-
-		public override IResourceIncluder GetIncluder(IResourceIncluderFactory includerFactory)
-		{
-			return includerFactory.CreateCssIncluder();
 		}
 	}
 }

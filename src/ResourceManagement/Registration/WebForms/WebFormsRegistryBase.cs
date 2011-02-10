@@ -1,14 +1,15 @@
 using System;
+using System.IO;
 using System.Reflection;
 using System.Web.UI;
 
 namespace AlmWitt.Web.ResourceManagement.WebForms
 {
-	internal abstract class WebFormsIncluderBase : IResourceIncluder
+	internal abstract class WebFormsRegistryBase : IResourceRegistry
 	{
 		private Control _control;
 
-		public WebFormsIncluderBase(Control control)
+		public WebFormsRegistryBase(Control control)
 		{
 			_control = control;
 		}
@@ -24,6 +25,10 @@ namespace AlmWitt.Web.ResourceManagement.WebForms
 		{
 			return Page.ClientScript.GetWebResourceUrl(Assembly.Load(assemblyName).GetTypes()[0], resourceName);
 		}
+
+		public abstract void RegisterInlineBlock(Action<TextWriter> block, object key);
+
+		public abstract bool IsInlineBlockRegistered(object key);
 
 		protected Control Control
 		{
