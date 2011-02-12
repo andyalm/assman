@@ -65,8 +65,7 @@ public string FileExtension
             {
                 if(_lastModified == null)
                 {
-                    FileInfo assemblyFile = new FileInfo(ToLocationPath(_assembly.CodeBase));
-                    _lastModified = assemblyFile.LastWriteTime;
+                	_lastModified = _assembly.GetLastWriteTime();
                 }
 
                 return _lastModified.Value;

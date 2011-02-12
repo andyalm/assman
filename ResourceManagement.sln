@@ -15,6 +15,39 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Less", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Spark", "src\ResourceManagement.Spark\ResourceManagement.Spark.csproj", "{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{96B97950-742B-4545-84D1-33A5E682DE10}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebForms-WebSiteProject", "WebForms-WebSiteProject", "{7F73D2D7-5D7C-4260-A06B-D1811D9C9983}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteLib", "samples\AspNet-WebSiteProject\WebsiteLib\WebsiteLib.csproj", "{F853FC33-CE3C-4501-8177-4BF2EF557826}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Website", "samples\AspNet-WebSiteProject\Website", "{C40EEE00-CA28-4910-8D2E-FC801CCA5535}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
+		ProjectReferences = "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}|AlmWitt.Web.ResourceManagement.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/Website"
+		Debug.AspNetCompiler.PhysicalPath = "samples\AspNet-WebSiteProject\Website\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Website\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Website"
+		Release.AspNetCompiler.PhysicalPath = "samples\AspNet-WebSiteProject\Website\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Website\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "1476"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc-WebAppProject", "Mvc-WebAppProject", "{88DB7D60-4270-4677-BF2A-580EC479DDDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "samples\Mvc-WebAppProject\Website\Website.csproj", "{8BC40064-631E-491F-A3E3-C56494A81977}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Mvc", "src\ResourceManagement.Mvc\ResourceManagement.Mvc.csproj", "{DF604504-959B-464A-92C5-4C279FCD8846}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +74,22 @@ Global
 		{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F853FC33-CE3C-4501-8177-4BF2EF557826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C40EEE00-CA28-4910-8D2E-FC801CCA5535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C40EEE00-CA28-4910-8D2E-FC801CCA5535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C40EEE00-CA28-4910-8D2E-FC801CCA5535}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{C40EEE00-CA28-4910-8D2E-FC801CCA5535}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{8BC40064-631E-491F-A3E3-C56494A81977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BC40064-631E-491F-A3E3-C56494A81977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BC40064-631E-491F-A3E3-C56494A81977}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BC40064-631E-491F-A3E3-C56494A81977}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF604504-959B-464A-92C5-4C279FCD8846}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF604504-959B-464A-92C5-4C279FCD8846}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF604504-959B-464A-92C5-4C279FCD8846}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF604504-959B-464A-92C5-4C279FCD8846}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,5 +98,10 @@ Global
 		{32437E2C-1E8B-4ADF-8070-A99AD5A0274D} = {AC5747EB-66AB-4B05-BF30-7AA088A89F34}
 		{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F} = {AC5747EB-66AB-4B05-BF30-7AA088A89F34}
 		{31F16E4E-7DAA-410B-970A-D26C270C3012} = {093F6888-5FEE-4D44-BDE4-E8DBECFDC598}
+		{7F73D2D7-5D7C-4260-A06B-D1811D9C9983} = {96B97950-742B-4545-84D1-33A5E682DE10}
+		{88DB7D60-4270-4677-BF2A-580EC479DDDE} = {96B97950-742B-4545-84D1-33A5E682DE10}
+		{F853FC33-CE3C-4501-8177-4BF2EF557826} = {7F73D2D7-5D7C-4260-A06B-D1811D9C9983}
+		{C40EEE00-CA28-4910-8D2E-FC801CCA5535} = {7F73D2D7-5D7C-4260-A06B-D1811D9C9983}
+		{8BC40064-631E-491F-A3E3-C56494A81977} = {88DB7D60-4270-4677-BF2A-580EC479DDDE}
 	EndGlobalSection
 EndGlobal

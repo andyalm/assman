@@ -90,7 +90,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <summary>
 		/// Gets or sets whether consolidation should be enabled.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.Consolidate, DefaultValue = false)]
+		[ConfigurationProperty(PropertyNames.Consolidate, DefaultValue = true)]
 		public bool Consolidate
 		{
 			get { return (bool) this[PropertyNames.Consolidate]; }

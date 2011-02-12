@@ -117,10 +117,12 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		public string GetResourceUrl(string resourceUrl, UrlType urlType)
 		{
-			if (Consolidate && IsMatch(resourceUrl))
-				return urlType.ConvertUrl(ConsolidatedUrl);
-			else
+			if (!Consolidate)
 				return resourceUrl;
+
+			var match = GetMatch(resourceUrl);
+
+			return match.IsMatch ? urlType.ConvertUrl(GetConsolidatedUrl(match)) : resourceUrl;
 		}
 
 		private string GetConsolidatedUrl(IResourceMatch match)

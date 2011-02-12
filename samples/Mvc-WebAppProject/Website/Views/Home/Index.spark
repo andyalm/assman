@@ -1,0 +1,3 @@
+<content name="main">
+	#Html.IncludeScript("~/Views/Home/Index.js");
+</content>

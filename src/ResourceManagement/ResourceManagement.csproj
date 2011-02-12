@@ -77,6 +77,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="BuildSupport\ILogger.cs" />
     <Compile Include="BuildSupport\MSBuild\PreConsolidateResources.cs" />
     <Compile Include="BuildSupport\NullLogger.cs" />
@@ -118,6 +119,8 @@
     <Compile Include="IResourceGroupTemplate.cs" />
     <Compile Include="IResourceHandler.cs" />
     <Compile Include="IResourceHandlerFactory.cs" />
+    <Compile Include="Registration\ConsolidatingResourceRegistry.cs" />
+    <Compile Include="Registration\ConsolidatingResourceRegistryAccessor.cs" />
     <Compile Include="Registration\GenericResourceRegistry.cs" />
     <Compile Include="Registration\GenericResourceRegistryAccessor.cs" />
     <Compile Include="Registration\IReadableResourceRegistry.cs" />
@@ -127,12 +130,15 @@
     <Compile Include="NullContentFilterFactory.cs" />
     <Compile Include="RegexResourceMatch.cs" />
     <Compile Include="Registration\IScriptRegistry.cs" />
+    <Compile Include="Registration\NullResourceRegistry.cs" />
+    <Compile Include="Registration\ReadableExtensions.cs" />
     <Compile Include="Registration\ResourceRegistryExtensions.cs" />
     <Compile Include="Registration\ResourceRegistryMap.cs" />
     <Compile Include="Registration\TextWriterExtensions.cs" />
     <Compile Include="ResourceCollectionExtensions.cs" />
     <Compile Include="ResourceGroupTemplateCollection.cs" />
     <Compile Include="ResourceGroup.cs" />
+    <Compile Include="TheadSafeInMemoryCache.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="EmbeddedResource.cs" />
     <Compile Include="EmbeddedResourceFinder.cs" />
