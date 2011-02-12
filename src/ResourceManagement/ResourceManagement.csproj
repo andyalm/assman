@@ -118,7 +118,6 @@
     <Compile Include="IResourceGroupTemplate.cs" />
     <Compile Include="IResourceHandler.cs" />
     <Compile Include="IResourceHandlerFactory.cs" />
-    <Compile Include="Lazy.cs" />
     <Compile Include="Registration\GenericResourceRegistry.cs" />
     <Compile Include="Registration\GenericResourceRegistryAccessor.cs" />
     <Compile Include="Registration\IReadableResourceRegistry.cs" />

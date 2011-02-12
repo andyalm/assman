@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Spark", "Spark", "{AC5747EB-66AB-4B05-BF30-7AA088A89F34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement", "ResourceManagement\ResourceManagement.csproj", "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement", "src\ResourceManagement\ResourceManagement.csproj", "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.UnitTests", "ResourceManagement.UnitTests\ResourceManagement.UnitTests.csproj", "{2298DCFD-8253-4964-9720-CB561D5ACCAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.UnitTests", "src\ResourceManagement.UnitTests\ResourceManagement.UnitTests.csproj", "{2298DCFD-8253-4964-9720-CB561D5ACCAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Spark.UnitTests", "ResourceManagement.Spark.UnitTests\ResourceManagement.Spark.UnitTests.csproj", "{32437E2C-1E8B-4ADF-8070-A99AD5A0274D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Spark.UnitTests", "src\ResourceManagement.Spark.UnitTests\ResourceManagement.Spark.UnitTests.csproj", "{32437E2C-1E8B-4ADF-8070-A99AD5A0274D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Less", "Less", "{093F6888-5FEE-4D44-BDE4-E8DBECFDC598}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Less", "ResourceManagement.Less\ResourceManagement.Less.csproj", "{31F16E4E-7DAA-410B-970A-D26C270C3012}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Less", "src\ResourceManagement.Less\ResourceManagement.Less.csproj", "{31F16E4E-7DAA-410B-970A-D26C270C3012}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Spark", "ResourceManagement.Spark\ResourceManagement.Spark.csproj", "{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Spark", "src\ResourceManagement.Spark\ResourceManagement.Spark.csproj", "{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
