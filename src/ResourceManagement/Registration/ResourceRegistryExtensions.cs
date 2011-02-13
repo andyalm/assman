@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
@@ -26,6 +27,16 @@ namespace AlmWitt.Web.ResourceManagement
 		public static void RegisterInlineBlock(this IResourceRegistry registry, string block, object key)
 		{
 			registry.RegisterInlineBlock(w => w.Write(block), key);
+		}
+
+		public static void RegisterInlineBlock(this IResourceRegistry registry, Action<TextWriter> block)
+		{
+			registry.RegisterInlineBlock(block, null);
+		}
+
+		public static void RegisterInlineBlock(this IResourceRegistry registry, string block)
+		{
+			registry.RegisterInlineBlock(block, null);
 		}
 
 		private static string GetEmbeddedResourceUrl(IResourceRegistry registry, string assemblyName, string resourceName)

@@ -89,6 +89,7 @@
   <ItemGroup>
     <Compile Include="AttributeBasedActionFinder.cs" />
     <Compile Include="ConsolidateSparkScriptAttribute.cs" />
+    <Compile Include="Registration\InlineBlockOutputScope.cs" />
     <Compile Include="ISparkJavascriptActionFinder.cs" />
     <Compile Include="ISparkResourceContentFetcher.cs" />
     <Compile Include="MvcNamingExtensions.cs" />

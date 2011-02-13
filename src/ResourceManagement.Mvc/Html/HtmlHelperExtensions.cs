@@ -103,12 +103,12 @@ namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 
 		public static IResourceRegistryAccessor ResourceRegistries(this HtmlHelper html)
 		{
-			var viewDataKey = "__ResourceRegistries" + html.ViewContext.View.GetHashCode();
-			var resourceRegistries = html.ViewContext.ViewData[viewDataKey] as IResourceRegistryAccessor;
+			var key = "__ResourceRegistries" + html.ViewContext.View.GetHashCode();
+			var resourceRegistries = html.ViewContext.HttpContext.Items[key] as IResourceRegistryAccessor;
 			if(resourceRegistries == null)
-			{
+			{	
 				resourceRegistries = new GenericResourceRegistryAccessor().UseConsolidation();
-				html.ViewContext.ViewData[viewDataKey] = resourceRegistries;
+				html.ViewContext.HttpContext.Items[key] = resourceRegistries;
 			}
 
 			return resourceRegistries;

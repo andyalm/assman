@@ -1,3 +1,9 @@
+<use namespace="Website.Models" />
 <content name="main">
-	#Html.IncludeScript("~/Views/Home/Index.js");
+	<ScriptInclude src="~/Views/Home/Index.js" />
+	Hello home page
+	#Html.RenderPartial("Nested", new NestedModel { Value = 0 });
+	<ScriptBlock>
+		Index.init();
+	</ScriptBlock>
 </content>
