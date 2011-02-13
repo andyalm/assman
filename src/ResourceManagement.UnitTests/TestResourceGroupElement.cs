@@ -142,6 +142,7 @@ namespace AlmWitt.Web.ResourceManagement
 			groups.ShouldContain(g => g.ConsolidatedUrl == "~/consolidated/bycontroller/Purchase.js");
 			groups.Single(g => g.ConsolidatedUrl == "~/consolidated/bycontroller/Search.js").GetResources().Count().ShouldEqual(2);
 			groups.Single(g => g.ConsolidatedUrl == "~/consolidated/bycontroller/Purchase.js").GetResources().Count().ShouldEqual(1);
+			_element.GetResourceUrl(@"~/Views/Search/Landing.js", UrlType.Static).ShouldEqual("~/consolidated/bycontroller/Search.js");
 		}
 
 		[Test]

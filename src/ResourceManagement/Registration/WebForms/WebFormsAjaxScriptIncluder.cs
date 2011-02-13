@@ -13,7 +13,7 @@ namespace AlmWitt.Web.ResourceManagement.WebForms
 			_scriptManager = scriptManager;
 		}
 
-		public override void IncludeUrl(string urlToInclude)
+		public override void IncludePath(string urlToInclude)
 		{
 			//we have to check to see if a reference exists already
 			//because the ScriptManager is case-sensitive when removing

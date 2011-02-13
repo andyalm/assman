@@ -9,6 +9,12 @@ namespace AlmWitt.Web.ResourceManagement
 		private readonly HashSet<string> _includes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<object, Action<TextWriter>> _inlineBlocks = new Dictionary<object, Action<TextWriter>>();
 
+		public bool TryResolvePath(string path, out string resolvedVirtualPath)
+		{
+			resolvedVirtualPath = path;
+			return true;
+		}
+
 		public IEnumerable<string> GetIncludes()
 		{
 			return _includes;
@@ -19,7 +25,7 @@ namespace AlmWitt.Web.ResourceManagement
 			return _inlineBlocks.Values;
 		}
 
-		public void IncludeUrl(string urlToInclude)
+		public void IncludePath(string urlToInclude)
 		{
 			if (!_includes.Contains(urlToInclude))
 			{
@@ -44,12 +50,6 @@ namespace AlmWitt.Web.ResourceManagement
 		public bool IsInlineBlockRegistered(object key)
 		{
 			return _inlineBlocks.ContainsKey(key);
-		}
-
-		public virtual string GetEmbeddedResourceUrl(string assemblyName, string resourceName)
-		{
-			throw new NotSupportedException(@"Directly including embedded resources is currently only supported when using the WebForms View Engine.
-You should still be able to consolidate embedded resources into consolidated groups without WebForms however.");
 		}
 	}
 }

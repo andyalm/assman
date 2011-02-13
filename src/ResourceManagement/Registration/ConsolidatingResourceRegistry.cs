@@ -17,53 +17,22 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 	/// </remarks>
 	public class ConsolidatingResourceRegistry : IReadableResourceRegistry, IScriptRegistry, IStyleRegistry
 	{
-		/// <summary>
-		/// Wraps the given <see cref="IResourceRegistry"/> with a proxy that ensures that all script includes are consolidated
-		/// based on the current <see cref="ResourceManagementConfiguration"/>.
-		/// </summary>
-		public static IResourceRegistry UseScriptConsolidation(IResourceRegistry scriptRegistry)
-		{
-			ResourceManagementConfiguration config = ResourceManagementConfiguration.Current;
-			if (config.Consolidate && config.ClientScripts.Consolidate)
-			{
-				scriptRegistry = new ConsolidatingResourceRegistry(scriptRegistry, config, config.GetScriptUrl);
-			}
-
-			return scriptRegistry;
-		}
-
-		/// <summary>
-		/// Wraps the given <see cref="IResourceRegistry"/> with a proxy that ensures that all css includes are consolidated
-		/// based on the current <see cref="ResourceManagementConfiguration"/>.
-		/// </summary>
-		public static IResourceRegistry UseCssConsolidation(IResourceRegistry cssRegistry)
-		{
-			ResourceManagementConfiguration config = ResourceManagementConfiguration.Current;
-			if (config.Consolidate && config.CssFiles.Consolidate)
-			{
-				cssRegistry = new ConsolidatingResourceRegistry(cssRegistry, config, config.GetStylesheetUrl);
-			}
-
-			return cssRegistry;
-		}
-
 		private readonly IResourceRegistry _inner;
 		private readonly ResourceManagementConfiguration _config;
 		private readonly Func<string, string> _getResourceUrl;
-		private static readonly Dictionary<string, string> _resolvedUrls = new Dictionary<string, string>();
 
-		internal ConsolidatingResourceRegistry(IResourceRegistry inner, ResourceManagementConfiguration config, Func<string, string> getResourceUrl)
+		internal ConsolidatingResourceRegistry(IResourceRegistry inner, ResourceManagementConfiguration config, Func<string, string> getResourceUrl, IDictionary<string,string> resolvedUrlCache)
 		{
 			_inner = inner;
 			_config = config;
 
 			Func<string, string> resolveFromCache = virtualPath =>
 			{
-				if (!_resolvedUrls.ContainsKey(virtualPath))
+				if (!resolvedUrlCache.ContainsKey(virtualPath))
 				{
-					_resolvedUrls[virtualPath] = getResourceUrl(virtualPath);
+					resolvedUrlCache[virtualPath] = getResourceUrl(virtualPath);
 				}
-				return _resolvedUrls[virtualPath];
+				return resolvedUrlCache[virtualPath];
 			};
 			_getResourceUrl = resolveFromCache;
 		}
@@ -73,24 +42,27 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			get { return _inner; }
 		}
 
-		public void IncludeUrl(string virtualPath)
+		public bool TryResolvePath(string path, out string resolvedVirtualPath)
+		{
+			var resolvedPath = _getResourceUrl(path);
+			if(!resolvedPath.Equals(path,  StringComparison.OrdinalIgnoreCase))
+			{
+				resolvedVirtualPath = resolvedPath;
+				return true;
+			}
+			else
+			{
+				resolvedVirtualPath = null;
+				return false;
+			}
+		}
+
+		public void IncludePath(string virtualPath)
 		{
 			virtualPath = ToCanonicalUrl(virtualPath);
 			virtualPath = _getResourceUrl(virtualPath);
 
-			_inner.IncludeUrl(virtualPath);
-		}
-
-		public string GetEmbeddedResourceUrl(string assemblyName, string resourceName)
-		{
-			string shortAssemblyName = assemblyName.ToShortAssemblyName();
-			string virtualPath = EmbeddedResource.GetVirtualPath(shortAssemblyName, resourceName);
-			string consolidatedUrl = _getResourceUrl(virtualPath);
-
-			if (_config.Assemblies.Contains(shortAssemblyName) && !consolidatedUrl.Equals(virtualPath, StringComparison.OrdinalIgnoreCase))
-				return consolidatedUrl;
-			else
-				return null;
+			_inner.IncludePath(virtualPath);
 		}
 
 		public void RegisterInlineBlock(Action<TextWriter> block, object key)
@@ -113,9 +85,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			return _inner.AsReadable().GetInlineBlocks();
 		}
 
-		//HACK: This method is internal because it is used by the WebResourceManager.
-		//This smells like we need to refactor this a little.
-		internal static string ToCanonicalUrl(string url)
+		private string ToCanonicalUrl(string url)
 		{
 			//if its a full url, no need to do anything more, just return it.
 			if (Uri.IsWellFormedUriString(url, UriKind.Absolute))

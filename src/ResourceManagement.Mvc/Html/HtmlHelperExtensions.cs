@@ -9,7 +9,7 @@ namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 	{	
 		public static void IncludeScript(this HtmlHelper html, string virtualPath)
 		{
-			html.ScriptRegistry().IncludeUrl(virtualPath);
+			html.ScriptRegistry().IncludePath(virtualPath);
 		}
 
 		public static void RenderScripts(this HtmlHelper html)

@@ -1,30 +1,25 @@
 using System;
 using System.IO;
-using System.Reflection;
 using System.Web.UI;
 
 namespace AlmWitt.Web.ResourceManagement.WebForms
 {
 	internal abstract class WebFormsRegistryBase : IResourceRegistry
 	{
-		private Control _control;
+		private readonly Control _control;
 
-		public WebFormsRegistryBase(Control control)
+		protected WebFormsRegistryBase(Control control)
 		{
 			_control = control;
 		}
 
-		public string ResolveUrl(string virtualPath)
+		public bool TryResolvePath(string path, out string resolvedVirtualPath)
 		{
-			return _control.ResolveUrl(virtualPath);
+			resolvedVirtualPath = path;
+			return true;
 		}
 
-		public abstract void IncludeUrl(string urlToInclude);
-
-		public string GetEmbeddedResourceUrl(string assemblyName, string resourceName)
-		{
-			return Page.ClientScript.GetWebResourceUrl(Assembly.Load(assemblyName).GetTypes()[0], resourceName);
-		}
+		public abstract void IncludePath(string urlToInclude);
 
 		public abstract void RegisterInlineBlock(Action<TextWriter> block, object key);
 

@@ -50,7 +50,7 @@ namespace AlmWitt.Web.ResourceManagement.WebForms
 			
 			if(String.IsNullOrEmpty(AssemblyName))
 			{
-				registry.IncludeUrl(ResourceUrl);
+				registry.IncludePath(ResourceUrl);
 			}
 			else
 			{

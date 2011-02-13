@@ -10,7 +10,7 @@ namespace AlmWitt.Web.ResourceManagement.WebForms
 		
 		public WebFormsCssRegistry(Control control) : base(control) { }
 
-		public override void IncludeUrl(string urlToInclude)
+		public override void IncludePath(string urlToInclude)
 		{
 			var linkElement = String.Format(linkTemplate, urlToInclude);
 			AddToHeader(urlToInclude, linkElement);

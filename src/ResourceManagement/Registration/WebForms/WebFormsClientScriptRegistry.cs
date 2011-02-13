@@ -12,7 +12,7 @@ namespace AlmWitt.Web.ResourceManagement.WebForms
 		{
 		}
 
-		public override void IncludeUrl(string urlToInclude)
+		public override void IncludePath(string urlToInclude)
 		{
 			Page.ClientScript.RegisterClientScriptInclude(typeof(WebFormsClientScriptRegistry), urlToInclude, urlToInclude);
 		}

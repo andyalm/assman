@@ -22,6 +22,11 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				_inner = inner;
 			}
 
+			public bool TryResolvePath(string path, out string resolvedVirtualPath)
+			{
+				return _inner.TryResolvePath(path, out resolvedVirtualPath);
+			}
+
 			public IEnumerable<string> GetIncludes()
 			{
 				return ReadableOrDefault().GetIncludes();
@@ -32,14 +37,9 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				return ReadableOrDefault().GetInlineBlocks();
 			}
 
-			public string GetEmbeddedResourceUrl(string assemblyName, string resourceName)
+			public void IncludePath(string urlToInclude)
 			{
-				return _inner.GetEmbeddedResourceUrl(assemblyName, resourceName);
-			}
-
-			public void IncludeUrl(string urlToInclude)
-			{
-				_inner.IncludeUrl(urlToInclude);
+				_inner.IncludePath(urlToInclude);
 			}
 
 			public void RegisterInlineBlock(Action<TextWriter> block, object key)

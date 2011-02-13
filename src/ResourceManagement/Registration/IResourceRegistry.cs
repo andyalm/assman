@@ -9,26 +9,18 @@ namespace AlmWitt.Web.ResourceManagement
 	public interface IResourceRegistry
 	{
 		/// <summary>
-		/// Resolves a virtual or relative url to one that is usable by the web browser.
+		/// Tries to resolve the given path into a true virtual file path.
 		/// </summary>
-		/// <param name="virtualPath">A virtual or relative url.</param>
+		/// <param name="path"></param>
+		/// <param name="resolvedVirtualPath"></param>
 		/// <returns></returns>
-		//string ResolveUrl(string virtualPath);
-		//TODO: maybe later???
-		
+		bool TryResolvePath(string path, out string resolvedVirtualPath);
+
 		/// <summary>
-		/// Gets a url that will return the contents of the specified embedded resource.
-		/// </summary>
-		/// <param name="assemblyName">The name of the assembly that the resource is embedded in.</param>
-		/// <param name="resourceName">The name of the embedded resource.</param>
-		/// <returns></returns>
-		string GetEmbeddedResourceUrl(string assemblyName, string resourceName);
-		
-		/// <summary>
-		/// Includes the resource on the current web page.
+		/// Includes the resource at the given path on the current web page.
 		/// </summary>
 		/// <param name="urlToInclude">The url of the resource to be included.</param>
-		void IncludeUrl(string urlToInclude);
+		void IncludePath(string urlToInclude);
 
 		/// <summary>
 		/// Registers an inline block that will appear inline on the page directly below the includes of this <see cref="IResourceRegistry"/>.
@@ -41,5 +33,6 @@ namespace AlmWitt.Web.ResourceManagement
 		/// Indicates that an inline block with the given key has been registered.
 		/// </summary>
 		bool IsInlineBlockRegistered(object key);
+
 	}
 }

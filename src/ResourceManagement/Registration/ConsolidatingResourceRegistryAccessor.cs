@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
@@ -24,7 +25,13 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			private readonly ResourceManagementConfiguration _config;
 			private ConsolidatingResourceRegistry _scriptRegistry;
 			private ConsolidatingResourceRegistry _styleRegistry;
-
+			private readonly IDictionary<string, ConsolidatingResourceRegistry> _namedScriptRegistries = new Dictionary<string, ConsolidatingResourceRegistry>(StringComparer.OrdinalIgnoreCase);
+			private readonly IDictionary<string, ConsolidatingResourceRegistry> _namedStyleRegistries = new Dictionary<string, ConsolidatingResourceRegistry>(StringComparer.OrdinalIgnoreCase);
+			
+			//static cache to keep track of resolved url's.  Since resolving can be a relatively expensive operation when you have a large ResourceManagement.config file, we
+			//cache the results here so that you only need to resolve a given url once in the app domain.
+			private static readonly IDictionary<string,string> _resolvedUrlCache = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+			
 			public ConsolidatingResourceRegistryAccessor(IResourceRegistryAccessor inner, ResourceManagementConfiguration config)
 			{
 				_inner = inner;
@@ -33,25 +40,39 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 
 			public IScriptRegistry ScriptRegistry
 			{
-				get { return WrapWithConsolidation(_inner.ScriptRegistry, _config.GetScriptUrl, ref _scriptRegistry); }
+				get { return WrapDefaultWithConsolidation(_inner.ScriptRegistry, _config.GetScriptUrl, ref _scriptRegistry); }
 			}
 
 			public IScriptRegistry NamedScriptRegistry(string name)
 			{
-				return WrapWithConsolidation(_inner.NamedScriptRegistry(name), _config.GetScriptUrl);
+				return WrapNamedWithConsolidation(name, _inner.NamedScriptRegistry, _config.GetScriptUrl, _namedScriptRegistries);
 			}
 
 			public IStyleRegistry StyleRegistry
 			{
-				get { return WrapWithConsolidation(_inner.StyleRegistry, _config.GetStylesheetUrl, ref _styleRegistry); }
+				get { return WrapDefaultWithConsolidation(_inner.StyleRegistry, _config.GetStylesheetUrl, ref _styleRegistry); }
 			}
 
 			public IStyleRegistry NamedStyleRegistry(string name)
 			{
-				return WrapWithConsolidation(_inner.NamedScriptRegistry(name), _config.GetStylesheetUrl);
+				return WrapNamedWithConsolidation(name, _inner.NamedStyleRegistry, _config.GetStylesheetUrl, _namedStyleRegistries);
 			}
 
-			private ConsolidatingResourceRegistry WrapWithConsolidation(IResourceRegistry registry, Func<string, string> getResourceUrl, ref ConsolidatingResourceRegistry field)
+			private ConsolidatingResourceRegistry WrapNamedWithConsolidation(string name, Func<string,IResourceRegistry> getNamedRegistry, Func<string, string> getResourceUrl, IDictionary<string, ConsolidatingResourceRegistry> registryCache)
+			{
+				ConsolidatingResourceRegistry consolidatingRegistry;
+				if(registryCache.TryGetValue(name, out consolidatingRegistry))
+				{
+					return consolidatingRegistry;
+				}
+
+				consolidatingRegistry = WrapWithConsolidation(getNamedRegistry(name), getResourceUrl);
+				registryCache[name] = consolidatingRegistry;
+
+				return consolidatingRegistry;
+			}
+
+			private ConsolidatingResourceRegistry WrapDefaultWithConsolidation(IResourceRegistry registry, Func<string, string> getResourceUrl, ref ConsolidatingResourceRegistry field)
 			{
 				if (field != null)
 					return field;
@@ -69,7 +90,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				}
 				else
 				{
-					return new ConsolidatingResourceRegistry(registry, _config, getResourceUrl);
+					return new ConsolidatingResourceRegistry(registry, _config, getResourceUrl, _resolvedUrlCache);
 				}
 			}
 		}

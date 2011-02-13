@@ -30,12 +30,13 @@ namespace AlmWitt.Web.ResourceManagement
 			yield break;
 		}
 
-		public string GetEmbeddedResourceUrl(string assemblyName, string resourceName)
+		public bool TryResolvePath(string path, out string resolvedVirtualPath)
 		{
-			return null;
+			resolvedVirtualPath = path;
+			return true;
 		}
 
-		public void IncludeUrl(string urlToInclude) {}
+		public void IncludePath(string urlToInclude) {}
 		public void RegisterInlineBlock(Action<TextWriter> block, object key) {}
 		public bool IsInlineBlockRegistered(object key)
 		{
