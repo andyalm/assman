@@ -3,11 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>${Title}</title>
+	<ScriptInclude src="~/Scripts/jquery-1.4.1.min.js" target="head" />
 	#Html.RenderStyles();
 	#Html.RenderScripts("head");
 </head>
 <body>
 	<use content="main" />
-	#Html.RenderScripts();   
+	#Html.RenderScripts();  
+	<script type="text/javascript" src="${Url.Content('~/Scripts/ResourceManagement-TestFramework.js')}"></script>
 </body>
 </html>

@@ -1,9 +1,10 @@
-<use namespace="Website.Models" />
 <content name="main">
-	<ScriptInclude src="~/Views/Home/Index.js" />
-	Hello home page
-	#Html.RenderPartial("Nested", new NestedModel { Value = 0 });
+	<dl>
+		<dt>&lt;ScriptBlock&gt; binding</dt>
+		<dd id="script-block-binding" class="test">running...</dd>
+	</dl>
+	
 	<ScriptBlock>
-		Index.init();
+		$("#script-block-binding").addClass("pass");
 	</ScriptBlock>
 </content>

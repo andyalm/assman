@@ -4,5 +4,5 @@ function Index() { }
 
 Index.init = function ()
 {
-	alert("Index page initialized");
+	$("#index").addClass("pass");
 };

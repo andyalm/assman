@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -12,73 +13,43 @@ namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 			html.ScriptRegistry().IncludePath(virtualPath);
 		}
 
+		public static void IncludeScript(this HtmlHelper html, string virtualPath, string registryName)
+		{
+			html.ScriptRegistry(registryName).IncludePath(virtualPath);
+		}
+
+		public static void IncludeStylesheet(this HtmlHelper html, string virtualPath)
+		{
+			html.StyleRegistry().IncludePath(virtualPath);
+		}
+
+		public static void IncludeStylesheet(this HtmlHelper html, string virtualPath, string registryName)
+		{
+			html.StyleRegistry(registryName).IncludePath(virtualPath);
+		}
+
 		public static void RenderScripts(this HtmlHelper html)
 		{
-			var scriptRegistry = html.ScriptRegistry().AsReadable();
-			RenderScripts(html, scriptRegistry);
+			var renderer = html.ScriptRegistry().Renderer(html.Resolver());
+			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
 		public static void RenderScripts(this HtmlHelper html, string registryName)
 		{
-			var scriptRegistry = html.ScriptRegistry(registryName).AsReadable();
-			RenderScripts(html, scriptRegistry);
+			var renderer = html.ScriptRegistry(registryName).Renderer(html.Resolver());
+			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
 		public static void RenderStyles(this HtmlHelper html)
 		{
-			var styleRegistry = html.StyleRegistry().AsReadable();
-			RenderStyles(html, styleRegistry);
+			var renderer = html.StyleRegistry().Renderer(html.Resolver());
+			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
-		private static void RenderScripts(HtmlHelper html, IReadableResourceRegistry scriptRegistry)
+		public static void RenderStyles(this HtmlHelper html, string registryName)
 		{
-			var url = new UrlHelper(html.ViewContext.RequestContext);
-			var writer = html.ViewContext.Writer;
-			foreach(var includeUrl in scriptRegistry.GetIncludes())
-			{
-				var scriptTag = GetScriptTag();
-				scriptTag.Attributes["src"] = url.Content(includeUrl);
-				scriptTag.WriteTo(writer);
-			}
-
-			var scriptBlocks = scriptRegistry.GetInlineBlocks();
-			if(scriptBlocks.Any())
-			{
-				var scriptTag = GetScriptTag();
-				scriptTag.WriteStartTag(writer);
-				foreach (var scriptBlock in scriptBlocks)
-				{
-					scriptBlock(writer);
-				}
-				scriptTag.WriteEndTag(writer);
-			}
-		}
-
-		private static void RenderStyles(HtmlHelper html, IReadableResourceRegistry styleRegistry)
-		{
-			var url = new UrlHelper(html.ViewContext.RequestContext);
-			var writer = html.ViewContext.Writer;
-			foreach (var includeUrl in styleRegistry.GetIncludes())
-			{
-				var linkTag = new TagBuilder("link");
-				linkTag.Attributes["rel"] = "Stylesheet";
-				linkTag.Attributes["type"] = "text/css";
-				linkTag.Attributes["href"] = url.Content(includeUrl);
-				linkTag.WriteTo(writer);
-			}
-
-			var styleBlocks = styleRegistry.GetInlineBlocks();
-			if(styleBlocks.Any())
-			{
-				var styleTag = new TagBuilder("style");
-				styleTag.Attributes["type"] = "text/css";
-				styleTag.WriteStartTag(writer);
-				foreach (var styleBlock in styleBlocks)
-				{
-					styleBlock(writer);
-				}
-				styleTag.WriteEndTag(writer);
-			}
+			var renderer = html.StyleRegistry(registryName).Renderer(html.Resolver());
+			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
 		public static IScriptRegistry ScriptRegistry(this HtmlHelper html, string registryName)
@@ -103,22 +74,17 @@ namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 
 		public static IResourceRegistryAccessor ResourceRegistries(this HtmlHelper html)
 		{
-			var key = "__ResourceRegistries" + html.ViewContext.View.GetHashCode();
-			var resourceRegistries = html.ViewContext.HttpContext.Items[key] as IResourceRegistryAccessor;
-			if(resourceRegistries == null)
-			{	
-				resourceRegistries = new GenericResourceRegistryAccessor().UseConsolidation();
-				html.ViewContext.HttpContext.Items[key] = resourceRegistries;
-			}
-
-			return resourceRegistries;
+			return html.ViewContext.ResourceRegistries();
 		}
 
-		private static TagBuilder GetScriptTag()
+		private static Func<string,string> Resolver(this HtmlHelper html)
 		{
-			var scriptTag = new TagBuilder("script");
-			scriptTag.Attributes["type"] = "text/javascript";
-			return scriptTag;
+			var urlHelper = new UrlHelper(html.ViewContext.RequestContext);
+			Func<string, string> resolverDelegate = url =>
+			{
+				return ResourceIncludeResolver.Instance.ResolveUrl(urlHelper, url);
+			};
+			return resolverDelegate;
 		}
 	}
 }

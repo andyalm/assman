@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebForms-WebSiteProject", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteLib", "samples\AspNet-WebSiteProject\WebsiteLib\WebsiteLib.csproj", "{F853FC33-CE3C-4501-8177-4BF2EF557826}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Website", "samples\AspNet-WebSiteProject\Website", "{C40EEE00-CA28-4910-8D2E-FC801CCA5535}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Website", "samples\AspNet-WebSiteProject\Website\", "{C40EEE00-CA28-4910-8D2E-FC801CCA5535}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
 		ProjectReferences = "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}|AlmWitt.Web.ResourceManagement.dll;"
@@ -42,7 +42,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Website", "samples\AspNet-W
 		VWDPort = "1476"
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc-WebAppProject", "Mvc-WebAppProject", "{88DB7D60-4270-4677-BF2A-580EC479DDDE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc2-WebAppProject", "Mvc2-WebAppProject", "{88DB7D60-4270-4677-BF2A-580EC479DDDE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "samples\Mvc-WebAppProject\Website\Website.csproj", "{8BC40064-631E-491F-A3E3-C56494A81977}"
 EndProject

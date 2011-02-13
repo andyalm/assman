@@ -134,6 +134,7 @@
     <Compile Include="Registration\ReadableExtensions.cs" />
     <Compile Include="Registration\ResourceRegistryExtensions.cs" />
     <Compile Include="Registration\ResourceRegistryMap.cs" />
+    <Compile Include="Registration\ResourceRegistryRenderer.cs" />
     <Compile Include="Registration\TextWriterExtensions.cs" />
     <Compile Include="ResourceCollectionExtensions.cs" />
     <Compile Include="ResourceGroupTemplateCollection.cs" />
