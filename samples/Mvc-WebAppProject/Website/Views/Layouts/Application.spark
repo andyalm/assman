@@ -9,7 +9,6 @@
 </head>
 <body>
 	<use content="main" />
-	#Html.RenderScripts();  
-	<script type="text/javascript" src="${Url.Content('~/Scripts/ResourceManagement-TestFramework.js')}"></script>
+	#Html.RenderScripts();
 </body>
 </html>

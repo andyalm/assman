@@ -2,7 +2,7 @@
 
 (function ()
 {
-	$(document).ready(function ()
+	$(window).load(function ()
 	{
 		$("dd.test").not(".pass").html("FAILED").css("color", "red");
 		$("dd.test.pass").html("PASSED").css("color", "green");

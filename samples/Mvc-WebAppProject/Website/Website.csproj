@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AppStart_SparkWebMvc.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IntegrationTestsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -78,9 +79,10 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <None Include="Views\Home\Index.spark" />
+    <None Include="Views\IntegrationTests\Index.spark" />
+    <Content Include="Scripts\ResourceManagement-TestFramework.js" />
     <Content Include="Views\bindings.xml" />
-    <Content Include="Views\Home\Index.js" />
+    <Content Include="Views\IntegrationTests\ScriptIncludeBinding.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -105,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
+    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

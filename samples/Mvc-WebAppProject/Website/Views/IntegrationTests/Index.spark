@@ -1,0 +1,23 @@
+<content name="main">
+	<dl>
+		<dt>&lt;ScriptBlock&gt; binding</dt>
+		<dd id="script-block-binding" class="test">running...</dd>
+		<dt>&lt;ScriptInclude&gt; binding</dt>
+		<dd id="script-include-binding" class="test">running...</dd>
+		<dt>ScriptInclude is consolidated</dt>
+		<dd id="script-include-consolidated" class="test">running...</dd>
+	</dl>
+	<ScriptInclude src="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
+	<ScriptBlock>
+		$("#script-block-binding").addClass("pass");
+	</ScriptBlock>
+	<ScriptBlock>
+		if($('script[src="/Scripts/Consolidated/Controllers/IntegrationTests.jsx"]').length == 1
+			&& $('script[src*="ScriptIncludeBinding.js"]').length == 0)
+		{
+			$("#script-include-consolidated").addClass("pass");
+		}
+	</ScriptBlock>
+	<!-- don't use Resource Registries here so that it tests will fail appropriately if necessary --> 
+	<script type="text/javascript" src="${Url.Content('~/Scripts/ResourceManagement-TestBootstrapper.js')}"></script>
+</content>
