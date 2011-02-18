@@ -79,8 +79,9 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <None Include="Views\Home\Index.spark" />
     <None Include="Views\IntegrationTests\Index.spark" />
-    <Content Include="Scripts\ResourceManagement-TestFramework.js" />
+    <Content Include="Scripts\ResourceManagement-TestBootstrapper.js" />
     <Content Include="Views\bindings.xml" />
     <Content Include="Views\IntegrationTests\ScriptIncludeBinding.js" />
     <Content Include="Web.config" />
@@ -107,7 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
