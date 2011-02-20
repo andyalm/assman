@@ -19,5 +19,10 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
     	{
     		return _resources;
     	}
+
+    	public IResource FindResource(string virtualPath)
+    	{
+    		return null;
+    	}
     }
 }

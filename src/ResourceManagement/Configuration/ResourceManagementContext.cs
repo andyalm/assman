@@ -19,6 +19,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		private readonly ResourceGroupTemplateCollection _clientScriptGroups;
 		private readonly ResourceGroupTemplateCollection _cssFileGroups;
 		private readonly List<Assembly> _assemblies;
+		private readonly DependencyManager _dependencyManager;
 
 		internal ResourceManagementContext()
 		{
@@ -78,7 +79,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return _assemblies;
 		}
 
-		public ConsolidatedResource ConsolidatedGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext)
+		public ConsolidatedResource ConsolidateGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext)
 		{
 			var group = GetGroupsFromTemplate(groupTemplateContext)
 				.Where(g => UrlType.ArePathsEqual(g.ConsolidatedUrl, groupConsolidatedUrl))
@@ -117,6 +118,15 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			var resourceType = ResourceType.FromPath(consolidatedUrl);
 
 			return GroupTemplatesOfType(resourceType).FindGroupTemplate(consolidatedUrl);
+		}
+
+		public IEnumerable<string> GetResourceDependencies(string virtualPath)
+		{
+			var resource = Finder.FindResource(virtualPath);
+			if(resource == null)
+				return new string[0];
+
+			return _dependencyManager.GetDependencies(resource);
 		}
 
 		private void ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)

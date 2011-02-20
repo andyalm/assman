@@ -64,7 +64,7 @@ namespace AlmWitt.Web.ResourceManagement
 				return _cachedConsolidatedResource;
 			}
 
-			var consolidatedResource = _configContext.ConsolidatedGroup(_path, _groupTemplateContext);
+			var consolidatedResource = _configContext.ConsolidateGroup(_path, _groupTemplateContext);
 			if(CachingEnabled)
 			{
 				_cachedConsolidatedResource = consolidatedResource;

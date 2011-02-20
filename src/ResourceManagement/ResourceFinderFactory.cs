@@ -54,6 +54,11 @@ namespace AlmWitt.Web.ResourceManagement
 			{
 				return new ResourceCollection();
 			}
-		}
+
+        	public IResource FindResource(string virtualPath)
+        	{
+        		return null;
+        	}
+        }
 	}
 }

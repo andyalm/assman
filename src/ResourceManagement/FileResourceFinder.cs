@@ -6,6 +6,7 @@ namespace AlmWitt.Web.ResourceManagement
 	internal class FileResourceFinder : IResourceFinder
 	{
 		private readonly string _directory;
+		private VirtualPathResolver _pathResolver;
 
 		/// <summary>
 		/// Constructs a new <see cref="FileResourceFinder"/>.
@@ -13,7 +14,8 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <param name="directory">The directory to recursively find resources.</param>
 		public FileResourceFinder(string directory)
 		{
-			this._directory = directory;
+			_directory = directory;
+			_pathResolver = VirtualPathResolver.GetInstance(_directory);
 		}
 
 		/// <summary>
@@ -34,6 +36,21 @@ namespace AlmWitt.Web.ResourceManagement
 			}
 			
 			return resources;
+		}
+
+		public IResource FindResource(string virtualPath)
+		{
+			if (!virtualPath.StartsWith("~/"))
+				return null;
+
+			var filePath = _pathResolver.MapPath(virtualPath);
+
+			if(File.Exists(filePath))
+			{
+				return new FileResource(filePath, _directory);
+			}
+
+			return null;
 		}
 	}
 }

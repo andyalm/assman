@@ -112,6 +112,7 @@
     <Compile Include="ContentFiltering\NullContentFilter.cs" />
     <Compile Include="Configuration\DefaultConfigLoader.cs" />
     <Compile Include="Configuration\IConfigLoader.cs" />
+    <Compile Include="DependencyManager.cs" />
     <Compile Include="IContentFilterFactory.cs" />
     <Compile Include="IO\IFileFinder.cs" />
     <Compile Include="IResourceFinderFactory.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="IResourceHandlerFactory.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistryAccessor.cs" />
+    <Compile Include="Registration\DependencyResolvingResourceRegistry.cs" />
     <Compile Include="Registration\GenericResourceRegistry.cs" />
     <Compile Include="Registration\GenericResourceRegistryAccessor.cs" />
     <Compile Include="Registration\IReadableResourceRegistry.cs" />

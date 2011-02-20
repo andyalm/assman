@@ -9,5 +9,10 @@ namespace AlmWitt.Web.ResourceManagement
 		/// Finds resources of the given file <see cref="ResourceType"/>.
 		/// </summary>
 		ResourceCollection FindResources(ResourceType resourceType);
+
+		/// <summary>
+		/// Finds the resource with the given virtual path.
+		/// </summary>
+		IResource FindResource(string virtualPath);
 	}
 }
