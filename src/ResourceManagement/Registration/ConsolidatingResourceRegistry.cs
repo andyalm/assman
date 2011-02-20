@@ -18,13 +18,11 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 	public class ConsolidatingResourceRegistry : IReadableResourceRegistry, IScriptRegistry, IStyleRegistry
 	{
 		private readonly IResourceRegistry _inner;
-		private readonly ResourceManagementConfiguration _config;
 		private readonly Func<string, string> _getResourceUrl;
 
-		internal ConsolidatingResourceRegistry(IResourceRegistry inner, ResourceManagementConfiguration config, Func<string, string> getResourceUrl, IDictionary<string,string> resolvedUrlCache)
+		internal ConsolidatingResourceRegistry(IResourceRegistry inner, Func<string, string> getResourceUrl, IDictionary<string,string> resolvedUrlCache)
 		{
 			_inner = inner;
-			_config = config;
 
 			Func<string, string> resolveFromCache = virtualPath =>
 			{

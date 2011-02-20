@@ -115,14 +115,20 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 						@group.Select(g => g.Resource).Sort(IncludePatternOrder()));
 		}
 
-		public string GetResourceUrl(string resourceUrl, UrlType urlType)
+		public bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl)
 		{
+			consolidatedUrl = null;
 			if (!Consolidate)
-				return resourceUrl;
+				return false;
 
-			var match = GetMatch(resourceUrl);
+			var match = GetMatch(virtualPath);
+			if(match.IsMatch)
+			{
+				consolidatedUrl = GetConsolidatedUrl(match);
+				return true;
+			}
 
-			return match.IsMatch ? urlType.ConvertUrl(GetConsolidatedUrl(match)) : resourceUrl;
+			return false;
 		}
 
 		private string GetConsolidatedUrl(IResourceMatch match)

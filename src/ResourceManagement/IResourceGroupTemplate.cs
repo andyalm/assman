@@ -8,5 +8,6 @@ namespace AlmWitt.Web.ResourceManagement
 		ResourceType ResourceType { get; }
 		bool Compress { get; }
 		IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources);
+		bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl);
 	}
 }

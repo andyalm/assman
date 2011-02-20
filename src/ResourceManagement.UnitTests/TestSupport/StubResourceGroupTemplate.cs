@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,6 +39,11 @@ namespace AlmWitt.Web.ResourceManagement.TestObjects
 		{
 			return from @group in _groups
 				   select CreateGroup(@group.ConsolidatedUrl, allResources.Where(@group.Contains));
+		}
+
+		public bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl)
+		{
+			throw new NotImplementedException();
 		}
 
 		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resources)

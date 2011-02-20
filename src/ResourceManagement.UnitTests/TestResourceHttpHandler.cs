@@ -15,7 +15,7 @@ namespace AlmWitt.Web.ResourceManagement
 	public class TestResourceHttpHandler
 	{
 		private ResourceHttpHandler _httpHandler;
-		private ResourceManagementConfiguration _config;
+		private ResourceManagementContext _context;
 		private FakeHandlerFactory _handlerFactory;
 		private Mock<HttpContextBase> _httpContext;
 		private ClientScriptGroupElement _groupElement;
@@ -24,16 +24,14 @@ namespace AlmWitt.Web.ResourceManagement
 		[SetUp]
 		public void SetupContext()
 		{
-			_config = new ResourceManagementConfiguration();
-			_config.RootFilePath = "c:\\temp";
-			_config.LastModified(DateTime.MinValue);
+			_context = ResourceManagementContext.Create();
 			_groupElement = new ClientScriptGroupElement();
 			_groupElement.ConsolidatedUrl = "~" + ConsolidatedPath;
-			_config.ClientScripts.Add(_groupElement);
+			_context.ClientScriptGroups.Add(_groupElement);
 
 			_handlerFactory = new FakeHandlerFactory();
 
-			_httpHandler = new ResourceHttpHandler(_config, _handlerFactory);
+			_httpHandler = new ResourceHttpHandler(_context, _handlerFactory);
 			_httpHandler.ToAppRelativePath = ToAppRelative;
 		}
 

@@ -17,13 +17,13 @@ namespace AlmWitt.Web.ResourceManagement
 		private readonly DateTime _minLastModified;
 		internal Func<string, string> ToAppRelativePath = path => VirtualPathUtility.ToAppRelative(path);
 
-		public ResourceHttpHandler() : this(ResourceManagementConfiguration.Current, new ResourceHandlerFactory()) {}
+		public ResourceHttpHandler() : this(ResourceManagementContext.Current, new ResourceHandlerFactory()) {}
 
-		internal ResourceHttpHandler(ResourceManagementConfiguration config, IResourceHandlerFactory handlerFactory)
+		internal ResourceHttpHandler(ResourceManagementContext context, IResourceHandlerFactory handlerFactory)
 		{
 			_handlerFactory = handlerFactory;
-			_resourceContext = config.BuildContext();
-			_minLastModified = config.LastModified();
+			_resourceContext = context;
+			_minLastModified = context.ConfigurationLastModified;
 			_handlerRegistry = new Dictionary<string, IResourceHandler>(StringComparer.OrdinalIgnoreCase);
 		}
 

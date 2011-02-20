@@ -5,6 +5,11 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 {
 	internal class StubResource : IResource
 	{
+		public static StubResource WithContent(string content)
+		{
+			return new StubResource(content);
+		}
+
 		public static StubResource WithPath(string virtualPath)
 		{
 			return new StubResource("")
@@ -14,7 +19,9 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 		}
 
 		private readonly string _content;
+
 		private string _virtualPath;
+
 		private DateTime _lastModified = DateTime.Now;
 
 		public StubResource(string content)

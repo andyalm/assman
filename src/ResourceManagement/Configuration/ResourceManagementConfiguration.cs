@@ -76,7 +76,9 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
             {
                 if (_rootFilePath == null)
                 {
-                    _rootFilePath = HttpContext.Current.Server.MapPath("~");
+                	var httpContext = HttpContext.Current;
+					if(httpContext != null)
+						_rootFilePath = httpContext.Server.MapPath("~");
                 }
 
                 return _rootFilePath;
@@ -187,18 +189,29 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		public ResourceManagementContext BuildContext()
 		{
-			return BuildContext(ResourceFinderFactory.GetInstance(RootFilePath));
+			IResourceFinder fileFinder;
+			if (String.IsNullOrEmpty(RootFilePath))
+				fileFinder = ResourceFinderFactory.Null;
+			else
+				fileFinder = ResourceFinderFactory.GetInstance(RootFilePath);
+
+			return BuildContext(fileFinder);
 		}
 
 		public ResourceManagementContext BuildContext(IResourceFinder fileFinder)
 		{
 			var context = ResourceManagementContext.Create();
 
+			context.PreConsolidated = PreConsolidated;
+			context.ConfigurationLastModified = LastModified();
+			context.ConsolidateClientScripts = Consolidate && ClientScripts.Consolidate;
+			context.ConsolidateCssFiles = Consolidate && CssFiles.Consolidate;
 			context.AddFinder(fileFinder);
 			context.AddAssemblies(Assemblies.GetAssemblies());
 			context.ClientScriptGroups.AddRange(ClientScripts.Cast<IResourceGroupTemplate>());
 			context.CssFileGroups.AddRange(CssFiles.Cast<IResourceGroupTemplate>());
 			context.MapExtensionToFilter(".js", JSMinContentFilterFactory.GetInstance());
+			context.MapExtensionToDependencyProvider(".js", VisualStudioScriptDependencyProvider.GetInstance());
 
 			foreach (var plugin in Plugins.GetPlugins())
 			{
@@ -215,42 +228,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public void SaveChanges(System.Configuration.Configuration config)
 		{
 			config.Save();
-		}
-
-		internal string GetScriptUrl(string scriptUrl)
-		{
-			return GetResourceUrl(ClientScripts, scriptUrl);
-		}
-
-		internal string GetStylesheetUrl(string stylesheetUrl)
-		{
-			return GetResourceUrl(CssFiles, stylesheetUrl);
-		}
-
-		private string GetResourceUrl<TGroupElement>(ResourceGroupElementCollection<TGroupElement> groupElements, string resourceUrl) where TGroupElement : ResourceGroupElement, new()
-		{
-			if (Consolidate && groupElements.Consolidate)
-			{
-				foreach (ResourceGroupElement groupElement in groupElements)
-				{
-					if(groupElement.IsMatch(resourceUrl))
-					{
-						resourceUrl = groupElement.GetResourceUrl(resourceUrl, ConsolidatedUrlType);
-						break;
-					}
-				}
-			}
-			if (!String.IsNullOrEmpty(Version) && !resourceUrl.Contains("?"))
-				resourceUrl += "?v=" + HttpUtility.UrlEncode(Version);	
-			return resourceUrl;
-		}
-
-		private UrlType ConsolidatedUrlType
-		{
-			get
-			{
-				return PreConsolidated ? UrlType.Static : UrlType.Dynamic;
-			}
 		}
 
 		private static class PropertyNames

@@ -33,7 +33,7 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
         }
 
         /// <summary>
-        /// Gets or sets the physical path the the root of the website.
+        /// Gets the physical path the the root of the website.
         /// </summary>
         public string WebRoot
         {

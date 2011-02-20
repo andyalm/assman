@@ -98,7 +98,7 @@ namespace AlmWitt.Web.ResourceManagement
 		}
 
 		[Test]
-		public void GetResourceUrlHonorsIncludeAndExclude()
+		public void TryGetConsolidatedUrlHonorsIncludeAndExclude()
 		{
 			CreateResources("file1.js", "file2.js", "file3.js", "file4.js", "file5.js");
 
@@ -108,11 +108,29 @@ namespace AlmWitt.Web.ResourceManagement
 			_element.Include.Add("file4.js");
 			_element.Exclude.Add("file3.js");
 
-			_element.GetResourceUrl("file1.js", UrlType.Static).ShouldEqual("file1.js");
-			_element.GetResourceUrl("file2.js", UrlType.Static).ShouldEqual(_element.ConsolidatedUrl);
-			_element.GetResourceUrl("file3.js", UrlType.Static).ShouldEqual("file3.js");
-			_element.GetResourceUrl("file4.js", UrlType.Static).ShouldEqual(_element.ConsolidatedUrl);
-			_element.GetResourceUrl("file5.js", UrlType.Static).ShouldEqual("file5.js");
+			VerifyUrlIsNotConsolidated("file1.js");
+			VerifyUrlIsConsolidated("file2.js");
+			VerifyUrlIsNotConsolidated("file3.js");
+			VerifyUrlIsConsolidated("file4.js");
+			VerifyUrlIsNotConsolidated("file5.js");
+		}
+
+		private void VerifyUrlIsConsolidated(string virtualPath)
+		{
+			VerifyUrlIsConsolidated(virtualPath, _element.ConsolidatedUrl);
+		}
+
+		private void VerifyUrlIsConsolidated(string virtualPath, string expectedConsolidatedUrl)
+		{
+			string consolidatedUrl;
+			_element.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl).ShouldBeTrue();
+			consolidatedUrl.ShouldEqual(expectedConsolidatedUrl);
+		}
+
+		private void VerifyUrlIsNotConsolidated(string virtualPath)
+		{
+			string consolidatedUrl;
+			_element.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl).ShouldBeFalse();
 		}
 
 		[Test]
@@ -142,7 +160,7 @@ namespace AlmWitt.Web.ResourceManagement
 			groups.ShouldContain(g => g.ConsolidatedUrl == "~/consolidated/bycontroller/Purchase.js");
 			groups.Single(g => g.ConsolidatedUrl == "~/consolidated/bycontroller/Search.js").GetResources().Count().ShouldEqual(2);
 			groups.Single(g => g.ConsolidatedUrl == "~/consolidated/bycontroller/Purchase.js").GetResources().Count().ShouldEqual(1);
-			_element.GetResourceUrl(@"~/Views/Search/Landing.js", UrlType.Static).ShouldEqual("~/consolidated/bycontroller/Search.js");
+			VerifyUrlIsConsolidated("~/Views/Search/Landing.js", "~/consolidated/bycontroller/Search.js");
 		}
 
 		[Test]

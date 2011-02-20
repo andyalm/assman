@@ -1,3 +1,5 @@
+using AlmWitt.Web.ResourceManagement.Configuration;
+
 using NUnit.Framework;
 
 using AlmWitt.Web.ResourceManagement.TestSupport;
@@ -9,12 +11,21 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 	{
 		private GenericResourceRegistryAccessor _innerAccessor;
 		private IResourceRegistryAccessor _consolidatingAccessor;
+		private ResourceManagementContext _context;
 
 		[SetUp]
 		public void SetupContext()
 		{
+			_context = ResourceManagementContext.Create();
+			ResourceManagementContext.Current = _context;
 			_innerAccessor = new GenericResourceRegistryAccessor();
 			_consolidatingAccessor = _innerAccessor.UseConsolidation();
+		}
+
+		[TearDown]
+		public void TeardownContext()
+		{
+			ResourceManagementContext.Current = null;
 		}
 
 		[Test]

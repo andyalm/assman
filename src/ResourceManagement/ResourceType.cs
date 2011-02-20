@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using AlmWitt.Web.ResourceManagement.Configuration;
-
 namespace AlmWitt.Web.ResourceManagement
 {
-    /// <summary>
-    /// Represents a specific type of web resource that can be consolidated and included on a web page.
-    /// </summary>
+	/// <summary>
+	/// Represents a specific type of web resource that can be consolidated and included on a web page.
+	/// </summary>
 	public abstract class ResourceType
-    {
+	{
 		private static readonly ResourceType _clientScript = new ClientScriptResourceType();
 		private static readonly ResourceType _css = new CssResourceType();
 
@@ -19,17 +17,17 @@ namespace AlmWitt.Web.ResourceManagement
 		/// Gets the client script resource type (i.e. javascript).
 		/// </summary>
 		public static ResourceType ClientScript
-    	{
-    		get { return _clientScript; }
-    	}
+		{
+			get { return _clientScript; }
+		}
 
 		/// <summary>
 		/// Gets the css resource type.
 		/// </summary>
 		public static ResourceType Css
-    	{
-    		get { return _css; }
-    	}
+		{
+			get { return _css; }
+		}
 
 		public static ResourceType FromPath(string path)
 		{
@@ -43,10 +41,10 @@ namespace AlmWitt.Web.ResourceManagement
 		}
 
 		private readonly List<string> _fileExtensions = new List<string>();
-		
+
 		public void AddFileExtension(string fileExtension)
 		{
-			if(!_fileExtensions.Any(extension => extension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)))
+			if (!_fileExtensions.Any(extension => extension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)))
 				_fileExtensions.Add(fileExtension);
 		}
 
@@ -69,50 +67,31 @@ namespace AlmWitt.Web.ResourceManagement
 
 		public abstract string ContentType { get; }
 		public abstract string DefaultFileExtension { get; }
-
-        
-		/// <summary>
-		/// Gets the consolidated url of the given resource path using the given configuration.
-		/// </summary>
-		/// <param name="config"></param>
-		/// <param name="resourcePath"></param>
-		/// <returns></returns>
-		public abstract string GetResourceUrl(ResourceManagementConfiguration config, string resourcePath);
-    }
+	}
 
 	internal class ClientScriptResourceType : ResourceType
 	{
 		public override string ContentType
-			{
-				get { return "text/javascript"; }
-			}
-
-			public override string DefaultFileExtension
-			{
-				get { return ".js"; }
-			}
-
-		public override string GetResourceUrl(ResourceManagementConfiguration config, string resourcePath)
 		{
-			return config.GetScriptUrl(resourcePath);
+			get { return "text/javascript"; }
+		}
+
+		public override string DefaultFileExtension
+		{
+			get { return ".js"; }
 		}
 	}
 
 	internal class CssResourceType : ResourceType
 	{
 		public override string ContentType
-			{
-				get { return "text/css"; }
-			}
-
-			public override string DefaultFileExtension
-			{
-				get { return ".css"; }
-			}
-
-		public override string GetResourceUrl(ResourceManagementConfiguration config, string resourcePath)
 		{
-			return config.GetStylesheetUrl(resourcePath);
+			get { return "text/css"; }
+		}
+
+		public override string DefaultFileExtension
+		{
+			get { return ".css"; }
 		}
 	}
 }

@@ -1,6 +1,3 @@
-using AlmWitt.Web.ResourceManagement;
-using AlmWitt.Web.ResourceManagement.Configuration;
-
 namespace AlmWitt.Web.ResourceManagement.TestObjects
 {
 	public class StubResourceType : ResourceType
@@ -22,11 +19,6 @@ namespace AlmWitt.Web.ResourceManagement.TestObjects
 		public override string DefaultFileExtension
 		{
 			get { return _defaultFileExtension; }
-		}
-
-		public override string GetResourceUrl(ResourceManagementConfiguration config, string resourcePath)
-		{
-			return null;
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 
 using AlmWitt.Web.ResourceManagement.ContentFiltering;
 
@@ -12,6 +13,22 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public static ResourceManagementContext Create()
 		{
 			return new ResourceManagementContext();
+		}
+
+		private static ResourceManagementContext _current;
+
+		public static ResourceManagementContext Current
+		{
+			get
+			{
+				if(_current == null)
+				{
+					_current = ResourceManagementConfiguration.Current.BuildContext();
+				}
+
+				return _current;
+			}
+			set { _current = value; }
 		}
 
 		private readonly CompositeResourceFinder _finder;
@@ -29,7 +46,15 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			_cssFileGroups = new ResourceGroupTemplateCollection();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = new DependencyManager(_finder);
+			ConsolidateClientScripts = true;
+			ConsolidateCssFiles = true;
 		}
+
+		public DateTime ConfigurationLastModified { get; set; }
+		public bool PreConsolidated { get; set; }
+		public bool ConsolidateClientScripts { get; set; }
+		public bool ConsolidateCssFiles { get; set; }
+		public string Version { get; set; }
 
 		public void MapExtensionToFilter(string fileExtension, IContentFilterFactory filterFactory)
 		{
@@ -129,6 +154,38 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public void MapExtensionToDependencyProvider(string fileExtension, IDependencyProvider dependencyProvider)
 		{
 			_dependencyManager.MapProvider(fileExtension, dependencyProvider);
+		}
+
+		public string GetScriptUrl(string scriptUrl)
+		{
+			return GetResourceUrl(ConsolidateClientScripts, ClientScriptGroups, scriptUrl);
+		}
+
+		public string GetStylesheetUrl(string stylesheetUrl)
+		{
+			return GetResourceUrl(ConsolidateCssFiles, CssFileGroups, stylesheetUrl);
+		}
+
+		private string GetResourceUrl(bool consolidate, IEnumerable<IResourceGroupTemplate> groupTemplates, string resourceUrl)
+		{
+			if (consolidate)
+			{
+				foreach (var groupElement in groupTemplates)
+				{
+					string consolidatedUrl;
+					if (groupElement.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
+					{
+						if (!PreConsolidated)
+							resourceUrl = UrlType.Dynamic.ConvertUrl(consolidatedUrl);
+						else
+							resourceUrl = UrlType.Static.ConvertUrl(consolidatedUrl);
+						break;
+					}
+				}
+			}
+			if (!String.IsNullOrEmpty(Version) && !resourceUrl.Contains("?"))
+				resourceUrl += "?v=" + HttpUtility.UrlEncode(Version);
+			return resourceUrl;
 		}
 
 		private void ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)

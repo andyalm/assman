@@ -13,7 +13,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 	public class TestConsolidatingResourceRegistry
 	{
 		private Mock<IResourceRegistry> _innerRegistry;
-		private ResourceManagementConfiguration _config;
+		private ResourceManagementContext _config;
 		private Dictionary<string, string> _resolvedUrlCache;
 		private ConsolidatingResourceRegistry _consolidatingRegistry;
 		private const string UrlNotToBeConsolidated = "~/random/location/script.js";
@@ -24,8 +24,9 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		public void SetupContext()
 		{
 			_innerRegistry = new Mock<IResourceRegistry>();
-			_config = new ResourceManagementConfiguration {PreConsolidated = true};
-			_config.ClientScripts.Add(new ClientScriptGroupElement
+			_config = ResourceManagementContext.Create();
+			_config.PreConsolidated = true;
+			_config.ClientScriptGroups.Add(new ClientScriptGroupElement
 			{
 				ConsolidatedUrl = ConsolidatedUrl,
 				Include = new ResourceMatchElementCollection
@@ -35,7 +36,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			});
 			_resolvedUrlCache = new Dictionary<string, string>();
 
-			_consolidatingRegistry = new ConsolidatingResourceRegistry(_innerRegistry.Object, _config, _config.GetScriptUrl, _resolvedUrlCache);
+			_consolidatingRegistry = new ConsolidatingResourceRegistry(_innerRegistry.Object, _config.GetScriptUrl, _resolvedUrlCache);
 		}
 
 		[Test]

@@ -36,6 +36,8 @@ namespace AlmWitt.Web.ResourceManagement
 			consolidatedResource.Resources.Count().ShouldEqual(2);
 		}
 
+		//TODO: Write tests for refactored GetResourceUrl
+
 		private IResourceFilter ToFilter(Predicate<IResource> predicate)
 		{
 			return ResourceFilters.Predicate(predicate);

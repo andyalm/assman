@@ -100,6 +100,7 @@
     <Compile Include="TestPluginElement.cs" />
     <Compile Include="TestResourceHttpHandler.cs" />
     <Compile Include="TestResourceManagementContext.cs" />
+    <Compile Include="TestResourceManagementContext_GetResourceUrl.cs" />
     <Compile Include="TestResourceType.cs" />
     <Compile Include="TestSupport\AssertionExtensions.cs" />
     <Compile Include="TestSupport\StubDependencyProvider.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="TestResourceHandler.cs" />
     <Compile Include="TestResourceManagementConfiguration.cs" />
     <Compile Include="TestVirtualPathResolver.cs" />
+    <Compile Include="TestVisualStudioDependencyProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ResourceManagement\ResourceManagement.csproj">

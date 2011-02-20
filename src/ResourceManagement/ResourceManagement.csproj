@@ -75,6 +75,7 @@
       <HintPath>..\..\..\..\Depends\Microsoft.AjaxExtensions\1.0.61025\System.Web.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyExtensions.cs" />
@@ -172,6 +173,7 @@
     </Compile>
     <Compile Include="Registration\WebForms\WebFormsAjaxScriptIncluder.cs" />
     <Compile Include="Registration\WebForms\WebFormsClientScriptRegistry.cs" />
+    <Compile Include="VisualStudioScriptDependencyProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
