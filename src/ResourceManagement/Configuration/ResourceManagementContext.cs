@@ -28,6 +28,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			_clientScriptGroups = new ResourceGroupTemplateCollection();
 			_cssFileGroups = new ResourceGroupTemplateCollection();
 			_assemblies = new List<Assembly>();
+			_dependencyManager = new DependencyManager(_finder);
 		}
 
 		public void MapExtensionToFilter(string fileExtension, IContentFilterFactory filterFactory)
@@ -122,11 +123,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		public IEnumerable<string> GetResourceDependencies(string virtualPath)
 		{
-			var resource = Finder.FindResource(virtualPath);
-			if(resource == null)
-				return new string[0];
-
-			return _dependencyManager.GetDependencies(resource);
+			return _dependencyManager.GetDependencies(virtualPath);
 		}
 
 		private void ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)

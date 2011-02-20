@@ -113,6 +113,7 @@
     <Compile Include="Configuration\DefaultConfigLoader.cs" />
     <Compile Include="Configuration\IConfigLoader.cs" />
     <Compile Include="DependencyManager.cs" />
+    <Compile Include="IDependencyProvider.cs" />
     <Compile Include="IContentFilterFactory.cs" />
     <Compile Include="IO\IFileFinder.cs" />
     <Compile Include="IResourceFinderFactory.cs" />

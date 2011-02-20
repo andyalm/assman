@@ -83,5 +83,15 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 			Assert.That(collection, Is.SubsetOf(otherCollection));
 			Assert.That(otherCollection, Is.SubsetOf(collection));
 		}
+
+		public static void ShouldBeEmpty<T>(this IEnumerable<T> collection)
+		{
+			CollectionAssert.IsEmpty(collection);
+		}
+
+		public static void CountShouldEqual<T>(this IEnumerable<T> collection, int expectedCount)
+		{
+			Assert.That(collection.Count(), Is.EqualTo(expectedCount), "The size of the collection was not what was expected");
+		}
 	}
 }
