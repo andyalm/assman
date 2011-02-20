@@ -126,6 +126,11 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return _dependencyManager.GetDependencies(virtualPath);
 		}
 
+		public void MapExtensionToDependencyProvider(string fileExtension, IDependencyProvider dependencyProvider)
+		{
+			_dependencyManager.MapProvider(fileExtension, dependencyProvider);
+		}
+
 		private void ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)
 		{
 			if(!groupTemplates.Any())

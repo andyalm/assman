@@ -11,19 +11,18 @@ namespace AlmWitt.Web.ResourceManagement
 	[TestFixture]
 	public class TestDependencyManager
 	{
-		private Mock<IDependencyProvider> _dependencyProvider;
+		private StubDependencyProvider _dependencyProvider;
 		private StubResourceFinder _resourceFinder;
 		private DependencyManager _dependencyManager;
 
 		[SetUp]
 		public void SetupContext()
 		{
-			_dependencyProvider = new Mock<IDependencyProvider>();
-			_dependencyProvider.Setup(p => p.GetDependencies(It.IsAny<IResource>())).Returns(new string[0]);
+			_dependencyProvider = new StubDependencyProvider();
 			_resourceFinder = new StubResourceFinder();
 
 			_dependencyManager = new DependencyManager(_resourceFinder);
-			_dependencyManager.MapProvider(".js", _dependencyProvider.Object);
+			_dependencyManager.MapProvider(".js", _dependencyProvider);
 		}
 
 		[Test]
@@ -68,7 +67,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private void SetDependencies(IResource resource, params string[] dependencies)
 		{
-			_dependencyProvider.Setup(p => p.GetDependencies(resource)).Returns(dependencies);
+			_dependencyProvider.SetDependencies(resource, dependencies);
 		}
 	}
 }
