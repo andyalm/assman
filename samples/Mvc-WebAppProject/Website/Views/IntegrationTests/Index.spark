@@ -6,6 +6,8 @@
 		<dd id="script-include-binding" class="test">running...</dd>
 		<dt>ScriptInclude is consolidated</dt>
 		<dd id="script-include-consolidated" class="test">running...</dd>
+    <dt>Dependencies are automatically included</dt>
+    <dd id="script-include-dependencies" class="test">running...</dd>
 	</dl>
 	<ScriptInclude src="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
 	<ScriptBlock>
@@ -18,6 +20,7 @@
 			$("#script-include-consolidated").addClass("pass");
 		}
 	</ScriptBlock>
+  <ScriptInclude src="~/scripts/DependencyLeaf.js" />
 	<!-- don't use Resource Registries here so that it tests will fail appropriately if necessary --> 
 	<script type="text/javascript" src="${Url.Content('~/Scripts/ResourceManagement-TestBootstrapper.js')}"></script>
 </content>

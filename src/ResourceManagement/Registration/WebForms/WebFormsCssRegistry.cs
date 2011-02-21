@@ -4,7 +4,7 @@ using System.Web.UI;
 
 namespace AlmWitt.Web.ResourceManagement.WebForms
 {
-	internal class WebFormsCssRegistry : WebFormsRegistryBase, IStyleRegistry
+	internal class WebFormsCssRegistry : WebFormsRegistryBase
 	{
 		const string linkTemplate = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"{0}\" />";
 		

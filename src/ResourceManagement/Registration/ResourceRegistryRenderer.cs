@@ -42,12 +42,12 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 
 	public static class ResourceRegistryRendererExtensions
 	{
-		public static ResourceRegistryRenderer Renderer(this IScriptRegistry scriptRegistry, Func<string,string> urlResolver)
+		public static ResourceRegistryRenderer ScriptRenderer(this IResourceRegistry scriptRegistry, Func<string,string> urlResolver)
 		{
 			return new ScriptRegistryRenderer(scriptRegistry.AsReadable(), urlResolver);
 		}
 
-		public static ResourceRegistryRenderer Renderer(this IStyleRegistry styleRegistry, Func<string,string> urlResolver)
+		public static ResourceRegistryRenderer StyleRenderer(this IResourceRegistry styleRegistry, Func<string,string> urlResolver)
 		{
 			return new StyleRegistryRenderer(styleRegistry.AsReadable(), urlResolver);
 		}

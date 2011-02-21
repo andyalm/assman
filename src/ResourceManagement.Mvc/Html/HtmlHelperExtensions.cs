@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Web.Mvc;
 
 using AlmWitt.Web.ResourceManagement.Registration;
@@ -30,44 +29,44 @@ namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 
 		public static void RenderScripts(this HtmlHelper html)
 		{
-			var renderer = html.ScriptRegistry().Renderer(html.Resolver());
+			var renderer = html.ScriptRegistry().ScriptRenderer(html.Resolver());
 			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
 		public static void RenderScripts(this HtmlHelper html, string registryName)
 		{
-			var renderer = html.ScriptRegistry(registryName).Renderer(html.Resolver());
+			var renderer = html.ScriptRegistry(registryName).ScriptRenderer(html.Resolver());
 			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
 		public static void RenderStyles(this HtmlHelper html)
 		{
-			var renderer = html.StyleRegistry().Renderer(html.Resolver());
+			var renderer = html.StyleRegistry().StyleRenderer(html.Resolver());
 			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
 		public static void RenderStyles(this HtmlHelper html, string registryName)
 		{
-			var renderer = html.StyleRegistry(registryName).Renderer(html.Resolver());
+			var renderer = html.StyleRegistry(registryName).StyleRenderer(html.Resolver());
 			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
-		public static IScriptRegistry ScriptRegistry(this HtmlHelper html, string registryName)
+		public static IResourceRegistry ScriptRegistry(this HtmlHelper html, string registryName)
 		{
 			return html.ResourceRegistries().NamedScriptRegistry(registryName);
 		}
 
-		public static IScriptRegistry ScriptRegistry(this HtmlHelper html)
+		public static IResourceRegistry ScriptRegistry(this HtmlHelper html)
 		{
 			return html.ResourceRegistries().ScriptRegistry;
 		}
 
-		public static IStyleRegistry StyleRegistry(this HtmlHelper html)
+		public static IResourceRegistry StyleRegistry(this HtmlHelper html)
 		{
 			return html.ResourceRegistries().StyleRegistry;
 		}
 
-		public static IStyleRegistry StyleRegistry(this HtmlHelper html, string registryName)
+		public static IResourceRegistry StyleRegistry(this HtmlHelper html, string registryName)
 		{
 			return html.ResourceRegistries().NamedStyleRegistry(registryName);
 		}

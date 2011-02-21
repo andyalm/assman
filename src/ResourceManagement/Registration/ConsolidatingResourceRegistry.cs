@@ -15,7 +15,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 	/// This is a proxy for an inner <see cref="IResourceRegistry"/> which means it can wrap any implementation of a
 	/// <see cref="IResourceRegistry"/>.
 	/// </remarks>
-	public class ConsolidatingResourceRegistry : IReadableResourceRegistry, IScriptRegistry, IStyleRegistry
+	public class ConsolidatingResourceRegistry : IReadableResourceRegistry
 	{
 		private readonly IResourceRegistry _inner;
 		private readonly Func<string, string> _getResourceUrl;

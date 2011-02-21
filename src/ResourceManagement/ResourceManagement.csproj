@@ -128,12 +128,10 @@
     <Compile Include="Registration\GenericResourceRegistry.cs" />
     <Compile Include="Registration\GenericResourceRegistryAccessor.cs" />
     <Compile Include="Registration\IReadableResourceRegistry.cs" />
-    <Compile Include="Registration\IStyleRegistry.cs" />
     <Compile Include="Registration\IResourceRegistryAccessor.cs" />
     <Compile Include="IResourceMatch.cs" />
     <Compile Include="NullContentFilterFactory.cs" />
     <Compile Include="RegexResourceMatch.cs" />
-    <Compile Include="Registration\IScriptRegistry.cs" />
     <Compile Include="Registration\NullResourceRegistry.cs" />
     <Compile Include="Registration\ReadableExtensions.cs" />
     <Compile Include="Registration\ResourceRegistryExtensions.cs" />

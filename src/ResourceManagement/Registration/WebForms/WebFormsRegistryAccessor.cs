@@ -6,8 +6,8 @@ namespace AlmWitt.Web.ResourceManagement.WebForms
 	internal class WebFormsRegistryAccessor : IResourceRegistryAccessor
 	{
 		private const string Default = "Default";
-		private readonly ResourceRegistryMap<IScriptRegistry> _scriptRegistries;
-		private readonly ResourceRegistryMap<IStyleRegistry> _styleRegistries;
+		private readonly ResourceRegistryMap<IResourceRegistry> _scriptRegistries;
+		private readonly ResourceRegistryMap<IResourceRegistry> _styleRegistries;
 
 		private readonly Control _control;
 
@@ -19,31 +19,31 @@ namespace AlmWitt.Web.ResourceManagement.WebForms
 		internal WebFormsRegistryAccessor(Control control)
 		{
 			_control = control;
-			_scriptRegistries = new ResourceRegistryMap<IScriptRegistry>(CreateScriptRegistry);
-			_styleRegistries = new ResourceRegistryMap<IStyleRegistry>(CreateStyleRegistry);
+			_scriptRegistries = new ResourceRegistryMap<IResourceRegistry>(CreateScriptRegistry);
+			_styleRegistries = new ResourceRegistryMap<IResourceRegistry>(CreateStyleRegistry);
 		}
 
-		public IScriptRegistry ScriptRegistry
+		public IResourceRegistry ScriptRegistry
 		{
 			get { return _scriptRegistries.GetDefaultRegistry(); }
 		}
 
-		public IScriptRegistry NamedScriptRegistry(string name)
+		public IResourceRegistry NamedScriptRegistry(string name)
 		{
 			return _scriptRegistries.GetRegistryWithName(name);
 		}
 
-		public IStyleRegistry StyleRegistry
+		public IResourceRegistry StyleRegistry
 		{
 			get { return _styleRegistries.GetDefaultRegistry(); }
 		}
 
-		public IStyleRegistry NamedStyleRegistry(string name)
+		public IResourceRegistry NamedStyleRegistry(string name)
 		{
 			return _styleRegistries.GetRegistryWithName(name);
 		}
 
-		private IScriptRegistry CreateScriptRegistry()
+		private IResourceRegistry CreateScriptRegistry()
 		{
 			ScriptManager scriptManager = ScriptManager.GetCurrent(_control.Page);
 			if (scriptManager == null)
@@ -56,7 +56,7 @@ namespace AlmWitt.Web.ResourceManagement.WebForms
 			}
 		}
 
-		private IStyleRegistry CreateStyleRegistry()
+		private IResourceRegistry CreateStyleRegistry()
 		{
 			return new WebFormsCssRegistry(_control);
 		}

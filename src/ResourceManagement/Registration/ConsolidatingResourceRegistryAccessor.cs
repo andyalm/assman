@@ -23,10 +23,10 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		{
 			private readonly IResourceRegistryAccessor _inner;
 			private readonly ResourceManagementContext _context;
-			private ConsolidatingResourceRegistry _scriptRegistry;
-			private ConsolidatingResourceRegistry _styleRegistry;
-			private readonly IDictionary<string, ConsolidatingResourceRegistry> _namedScriptRegistries = new Dictionary<string, ConsolidatingResourceRegistry>(StringComparer.OrdinalIgnoreCase);
-			private readonly IDictionary<string, ConsolidatingResourceRegistry> _namedStyleRegistries = new Dictionary<string, ConsolidatingResourceRegistry>(StringComparer.OrdinalIgnoreCase);
+			private IResourceRegistry _scriptRegistry;
+			private IResourceRegistry _styleRegistry;
+			private readonly IDictionary<string, IResourceRegistry> _namedScriptRegistries = new Dictionary<string, IResourceRegistry>(StringComparer.OrdinalIgnoreCase);
+			private readonly IDictionary<string, IResourceRegistry> _namedStyleRegistries = new Dictionary<string, IResourceRegistry>(StringComparer.OrdinalIgnoreCase);
 			
 			//static cache to keep track of resolved url's.  Since resolving can be a relatively expensive operation when you have a large ResourceManagement.config file, we
 			//cache the results here so that you only need to resolve a given url once in the app domain.
@@ -39,29 +39,29 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				_context = context;
 			}
 
-			public IScriptRegistry ScriptRegistry
+			public IResourceRegistry ScriptRegistry
 			{
 				get { return WrapDefaultWithConsolidation(_inner.ScriptRegistry, _context.GetScriptUrl, ref _scriptRegistry); }
 			}
 
-			public IScriptRegistry NamedScriptRegistry(string name)
+			public IResourceRegistry NamedScriptRegistry(string name)
 			{
 				return WrapNamedWithConsolidation(name, _inner.NamedScriptRegistry, _context.GetScriptUrl, _namedScriptRegistries);
 			}
 
-			public IStyleRegistry StyleRegistry
+			public IResourceRegistry StyleRegistry
 			{
 				get { return WrapDefaultWithConsolidation(_inner.StyleRegistry, _context.GetStylesheetUrl, ref _styleRegistry); }
 			}
 
-			public IStyleRegistry NamedStyleRegistry(string name)
+			public IResourceRegistry NamedStyleRegistry(string name)
 			{
 				return WrapNamedWithConsolidation(name, _inner.NamedStyleRegistry, _context.GetStylesheetUrl, _namedStyleRegistries);
 			}
 
-			private ConsolidatingResourceRegistry WrapNamedWithConsolidation(string name, Func<string,IResourceRegistry> getNamedRegistry, Func<string, string> getResourceUrl, IDictionary<string, ConsolidatingResourceRegistry> registryCache)
+			private IResourceRegistry WrapNamedWithConsolidation(string name, Func<string,IResourceRegistry> getNamedRegistry, Func<string, string> getResourceUrl, IDictionary<string, IResourceRegistry> registryCache)
 			{
-				ConsolidatingResourceRegistry consolidatingRegistry;
+				IResourceRegistry consolidatingRegistry;
 				if(registryCache.TryGetValue(name, out consolidatingRegistry))
 				{
 					return consolidatingRegistry;
@@ -73,7 +73,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				return consolidatingRegistry;
 			}
 
-			private ConsolidatingResourceRegistry WrapDefaultWithConsolidation(IResourceRegistry registry, Func<string, string> getResourceUrl, ref ConsolidatingResourceRegistry field)
+			private IResourceRegistry WrapDefaultWithConsolidation(IResourceRegistry registry, Func<string, string> getResourceUrl, ref IResourceRegistry field)
 			{
 				if (field != null)
 					return field;
@@ -83,15 +83,21 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				return field;
 			}
 
-			private ConsolidatingResourceRegistry WrapWithConsolidation(IResourceRegistry registry, Func<string, string> getResourceUrl)
+			private IResourceRegistry WrapWithConsolidation(IResourceRegistry registry, Func<string, string> getResourceUrl)
 			{
-				if (registry is ConsolidatingResourceRegistry)
+				if (registry is ConsolidatingResourceRegistry || registry is DependencyResolvingResourceRegistry)
 				{
-					return (ConsolidatingResourceRegistry)registry;
+					return registry;
 				}
 				else
 				{
-					return new ConsolidatingResourceRegistry(registry, getResourceUrl, _resolvedUrlCache);
+					IResourceRegistry consolidatingRegistry = new ConsolidatingResourceRegistry(registry, getResourceUrl, _resolvedUrlCache);
+					if(_context.ManageDependencies)
+					{
+						consolidatingRegistry = new DependencyResolvingResourceRegistry(consolidatingRegistry, _context);
+					}
+
+					return consolidatingRegistry;
 				}
 			}
 		}

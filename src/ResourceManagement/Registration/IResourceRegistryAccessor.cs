@@ -2,12 +2,12 @@ namespace AlmWitt.Web.ResourceManagement
 {
 	public interface IResourceRegistryAccessor
 	{
-		IScriptRegistry ScriptRegistry { get; }
+		IResourceRegistry ScriptRegistry { get; }
 
-		IScriptRegistry NamedScriptRegistry(string name);
+		IResourceRegistry NamedScriptRegistry(string name);
 
-		IStyleRegistry StyleRegistry { get; }
+		IResourceRegistry StyleRegistry { get; }
 
-		IStyleRegistry NamedStyleRegistry(string name);
+		IResourceRegistry NamedStyleRegistry(string name);
 	}
 }

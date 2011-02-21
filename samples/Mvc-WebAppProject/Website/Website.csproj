@@ -83,6 +83,8 @@
     <None Include="Views\IntegrationTests\Index.spark" />
     <Content Include="Scripts\ResourceManagement-TestBootstrapper.js" />
     <Content Include="Views\bindings.xml" />
+    <Content Include="Scripts\Dependency.js" />
+    <Content Include="Scripts\DependencyLeaf.js" />
     <Content Include="Views\IntegrationTests\ScriptIncludeBinding.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

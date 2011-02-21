@@ -54,6 +54,9 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public bool PreConsolidated { get; set; }
 		public bool ConsolidateClientScripts { get; set; }
 		public bool ConsolidateCssFiles { get; set; }
+
+		public bool ManageDependencies { get; set; }
+
 		public string Version { get; set; }
 
 		public void MapExtensionToFilter(string fileExtension, IContentFilterFactory filterFactory)
@@ -166,6 +169,11 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return GetResourceUrl(ConsolidateCssFiles, CssFileGroups, stylesheetUrl);
 		}
 
+		internal IResourceFinder Finder
+		{
+			get { return _finder; }
+		}
+
 		private string GetResourceUrl(bool consolidate, IEnumerable<IResourceGroupTemplate> groupTemplates, string resourceUrl)
 		{
 			if (consolidate)
@@ -223,11 +231,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				return _clientScriptGroups;
 			else
 				return _cssFileGroups;
-		}
-
-		internal IResourceFinder Finder
-		{
-			get { return _finder; }
 		}
 	}
 

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace AlmWitt.Web.ResourceManagement
 {
-	public class GenericResourceRegistry : IReadableResourceRegistry, IScriptRegistry, IStyleRegistry
+	public class GenericResourceRegistry : IReadableResourceRegistry
 	{
 		private readonly HashSet<string> _includes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<object, Action<TextWriter>> _inlineBlocks = new Dictionary<object, Action<TextWriter>>();

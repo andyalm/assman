@@ -17,6 +17,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		public void SetupContext()
 		{
 			_context = ResourceManagementContext.Create();
+			_context.ManageDependencies = false;
 			ResourceManagementContext.Current = _context;
 			_innerAccessor = new GenericResourceRegistryAccessor();
 			_consolidatingAccessor = _innerAccessor.UseConsolidation();
@@ -64,6 +65,14 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			
 			var scriptRegistry = _consolidatingAccessor.NamedScriptRegistry(name);
 			_consolidatingAccessor.NamedScriptRegistry(name).ShouldBeSameAs(scriptRegistry);
+		}
+
+		[Test]
+		public void WhenManageDependenciesIsTrue_ScriptRegistryIsWrappedInDependencyResolvingDecorator()
+		{
+			_context.ManageDependencies = true;
+			var consolidatedAccessor = _innerAccessor.UseConsolidation();
+			consolidatedAccessor.ScriptRegistry.ShouldBeInstanceOf<DependencyResolvingResourceRegistry>();
 		}
 	}
 }

@@ -4,7 +4,7 @@ using System.Web.UI;
 
 namespace AlmWitt.Web.ResourceManagement.WebForms
 {
-	internal class WebFormsClientScriptRegistry : WebFormsRegistryBase, IScriptRegistry
+	internal class WebFormsClientScriptRegistry : WebFormsRegistryBase
 	{
 		private static readonly Type _type = typeof(Page);
 

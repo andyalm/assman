@@ -7,7 +7,7 @@ namespace AlmWitt.Web.ResourceManagement
 	/// <summary>
 	/// An implementation of <see cref="IResourceRegistry"/> that doesn't do anything. (null object pattern)
 	/// </summary>
-	public class NullResourceRegistry : IReadableResourceRegistry, IScriptRegistry, IStyleRegistry
+	public class NullResourceRegistry : IReadableResourceRegistry
 	{
 		private static readonly IReadableResourceRegistry _instance = new NullResourceRegistry();
 

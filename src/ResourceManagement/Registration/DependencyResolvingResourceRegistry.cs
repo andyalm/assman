@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
 namespace AlmWitt.Web.ResourceManagement.Registration
 {
-	public class DependencyResolvingResourceRegistry : IResourceRegistry
+	public class DependencyResolvingResourceRegistry : IReadableResourceRegistry
 	{
 		private readonly IResourceRegistry _inner;
 		private readonly ResourceManagementContext _context;
@@ -38,6 +39,16 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		public bool IsInlineBlockRegistered(object key)
 		{
 			return _inner.IsInlineBlockRegistered(key);
+		}
+
+		public IEnumerable<string> GetIncludes()
+		{
+			return _inner.AsReadable().GetIncludes();
+		}
+
+		public IEnumerable<Action<TextWriter>> GetInlineBlocks()
+		{
+			return _inner.AsReadable().GetInlineBlocks();
 		}
 	}
 }

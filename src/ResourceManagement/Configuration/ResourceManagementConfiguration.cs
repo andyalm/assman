@@ -100,6 +100,16 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		}
 
 		/// <summary>
+		/// Gets or sets whether dependencies provided by the <see cref="IDependencyProvider"/>'s will be included automatically.
+		/// </summary>
+		[ConfigurationProperty(PropertyNames.ManageDependencies, DefaultValue = false)]
+		public bool ManageDependencies
+		{
+			get { return (bool)this[PropertyNames.ManageDependencies]; }
+			set { this[PropertyNames.ManageDependencies] = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets whether the resources have been pre-consolidated into static files.
 		/// </summary>
 		[ConfigurationProperty(PropertyNames.PreConsolidated)]
@@ -206,6 +216,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			context.ConfigurationLastModified = LastModified();
 			context.ConsolidateClientScripts = Consolidate && ClientScripts.Consolidate;
 			context.ConsolidateCssFiles = Consolidate && CssFiles.Consolidate;
+			context.ManageDependencies = ManageDependencies;
 			context.AddFinder(fileFinder);
 			context.AddAssemblies(Assemblies.GetAssemblies());
 			context.ClientScriptGroups.AddRange(ClientScripts.Cast<IResourceGroupTemplate>());
@@ -233,6 +244,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		private static class PropertyNames
 		{
 			public const string Consolidate = "consolidate";
+			public const string ManageDependencies = "manageDependencies";
 			public const string ClientScripts = "clientScripts";
 			public const string CssFiles = "cssFiles";
 			public const string PreConsolidated = "preConsolidated";
