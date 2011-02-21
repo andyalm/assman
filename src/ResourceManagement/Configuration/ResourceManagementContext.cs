@@ -45,7 +45,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			_clientScriptGroups = new ResourceGroupTemplateCollection();
 			_cssFileGroups = new ResourceGroupTemplateCollection();
 			_assemblies = new List<Assembly>();
-			_dependencyManager = new DependencyManager(_finder);
+			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder);
 			ConsolidateClientScripts = true;
 			ConsolidateCssFiles = true;
 		}

@@ -83,6 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestDefaultDependencyCache.cs" />
     <Compile Include="Registration\TestDependencyResolvingResourceRegistry.cs" />
     <Compile Include="Registration\TestConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\TestConsolidatingResourceRegistryAccessor.cs" />

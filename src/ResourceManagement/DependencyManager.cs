@@ -7,11 +7,13 @@ namespace AlmWitt.Web.ResourceManagement
 	public class DependencyManager
 	{
 		private readonly IResourceFinder _resourceFinder;
+		private readonly IDependencyCache _dependencyCache;
 		private readonly IDictionary<string, IDependencyProvider> _parsers = new Dictionary<string, IDependencyProvider>(StringComparer.OrdinalIgnoreCase);
 
-		public DependencyManager(IResourceFinder resourceFinder)
+		public DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache)
 		{
 			_resourceFinder = resourceFinder;
+			_dependencyCache = dependencyCache;
 		}
 
 		public void MapProvider(string extension, IDependencyProvider dependencyProvider)
@@ -20,25 +22,39 @@ namespace AlmWitt.Web.ResourceManagement
 		}
 
 		public IEnumerable<string> GetDependencies(string virtualPath)
-		{
+		{	
 			var dependencyList = new List<IEnumerable<string>>();
 			AccumulateDependencies(dependencyList, virtualPath);
 
-			return dependencyList.SelectMany(d => d)
-				.Distinct(StringComparer.OrdinalIgnoreCase)
-				.ToList();
+			return CollapseDependencies(dependencyList);
 		}
 
 		private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, string virtualPath)
 		{
+			IEnumerable<string> cachedDependencies;
+			if (_dependencyCache.TryGetDependencies(virtualPath, out cachedDependencies))
+			{
+				dependencyList.Insert(0, cachedDependencies);
+				return;
+			}
+			
 			var resource = _resourceFinder.FindResource(virtualPath);
 			if(resource == null)
 				return;
+
+			if(_dependencyCache.TryGetDependencies(resource, out cachedDependencies))
+			{
+				dependencyList.Insert(0, cachedDependencies);
+				//store in cache so that it will also be indexed by virtual path
+				_dependencyCache.StoreDependencies(resource, cachedDependencies);
+				return;
+			}
 
 			IDependencyProvider provider;
 			if(!_parsers.TryGetValue(resource.FileExtension, out provider))
 				return;
 
+			var dependencyListEntrySize = dependencyList.Count;
 			var dependencies = provider.GetDependencies(resource);
 			if(dependencies.Any())
 			{
@@ -48,6 +64,15 @@ namespace AlmWitt.Web.ResourceManagement
 					AccumulateDependencies(dependencyList, dependency);
 				}
 			}
+			var dependenciesForCurrentResource = CollapseDependencies(dependencyList.Take(dependencyList.Count - dependencyListEntrySize));
+			_dependencyCache.StoreDependencies(resource, dependenciesForCurrentResource);
+		}
+
+		private IEnumerable<string> CollapseDependencies(IEnumerable<IEnumerable<string>> dependencyList)
+		{
+			return dependencyList.SelectMany(d => d)
+				.Distinct(StringComparer.OrdinalIgnoreCase)
+				.ToList();
 		}
 	}
 }

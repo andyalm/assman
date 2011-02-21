@@ -1,4 +1,4 @@
-
+///<reference path="~/scripts/jquery-1.4.1-vsdoc" />
 
 function Dependency() { }
 
