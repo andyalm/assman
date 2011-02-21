@@ -45,10 +45,5 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				return _rx;
 			}
 		}
-
-		private static class PropertyNames
-		{
-			public const string Pattern = "pattern";
-		}
 	}
 }

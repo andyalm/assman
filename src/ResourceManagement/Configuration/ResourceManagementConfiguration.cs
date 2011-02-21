@@ -240,17 +240,5 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			config.Save();
 		}
-
-		private static class PropertyNames
-		{
-			public const string Consolidate = "consolidate";
-			public const string ManageDependencies = "manageDependencies";
-			public const string ClientScripts = "clientScripts";
-			public const string CssFiles = "cssFiles";
-			public const string PreConsolidated = "preConsolidated";
-			public const string Version = "version";
-			public const string Assemblies = "assemblies";
-			public const string Plugins = "plugins";
-		}
 	}
 }

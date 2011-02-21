@@ -86,12 +86,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return ((ResourceGroupElement) element).ConsolidatedUrl;
 		}
 
-		private static class PropertyNames
-		{
-			public const string Consolidate = "consolidate";
-			public const string Compress = "compress";
-		}
-
 		#region IEnumerable<ResourceGroupElement> implimentation
 
 		IEnumerator<ResourceGroupElement> IEnumerable<ResourceGroupElement>.GetEnumerator()

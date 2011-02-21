@@ -47,10 +47,5 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			return new ConfigurationErrorsException(message, this.ElementInformation.Source, this.ElementInformation.LineNumber);
 		}
-
-		private static class PropertyNames
-		{
-			public const string Type = "type";
-		}
 	}
 }

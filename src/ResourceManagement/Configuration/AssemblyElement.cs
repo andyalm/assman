@@ -49,10 +49,5 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				throw new Exception("The assembly '" + Name + "' could not be loaded.", ex);
 			}
 		}
-
-		private static class PropertyNames
-		{
-			public const string Name = "name";
-		}
 	}
 }

@@ -185,14 +185,5 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				return xIndex - yIndex;
 			};
 		}
-
-		private static class PropertyNames
-		{
-			public const string Consolidate = "consolidate";
-			public const string Exclude = "exclude";
-			public const string Include = "include";
-			public const string Compress = "compress";
-			public const string ConsolidatedUrl = "consolidatedUrl";
-		}
 	}
 }

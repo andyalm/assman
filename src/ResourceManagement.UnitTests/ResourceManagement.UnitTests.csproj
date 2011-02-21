@@ -94,7 +94,6 @@
     <Compile Include="TestCompositeResourceFilter.cs" />
     <Compile Include="TestConsolidatedResource.cs" />
     <Compile Include="TestContentFilterMap.cs" />
-    <Compile Include="TestCustomFinderElement.cs" />
     <Compile Include="TestDependencyManager.cs" />
     <Compile Include="TestEmbeddedResource.cs" />
     <Compile Include="TestEmbeddedResourceFinder.cs" />
