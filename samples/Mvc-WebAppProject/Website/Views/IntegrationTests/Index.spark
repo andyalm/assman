@@ -23,6 +23,15 @@
     <dt>Dependencies are automatically included</dt>
     <dd id="script-include-dependencies" class="test">running...</dd>
     <ScriptInclude src="~/scripts/DependencyLeaf.js" />
+
+    <dt>Scripts included in two script registries only renders once</dt>
+    <dd id="script-include-two-registries" class="test">running...</dd>
+    <ScriptBlock>
+      if($('script[src="/Scripts/Consolidated/Shared/JQuery.jsx"]').length == 1)
+      {
+        $("#script-include-two-registries").addClass("pass");
+      }
+    </ScriptBlock>
 	</dl>
 	
 	<!-- don't use Resource Registries here so that it tests will fail appropriately if necessary --> 

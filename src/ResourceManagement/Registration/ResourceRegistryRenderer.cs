@@ -1,26 +1,31 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Web;
 
 namespace AlmWitt.Web.ResourceManagement.Registration
 {
 	public abstract class ResourceRegistryRenderer
 	{
 		private readonly IReadableResourceRegistry _resourceRegistry;
-		private readonly Func<string, string> _urlResolver;
+		private readonly IRegistryRenderingContext _renderingContext;
 
-		protected ResourceRegistryRenderer(IReadableResourceRegistry resourceRegistry, Func<string,string> urlResolver)
+		protected ResourceRegistryRenderer(IReadableResourceRegistry resourceRegistry, IRegistryRenderingContext renderingContext)
 		{
 			_resourceRegistry = resourceRegistry;
-			_urlResolver = urlResolver;
+			_renderingContext = renderingContext;
 		}
 
 		public void RenderTo(TextWriter writer)
 		{
 			foreach (var includeUrl in _resourceRegistry.GetIncludes())
 			{
-				var resolvedUrl = _urlResolver(includeUrl);
-				WriteIncludeTag(writer, resolvedUrl);
+				if(_renderingContext.ShouldRenderInclude(includeUrl))
+				{
+					var resolvedUrl = _renderingContext.ResolveUrl(includeUrl);
+					WriteIncludeTag(writer, resolvedUrl);
+					_renderingContext.MarkIncludeAsRendered(includeUrl);
+				}
 			}
 
 			var scriptBlocks = _resourceRegistry.GetInlineBlocks();
@@ -42,19 +47,29 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 
 	public static class ResourceRegistryRendererExtensions
 	{
-		public static ResourceRegistryRenderer ScriptRenderer(this IResourceRegistry scriptRegistry, Func<string,string> urlResolver)
+		public static ResourceRegistryRenderer ScriptRenderer(this IResourceRegistryAccessor registryAccessor, string registryName, HttpContextBase httpContext, Func<string,string> urlResolver)
 		{
-			return new ScriptRegistryRenderer(scriptRegistry.AsReadable(), urlResolver);
+			var orderingStrategyContext = new OrderingStategyContext(registryName, registryAccessor.NamedScriptRegistry, httpContext);
+
+			var renderingContext = new RegistryRenderingContext(orderingStrategyContext,
+			                                                    ResourceRegistryConfiguration.OrderingStrategy, urlResolver);
+			
+			return new ScriptRegistryRenderer(orderingStrategyContext.CurrentRegistry.AsReadable(), renderingContext);
 		}
 
-		public static ResourceRegistryRenderer StyleRenderer(this IResourceRegistry styleRegistry, Func<string,string> urlResolver)
+		public static ResourceRegistryRenderer StyleRenderer(this IResourceRegistryAccessor registryAccessor, string registryName, HttpContextBase httpContext, Func<string,string> urlResolver)
 		{
-			return new StyleRegistryRenderer(styleRegistry.AsReadable(), urlResolver);
-		}
+			var orderingStrategyContext = new OrderingStategyContext(registryName, registryAccessor.NamedStyleRegistry, httpContext);
 
+			var renderingContext = new RegistryRenderingContext(orderingStrategyContext,
+																ResourceRegistryConfiguration.OrderingStrategy, urlResolver);
+
+			return new StyleRegistryRenderer(orderingStrategyContext.CurrentRegistry.AsReadable(), renderingContext);
+		}
+		
 		private class ScriptRegistryRenderer : ResourceRegistryRenderer
 		{
-			public ScriptRegistryRenderer(IReadableResourceRegistry resourceRegistry, Func<string,string> urlResolver) : base(resourceRegistry, urlResolver) {}
+			public ScriptRegistryRenderer(IReadableResourceRegistry resourceRegistry, RegistryRenderingContext renderingContext) : base(resourceRegistry, renderingContext) {}
 			
 			protected override void WriteIncludeTag(TextWriter writer, string url)
 			{
@@ -73,7 +88,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 
 		private class StyleRegistryRenderer : ResourceRegistryRenderer
 		{
-			public StyleRegistryRenderer(IReadableResourceRegistry resourceRegistry, Func<string,string> urlResolver) : base(resourceRegistry, urlResolver) {}
+			public StyleRegistryRenderer(IReadableResourceRegistry resourceRegistry, RegistryRenderingContext renderingContext) : base(resourceRegistry, renderingContext) { }
 
 			protected override void WriteIncludeTag(TextWriter writer, string url)
 			{

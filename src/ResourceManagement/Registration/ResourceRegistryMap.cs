@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Web.UI;
+
+using AlmWitt.Web.ResourceManagement.Registration;
 
 namespace AlmWitt.Web.ResourceManagement
 {
@@ -8,7 +9,6 @@ namespace AlmWitt.Web.ResourceManagement
 	{
 		private readonly Dictionary<string, TResourceRegistry> _registries = new Dictionary<string, TResourceRegistry>(StringComparer.OrdinalIgnoreCase);
 		private readonly Func<TResourceRegistry> _createRegistry;
-		private const string Default = "Default";
 
 		public ResourceRegistryMap(Func<TResourceRegistry> createRegistry)
 		{
@@ -17,7 +17,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 		public TResourceRegistry GetDefaultRegistry()
 		{
-			return GetRegistryWithName(Default);
+			return GetRegistryWithName(ResourceRegistryConfiguration.DefaultRegistryName);
 		}
 
 		public TResourceRegistry GetRegistryWithName(string name)

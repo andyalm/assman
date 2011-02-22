@@ -29,25 +29,23 @@ namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 
 		public static void RenderScripts(this HtmlHelper html)
 		{
-			var renderer = html.ScriptRegistry().ScriptRenderer(html.Resolver());
-			renderer.RenderTo(html.ViewContext.Writer);
+			html.RenderScripts(ResourceRegistryConfiguration.DefaultRegistryName);
 		}
 
 		public static void RenderScripts(this HtmlHelper html, string registryName)
 		{
-			var renderer = html.ScriptRegistry(registryName).ScriptRenderer(html.Resolver());
+			var renderer = html.ResourceRegistries().ScriptRenderer(registryName, html.ViewContext.HttpContext, html.Resolver());
 			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
 		public static void RenderStyles(this HtmlHelper html)
 		{
-			var renderer = html.StyleRegistry().StyleRenderer(html.Resolver());
-			renderer.RenderTo(html.ViewContext.Writer);
+			html.RenderStyles(ResourceRegistryConfiguration.DefaultRegistryName);
 		}
 
 		public static void RenderStyles(this HtmlHelper html, string registryName)
 		{
-			var renderer = html.StyleRegistry(registryName).StyleRenderer(html.Resolver());
+			var renderer = html.ResourceRegistries().StyleRenderer(registryName, html.ViewContext.HttpContext, html.Resolver());
 			renderer.RenderTo(html.ViewContext.Writer);
 		}
 
