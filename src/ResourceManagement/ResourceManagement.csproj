@@ -90,11 +90,8 @@
     <Compile Include="Configuration\ClientScriptGroupElementCollection.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="Configuration\ConsolidatedUrlTemplate.cs" />
-    <Compile Include="Configuration\CssFilesConfigurationElement.cs" />
     <Compile Include="Configuration\CssGroupElement.cs" />
     <Compile Include="Configuration\CssGroupElementCollection.cs" />
-    <Compile Include="Configuration\InclusionRedirectElement.cs" />
-    <Compile Include="Configuration\InclusionRedirectElementCollection.cs" />
     <Compile Include="Configuration\IResourceManagementPlugin.cs" />
     <Compile Include="Configuration\MappedConfigLoader.cs" />
     <Compile Include="Configuration\PluginElement.cs" />
@@ -105,7 +102,6 @@
     <Compile Include="Configuration\ResourceManagementContext.cs" />
     <Compile Include="Configuration\ResourceMatchElement.cs" />
     <Compile Include="Configuration\ResourceMatchElementCollection.cs" />
-    <Compile Include="Configuration\ClientScriptsConfigurationElement.cs" />
     <Compile Include="Configuration\UrlType.cs" />
     <Compile Include="BuildSupport\PreConsolidateCommand.cs" />
     <Compile Include="ConsolidatedResource.cs" />
