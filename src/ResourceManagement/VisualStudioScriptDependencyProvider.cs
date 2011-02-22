@@ -9,6 +9,7 @@ namespace AlmWitt.Web.ResourceManagement
 	public class VisualStudioScriptDependencyProvider : IDependencyProvider
 	{
 		private static readonly Regex _referenceRegex = new Regex(@"///\s*(<reference .+ />)", RegexOptions.Compiled);
+		private static readonly Regex _vsDocRegex = new Regex(@"-vsdoc(?=\.js)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		public static VisualStudioScriptDependencyProvider GetInstance()
 		{
@@ -43,7 +44,7 @@ namespace AlmWitt.Web.ResourceManagement
 			}
 			var pathAttr = referenceElement.Attribute("path");
 			if (pathAttr != null)
-				return pathAttr.Value;
+				return RemoveVsDocIfPresent(pathAttr.Value);
 
 			var nameAttr = referenceElement.Attribute("name");
 			if(nameAttr != null)
@@ -52,6 +53,11 @@ namespace AlmWitt.Web.ResourceManagement
 			}
 
 			return null;
+		}
+
+		private string RemoveVsDocIfPresent(string path)
+		{
+			return _vsDocRegex.Replace(path, String.Empty);
 		}
 
 		private string CreateAssemblyVirtualPath(XElement referenceElement, string resourceName)

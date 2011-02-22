@@ -64,6 +64,17 @@ namespace AlmWitt.Web.ResourceManagement
 			dependencies[1].ShouldEqual("~/scripts/script2.js");
 		}
 
+		[Test]
+		public void WhenReferencePathPointsToVsDocFile_VsDocPartIsRemoved()
+		{
+			var resource = StubResource.WithContent(@"///<reference path=""~/scripts/jquery-1.4.4-vsdoc.js"" />");
+
+			var dependencies = _provider.GetDependencies(resource).ToList();
+
+			dependencies.CountShouldEqual(1);
+			dependencies[0].ShouldEqual("~/scripts/jquery-1.4.4.js");
+		}
+
 		//TODO: Handle relative paths
 	}
 }
