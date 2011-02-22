@@ -2,25 +2,29 @@
 	<dl>
 		<dt>&lt;ScriptBlock&gt; binding</dt>
 		<dd id="script-block-binding" class="test">running...</dd>
+    <ScriptBlock>
+      $("#script-block-binding").addClass("pass");
+    </ScriptBlock>
+    
 		<dt>&lt;ScriptInclude&gt; binding</dt>
 		<dd id="script-include-binding" class="test">running...</dd>
-		<dt>ScriptInclude is consolidated</dt>
+    <ScriptInclude src="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
+		
+    <dt>ScriptInclude is consolidated</dt>
 		<dd id="script-include-consolidated" class="test">running...</dd>
+    <ScriptBlock>
+      if($('script[src="/Scripts/Consolidated/Controllers/IntegrationTests.jsx"]').length == 1
+      && $('script[src*="ScriptIncludeBinding.js"]').length == 0)
+      {
+      $("#script-include-consolidated").addClass("pass");
+      }
+    </ScriptBlock>
+    
     <dt>Dependencies are automatically included</dt>
     <dd id="script-include-dependencies" class="test">running...</dd>
+    <ScriptInclude src="~/scripts/DependencyLeaf.js" />
 	</dl>
-	<ScriptInclude src="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
-	<ScriptBlock>
-		$("#script-block-binding").addClass("pass");
-	</ScriptBlock>
-	<ScriptBlock>
-		if($('script[src="/Scripts/Consolidated/Controllers/IntegrationTests.jsx"]').length == 1
-			&& $('script[src*="ScriptIncludeBinding.js"]').length == 0)
-		{
-			$("#script-include-consolidated").addClass("pass");
-		}
-	</ScriptBlock>
-  <ScriptInclude src="~/scripts/DependencyLeaf.js" />
+	
 	<!-- don't use Resource Registries here so that it tests will fail appropriately if necessary --> 
 	<script type="text/javascript" src="${Url.Content('~/Scripts/ResourceManagement-TestBootstrapper.js')}"></script>
 </content>

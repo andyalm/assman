@@ -14,7 +14,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <summary>
 		/// Gets or sets the regex pattern used to match.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.Pattern, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty(PropertyNames.Pattern, IsRequired = false, IsKey = false)]
 		public string Pattern
 		{
 			get { return this[PropertyNames.Pattern] as string;}
@@ -24,7 +24,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <summary>
 		/// Gets or sets the regex pattern used to match.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.Path, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty(PropertyNames.Path, IsRequired = false, IsKey = false)]
 		public string Path
 		{
 			get { return this[PropertyNames.Path] as string; }
@@ -56,7 +56,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <returns></returns>
 		public bool IsMatch(string resourcePath)
 		{
-			return Rx.IsMatch(resourcePath);
+			return GetMatch(resourcePath).IsMatch();
 		}
 
 		public IResourceMatch GetMatch(string resourcePath)
