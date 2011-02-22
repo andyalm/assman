@@ -30,7 +30,7 @@ namespace AlmWitt.Web.ResourceManagement
 			                                                           new GroupTemplateContext(groupTemplate)
 			                                                           {
 			                                                           	ExcludeFilter = ToFilter(r => r.VirtualPath.Contains("file2"))
-			                                                           });
+			                                                           }, ResourceMode.Debug);
 			
 			consolidatedResource.ShouldNotBeNull();
 			consolidatedResource.Resources.Count().ShouldEqual(2);

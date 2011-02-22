@@ -20,6 +20,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public const string Version = "version";
 		public const string Assemblies = "assemblies";
 		public const string Plugins = "plugins";
-		public const string RedirectTo = "redirectTo";
+		public const string Path = "path";
+		public const string Mode = "mode";
 	}
 }

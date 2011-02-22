@@ -21,7 +21,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_instance.ClientScripts.Consolidate = true;
 			_instance.ClientScripts.Add(new ClientScriptGroupElement());
 			_instance.ClientScripts[0].ConsolidatedUrl = consolidatedScript;
-			_instance.ClientScripts[0].Exclude.Add(excludedScript);
+			_instance.ClientScripts[0].Exclude.AddPattern(excludedScript);
 			_instance.LastModified(DateTime.MinValue);
 		}
 

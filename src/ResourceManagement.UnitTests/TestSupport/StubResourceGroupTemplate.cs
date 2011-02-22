@@ -35,7 +35,7 @@ namespace AlmWitt.Web.ResourceManagement.TestObjects
 
 		public bool Compress { get; set; }
 
-		public IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources)
+		public IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources, ResourceMode mode)
 		{
 			return from @group in _groups
 				   select CreateGroup(@group.ConsolidatedUrl, allResources.Where(@group.Contains));

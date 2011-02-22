@@ -6,15 +6,22 @@ namespace AlmWitt.Web.ResourceManagement
 	public class RegexResourceMatch : IResourceMatch
 	{
 		private readonly Match _match;
+		private readonly ResourceMode? _mode;
 
-		public RegexResourceMatch(Match match)
+		public RegexResourceMatch(Match match, ResourceMode? mode)
 		{
 			_match = match;
+			_mode = mode;
 		}
 
-		public bool IsMatch
+		public bool IsMatch()
 		{
-			get { return _match.Success; }
+			return _match.Success;
+		}
+
+		public bool IsMatch(ResourceMode mode)
+		{
+			return IsMatch() && (_mode == null || _mode == mode);
 		}
 
 		public string GetSubValue(string name)

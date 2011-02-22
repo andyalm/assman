@@ -31,7 +31,10 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				ConsolidatedUrl = ConsolidatedUrl,
 				Include = new ResourceMatchElementCollection
 				{
-					"~/configured/location/.+"
+					new ResourceMatchElement
+					{
+						Pattern = "~/configured/location/.+"
+					}
 				}
 			});
 			_resolvedUrlCache = new Dictionary<string, string>();

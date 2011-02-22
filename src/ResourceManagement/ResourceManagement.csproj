@@ -125,6 +125,7 @@
     <Compile Include="IResourceGroupTemplate.cs" />
     <Compile Include="IResourceHandler.cs" />
     <Compile Include="IResourceHandlerFactory.cs" />
+    <Compile Include="PathResourceMatch.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistryAccessor.cs" />
     <Compile Include="Registration\DependencyResolvingResourceRegistry.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="ResourceCollectionExtensions.cs" />
     <Compile Include="ResourceGroupTemplateCollection.cs" />
     <Compile Include="ResourceGroup.cs" />
+    <Compile Include="ResourceMode.cs" />
     <Compile Include="TheadSafeInMemoryCache.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="EmbeddedResource.cs" />

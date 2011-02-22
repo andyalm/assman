@@ -3,8 +3,6 @@ using System.Web.Configuration;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
-using AlmWitt.Web.ResourceManagement.Configuration;
-
 namespace AlmWitt.Web.ResourceManagement
 {
 	internal class ResourceHandler : IResourceHandler
@@ -64,7 +62,7 @@ namespace AlmWitt.Web.ResourceManagement
 				return _cachedConsolidatedResource;
 			}
 
-			var consolidatedResource = _configContext.ConsolidateGroup(_path, _groupTemplateContext);
+			var consolidatedResource = _configContext.ConsolidateGroup(_path, _groupTemplateContext, IsDebugMode ? ResourceMode.Debug : ResourceMode.Release);
 			if(CachingEnabled)
 			{
 				_cachedConsolidatedResource = consolidatedResource;
@@ -75,10 +73,15 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private bool CachingEnabled
 		{
+			get { return !IsDebugMode; }
+		}
+
+		private bool IsDebugMode
+		{
 			get
 			{
 				var compilationSection = GetConfigurationLoader().GetSection<CompilationSection>("system.web/compilation");
-				return !compilationSection.Debug;
+				return compilationSection.Debug;
 			}
 		}
 	}

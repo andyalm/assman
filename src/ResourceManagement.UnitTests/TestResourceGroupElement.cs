@@ -27,7 +27,7 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			CreateResources("include1.js", "exclude.js", "include2.js");
 
-			_element.Exclude.Add("exclude");
+			_element.Exclude.AddPattern("exclude");
 			var resources = GetResources(_element);
 
 			Assert.IsNotNull(resources);
@@ -39,8 +39,22 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			CreateResources("include1.js", "notincluded.js", "include2.js");
 
-			_element.Include.Add("include1");
-			_element.Include.Add("include2");
+			_element.Include.AddPattern("include1");
+			_element.Include.AddPattern("include2");
+			var resources = GetResources(_element);
+
+			Assert.IsNotNull(resources);
+			Assert.AreEqual(2, resources.Count());
+		}
+
+		[Test]
+		public void WhenPathIsSpecifiedInsteadOfPattern_OnlyExactMatchesMatch()
+		{
+			CreateResources("include1.js", "notincluded.js", "include2.js");
+
+			_element.Include.AddPath("~/include1.js");
+			_element.Include.AddPath("notincluded");
+			_element.Include.AddPath("~/include2.js");
 			var resources = GetResources(_element);
 
 			Assert.IsNotNull(resources);
@@ -52,10 +66,10 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			CreateResources("include.js", "both.js", "exclude.js");
 
-			_element.Include.Add("include");
-			_element.Include.Add("both");
-			_element.Exclude.Add("exclude");
-			_element.Exclude.Add("both");
+			_element.Include.AddPattern("include");
+			_element.Include.AddPattern("both");
+			_element.Exclude.AddPattern("exclude");
+			_element.Exclude.AddPattern("both");
 			var resources = GetResources(_element);
 
 			Assert.IsNotNull(resources);
@@ -74,17 +88,48 @@ namespace AlmWitt.Web.ResourceManagement
 		}
 
 		[Test]
+		public void WhenGroupContainsPatternForDebugAndReleaseVersionsOfScript_DebugVersionIsExcludedFromReleaseGroupAndReleaseIsExcludedFromDebugGroup()
+		{
+			CreateResources("neutralscript.js", "MicrosoftAjax.debug.js", "MicrosoftAjax.js");
+
+			_element.Include.Add(new ResourceMatchElement
+			{
+				Pattern = "neutralscript.js"
+			});
+			_element.Include.Add(new ResourceMatchElement
+			{
+				Path = "~/MicrosoftAjax.debug.js",
+				Mode = ResourceMode.Debug
+			});
+			_element.Include.Add(new ResourceMatchElement
+			{
+				Path = "~/MicrosoftAjax.js",
+				Mode = ResourceMode.Release
+			});
+
+			var debugResources = _element.GetGroups(_allResources, ResourceMode.Debug).Single().GetResources().ToList();
+			debugResources.CountShouldEqual(2);
+			debugResources[0].VirtualPath.ShouldEqual("~/neutralscript.js");
+			debugResources[1].VirtualPath.ShouldEqual("~/MicrosoftAjax.debug.js");
+
+			var releaseResources = _element.GetGroups(_allResources, ResourceMode.Release).Single().GetResources().ToList();
+			releaseResources.CountShouldEqual(2);
+			releaseResources[0].VirtualPath.ShouldEqual("~/neutralscript.js");
+			releaseResources[1].VirtualPath.ShouldEqual("~/MicrosoftAjax.js");
+		}
+
+		[Test]
 		public void GetResourcesSortsByIncludeOrder()
 		{
 			CreateResources("file1.js", "file2.js", "file3.js",
 				"file4.js", "file5.js");
 
 			_element.Consolidate = true;
-			_element.Include.Add("file3.js");
-			_element.Include.Add("file2.js");
-			_element.Include.Add("file1.js");
-			_element.Include.Add("file4.js");
-			_element.Include.Add("file5.js");
+			_element.Include.AddPattern("file3.js");
+			_element.Include.AddPattern("file2.js");
+			_element.Include.AddPattern("file1.js");
+			_element.Include.AddPattern("file4.js");
+			_element.Include.AddPattern("file5.js");
 
 			var resources = GetResources(_element);
 
@@ -103,10 +148,10 @@ namespace AlmWitt.Web.ResourceManagement
 			CreateResources("file1.js", "file2.js", "file3.js", "file4.js", "file5.js");
 
 			_element.Consolidate = true;
-			_element.Include.Add("file2.js");
-			_element.Include.Add("file3.js");
-			_element.Include.Add("file4.js");
-			_element.Exclude.Add("file3.js");
+			_element.Include.AddPattern("file2.js");
+			_element.Include.AddPattern("file3.js");
+			_element.Include.AddPattern("file4.js");
+			_element.Exclude.AddPattern("file3.js");
 
 			VerifyUrlIsNotConsolidated("file1.js");
 			VerifyUrlIsConsolidated("file2.js");
@@ -115,32 +160,14 @@ namespace AlmWitt.Web.ResourceManagement
 			VerifyUrlIsNotConsolidated("file5.js");
 		}
 
-		private void VerifyUrlIsConsolidated(string virtualPath)
-		{
-			VerifyUrlIsConsolidated(virtualPath, _element.ConsolidatedUrl);
-		}
-
-		private void VerifyUrlIsConsolidated(string virtualPath, string expectedConsolidatedUrl)
-		{
-			string consolidatedUrl;
-			_element.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl).ShouldBeTrue();
-			consolidatedUrl.ShouldEqual(expectedConsolidatedUrl);
-		}
-
-		private void VerifyUrlIsNotConsolidated(string virtualPath)
-		{
-			string consolidatedUrl;
-			_element.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl).ShouldBeFalse();
-		}
-
 		[Test]
 		public void WhenConsolidatedUrlIsNotTemplated_OnlyOneGroupIsReturnedFromGetGroups()
 		{
 			CreateResources("file1.js", "file2.js");
 
-			_element.Include.Add(@"file\d+\.js");
+			_element.Include.AddPattern(@"file\d+\.js");
 
-			var groups = _element.GetGroups(_allResources);
+			var groups = _element.GetGroups(_allResources, ResourceMode.Release);
 			groups.Count().ShouldEqual(1);
 			groups.First().ConsolidatedUrl.ShouldEqual(_element.ConsolidatedUrl);
 			groups.First().GetResources().ShouldContainAll(_allResources.ToArray());
@@ -152,9 +179,9 @@ namespace AlmWitt.Web.ResourceManagement
 			CreateResources("Views/Search/Landing.js", "Views/Search/Results.js", "Views/Purchase/Landing.js");
 
 			_element.ConsolidatedUrl = "~/consolidated/bycontroller/{controller}.js";
-			_element.Include.Add(@"~/Views/(?<controller>\w+)/.+\.js");
+			_element.Include.AddPattern(@"~/Views/(?<controller>\w+)/.+\.js");
 
-			var groups = _element.GetGroups(_allResources).ToList();
+			var groups = _element.GetGroups(_allResources, ResourceMode.Release).ToList();
 			groups.Count.ShouldEqual(2);
 			groups.ShouldContain(g => g.ConsolidatedUrl == "~/consolidated/bycontroller/Search.js");
 			groups.ShouldContain(g => g.ConsolidatedUrl == "~/consolidated/bycontroller/Purchase.js");
@@ -195,9 +222,27 @@ namespace AlmWitt.Web.ResourceManagement
 			CreateResources("file1.js", "file2.js");
 			_element.Compress = true;
 
-			var group = _element.GetGroups(_allResources).Single();
+			var group = _element.GetGroups(_allResources, ResourceMode.Release).Single();
 
 			group.Compress.ShouldBeTrue();
+		}
+
+		private void VerifyUrlIsConsolidated(string virtualPath)
+		{
+			VerifyUrlIsConsolidated(virtualPath, _element.ConsolidatedUrl);
+		}
+
+		private void VerifyUrlIsConsolidated(string virtualPath, string expectedConsolidatedUrl)
+		{
+			string consolidatedUrl;
+			_element.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl).ShouldBeTrue();
+			consolidatedUrl.ShouldEqual(expectedConsolidatedUrl);
+		}
+
+		private void VerifyUrlIsNotConsolidated(string virtualPath)
+		{
+			string consolidatedUrl;
+			_element.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl).ShouldBeFalse();
 		}
 
 		private void CreateResources(params string[] paths)
@@ -210,7 +255,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private ResourceCollection GetResources(ResourceGroupElement groupElement)
 		{
-			return groupElement.GetGroups(_allResources)
+			return groupElement.GetGroups(_allResources, ResourceMode.Release)
 				.Single().GetResources().ToResourceCollection();
 		}
 	}
