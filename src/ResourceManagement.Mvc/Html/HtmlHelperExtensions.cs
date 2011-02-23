@@ -34,8 +34,8 @@ namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 
 		public static void RenderScripts(this HtmlHelper html, string registryName)
 		{
-			var renderer = html.ResourceRegistries().ScriptRenderer(registryName, html.ViewContext.HttpContext, html.Resolver());
-			renderer.RenderTo(html.ViewContext.Writer);
+			var renderer = html.ResourceRegistries().ScriptRenderer(registryName, html.Resolver());
+			renderer.Render(html.ViewContext.Writer);
 		}
 
 		public static void RenderStyles(this HtmlHelper html)
@@ -45,8 +45,8 @@ namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 
 		public static void RenderStyles(this HtmlHelper html, string registryName)
 		{
-			var renderer = html.ResourceRegistries().StyleRenderer(registryName, html.ViewContext.HttpContext, html.Resolver());
-			renderer.RenderTo(html.ViewContext.Writer);
+			var renderer = html.ResourceRegistries().StyleRenderer(registryName, html.Resolver());
+			renderer.Render(html.ViewContext.Writer);
 		}
 
 		public static IResourceRegistry ScriptRegistry(this HtmlHelper html, string registryName)

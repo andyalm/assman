@@ -1,9 +1,14 @@
+using System;
+using System.Linq;
+
+using AlmWitt.Web.ResourceManagement.Registration;
+
 namespace AlmWitt.Web.ResourceManagement
 {
 	public class GenericResourceRegistryAccessor : IResourceRegistryAccessor
 	{
-		private readonly ResourceRegistryMap<IResourceRegistry> _scriptRegistries = new ResourceRegistryMap<IResourceRegistry>(() => new GenericResourceRegistry());
-		private readonly ResourceRegistryMap<IResourceRegistry> _styleRegistries = new ResourceRegistryMap<IResourceRegistry>(() => new GenericResourceRegistry());
+		private readonly ResourceRegistryMap _scriptRegistries = new ResourceRegistryMap(() => new GenericResourceRegistry());
+		private readonly ResourceRegistryMap _styleRegistries = new ResourceRegistryMap(() => new GenericResourceRegistry());
 		
 		public IResourceRegistry ScriptRegistry
 		{
@@ -23,6 +28,25 @@ namespace AlmWitt.Web.ResourceManagement
 		public IResourceRegistry NamedStyleRegistry(string name)
 		{
 			return _styleRegistries.GetRegistryWithName(name);
+		}
+
+		public RegisteredResources GetRegisteredScripts(string registryName)
+		{
+			return GetRegisteredResources(_scriptRegistries, registryName);
+		}
+
+		public RegisteredResources GetRegisteredStyles(string registryName)
+		{
+			return GetRegisteredResources(_styleRegistries, registryName);
+		}
+
+		private RegisteredResources GetRegisteredResources(ResourceRegistryMap registryMap, string registryName)
+		{
+			return new RegisteredResources
+			{
+				Includes = registryMap.GetIncludesFor(registryName).ToList(),
+				InlineBlocks = registryMap.GetInlineBlocksFor(registryName).ToList()
+			};
 		}
 	}
 }

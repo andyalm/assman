@@ -1,104 +1,93 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Web;
 
 namespace AlmWitt.Web.ResourceManagement.Registration
 {
-	public abstract class ResourceRegistryRenderer
+	public class ResourceRegistryRenderer
 	{
-		private readonly IReadableResourceRegistry _resourceRegistry;
-		private readonly IRegistryRenderingContext _renderingContext;
+		private readonly RegisteredResources _resources;
+		private readonly IResourceWriter _resourceWriter;
+		private readonly Func<string, string> _urlResolver;
 
-		protected ResourceRegistryRenderer(IReadableResourceRegistry resourceRegistry, IRegistryRenderingContext renderingContext)
+		public ResourceRegistryRenderer(RegisteredResources resources, IResourceWriter resourceWriter, Func<string,string> urlResolver)
 		{
-			_resourceRegistry = resourceRegistry;
-			_renderingContext = renderingContext;
+			_resources = resources;
+			_resourceWriter = resourceWriter;
+			_urlResolver = urlResolver;
 		}
 
-		public void RenderTo(TextWriter writer)
+		public void Render(TextWriter writer)
 		{
-			foreach (var includeUrl in _resourceRegistry.GetIncludes())
+			foreach (var includeUrl in _resources.Includes)
 			{
-				if(_renderingContext.ShouldRenderInclude(includeUrl))
-				{
-					var resolvedUrl = _renderingContext.ResolveUrl(includeUrl);
-					WriteIncludeTag(writer, resolvedUrl);
-					_renderingContext.MarkIncludeAsRendered(includeUrl);
-				}
+				var resolvedUrl = _urlResolver(includeUrl);
+				_resourceWriter.WriteIncludeTag(writer, resolvedUrl);
 			}
 
-			var scriptBlocks = _resourceRegistry.GetInlineBlocks();
+			var scriptBlocks = _resources.InlineBlocks;
 			if (scriptBlocks.Any())
 			{
-				WriteBeginBlock(writer);
+				_resourceWriter.WriteBeginBlock(writer);
 				foreach (var scriptBlock in scriptBlocks)
 				{
 					scriptBlock(writer);
 				}
-				WriteEndBlock(writer);
+				_resourceWriter.WriteEndBlock(writer);
 			}
 		}
-
-		protected abstract void WriteIncludeTag(TextWriter writer, string url);
-		protected abstract void WriteBeginBlock(TextWriter writer);
-		protected abstract void WriteEndBlock(TextWriter writer);
 	}
 
 	public static class ResourceRegistryRendererExtensions
 	{
-		public static ResourceRegistryRenderer ScriptRenderer(this IResourceRegistryAccessor registryAccessor, string registryName, HttpContextBase httpContext, Func<string,string> urlResolver)
+		private static readonly IResourceWriter _scriptWriter = new ScriptResourceWriter();
+		private static readonly IResourceWriter _styleWriter = new StyleResourceWriter();
+		
+		public static ResourceRegistryRenderer ScriptRenderer(this IResourceRegistryAccessor registryAccessor, string registryName, Func<string,string> urlResolver)
 		{
-			var orderingStrategyContext = new OrderingStategyContext(registryName, registryAccessor.NamedScriptRegistry, httpContext);
-
-			var renderingContext = new RegistryRenderingContext(orderingStrategyContext,
-			                                                    ResourceRegistryConfiguration.OrderingStrategy, urlResolver);
+			var registeredResources = registryAccessor.GetRegisteredScripts(registryName);
 			
-			return new ScriptRegistryRenderer(orderingStrategyContext.CurrentRegistry.AsReadable(), renderingContext);
+			return new ResourceRegistryRenderer(registeredResources, _scriptWriter, urlResolver);
 		}
 
-		public static ResourceRegistryRenderer StyleRenderer(this IResourceRegistryAccessor registryAccessor, string registryName, HttpContextBase httpContext, Func<string,string> urlResolver)
+		public static ResourceRegistryRenderer StyleRenderer(this IResourceRegistryAccessor registryAccessor, string registryName, Func<string,string> urlResolver)
 		{
-			var orderingStrategyContext = new OrderingStategyContext(registryName, registryAccessor.NamedStyleRegistry, httpContext);
+			var registeredResources = registryAccessor.GetRegisteredStyles(registryName);
 
-			var renderingContext = new RegistryRenderingContext(orderingStrategyContext,
-																ResourceRegistryConfiguration.OrderingStrategy, urlResolver);
-
-			return new StyleRegistryRenderer(orderingStrategyContext.CurrentRegistry.AsReadable(), renderingContext);
+			return new ResourceRegistryRenderer(registeredResources, _styleWriter, urlResolver);
 		}
 		
-		private class ScriptRegistryRenderer : ResourceRegistryRenderer
+		private class ScriptResourceWriter : IResourceWriter
 		{
-			public ScriptRegistryRenderer(IReadableResourceRegistry resourceRegistry, RegistryRenderingContext renderingContext) : base(resourceRegistry, renderingContext) {}
-			
-			protected override void WriteIncludeTag(TextWriter writer, string url)
+			public void WriteIncludeTag(TextWriter writer, string url)
 			{
 				writer.Write("<script type=\"text/javascript\" src=\"{0}\"></script>", url);
 			}
 
-			protected override void WriteBeginBlock(TextWriter writer)
+			public void WriteBeginBlock(TextWriter writer)
 			{
 				writer.Write("<script type=\"text/javascript\">");
 			}
-			protected override void WriteEndBlock(TextWriter writer)
+
+			public void WriteEndBlock(TextWriter writer)
 			{
 				writer.Write("</script>");
 			}
 		}
 
-		private class StyleRegistryRenderer : ResourceRegistryRenderer
+		private class StyleResourceWriter : IResourceWriter
 		{
-			public StyleRegistryRenderer(IReadableResourceRegistry resourceRegistry, RegistryRenderingContext renderingContext) : base(resourceRegistry, renderingContext) { }
-
-			protected override void WriteIncludeTag(TextWriter writer, string url)
+			public void WriteIncludeTag(TextWriter writer, string url)
 			{
 				writer.Write("<link rel=\"Stylesheet\" type=\"text/css\" href=\"{0}\"></link>", url);
 			}
-			protected override void WriteBeginBlock(TextWriter writer)
+
+			public void WriteBeginBlock(TextWriter writer)
 			{
 				writer.Write("<style type=\"text/css\">");
 			}
-			protected override void WriteEndBlock(TextWriter writer)
+
+			public void WriteEndBlock(TextWriter writer)
 			{
 				writer.Write("</style>");
 			}
