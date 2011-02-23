@@ -104,11 +104,11 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return ConsolidatedUrlTemplate.Matches(consolidatedUrl);
 		}
 
-		public IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources)
+		public IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources, ResourceMode mode)
 		{
 			return  from resource in allResources
 					let match = GetMatch(resource.VirtualPath)
-					where match.IsMatch
+					where match.IsMatch(mode)
 					let resourceWithUrl = new { Resource = resource, ConsolidatedUrl = GetConsolidatedUrl(match) }
 					group resourceWithUrl by resourceWithUrl.ConsolidatedUrl into @group
 					select CreateGroup(@group.Key,
@@ -122,7 +122,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				return false;
 
 			var match = GetMatch(virtualPath);
-			if(match.IsMatch)
+			if(match.IsMatch())
 			{
 				consolidatedUrl = GetConsolidatedUrl(match);
 				return true;
@@ -160,7 +160,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				&& !Exclude.IsMatch(resourceUrl);
 		}
 
-		internal IResourceMatch GetMatch(string resourceUrl)
+		private IResourceMatch GetMatch(string resourceUrl)
 		{
 			if(Include.Count == 0)
 			{
@@ -169,7 +169,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 			var includeMatch = Include.GetMatch(resourceUrl);
 			var excludeMatch = Exclude.GetMatch(resourceUrl);
-			if (includeMatch.IsMatch && !excludeMatch.IsMatch)
+			if (includeMatch.IsMatch() && !excludeMatch.IsMatch())
 				return includeMatch;
 
 			return ResourceMatches.False(resourceUrl);

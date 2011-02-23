@@ -14,11 +14,39 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <summary>
 		/// Gets or sets the regex pattern used to match.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.Pattern, IsRequired = true, IsKey = true)]
+		[ConfigurationProperty(PropertyNames.Pattern, IsRequired = false, IsKey = false)]
 		public string Pattern
 		{
 			get { return this[PropertyNames.Pattern] as string;}
 			set { this[PropertyNames.Pattern] = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the regex pattern used to match.
+		/// </summary>
+		[ConfigurationProperty(PropertyNames.Path, IsRequired = false, IsKey = false)]
+		public string Path
+		{
+			get { return this[PropertyNames.Path] as string; }
+			set { this[PropertyNames.Path] = value; }
+		}
+
+		[ConfigurationProperty(PropertyNames.Mode, DefaultValue = null)]
+		public ResourceMode? Mode
+		{
+			get { return (ResourceMode?) this[PropertyNames.Mode]; }
+			set { this[PropertyNames.Mode] = value; }
+		}
+
+		public string Key
+		{
+			get
+			{
+				if (IsRegexMode)
+					return Pattern;
+				else
+					return Path;
+			}
 		}
 		
 		/// <summary>
@@ -28,12 +56,15 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <returns></returns>
 		public bool IsMatch(string resourcePath)
 		{
-			return Rx.IsMatch(resourcePath);
+			return GetMatch(resourcePath).IsMatch();
 		}
 
 		public IResourceMatch GetMatch(string resourcePath)
 		{
-			return new RegexResourceMatch(Rx.Match(resourcePath));
+			if (IsRegexMode)
+				return new RegexResourceMatch(Rx.Match(resourcePath), Mode);
+			else
+				return new PathResourceMatch(Path, resourcePath, Mode);
 		}
 
 		private Regex Rx
@@ -44,6 +75,11 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 					_rx = new Regex(Pattern, RegexOptions.IgnoreCase);
 				return _rx;
 			}
+		}
+
+		private bool IsRegexMode
+		{
+			get { return String.IsNullOrEmpty(Path); }
 		}
 	}
 }

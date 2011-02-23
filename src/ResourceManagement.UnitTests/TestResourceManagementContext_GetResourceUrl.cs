@@ -25,7 +25,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_instance.ConfigurationLastModified = DateTime.MinValue;
 			_groupElement = new ClientScriptGroupElement();
 			_groupElement.ConsolidatedUrl = consolidatedScript;
-			_groupElement.Exclude.Add(excludedScript);
+			_groupElement.Exclude.AddPattern(excludedScript);
 			_instance.ClientScriptGroups.Add(_groupElement);
 		}
 
@@ -105,7 +105,7 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			const string secondGroupUrl = "~/mysecondconsolidation.jsx";
 			_instance.ConsolidateClientScripts = true;
-			_groupElement.Exclude.Add(mySecondScript);
+			_groupElement.Exclude.AddPattern(mySecondScript);
 			var secondGroupElement = new ClientScriptGroupElement();
 			_instance.ClientScriptGroups.Add(secondGroupElement);
 			secondGroupElement.ConsolidatedUrl = secondGroupUrl;

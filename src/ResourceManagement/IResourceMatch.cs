@@ -2,7 +2,8 @@ namespace AlmWitt.Web.ResourceManagement
 {
 	public interface IResourceMatch
 	{
-		bool IsMatch { get; }
+		bool IsMatch();
+		bool IsMatch(ResourceMode mode);
 
 		string GetSubValue(string name);
 
@@ -30,9 +31,14 @@ namespace AlmWitt.Web.ResourceManagement
 				_value = value;
 			}
 
-			public bool IsMatch
+			public bool IsMatch()
 			{
-				get { return false; }
+				return false;
+			}
+
+			public bool IsMatch(ResourceMode mode)
+			{
+				return false;
 			}
 
 			public string GetSubValue(string name)
@@ -55,9 +61,14 @@ namespace AlmWitt.Web.ResourceManagement
 				_inner = inner;
 			}
 
-			public bool IsMatch
+			public bool IsMatch()
 			{
-				get { return !_inner.IsMatch; }
+				return !_inner.IsMatch();
+			}
+
+			public bool IsMatch(ResourceMode mode)
+			{
+				return !_inner.IsMatch(mode);
 			}
 
 			public string GetSubValue(string name)

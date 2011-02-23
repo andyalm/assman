@@ -108,9 +108,9 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return _assemblies;
 		}
 
-		public ConsolidatedResource ConsolidateGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext)
+		public ConsolidatedResource ConsolidateGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext, ResourceMode mode)
 		{
-			var group = GetGroupsFromTemplate(groupTemplateContext)
+			var group = GetGroupsFromTemplate(groupTemplateContext, mode)
 				.Where(g => UrlType.ArePathsEqual(g.ConsolidatedUrl, groupConsolidatedUrl))
 				.SingleOrDefault();
 			
@@ -136,10 +136,10 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				.Consolidate(createContentFilter, groupTemplateContext.GroupTemplate.ResourceType.Separator);
 		}
 
-		public void ConsolidateAll(Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)
+		public void ConsolidateAll(Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource, ResourceMode mode)
 		{
-			ConsolidateAllInternal(ClientScriptGroups, handleConsolidatedResource);
-			ConsolidateAllInternal(CssFileGroups, handleConsolidatedResource);
+			ConsolidateAllInternal(ClientScriptGroups, handleConsolidatedResource, mode);
+			ConsolidateAllInternal(CssFileGroups, handleConsolidatedResource, mode);
 		}
 
 		public GroupTemplateContext FindGroupTemplate(string consolidatedUrl)
@@ -196,7 +196,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return resourceUrl;
 		}
 
-		private void ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)
+		private void ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource, ResourceMode mode)
 		{
 			if(!groupTemplates.Any())
 				return;
@@ -205,7 +205,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 			groupTemplates.ForEach(templateContext =>
 			{
-				var groups = templateContext.GroupTemplate.GetGroups(allResources);
+				var groups = templateContext.GroupTemplate.GetGroups(allResources, mode);
 				foreach (var group in groups)
 				{
 					var consolidatedResource = ConsolidateGroup(group, templateContext);
@@ -216,13 +216,13 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			});
 		}
 
-		private IEnumerable<IResourceGroup> GetGroupsFromTemplate(GroupTemplateContext groupTemplateContext)
+		private IEnumerable<IResourceGroup> GetGroupsFromTemplate(GroupTemplateContext groupTemplateContext, ResourceMode mode)
 		{
 			var resources = _finder
 				.FindResources(groupTemplateContext.GroupTemplate.ResourceType)
 				.WhereNot(groupTemplateContext.ExcludeFilter);
 
-			return groupTemplateContext.GroupTemplate.GetGroups(resources);
+			return groupTemplateContext.GroupTemplate.GetGroups(resources, mode);
 		}
 
 		private ResourceGroupTemplateCollection GroupTemplatesOfType(ResourceType resourceType)

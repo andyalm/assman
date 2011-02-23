@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
@@ -10,14 +9,26 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 	/// </summary>
 	public class ResourceMatchElementCollection : ConfigurationElementCollection
 	{
+		public void Add(ResourceMatchElement element)
+		{
+			BaseAdd(element);
+		}
+		
 		/// <summary>
 		/// Adds the given regex pattern to the collection.
 		/// </summary>
 		/// <param name="pattern">A regular expression pattern.</param>
-		public void Add(string pattern)
+		public void AddPattern(string pattern)
 		{
 			var element = new ResourceMatchElement();
 			element.Pattern = pattern;
+			BaseAdd(element);
+		}
+
+		public void AddPath(string path)
+		{
+			var element = new ResourceMatchElement();
+			element.Path = path;
 			BaseAdd(element);
 		}
 
@@ -37,7 +48,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			foreach (ResourceMatchElement element in this)
 			{
 				var match = element.GetMatch(resourcePath);
-				if (match.IsMatch)
+				if (match.IsMatch())
 					return match;
 			}
 
@@ -79,7 +90,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <returns></returns>
 		protected override object GetElementKey(ConfigurationElement element)
 		{
-			return ((ResourceMatchElement) element).Pattern;
+			return ((ResourceMatchElement) element).Key;
 		}
 	}
 }

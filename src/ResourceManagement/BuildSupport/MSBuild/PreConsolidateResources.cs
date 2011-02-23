@@ -1,6 +1,6 @@
 using System;
+using System.Diagnostics;
 using System.IO;
-using System.Threading;
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -13,40 +13,45 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport.MSBuild
     /// </summary>
     public class PreConsolidateResources : Task
     {
-        private ITaskItem m_webRoot;
-        private bool m_sleep = false;
+    	/// <summary>
+    	/// Gets or sets the physical path the the root of the website.
+    	/// </summary>
+    	[Required]
+    	public ITaskItem WebRoot { get; set; }
 
-        /// <summary>
-        /// Gets or sets the physical path the the root of the website.
-        /// </summary>
-        public ITaskItem WebRoot
-        {
-            get { return m_webRoot; }
-            set { m_webRoot = value; }
-        }
+		/// <summary>
+		/// Indicates whether to consolidate the scripts in Debug or Release mode.
+		/// </summary>
+		public ResourceMode Mode { get; set; }
 
-        /// <summary>
-        /// Forces the task to sleep for 15 seconds before executing.  Default is <c>false</c>.
-        /// </summary>
-        /// <remarks>
-        /// This is intended to be used for debugging purposes (to allow you time to attach to the msbuild process).
-        /// </remarks>
-        public bool Sleep
-        {
-            get { return m_sleep; }
-            set { m_sleep = value; }
-        }
+    	/// <summary>
+    	/// Optionally applies the given version to be used in all script/style includes.  If left null,
+    	/// the version will be generated based on the Date/Time the scripts and styles were consolidated.
+    	/// </summary>
+		public string Version { get; set; }
 
-        /// <summary>
+    	/// <summary>
+    	/// Forces the task to try to launch a debugger when executed.  Default is <c>false</c>.
+    	/// </summary>
+    	public bool DebugTask { get; set; }
+
+		public PreConsolidateResources()
+		{
+			Mode = ResourceMode.Release;
+		}
+
+    	/// <summary>
         /// Executes the task.
         /// </summary>
         /// <returns></returns>
         public override bool Execute()
         {
-            if (Sleep)
-                Thread.Sleep(15000);
+			if (DebugTask)
+				Debugger.Launch();
 
-            PreConsolidateCommand cmd = PreConsolidateCommand.GetInstance(BasePath);
+            PreConsolidateCommand cmd = PreConsolidateCommand.GetInstance(FullPathToWebsiteDirectory);
+			cmd.Mode = this.Mode;
+    		cmd.Version = this.Version;
             cmd.Logger = new MSBuildLogger(this.Log);
             cmd.Execute();
 
@@ -54,7 +59,7 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport.MSBuild
         }
 
        
-        private string BasePath
+        private string FullPathToWebsiteDirectory
         {
             get
             {

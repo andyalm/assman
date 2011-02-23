@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
@@ -57,6 +58,16 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			public IResourceRegistry NamedStyleRegistry(string name)
 			{
 				return WrapNamedWithConsolidation(name, _inner.NamedStyleRegistry, _context.GetStylesheetUrl, _namedStyleRegistries);
+			}
+
+			public RegisteredResources GetRegisteredScripts(string registryName)
+			{
+				return _inner.GetRegisteredScripts(registryName);
+			}
+
+			public RegisteredResources GetRegisteredStyles(string registryName)
+			{
+				return _inner.GetRegisteredStyles(registryName);
 			}
 
 			private IResourceRegistry WrapNamedWithConsolidation(string name, Func<string,IResourceRegistry> getNamedRegistry, Func<string, string> getResourceUrl, IDictionary<string, IResourceRegistry> registryCache)
