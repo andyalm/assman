@@ -20,35 +20,38 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
             return new PreConsolidateCommand(webRoot);
         }
 
-        private readonly string _webRoot;
+        private readonly string _websiteRootDirectory;
         private VirtualPathResolver _resolver;
         private System.Configuration.Configuration _config;
     	private ResourceManagementContext _context;
         private ILogger _logger = NullLogger.Instance;
-    	private bool? _enableCompression;
-
-        private PreConsolidateCommand(string webRoot)
+    	
+        private PreConsolidateCommand(string websiteRootDirectory)
         {
-            _webRoot = webRoot;
+            _websiteRootDirectory = websiteRootDirectory;
+			Mode = ResourceMode.Release;
         }
 
         /// <summary>
         /// Gets the physical path the the root of the website.
         /// </summary>
-        public string WebRoot
+        public string WebsiteRootDirectory
         {
-            get { return _webRoot; }
+            get { return _websiteRootDirectory; }
         }
 
-    	public bool AutoVersion { get; set; }
+		/// <summary>
+		/// Indicates whether to consolidate the scripts in Debug or Release mode.
+		/// </summary>
+		public ResourceMode Mode { get; set; }
 
-    	public bool EnableCompression
-    	{
-			get { return _enableCompression ?? false; }
-			set { _enableCompression = value; }
-    	}
+		/// <summary>
+		/// Optionally applies the given version to be used in all script/style includes.  If left null,
+		/// the version will be generated based on the Date/Time the scripts and styles were consolidated.
+		/// </summary>
+		public string Version { get; set; }
 
-        /// <summary>
+    	/// <summary>
         /// Gets or sets the build logger used to log the progress of the command.
         /// </summary>
         public ILogger Logger
@@ -64,7 +67,7 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
         public void Execute()
         {
             LogMessage("Begin consolidating resources...");
-            ResourceManagementConfiguration configSection = GetConfigSection(WebRoot);
+            ResourceManagementConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
             _resolver = GetResolver(configSection.RootFilePath);
 			
 			SetCompression(configSection);
@@ -77,26 +80,20 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
 
 		private void SetCompression(ResourceManagementConfiguration configSection)
 		{
-			if (_enableCompression != null)
-			{
-				configSection.ClientScripts.Compress = _enableCompression.Value;
-				configSection.CssFiles.Compress = _enableCompression.Value;
-			}
+			var compress = Mode == ResourceMode.Release;
+			configSection.ClientScripts.Compress = compress;
+			configSection.CssFiles.Compress = compress;
 		}
 
-		private void SetVersion(ResourceManagementConfiguration section)
-		{
-			if (AutoVersion)
-			{
-				string version = DateTime.Now.ToString("MMdd");
-				section.Version = version;
-			}
+    	private void SetVersion(ResourceManagementConfiguration section)
+    	{
+    		section.Version = this.Version ?? DateTime.Now.ToString("yyMMddHHmm");
 		}
 
 		private void ConsolidateAll(ResourceManagementConfiguration configSection)
 		{
 			_context = configSection.BuildContext();
-			_context.ConsolidateAll(WriteConsolidatedResource);
+			_context.ConsolidateAll(WriteConsolidatedResource, Mode);
 			configSection.PreConsolidated = true;
 		}
 

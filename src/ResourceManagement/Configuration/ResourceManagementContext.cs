@@ -136,10 +136,10 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				.Consolidate(createContentFilter, groupTemplateContext.GroupTemplate.ResourceType.Separator);
 		}
 
-		public void ConsolidateAll(Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)
+		public void ConsolidateAll(Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource, ResourceMode mode)
 		{
-			ConsolidateAllInternal(ClientScriptGroups, handleConsolidatedResource, ResourceMode.Release);
-			ConsolidateAllInternal(CssFileGroups, handleConsolidatedResource, ResourceMode.Release);
+			ConsolidateAllInternal(ClientScriptGroups, handleConsolidatedResource, mode);
+			ConsolidateAllInternal(CssFileGroups, handleConsolidatedResource, mode);
 		}
 
 		public GroupTemplateContext FindGroupTemplate(string consolidatedUrl)
