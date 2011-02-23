@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace AlmWitt.Web.ResourceManagement
+namespace AlmWitt.Web.ResourceManagement.Registration
 {
 	/// <summary>
 	/// Represents an object that manages the inclusion of resources.

@@ -3,7 +3,7 @@ using System.IO;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
-namespace AlmWitt.Web.ResourceManagement
+namespace AlmWitt.Web.ResourceManagement.Registration
 {
 	public static class ResourceRegistryExtensions
 	{

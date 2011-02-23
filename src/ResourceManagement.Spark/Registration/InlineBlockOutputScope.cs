@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 
+using AlmWitt.Web.ResourceManagement.Registration;
+
 using Spark;
 using Spark.Spool;
 

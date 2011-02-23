@@ -1,7 +1,7 @@
 using System;
 using System.Web.UI;
 
-namespace AlmWitt.Web.ResourceManagement.WebForms
+namespace AlmWitt.Web.ResourceManagement.Registration.WebForms
 {
 	internal class WebFormsAjaxScriptIncluder : WebFormsClientScriptRegistry
 	{

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Web.UI;
 
-namespace AlmWitt.Web.ResourceManagement.WebForms
+namespace AlmWitt.Web.ResourceManagement.Registration.WebForms
 {
 	internal class WebFormsCssRegistry : WebFormsRegistryBase
 	{

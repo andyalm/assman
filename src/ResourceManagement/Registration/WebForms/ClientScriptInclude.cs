@@ -1,6 +1,4 @@
-using System;
-
-namespace AlmWitt.Web.ResourceManagement.WebForms
+namespace AlmWitt.Web.ResourceManagement.Registration.WebForms
 {
 	/// <summary>
 	/// Includes a client script file on a page.

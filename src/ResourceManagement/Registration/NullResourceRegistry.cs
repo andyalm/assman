@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AlmWitt.Web.ResourceManagement
+namespace AlmWitt.Web.ResourceManagement.Registration
 {
 	/// <summary>
 	/// An implementation of <see cref="IResourceRegistry"/> that doesn't do anything. (null object pattern)

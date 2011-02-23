@@ -57,15 +57,8 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private IDictionary<string,IEnumerable<string>> GetCacheKeyedByVirtualPath()
 		{
-			var httpContext = _httpContextAccessor();
-			var cache = httpContext.Items[_httpItemsKey] as IDictionary<string, IEnumerable<string>>;
-			if(cache == null)
-			{
-				cache = new Dictionary<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase);
-				httpContext.Items[_httpItemsKey] = cache;
-			}
-
-			return cache;
+			return _httpContextAccessor().Items.GetOrCreate<IDictionary<string, IEnumerable<string>>>(_httpItemsKey,
+				() => new Dictionary<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase));
 		} 
 
 		private class CacheItem

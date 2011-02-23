@@ -1,9 +1,7 @@
 using System;
 using System.Web.UI;
 
-using AlmWitt.Web.ResourceManagement;
-
-namespace AlmWitt.Web.ResourceManagement.WebForms
+namespace AlmWitt.Web.ResourceManagement.Registration.WebForms
 {
 	/// <summary>
 	/// Represents a control that includes a web resource.

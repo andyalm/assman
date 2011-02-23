@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using AlmWitt.Web.ResourceManagement.Registration;
-
-namespace AlmWitt.Web.ResourceManagement
+namespace AlmWitt.Web.ResourceManagement.Registration
 {
 	internal class ResourceRegistryMap
 	{

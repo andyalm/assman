@@ -1,5 +1,7 @@
 using System.Web.Mvc;
 
+using AlmWitt.Web.ResourceManagement.Registration;
+
 namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 {
 	public static class AjaxHelperExtensions

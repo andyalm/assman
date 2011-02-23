@@ -1,8 +1,4 @@
-using System;
-
-using AlmWitt.Web.ResourceManagement.Registration;
-
-namespace AlmWitt.Web.ResourceManagement
+namespace AlmWitt.Web.ResourceManagement.Registration
 {
 	public interface IResourceRegistryAccessor
 	{

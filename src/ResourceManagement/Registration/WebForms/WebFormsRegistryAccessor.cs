@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Web.UI;
 
-using AlmWitt.Web.ResourceManagement.Registration;
-
-namespace AlmWitt.Web.ResourceManagement.WebForms
+namespace AlmWitt.Web.ResourceManagement.Registration.WebForms
 {
 	internal class WebFormsRegistryAccessor : IResourceRegistryAccessor
 	{
