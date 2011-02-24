@@ -6,3 +6,4 @@ glob:*.suo
 glob:*.cache
 relre:samples/LessIntegration/bin/.+
 relre:Website/[Bb]in/.+
+relre:^output/.+

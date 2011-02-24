@@ -10,6 +10,7 @@
     <Projects Include="ResourceManagement.Less\Build.proj"/>
     <Projects Include="ResourceManagement.UnitTests\Build.proj"/>
     <Projects Include="ResourceManagement.Spark.UnitTests\Build.proj"/>
+    <Projects Include="PackageSpecs\Build.proj"/>
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\packages\Build1.0.0\tree.targets"/>

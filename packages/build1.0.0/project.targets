@@ -4,7 +4,7 @@
   <Import Project="base.targets"/>
 
   <PropertyGroup>
-    <ExportDestinationFolder>$(ExportDir)\$(TargetClrVersion)</ExportDestinationFolder>
+    <ExportDestinationFolder>$(ExportBinDir)\$(TargetClrVersion)</ExportDestinationFolder>
   </PropertyGroup>
   
   <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)">
