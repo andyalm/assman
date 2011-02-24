@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="$(DefaultTarget)">
+
+  <Import Project="base.targets"/>
+  
+  <Target Name="Import" DependsOnTargets="$(ImportDependsOn)">
+    <MSBuild Projects="%(Projects.FullPath)" Targets="Import" Properties="$(Properties)" />
+  </Target>
+  
+  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)">
+    <MSBuild Projects="%(Projects.FullPath)" Targets="Clean" Properties="$(Properties)" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)">
+    <MSBuild Projects="%(Projects.FullPath)" Targets="Build" Properties="$(Properties)" />
+  </Target>
+
+  <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)">
+    <MSBuild Projects="%(Projects.FullPath)" Targets="Rebuild" Properties="$(Properties)" />
+  </Target>
+
+  <Target Name="UnitTest" DependsOnTargets="$(UnitTestDependsOn)">
+    <MSBuild Projects="%(Projects.FullPath)" Targets="UnitTest" Properties="$(Properties)" />
+  </Target>
+
+  <Target Name="AcceptanceTest" DependsOnTargets="$(AcceptanceTestDependsOn)">
+    <MSBuild Projects="%(Projects.FullPath)" Targets="AcceptanceTest" Properties="$(Properties)" />
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="$(PackageDependsOn)">
+    <MSBuild Projects="%(Projects.FullPath)" Targets="Package" Properties="$(Properties)" />
+  </Target>
+  
+</Project>

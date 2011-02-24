@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="$(DefaultTarget)">
+
+  <Import Project="base.targets"/>
+
+  <Target Name="UnitTest" DependsOnTargets="$(UnitTestDependsOn)">
+    <Message Text="##teamcity[progressStart 'Running unit tests for %(Project.Filename)']"/>
+
+    <!-- Build the unit test project -->
+    <MSBuild Projects="@(Project)" Targets="Build" Properties="$(Properties)">
+      <Output TaskParameter="TargetOutputs" ItemName="TestAssembly"/>
+    </MSBuild>
+
+    <!-- Construct the test results file path -->
+    <CreateProperty Value="%(TestAssembly.RootDir)%(TestAssembly.Directory)%(TestAssembly.Filename).NUnit.xml">
+      <Output TaskParameter="Value" PropertyName="TestResultsFilePath"/>
+    </CreateProperty>
+
+    <Exec Command="$(NUnitBinDir)\nunit-console.exe &quot;%(TestAssembly.FullPath)&quot;"
+           LogStandardErrorAsError="true" />
+
+    <Message Text="NUnitTargetFramework is '$(NUnitTargetFramework)'..." />
+
+    <!--<Message Text="##teamcity[importData type='nunit' path='$(TestResultsFilePath)']" Condition="$(UseNativeTeamCityRunner)!='true'" />-->
+
+    <Message Text="##teamcity[progressFinish 'Running unit tests for %(Project.Filename)']"/>
+  </Target>
+
+</Project>
