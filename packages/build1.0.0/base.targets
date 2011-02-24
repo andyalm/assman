@@ -3,21 +3,19 @@
 
   <PropertyGroup>
   	<DefaultTarget>Package</DefaultTarget>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Properties>Configuration=$(Configuration);Platform=$(Platform)</Properties>
-    
     <CleanDependsOn></CleanDependsOn>
     <BuildDependsOn>Clean</BuildDependsOn>
     <RebuildDependsOn>Clean;Build</RebuildDependsOn>
     <UnitTestDependsOn>Build</UnitTestDependsOn>
-    <PackageDependsOn>UnitTest</PackageDependsOn>
+    <ExportDependsOn>UnitTest</ExportDependsOn>
+    <PackageDependsOn>Export</PackageDependsOn>
   </PropertyGroup>
 
   <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)"></Target>
   <Target Name="Build" DependsOnTargets="$(BuildDependsOn)"></Target>
   <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)"></Target>
   <Target Name="UnitTest" DependsOnTargets="$(UnitTestDependsOn)"></Target>
+  <Target Name="Export" DependsOnTargets="$(ExportDependsOn)"></Target>
   <Target Name="Package" DependsOnTargets="$(PackageDependsOn)"></Target>
   
 </Project>

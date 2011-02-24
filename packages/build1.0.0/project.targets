@@ -3,12 +3,26 @@
 
   <Import Project="base.targets"/>
 
+  <PropertyGroup>
+    <ExportDestinationFolder>$(ExportDir)\$(TargetClrVersion)</ExportDestinationFolder>
+  </PropertyGroup>
+  
   <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)">
+    <Delete Files="$(ExportDestinationFolder)\%(ExportAssembly.Identity).dll" />
+    <Delete Files="$(ExportDestinationFolder)\%(ExportAssembly.Identity).pdb" />
+    <Delete Files="$(ExportDestinationFolder)\%(ExportAssembly.Identity).xml" />
+    
     <MSBuild Projects="@(Project)" Targets="Clean" Properties="$(Properties)" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="$(BuildDependsOn)">
     <MSBuild Projects="@(Project)" Targets="Build" Properties="$(Properties)" />
+  </Target>
+
+  <Target Name="Export" DependsOnTargets="$(ExportDependsOn)">
+    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).dll" DestinationFolder="$(ExportDestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).dll')" />
+    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).pdb" DestinationFolder="$(ExportDestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).pdb')" />
+    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).xml" DestinationFolder="$(ExportDestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).xml')" />
   </Target>
   
 </Project>

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Package">
 
-  <PropertyGroup>
-	<NUnitBinDir>$(MSBuildProjectDirectory)\..\..\packages\NUnit.2.5.9.10348\Tools</NUnitBinDir>
-  </PropertyGroup>
+  <Import Project="$(MSBuildProjectDirectory)\..\..\packages\Build1.0.0\head.targets"/>
   
   <ItemGroup>
     <Project Include="ResourceManagement.Spark.UnitTests.csproj"/>

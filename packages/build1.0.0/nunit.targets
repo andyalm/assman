@@ -3,6 +3,10 @@
 
   <Import Project="base.targets"/>
 
+  <PropertyGroup>
+    <NUnitToolsDir>$(MSBuildThisFileDirectory)..\NUnit.2.5.9.10348\Tools</NUnitToolsDir>
+  </PropertyGroup>
+
   <Target Name="UnitTest" DependsOnTargets="$(UnitTestDependsOn)">
     <Message Text="##teamcity[progressStart 'Running unit tests for %(Project.Filename)']"/>
 
@@ -16,7 +20,7 @@
       <Output TaskParameter="Value" PropertyName="TestResultsFilePath"/>
     </CreateProperty>
 
-    <Exec Command="$(NUnitBinDir)\nunit-console.exe &quot;%(TestAssembly.FullPath)&quot; /xml=&quot;$(TestResultsFilePath)&quot;"
+    <Exec Command="$(NUnitToolsDir)\nunit-console.exe &quot;%(TestAssembly.FullPath)&quot; /xml=&quot;$(TestResultsFilePath)&quot;"
            LogStandardErrorAsError="true" />
 
     <Message Text="##teamcity[importData type='nunit' path='$(TestResultsFilePath)']" />
