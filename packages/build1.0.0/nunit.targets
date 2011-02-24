@@ -16,13 +16,10 @@
       <Output TaskParameter="Value" PropertyName="TestResultsFilePath"/>
     </CreateProperty>
 
-    <Exec Command="$(NUnitBinDir)\nunit-console.exe &quot;%(TestAssembly.FullPath)&quot;"
+    <Exec Command="$(NUnitBinDir)\nunit-console.exe &quot;%(TestAssembly.FullPath)&quot; /xml=&quot;$(TestResultsFilePath)&quot;"
            LogStandardErrorAsError="true" />
 
-    <Message Text="NUnitTargetFramework is '$(NUnitTargetFramework)'..." />
-
-    <!--<Message Text="##teamcity[importData type='nunit' path='$(TestResultsFilePath)']" Condition="$(UseNativeTeamCityRunner)!='true'" />-->
-
+    <Message Text="##teamcity[importData type='nunit' path='$(TestResultsFilePath)']" />
     <Message Text="##teamcity[progressFinish 'Running unit tests for %(Project.Filename)']"/>
   </Target>
 

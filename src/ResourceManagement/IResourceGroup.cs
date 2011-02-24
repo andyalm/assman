@@ -22,7 +22,6 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <summary>
 		/// Gets the resources that belong to the group.
 		/// </summary>
-		/// <param name="finder">A <see cref="IResourceFinder"/> that finds all resources that are available.</param>
 		IEnumerable<IResource> GetResources();
 	}
 }

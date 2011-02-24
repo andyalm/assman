@@ -1,5 +1,7 @@
 using System;
 
+using AlmWitt.Web.ResourceManagement.ContentFiltering;
+
 namespace AlmWitt.Web.ResourceManagement
 {
 	/// <summary>
