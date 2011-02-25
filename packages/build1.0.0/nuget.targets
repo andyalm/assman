@@ -15,17 +15,10 @@
     <Delete Files="@(NuPackages)" />
   </Target>
 
-  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)">
-    <Exec Command="$(NuGetDir)\NuGet.exe pack &quot;%(NuSpec.FullPath)&quot;"
+  <Target Name="Package" DependsOnTargets="$(PackageDependsOn)">
+    <Exec Command="$(NuGetDir)\NuGet.exe pack &quot;%(NuSpec.FullPath)&quot; -o &quot;$(ExportDestinationFolder)&quot;"
           WorkingDirectory="%(NuSpec.RecursiveDir)"
           LogStandardErrorAsError="true" />
-  </Target>
-
-  <Target Name="Export" DependsOnTargets="$(ExportDependsOn)">
-    <ItemGroup>
-      <NuPackages Include="%(NuSpec.RecursiveDir)*.nupkg"/>
-    </ItemGroup>
-    <Copy SourceFiles="@(NuPackages)" DestinationFolder="$(ExportDestinationFolder)" />
   </Target>
   
 </Project>
