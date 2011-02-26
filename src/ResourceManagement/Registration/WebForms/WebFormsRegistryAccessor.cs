@@ -10,9 +10,9 @@ namespace AlmWitt.Web.ResourceManagement.Registration.WebForms
 
 		private readonly Control _control;
 
-		public static WebFormsRegistryAccessor GetInstance(Control control)
-		{
-			return new WebFormsRegistryAccessor(control);
+		public static IResourceRegistryAccessor GetInstance(Control control)
+		{	
+			return new WebFormsRegistryAccessor(control).UseConsolidation();
 		}
 
 		internal WebFormsRegistryAccessor(Control control)

@@ -13,5 +13,6 @@
   <files>
     <file src="..\..\..\output\lib\**\AlmWitt.Web.ResourceManagement.dll" target="lib" />
     <file src="..\..\..\output\lib\**\AlmWitt.Web.ResourceManagement.xml" target="lib" />
+    <file src="Content\**\*.*" target="Content" />
   </files>
 </package>

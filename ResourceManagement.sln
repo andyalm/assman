@@ -48,6 +48,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "samples\Mvc-WebA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement.Mvc", "src\ResourceManagement.Mvc\ResourceManagement.Mvc.csproj", "{DF604504-959B-464A-92C5-4C279FCD8846}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{21684AF8-44DD-4C74-9AC6-3F27704DC85C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{EE3FB03B-5FC1-4642-AC3C-6610FE2622FC}"
+	ProjectSection(SolutionItems) = preProject
+		src\PackageSpecs\ResourceManagement\Content\ResourceManagement.config = src\PackageSpecs\ResourceManagement\Content\ResourceManagement.config
+		src\PackageSpecs\ResourceManagement\ResourceManagement.nuspec = src\PackageSpecs\ResourceManagement\ResourceManagement.nuspec
+		src\PackageSpecs\ResourceManagement\Content\Web.config.transform = src\PackageSpecs\ResourceManagement\Content\Web.config.transform
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,5 +112,6 @@ Global
 		{F853FC33-CE3C-4501-8177-4BF2EF557826} = {7F73D2D7-5D7C-4260-A06B-D1811D9C9983}
 		{C40EEE00-CA28-4910-8D2E-FC801CCA5535} = {7F73D2D7-5D7C-4260-A06B-D1811D9C9983}
 		{8BC40064-631E-491F-A3E3-C56494A81977} = {88DB7D60-4270-4677-BF2A-580EC479DDDE}
+		{EE3FB03B-5FC1-4642-AC3C-6610FE2622FC} = {21684AF8-44DD-4C74-9AC6-3F27704DC85C}
 	EndGlobalSection
 EndGlobal
