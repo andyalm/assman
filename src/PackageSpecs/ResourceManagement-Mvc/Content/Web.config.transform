@@ -1,0 +1,9 @@
+<configuration>
+	<system.web>
+		<pages>
+			<namespaces>
+				<add namespace="AlmWitt.Web.ResourceManagement.Mvc.Html" />
+			</namespaces>
+		</pages>
+	</system.web>
+</configuration>

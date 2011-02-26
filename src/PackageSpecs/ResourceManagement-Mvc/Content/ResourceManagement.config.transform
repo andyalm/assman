@@ -1,0 +1,16 @@
+<almWitt.web.resourceManagement>
+	<clientScripts>
+		<group consolidatedUrl="~/Scripts/Consolidated/Shared.js">
+			<include>
+				<add pattern="~/Views/Shared/.+" />
+			</include>
+		</group>
+	</clientScripts>
+	<cssFiles>
+		<group consolidatedUrl="~/Content/Consolidated/Shared.css">
+			<include>
+				<add pattern="~/Views/Shared/.+" />
+			</include>
+		</group>
+	</cssFiles>
+</almWitt.web.resourceManagement>
