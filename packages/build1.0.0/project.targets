@@ -4,25 +4,49 @@
   <Import Project="base.targets"/>
 
   <PropertyGroup>
-    <ExportDestinationFolder>$(ExportBinDir)\$(TargetClrVersion)</ExportDestinationFolder>
+    <Framework20DestinationFolder>$(ExportBinDir)\.NetFramework 2.0</Framework20DestinationFolder>
+    <Framework40DestinationFolder>$(ExportBinDir)\.NetFramework 4.0</Framework40DestinationFolder>
+    <Target20Framework Condition="$(Target20Framework)==''">true</Target20Framework>
+    <Target40Framework Condition="$(Target40Framework)==''">false</Target40Framework>
   </PropertyGroup>
   
   <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)">
-    <Delete Files="$(ExportDestinationFolder)\%(ExportAssembly.Identity).dll" />
-    <Delete Files="$(ExportDestinationFolder)\%(ExportAssembly.Identity).pdb" />
-    <Delete Files="$(ExportDestinationFolder)\%(ExportAssembly.Identity).xml" />
+    <Delete Files="$(Framework20DestinationFolder)\%(ExportAssembly.Identity).dll" />
+    <Delete Files="$(Framework20DestinationFolder)\%(ExportAssembly.Identity).pdb" />
+    <Delete Files="$(Framework20DestinationFolder)\%(ExportAssembly.Identity).xml" />
+
+    <Delete Files="$(Framework40DestinationFolder)\%(ExportAssembly.Identity).dll" />
+    <Delete Files="$(Framework40DestinationFolder)\%(ExportAssembly.Identity).pdb" />
+    <Delete Files="$(Framework40DestinationFolder)\%(ExportAssembly.Identity).xml" />
     
     <MSBuild Projects="@(Project)" Targets="Clean" Properties="$(Properties)" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="$(BuildDependsOn)">
-    <MSBuild Projects="@(Project)" Targets="Build" Properties="$(Properties)" />
+    <MSBuild Projects="@(Project)" Targets="Build" Properties="$(Properties);TargetClrVersion=2.0" Condition="$(Target20Framework)=='true'" />
+    <ItemGroup>
+      <ObjFiles Include="obj\$(Configuration)\*.*" />
+    </ItemGroup>
+    <Delete Files="@(ObjFiles)" Condition="$(Target20Framework)=='true' and $(Target40Framework)=='true'" />
+    <MSBuild Projects="@(Project)" Targets="Build" Properties="$(Properties);TargetClrVersion=4.0" Condition="$(Target40Framework)=='true'" />
   </Target>
 
   <Target Name="Export" DependsOnTargets="$(ExportDependsOn)">
-    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).dll" DestinationFolder="$(ExportDestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).dll')" />
-    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).pdb" DestinationFolder="$(ExportDestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).pdb')" />
-    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).xml" DestinationFolder="$(ExportDestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).xml')" />
+    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).dll" DestinationFolder="$(Framework20DestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).dll')" />
+    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).pdb" DestinationFolder="$(Framework20DestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).pdb')" />
+    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).xml" DestinationFolder="$(Framework20DestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).xml')" />
+
+    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).dll" DestinationFolder="$(Framework40DestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).dll')" />
+    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).pdb" DestinationFolder="$(Framework40DestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).pdb')" />
+    <Copy SourceFiles="bin\$(Configuration)\%(ExportAssembly.Identity).xml" DestinationFolder="$(Framework40DestinationFolder)" Condition="Exists('bin\$(Configuration)\%(ExportAssembly.Identity).xml')" />
+
+    <Copy SourceFiles="bin\$(Configuration)\.NetFramework 2.0\%(ExportAssembly.Identity).dll" DestinationFolder="$(Framework20DestinationFolder)" Condition="Exists('bin\$(Configuration)\.NetFramework 2.0\%(ExportAssembly.Identity).dll')" />
+    <Copy SourceFiles="bin\$(Configuration)\.NetFramework 2.0\%(ExportAssembly.Identity).pdb" DestinationFolder="$(Framework20DestinationFolder)" Condition="Exists('bin\$(Configuration)\.NetFramework 2.0\%(ExportAssembly.Identity).pdb')" />
+    <Copy SourceFiles="bin\$(Configuration)\.NetFramework 2.0\%(ExportAssembly.Identity).xml" DestinationFolder="$(Framework20DestinationFolder)" Condition="Exists('bin\$(Configuration)\.NetFramework 2.0\%(ExportAssembly.Identity).xml')" />
+    
+    <Copy SourceFiles="bin\$(Configuration)\.NetFramework 4.0\%(ExportAssembly.Identity).dll" DestinationFolder="$(Framework40DestinationFolder)" Condition="Exists('bin\$(Configuration)\.NetFramework 4.0\%(ExportAssembly.Identity).dll')" />
+    <Copy SourceFiles="bin\$(Configuration)\.NetFramework 4.0\%(ExportAssembly.Identity).pdb" DestinationFolder="$(Framework40DestinationFolder)" Condition="Exists('bin\$(Configuration)\.NetFramework 4.0\%(ExportAssembly.Identity).pdb')" />
+    <Copy SourceFiles="bin\$(Configuration)\.NetFramework 4.0\%(ExportAssembly.Identity).xml" DestinationFolder="$(Framework40DestinationFolder)" Condition="Exists('bin\$(Configuration)\.NetFramework 4.0\%(ExportAssembly.Identity).xml')" />
   </Target>
   
 </Project>

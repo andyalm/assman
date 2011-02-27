@@ -2,7 +2,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <TargetClrVersion>.NetFramework 2.0</TargetClrVersion>
     <Properties>Configuration=$(Configuration);Platform=$(Platform)</Properties>
     <ExportDir>$(MSBuildThisFileDirectory)..\..\output</ExportDir>
     <ExportBinDir>$(ExportDir)\lib</ExportBinDir>

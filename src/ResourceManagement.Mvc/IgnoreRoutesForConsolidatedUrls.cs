@@ -3,7 +3,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 
 using AlmWitt.Web.ResourceManagement.Mvc;
-#if Net4
+#if NET_40
 [assembly: PreApplicationStartMethod(typeof(IgnoreRoutesForConsolidatedUrls), "AddIgnoreRoute")]
 #endif
 namespace AlmWitt.Web.ResourceManagement.Mvc

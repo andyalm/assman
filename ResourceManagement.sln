@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebForms-WebSiteProject", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteLib", "samples\AspNet-WebSiteProject\WebsiteLib\WebsiteLib.csproj", "{F853FC33-CE3C-4501-8177-4BF2EF557826}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Website", "samples\AspNet-WebSiteProject\Website\", "{C40EEE00-CA28-4910-8D2E-FC801CCA5535}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Website", "samples\AspNet-WebSiteProject\Website", "{C40EEE00-CA28-4910-8D2E-FC801CCA5535}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
 		ProjectReferences = "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}|AlmWitt.Web.ResourceManagement.dll;"
@@ -59,7 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{EE3FB03B-5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc", "Mvc", "{8B1CBBE5-99F3-470B-AE9D-420EF2B7B7F6}"
 	ProjectSection(SolutionItems) = preProject
-		src\PackageSpecs\ResourceManagement-Mvc\ResourceManagement-Mvc.nuspec = src\PackageSpecs\ResourceManagement-Mvc\ResourceManagement-Mvc.nuspec
+		src\PackageSpecs\ResourceManagement-Mvc\ResourceManagement-Mvc2.nuspec = src\PackageSpecs\ResourceManagement-Mvc\ResourceManagement-Mvc2.nuspec
 		src\PackageSpecs\ResourceManagement-Mvc\Content\ResourceManagement.config.transform = src\PackageSpecs\ResourceManagement-Mvc\Content\ResourceManagement.config.transform
 		src\PackageSpecs\ResourceManagement-Mvc\Content\Web.config.transform = src\PackageSpecs\ResourceManagement-Mvc\Content\Web.config.transform
 	EndProjectSection
