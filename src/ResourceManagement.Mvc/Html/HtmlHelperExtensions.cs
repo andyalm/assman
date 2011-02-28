@@ -1,52 +1,66 @@
 using System;
+using System.Web;
 using System.Web.Mvc;
 
 using AlmWitt.Web.ResourceManagement.Registration;
 
 namespace AlmWitt.Web.ResourceManagement.Mvc.Html
 {
+	//NOTE: Many of these helper methods should have a void return value.  However, I have made them return a DummyStringResult
+	//because some ViewEngines (*cough* Razor *cough*) have a very ugly one line statement syntax.  Making them return a dummy
+	//return value allows you to call the helper methods with either expression or statement syntax.
 	public static class HtmlHelperExtensions
 	{	
-		public static void IncludeScript(this HtmlHelper html, string virtualPath)
+		public static DummyStringResult IncludeScript(this HtmlHelper html, string virtualPath)
 		{
 			html.ScriptRegistry().IncludePath(virtualPath);
+			return DummyStringResult.Instance;
 		}
 
-		public static void IncludeScript(this HtmlHelper html, string virtualPath, string registryName)
+		public static DummyStringResult IncludeScript(this HtmlHelper html, string virtualPath, string registryName)
 		{
 			html.ScriptRegistry(registryName).IncludePath(virtualPath);
+			return DummyStringResult.Instance;
 		}
 
-		public static void IncludeStylesheet(this HtmlHelper html, string virtualPath)
+		public static DummyStringResult IncludeStylesheet(this HtmlHelper html, string virtualPath)
 		{
 			html.StyleRegistry().IncludePath(virtualPath);
+			return DummyStringResult.Instance;
 		}
 
-		public static void IncludeStylesheet(this HtmlHelper html, string virtualPath, string registryName)
+		public static DummyStringResult IncludeStylesheet(this HtmlHelper html, string virtualPath, string registryName)
 		{
 			html.StyleRegistry(registryName).IncludePath(virtualPath);
+			return DummyStringResult.Instance;
 		}
 
-		public static void RenderScripts(this HtmlHelper html)
+		public static DummyStringResult RenderScripts(this HtmlHelper html)
 		{
 			html.RenderScripts(ResourceRegistryConfiguration.DefaultRegistryName);
+			return DummyStringResult.Instance;
 		}
 
-		public static void RenderScripts(this HtmlHelper html, string registryName)
+		public static DummyStringResult RenderScripts(this HtmlHelper html, string registryName)
 		{
 			var renderer = html.ResourceRegistries().ScriptRenderer(registryName, html.Resolver());
 			renderer.Render(html.ViewContext.Writer);
+			return DummyStringResult.Instance;
 		}
 
-		public static void RenderStyles(this HtmlHelper html)
+		public static DummyStringResult RenderStyles(this HtmlHelper html)
 		{
 			html.RenderStyles(ResourceRegistryConfiguration.DefaultRegistryName);
+
+			return DummyStringResult.Instance;
 		}
 
-		public static void RenderStyles(this HtmlHelper html, string registryName)
+		public static DummyStringResult RenderStyles(this HtmlHelper html, string registryName)
 		{
 			var renderer = html.ResourceRegistries().StyleRenderer(registryName, html.Resolver());
 			renderer.Render(html.ViewContext.Writer);
+
+			return DummyStringResult.Instance;
 		}
 
 		public static IResourceRegistry ScriptRegistry(this HtmlHelper html, string registryName)

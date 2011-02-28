@@ -13,14 +13,17 @@
     <TargetClrVersion Condition="$(TargetClrVersion)==''">4.0</TargetClrVersion>
     <TargetFrameworkVersion Condition="$(TargetClrVersion)!='4.0'">v3.5</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="$(TargetClrVersion)=='4.0'">v4.0</TargetFrameworkVersion>
+    <MvcVersion Condition="$(MvcVersion)==''">3.0</MvcVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\.NetFramework $(TargetClrVersion)</OutputPath>
-    <DefineConstants Condition="$(TargetClrVersion)=='4.0'">DEBUG;TRACE;NET_40</DefineConstants>
+    <OutputPath Condition="$(MvcVersion)!='3.0'">bin\Debug\Mvc2\.NetFramework $(TargetClrVersion)</OutputPath>
+    <OutputPath Condition="$(MvcVersion)=='3.0'">bin\Debug\Mvc3\.NetFramework $(TargetClrVersion)</OutputPath>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">DEBUG;TRACE;NET_40;MVC3</DefineConstants>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">DEBUG;TRACE;NET_40</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">DEBUG;TRACE;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,8 +31,10 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\.NetFramework $(TargetClrVersion)</OutputPath>
-    <DefineConstants Condition="$(TargetClrVersion)=='4.0'">TRACE;NET_40</DefineConstants>
+    <OutputPath Condition="$(MvcVersion)!='3.0'">bin\Release\Mvc2\.NetFramework $(TargetClrVersion)</OutputPath>
+    <OutputPath Condition="$(MvcVersion)=='3.0'">bin\Release\Mvc3\.NetFramework $(TargetClrVersion)</OutputPath>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">TRACE;NET_40;MVC3</DefineConstants>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">TRACE;NET_40</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">TRACE;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -39,9 +44,13 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
-    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 2\Assemblies\System.Web.Mvc.dll</HintPath>
+    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" Condition="$(MvcVersion)!='3.0'">
+      <SpecificVersion>True</SpecificVersion>
+      <HintPath>..\..\packages\Mvc.2.0.0\lib\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" Condition="$(MvcVersion)=='3.0'">
+      <SpecificVersion>True</SpecificVersion>
+      <HintPath>..\..\packages\Mvc.3.0.0\lib\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml.Linq" />
@@ -50,8 +59,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Html\DummyStringResult.cs" />
     <Compile Include="Html\AjaxHelperExtensions.cs" />
     <Compile Include="Html\HtmlHelperExtensions.cs" />
+    <Compile Include="Html\IHtmlString.cs" />
     <Compile Include="IgnoreRoutesForConsolidatedUrls.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceIncludeResolver.cs" />

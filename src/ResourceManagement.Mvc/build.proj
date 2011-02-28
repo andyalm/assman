@@ -3,10 +3,20 @@
 
   <Import Project="$(MSBuildProjectDirectory)\..\..\packages\Build1.0.0\head.targets"/>
 
-  <PropertyGroup>
-    <Target20Framework>true</Target20Framework>
-    <Target40Framework>true</Target40Framework>
-  </PropertyGroup>
+  <ItemGroup>
+    <BuildProfile Include="Mvc3">
+      <Properties>TargetClrVersion=4.0;MvcVersion=3.0</Properties>
+      <OutputPath>Mvc3\.NetFramework 4.0</OutputPath>
+    </BuildProfile>
+    <BuildProfile Include="Mvc2_40">
+      <Properties>TargetClrVersion=4.0;MvcVersion=2.0</Properties>
+      <OutputPath>Mvc2\.NetFramework 4.0</OutputPath>
+    </BuildProfile>
+    <BuildProfile Include="Mvc2_35">
+      <Properties>TargetClrVersion=2.0;MvcVersion=2.0</Properties>
+      <OutputPath>Mvc2\.NetFramework 2.0</OutputPath>
+    </BuildProfile>
+  </ItemGroup>
   <ItemGroup>
     <Project Include="ResourceManagement.Mvc.csproj"/>
   </ItemGroup>
