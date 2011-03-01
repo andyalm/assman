@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<bindings>
+  <element name="ScriptBlock">
+    <start>#using(new InlineBlockOutputScope(this, Html.ScriptRegistry('@target'))) {</start>
+    <end>#}</end>
+  </element>
+  <element name="ScriptBlock">
+    <start>#using(new InlineBlockOutputScope(this, Html.ScriptRegistry())) {</start>
+    <end>#}</end>
+  </element>
+  <element name="StyleBlock">
+    <start>#using(new InlineBlockOutputScope(this, Html.StyleRegistry('@target'))) {</start>
+    <end>#}</end>
+  </element>
+  <element name="StyleBlock">
+    <start>#using(new InlineBlockOutputScope(this, Html.StyleRegistry())) {</start>
+    <end>#}</end>
+  </element>
+  <element name="ScriptInclude">#Html.IncludeScript('@src', '@target');</element>
+  <element name="ScriptInclude">#Html.IncludeScript('@src');</element>
+  <element name="StyleInclude">#Html.IncludeStylesheet('@src', '@target');</element>
+  <element name="StyleInclude">#Html.IncludeStylesheet('@src');</element>
+</bindings>

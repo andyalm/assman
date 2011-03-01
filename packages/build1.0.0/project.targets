@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="$(DefaultTarget)">
+
+  <Import Project="base.targets"/>
+
+  <ItemGroup Condition="@(BuildProfile)==''">
+    <BuildProfile Include="Default">
+      <Properties>TargetClrVersion=2.0</Properties>
+      <OutputPath></OutputPath>
+    </BuildProfile>
+  </ItemGroup>
+  
+  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn);_CleanExportAssembly">
+    <MSBuild Projects="@(Project)" Targets="Clean" Properties="$(Properties)" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn);_BuildWithProfile">
+    
+  </Target>
+
+  <Target Name="Export" DependsOnTargets="$(ExportDependsOn);_ExportAssembly">
+  </Target>
+
+  <Target Name="_CleanExportAssembly">
+    <PropertyGroup>
+      <AssemblyName>%(ExportAssembly.Identity)</AssemblyName>
+    </PropertyGroup>
+
+    <Delete Files="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).dll"  />
+    <Delete Files="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).pdb"  />
+    <Delete Files="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).xml"  />
+
+    <Delete Files="$(ExportBinDir)\%(BuildProfile.OutputPath)\$(AssemblyName).dll"  />
+    <Delete Files="$(ExportBinDir)\%(BuildProfile.OutputPath)\$(AssemblyName).pdb"  />
+    <Delete Files="$(ExportBinDir)\%(BuildProfile.OutputPath)\$(AssemblyName).xml"  />
+
+  </Target>
+
+  <Target Name="_BuildWithProfile">
+    <ItemGroup>
+      <ObjFiles Include="obj\$(Configuration)\*.*" />
+    </ItemGroup>
+    <Delete Files="@(ObjFiles)" />
+    <PropertyGroup>
+      <ProjectPath>%(Project.FullPath)</ProjectPath>
+    </PropertyGroup>
+    <MSBuild Projects="$(ProjectPath)" Targets="Build" Properties="$(Properties);%(BuildProfile.Properties)" />
+  </Target>
+
+  <Target Name="_ExportAssembly">
+    <PropertyGroup>
+      <AssemblyName>%(ExportAssembly.Identity)</AssemblyName>
+    </PropertyGroup>
+
+    <Message Text="ExportBinDir is $(ExportBinDir)..." />
+
+    <Copy SourceFiles="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).dll" DestinationFolder="$(ExportBinDir)\%(BuildProfile.OutputPath)" Condition="Exists('bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).dll')" />
+    <Copy SourceFiles="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).pdb" DestinationFolder="$(ExportBinDir)\%(BuildProfile.OutputPath)" Condition="Exists('bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).pdb')" />
+    <Copy SourceFiles="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).xml" DestinationFolder="$(ExportBinDir)\%(BuildProfile.OutputPath)" Condition="Exists('bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).xml')" />
+  </Target>
+  
+</Project>

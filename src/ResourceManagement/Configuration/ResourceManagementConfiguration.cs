@@ -59,7 +59,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		/// <summary>
 		/// Opens an instance of the configuration to be edited.
 		/// </summary>
-		/// <param name="configFilePath">The physical path to the config file.</param>
 		/// <param name="configuration">The <see cref="Configuration"/> object used to manage the configuration.</param>
 		/// <returns></returns>
 		public static ResourceManagementConfiguration OpenForEditing(out System.Configuration.Configuration configuration)

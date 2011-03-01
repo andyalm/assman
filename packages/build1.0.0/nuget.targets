@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="$(DefaultTarget)">
+
+  <Import Project="base.targets"/>
+
+  <PropertyGroup>
+    <ExportDestinationFolder>$(ExportDir)</ExportDestinationFolder>
+    <NuGetDir>$(MSBuildThisFileDirectory)..\NuGet.1.2</NuGetDir>
+  </PropertyGroup>
+  
+  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)">
+    <ItemGroup>
+      <NuPackages Include="%(NuSpec.RecursiveDir)*.nupkg"/>
+    </ItemGroup>
+    <Delete Files="@(NuPackages)" />
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="$(PackageDependsOn)">
+    <Exec Command="$(NuGetDir)\NuGet.exe pack &quot;%(NuSpec.FullPath)&quot; -o &quot;$(ExportDestinationFolder)&quot;"
+          WorkingDirectory="%(NuSpec.RecursiveDir)"
+          LogStandardErrorAsError="true" />
+  </Target>
+  
+</Project>

@@ -14,7 +14,8 @@ namespace AlmWitt.Web.ResourceManagement.Registration.WebForms
 
 		public override void IncludePath(string urlToInclude)
 		{
-			Page.ClientScript.RegisterClientScriptInclude(typeof(WebFormsClientScriptRegistry), urlToInclude, urlToInclude);
+			var resolvedUrl = Control.ResolveUrl(urlToInclude);
+			Page.ClientScript.RegisterClientScriptInclude(typeof(WebFormsClientScriptRegistry), urlToInclude, resolvedUrl);
 		}
 
 		public override void RegisterInlineBlock(Action<TextWriter> block, object key)

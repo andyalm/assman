@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>ResourceManagement</id>
+    <version>1.9</version>
+    <authors>Andy Alm</authors>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://jscssconsolidate.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A full featured web resource/asset management framework for ASP.NET and ASP.NET Mvc.</description>
+    <tags>javascript css mash consolidation mvc</tags>
+  </metadata>
+  <files>
+    <file src="..\..\..\output\lib\**\AlmWitt.Web.ResourceManagement.dll" target="lib" />
+    <file src="..\..\..\output\lib\**\AlmWitt.Web.ResourceManagement.xml" target="lib" />
+    <file src="Content\**\*.*" target="Content" />
+  </files>
+</package>
