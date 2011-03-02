@@ -89,14 +89,18 @@
     <Compile Include="Configuration\AssemblyElementCollection.cs" />
     <Compile Include="Configuration\ClientScriptGroupElement.cs" />
     <Compile Include="Configuration\ClientScriptGroupElementCollection.cs" />
+    <Compile Include="Configuration\CompiledFilePersister.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="Configuration\ConsolidatedUrlTemplate.cs" />
     <Compile Include="Configuration\CssGroupElement.cs" />
     <Compile Include="Configuration\CssGroupElementCollection.cs" />
+    <Compile Include="Configuration\IPreConsolidationInfoPersister.cs" />
     <Compile Include="Configuration\IResourceManagementPlugin.cs" />
     <Compile Include="Configuration\MappedConfigLoader.cs" />
     <Compile Include="Configuration\PluginElement.cs" />
     <Compile Include="Configuration\PluginElementCollection.cs" />
+    <Compile Include="Configuration\PreConsolidationPersisterFactory.cs" />
+    <Compile Include="Configuration\PreConsolidationReport.cs" />
     <Compile Include="Configuration\PropertyNames.cs" />
     <Compile Include="Configuration\ResourceGroupElement.cs" />
     <Compile Include="Configuration\ResourceGroupElementCollection.cs" />
@@ -151,7 +155,7 @@
     <Compile Include="ResourceGroupTemplateCollection.cs" />
     <Compile Include="ResourceGroup.cs" />
     <Compile Include="ResourceMode.cs" />
-    <Compile Include="TheadSafeInMemoryCache.cs" />
+    <Compile Include="ThreadSafeInMemoryCache.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="EmbeddedResource.cs" />
     <Compile Include="EmbeddedResourceFinder.cs" />

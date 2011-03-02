@@ -30,7 +30,7 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			_instance.Assemblies.Add(this.GetType().Assembly.GetName().Name);
 			var fileFinder = ResourceFinderFactory.Null;
-			var context = _instance.BuildContext(fileFinder);
+			var context = _instance.BuildContext(fileFinder, PreConsolidationPersisterFactory.Null);
 			ResourceCollection resources = context.Finder.FindResources(ResourceType.Css);
 			Assert.IsNotNull(resources);
 			Assert.IsTrue(resources.Count > 0, "Resource count should be greater than zero.");
@@ -42,7 +42,7 @@ namespace AlmWitt.Web.ResourceManagement
 			var lastModified = DateTime.Now;
 			_instance.LastModified(lastModified);
 
-			var context = _instance.BuildContext(ResourceFinderFactory.Null);
+			var context = _instance.BuildContext(ResourceFinderFactory.Null, PreConsolidationPersisterFactory.Null);
 
 			context.ConfigurationLastModified.ShouldEqual(lastModified);
 		}

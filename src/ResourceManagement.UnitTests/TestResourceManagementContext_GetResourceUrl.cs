@@ -2,6 +2,7 @@ using System;
 using System.Web;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
+using AlmWitt.Web.ResourceManagement.TestSupport;
 
 using NUnit.Framework;
 
@@ -119,11 +120,23 @@ namespace AlmWitt.Web.ResourceManagement
 		public void ConsolidatedUrlIsStaticWhenPreConsolidated()
 		{
 			_instance.ConsolidateClientScripts = true;
-			_instance.PreConsolidated = true;
+			_instance.LoadPreCompilationReport(new PreConsolidationReport());
 
 			string scriptToInclude = _instance.GetScriptUrl(myScript);
 
 			Assert.That(scriptToInclude, Is.EqualTo(consolidatedScriptStatic).IgnoreCase);
+		}
+
+		[Test]
+		public void ScriptUrlIsLazilyCached()
+		{
+			var resolvedScriptPath1 = _instance.GetScriptUrl(myScript);
+			if(resolvedScriptPath1 != consolidatedScript)
+				Assert.Inconclusive("The first call to GetScriptUrl did not return the expected result");
+			_instance.ClientScriptGroups.Clear();
+			var resolvedScriptPath2 = _instance.GetScriptUrl(myScript);
+
+			resolvedScriptPath2.ShouldEqual(resolvedScriptPath1);
 		}
 	}
 }

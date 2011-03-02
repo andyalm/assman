@@ -29,11 +29,6 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			private readonly IDictionary<string, IResourceRegistry> _namedScriptRegistries = new Dictionary<string, IResourceRegistry>(StringComparer.OrdinalIgnoreCase);
 			private readonly IDictionary<string, IResourceRegistry> _namedStyleRegistries = new Dictionary<string, IResourceRegistry>(StringComparer.OrdinalIgnoreCase);
 			
-			//static cache to keep track of resolved url's.  Since resolving can be a relatively expensive operation when you have a large ResourceManagement.config file, we
-			//cache the results here so that you only need to resolve a given url once in the app domain.
-			//TODO: move caching out of this class and into somewhere else encapsulated behind ResourceManagementContext
-			private static readonly IDictionary<string,string> _resolvedUrlCache = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-			
 			public ConsolidatingResourceRegistryAccessor(IResourceRegistryAccessor inner, ResourceManagementContext context)
 			{
 				_inner = inner;
@@ -102,7 +97,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				}
 				else
 				{
-					IResourceRegistry consolidatingRegistry = new ConsolidatingResourceRegistry(registry, getResourceUrl, _resolvedUrlCache);
+					IResourceRegistry consolidatingRegistry = new ConsolidatingResourceRegistry(registry, getResourceUrl);
 					if(_context.ManageDependencies)
 					{
 						consolidatingRegistry = new DependencyResolvingResourceRegistry(consolidatingRegistry, _context);

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 
-using AlmWitt.Web.ResourceManagement.Configuration;
-
 namespace AlmWitt.Web.ResourceManagement.Registration
 {
 	/// <summary>
@@ -20,19 +18,10 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		private readonly IResourceRegistry _inner;
 		private readonly Func<string, string> _getResourceUrl;
 
-		internal ConsolidatingResourceRegistry(IResourceRegistry inner, Func<string, string> getResourceUrl, IDictionary<string,string> resolvedUrlCache)
+		internal ConsolidatingResourceRegistry(IResourceRegistry inner, Func<string, string> getResourceUrl)
 		{
 			_inner = inner;
-
-			Func<string, string> resolveFromCache = virtualPath =>
-			{
-				if (!resolvedUrlCache.ContainsKey(virtualPath))
-				{
-					resolvedUrlCache[virtualPath] = getResourceUrl(virtualPath);
-				}
-				return resolvedUrlCache[virtualPath];
-			};
-			_getResourceUrl = resolveFromCache;
+			_getResourceUrl = getResourceUrl;
 		}
 
 		public IResourceRegistry Inner

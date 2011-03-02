@@ -12,17 +12,20 @@ namespace AlmWitt.Web.ResourceManagement
 	/// <remarks>
 	/// When we move to .NET 4, we can replace this with a ConcurrentDictionary.
 	/// </remarks>
-	public class ThreadSafeInMemoryCache<TKey, TValue>
+	internal class ThreadSafeInMemoryCache<TKey, TValue>
 	{
-		public static ThreadSafeInMemoryCache<TKey, TValue> Create()
+		private readonly IDictionary<TKey, TValue> _dictionary;
+		private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
+		public ThreadSafeInMemoryCache()
 		{
-			return new ThreadSafeInMemoryCache<TKey, TValue>();
+			_dictionary = new Dictionary<TKey, TValue>();
 		}
 
-		private ThreadSafeInMemoryCache() { }
-
-		private readonly IDictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
-		private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		public ThreadSafeInMemoryCache(IEqualityComparer<TKey> comparer)
+		{
+			_dictionary = new Dictionary<TKey, TValue>(comparer);
+		}
 
 		public int Count
 		{

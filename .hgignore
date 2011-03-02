@@ -1,4 +1,5 @@
 ﻿
+relre:_ReSharper.ResourceManagement/.+
 relre:bin/(Debug|Release)/.+
 relre:obj/(Debug|Release)/.+
 glob:*.user

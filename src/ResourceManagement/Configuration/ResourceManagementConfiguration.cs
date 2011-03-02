@@ -1,9 +1,7 @@
 using System;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
 using System.Web;
-using System.Web.Configuration;
 
 using AlmWitt.Web.ResourceManagement.ContentFiltering;
 
@@ -109,16 +107,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		}
 
 		/// <summary>
-		/// Gets or sets whether the resources have been pre-consolidated into static files.
-		/// </summary>
-		[ConfigurationProperty(PropertyNames.PreConsolidated)]
-		public bool PreConsolidated
-		{
-			get { return (bool) this[PropertyNames.PreConsolidated]; }
-			set { this[PropertyNames.PreConsolidated] = value; }
-		}
-
-		/// <summary>
 		/// Gets or sets the version number that will be appended to the end of all resource url's.
 		/// </summary>
 		[ConfigurationProperty(PropertyNames.Version)]
@@ -199,19 +187,25 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public ResourceManagementContext BuildContext()
 		{
 			IResourceFinder fileFinder;
+			IPreConsolidationInfoPersister preConsolidationPersister;
 			if (String.IsNullOrEmpty(RootFilePath))
+			{
 				fileFinder = ResourceFinderFactory.Null;
+				preConsolidationPersister = new NullPreConsolidationPersister();
+			}
 			else
+			{
 				fileFinder = ResourceFinderFactory.GetInstance(RootFilePath);
+				preConsolidationPersister = new CompiledFilePersister(RootFilePath);
+			}
 
-			return BuildContext(fileFinder);
+			return BuildContext(fileFinder, preConsolidationPersister);
 		}
 
-		public ResourceManagementContext BuildContext(IResourceFinder fileFinder)
+		public ResourceManagementContext BuildContext(IResourceFinder fileFinder, IPreConsolidationInfoPersister preConsolidationPersister)
 		{
 			var context = ResourceManagementContext.Create();
 
-			context.PreConsolidated = PreConsolidated;
 			context.ConfigurationLastModified = LastModified();
 			context.ConsolidateClientScripts = Consolidate && ClientScripts.Consolidate;
 			context.ConsolidateCssFiles = Consolidate && CssFiles.Consolidate;
@@ -222,6 +216,12 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			context.CssFileGroups.AddRange(CssFiles.Cast<IResourceGroupTemplate>());
 			context.MapExtensionToFilter(".js", JSMinContentFilterFactory.GetInstance());
 			context.MapExtensionToDependencyProvider(".js", VisualStudioScriptDependencyProvider.GetInstance());
+
+			PreConsolidationReport preConsolidationReport;
+			if (preConsolidationPersister.TryGetPreConsolidationInfo(out preConsolidationReport))
+			{
+				context.LoadPreCompilationReport(preConsolidationReport);
+			}
 
 			foreach (var plugin in Plugins.GetPlugins())
 			{

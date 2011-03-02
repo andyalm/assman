@@ -94,7 +94,7 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
 		{
 			_context = configSection.BuildContext();
 			_context.ConsolidateAll(WriteConsolidatedResource, Mode);
-			configSection.PreConsolidated = true;
+			//TODO: Persist the pre-consolidation report
 		}
 
 		private void WriteConsolidatedResource(ConsolidatedResource consolidatedResource, IResourceGroup group)

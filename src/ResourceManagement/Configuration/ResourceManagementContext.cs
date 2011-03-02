@@ -37,6 +37,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		private readonly ResourceGroupTemplateCollection _cssFileGroups;
 		private readonly List<Assembly> _assemblies;
 		private readonly DependencyManager _dependencyManager;
+		private ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
 
 		internal ResourceManagementContext()
 		{
@@ -51,7 +52,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		}
 
 		public DateTime ConfigurationLastModified { get; set; }
-		public bool PreConsolidated { get; set; }
+		public bool PreConsolidated { get; private set; }
 		public bool ConsolidateClientScripts { get; set; }
 		public bool ConsolidateCssFiles { get; set; }
 
@@ -169,6 +170,11 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return GetResourceUrl(ConsolidateCssFiles, CssFileGroups, stylesheetUrl);
 		}
 
+		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
+		{
+			PreConsolidated = true;
+		}
+
 		internal IResourceFinder Finder
 		{
 			get { return _finder; }
@@ -178,21 +184,35 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			if (consolidate)
 			{
-				foreach (var groupElement in groupTemplates)
+				string unresolvedUrl = resourceUrl;
+				var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl, () => CalculateResourceUrl(groupTemplates, unresolvedUrl));
+
+				if(resolvedUrl != unresolvedUrl)
 				{
-					string consolidatedUrl;
-					if (groupElement.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
-					{
-						if (!PreConsolidated)
-							resourceUrl = UrlType.Dynamic.ConvertUrl(consolidatedUrl);
-						else
-							resourceUrl = UrlType.Static.ConvertUrl(consolidatedUrl);
-						break;
-					}
+					if (!PreConsolidated)
+						resolvedUrl = UrlType.Dynamic.ConvertUrl(resolvedUrl);
+					else
+						resolvedUrl = UrlType.Static.ConvertUrl(resolvedUrl);
 				}
-			}
+
+				resourceUrl = resolvedUrl;
+			}	
 			if (!String.IsNullOrEmpty(Version) && !resourceUrl.Contains("?"))
 				resourceUrl += "?v=" + HttpUtility.UrlEncode(Version);
+			return resourceUrl;
+		}
+
+		private string CalculateResourceUrl(IEnumerable<IResourceGroupTemplate> groupTemplates, string resourceUrl)
+		{
+			foreach (var groupElement in groupTemplates)
+			{
+				string consolidatedUrl;
+				if (groupElement.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
+				{
+					return consolidatedUrl;
+				}
+			}
+
 			return resourceUrl;
 		}
 
