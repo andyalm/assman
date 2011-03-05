@@ -1,4 +1,6 @@
-namespace AlmWitt.Web.ResourceManagement.Configuration
+using System;
+
+namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 {
 	public interface IPreConsolidationInfoPersister
 	{

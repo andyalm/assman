@@ -68,6 +68,17 @@ namespace AlmWitt.Web.ResourceManagement
 				return value;
 			}
 		}
+
+		public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> pairs)
+		{
+			using(_lock.WriteLock())
+			{
+				foreach (var pair in pairs)
+				{
+					_dictionary.Add(pair);
+				}
+			}
+		}
 	}
 
 	internal static class ReaderWriterLockExtensions

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 
 using AlmWitt.Web.ResourceManagement.ContentFiltering;
+using AlmWitt.Web.ResourceManagement.PreConsolidation;
 
 namespace AlmWitt.Web.ResourceManagement.Configuration
 {

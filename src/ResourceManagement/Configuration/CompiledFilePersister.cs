@@ -1,3 +1,5 @@
+using AlmWitt.Web.ResourceManagement.PreConsolidation;
+
 namespace AlmWitt.Web.ResourceManagement.Configuration
 {
 	public class CompiledFilePersister : IPreConsolidationInfoPersister

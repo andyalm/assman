@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web;
 
 using AlmWitt.Web.ResourceManagement.ContentFiltering;
+using AlmWitt.Web.ResourceManagement.PreConsolidation;
 
 namespace AlmWitt.Web.ResourceManagement.Configuration
 {
@@ -37,7 +38,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		private readonly ResourceGroupTemplateCollection _cssFileGroups;
 		private readonly List<Assembly> _assemblies;
 		private readonly DependencyManager _dependencyManager;
-		private ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
+		private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
 
 		internal ResourceManagementContext()
 		{
@@ -172,7 +173,33 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
 		{
+			var preConsolidatedDependencyCache = new PreConsolidatedDependencyCache();
+			PopulateDependencyCache(preConsolidationReport.ClientScriptGroups, preConsolidatedDependencyCache);
+			PopulateDependencyCache(preConsolidationReport.CssGroups, preConsolidatedDependencyCache);
+			_dependencyManager.SetCache(preConsolidatedDependencyCache);
+
+			PopulateResourceUrlMap(preConsolidationReport.ClientScriptGroups);
+			PopulateResourceUrlMap(preConsolidationReport.CssGroups);
+
 			PreConsolidated = true;
+		}
+
+		private void PopulateResourceUrlMap(IEnumerable<PreConsolidatedResourceGroup> groups)
+		{
+			var resourceUrlMap = from @group in groups
+								 from resourcePiece in @group.Resources
+								 select new KeyValuePair<string, string>(resourcePiece.Path, @group.ConsolidatedUrl);
+
+			_resolvedResourceUrls.AddRange(resourceUrlMap);
+		}
+
+		private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceGroup> groups,
+		                                     PreConsolidatedDependencyCache preConsolidatedDependencyCache)
+		{
+			foreach (var resource in groups.SelectMany(@group => @group.Resources))
+			{
+				preConsolidatedDependencyCache.SetDependencies(resource.Path, resource.Dependencies);
+			}
 		}
 
 		internal IResourceFinder Finder
@@ -185,9 +212,10 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			if (consolidate)
 			{
 				string unresolvedUrl = resourceUrl;
-				var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl, () => CalculateResourceUrl(groupTemplates, unresolvedUrl));
+				var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl,
+				                                                 () => CalculateResourceUrl(groupTemplates, unresolvedUrl));
 
-				if(resolvedUrl != unresolvedUrl)
+				if (resolvedUrl != unresolvedUrl)
 				{
 					if (!PreConsolidated)
 						resolvedUrl = UrlType.Dynamic.ConvertUrl(resolvedUrl);
@@ -196,7 +224,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				}
 
 				resourceUrl = resolvedUrl;
-			}	
+			}
 			if (!String.IsNullOrEmpty(Version) && !resourceUrl.Contains("?"))
 				resourceUrl += "?v=" + HttpUtility.UrlEncode(Version);
 			return resourceUrl;
@@ -204,10 +232,10 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		private string CalculateResourceUrl(IEnumerable<IResourceGroupTemplate> groupTemplates, string resourceUrl)
 		{
-			foreach (var groupElement in groupTemplates)
+			foreach (var groupTemplate in groupTemplates)
 			{
 				string consolidatedUrl;
-				if (groupElement.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
+				if (groupTemplate.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
 				{
 					return consolidatedUrl;
 				}
@@ -216,9 +244,11 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return resourceUrl;
 		}
 
-		private void ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource, ResourceMode mode)
+		private void ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates,
+		                                    Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource,
+		                                    ResourceMode mode)
 		{
-			if(!groupTemplates.Any())
+			if (!groupTemplates.Any())
 				return;
 
 			var allResources = _finder.FindResources(groupTemplates.First().ResourceType);
@@ -251,36 +281,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				return _clientScriptGroups;
 			else
 				return _cssFileGroups;
-		}
-	}
-
-	public class ContentFilterMap
-	{
-		private readonly IDictionary<string,IContentFilterFactory> _map = new Dictionary<string, IContentFilterFactory>();
-
-		public void MapExtension(string fileExtension, IContentFilterFactory filterFactory)
-		{
-			ValidateFileExtensionArgument(fileExtension);
-
-			_map[fileExtension] = filterFactory;
-		}
-
-		public IContentFilterFactory GetFilterFactoryForExtension(string fileExtension)
-		{
-			ValidateFileExtensionArgument(fileExtension);
-			
-			if (_map.ContainsKey(fileExtension))
-				return _map[fileExtension];
-			else
-				return NullContentFilterFactory.Instance;
-		}
-
-		private void ValidateFileExtensionArgument(string fileExtension)
-		{
-			if(!fileExtension.StartsWith("."))
-			{
-				throw new ArgumentException("The fileExtension argument must begine with a dot (e.g. .js, .css)", "fileExtension");
-			}
 		}
 	}
 }

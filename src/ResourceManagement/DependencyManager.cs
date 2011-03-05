@@ -7,7 +7,7 @@ namespace AlmWitt.Web.ResourceManagement
 	public class DependencyManager
 	{
 		private readonly IResourceFinder _resourceFinder;
-		private readonly IDependencyCache _dependencyCache;
+		private IDependencyCache _dependencyCache;
 		private readonly IDictionary<string, IDependencyProvider> _parsers = new Dictionary<string, IDependencyProvider>(StringComparer.OrdinalIgnoreCase);
 
 		public DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache)
@@ -73,6 +73,11 @@ namespace AlmWitt.Web.ResourceManagement
 			return dependencyList.SelectMany(d => d)
 				.Distinct(StringComparer.OrdinalIgnoreCase)
 				.ToList();
+		}
+
+		public void SetCache(IDependencyCache dependencyCache)
+		{
+			_dependencyCache = dependencyCache;
 		}
 	}
 }

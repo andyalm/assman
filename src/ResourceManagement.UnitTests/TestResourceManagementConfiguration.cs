@@ -1,6 +1,7 @@
 using System;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
+using AlmWitt.Web.ResourceManagement.PreConsolidation;
 using AlmWitt.Web.ResourceManagement.TestSupport;
 
 using NUnit.Framework;
