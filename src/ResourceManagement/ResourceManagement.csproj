@@ -89,13 +89,14 @@
     <Compile Include="Configuration\AssemblyElementCollection.cs" />
     <Compile Include="Configuration\ClientScriptGroupElement.cs" />
     <Compile Include="Configuration\ClientScriptGroupElementCollection.cs" />
-    <Compile Include="Configuration\CompiledFilePersister.cs" />
+    <Compile Include="IO\IFileAccess.cs" />
+    <Compile Include="PreConsolidation\CompiledFilePersister.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="Configuration\ConsolidatedUrlTemplate.cs" />
     <Compile Include="Configuration\ContentFilterMap.cs" />
     <Compile Include="Configuration\CssGroupElement.cs" />
     <Compile Include="Configuration\CssGroupElementCollection.cs" />
-    <Compile Include="PreConsolidation\IPreConsolidationInfoPersister.cs" />
+    <Compile Include="PreConsolidation\IPreConsolidationReportPersister.cs" />
     <Compile Include="Configuration\IResourceManagementPlugin.cs" />
     <Compile Include="Configuration\MappedConfigLoader.cs" />
     <Compile Include="Configuration\PluginElement.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Registration\WebForms\WebFormsAjaxScriptIncluder.cs" />
     <Compile Include="Registration\WebForms\WebFormsClientScriptRegistry.cs" />
     <Compile Include="VisualStudioScriptDependencyProvider.cs" />
+    <Compile Include="Xml\XmlWriterExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

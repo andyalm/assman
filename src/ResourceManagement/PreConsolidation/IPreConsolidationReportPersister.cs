@@ -2,13 +2,13 @@ using System;
 
 namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 {
-	public interface IPreConsolidationInfoPersister
+	public interface IPreConsolidationReportPersister
 	{
 		bool TryGetPreConsolidationInfo(out PreConsolidationReport preConsolidationReport);
 		void SavePreConsolidationInfo(PreConsolidationReport preConsolidationReport);
 	}
 
-	internal class NullPreConsolidationPersister : IPreConsolidationInfoPersister
+	internal class NullPreConsolidationPersister : IPreConsolidationReportPersister
 	{
 		public bool TryGetPreConsolidationInfo(out PreConsolidationReport preConsolidationReport)
 		{

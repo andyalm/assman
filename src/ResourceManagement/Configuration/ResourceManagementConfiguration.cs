@@ -188,7 +188,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public ResourceManagementContext BuildContext()
 		{
 			IResourceFinder fileFinder;
-			IPreConsolidationInfoPersister preConsolidationPersister;
+			IPreConsolidationReportPersister preConsolidationPersister;
 			if (String.IsNullOrEmpty(RootFilePath))
 			{
 				fileFinder = ResourceFinderFactory.Null;
@@ -203,7 +203,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return BuildContext(fileFinder, preConsolidationPersister);
 		}
 
-		public ResourceManagementContext BuildContext(IResourceFinder fileFinder, IPreConsolidationInfoPersister preConsolidationPersister)
+		public ResourceManagementContext BuildContext(IResourceFinder fileFinder, IPreConsolidationReportPersister preConsolidationPersister)
 		{
 			var context = ResourceManagementContext.Create();
 
