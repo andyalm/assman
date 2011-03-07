@@ -106,6 +106,7 @@
     <Compile Include="TestResourceType.cs" />
     <Compile Include="TestSupport\AssertionExtensions.cs" />
     <Compile Include="TestSupport\StubDependencyProvider.cs" />
+    <Compile Include="TestSupport\StubFileAccess.cs" />
     <Compile Include="TestSupport\StubPlugin.cs" />
     <Compile Include="TestSupport\StubRequestContext.cs" />
     <Compile Include="TestSupport\StubResourceFinder.cs" />

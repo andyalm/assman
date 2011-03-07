@@ -80,8 +80,7 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 
 		public static void ShouldContainAll<T>(this IEnumerable<T> collection, IEnumerable<T> otherCollection)
 		{
-			Assert.That(collection, Is.SubsetOf(otherCollection));
-			Assert.That(otherCollection, Is.SubsetOf(collection));
+			Assert.That(collection, Is.EquivalentTo(otherCollection));
 		}
 
 		public static void ShouldBeEmpty<T>(this IEnumerable<T> collection)

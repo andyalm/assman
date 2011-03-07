@@ -197,7 +197,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			else
 			{
 				fileFinder = ResourceFinderFactory.GetInstance(RootFilePath);
-				preConsolidationPersister = new CompiledFilePersister(RootFilePath);
+				preConsolidationPersister = CompiledFilePersister.ForWebDirectory(RootFilePath);
 			}
 
 			return BuildContext(fileFinder, preConsolidationPersister);

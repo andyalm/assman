@@ -13,5 +13,10 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 		{
 			Resources = new List<PreConsolidatedResourcePiece>();
 		}
+
+		public override string ToString()
+		{
+			return ConsolidatedUrl;
+		}
 	}
 }

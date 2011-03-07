@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -11,12 +12,13 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 {
 	public class CompiledFilePersister : IPreConsolidationReportPersister
 	{
-		private readonly IFileAccess _fileAccess;
-
-		public CompiledFilePersister(string rootWebPath)
+		public static CompiledFilePersister ForWebDirectory(string rootWebDirectory)
 		{
-			_fileAccess = new FileAccessWrapper(Path.Combine(rootWebPath, "bin\\ResourceManagement.compiled"));
+			var fileAccess = new FileAccessWrapper(Path.Combine(rootWebDirectory, "bin\\ResourceManagement.compiled"));
+			return new CompiledFilePersister(fileAccess);
 		}
+		
+		private readonly IFileAccess _fileAccess;
 
 		internal CompiledFilePersister(IFileAccess fileAccess)
 		{
@@ -25,9 +27,21 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 
 		public bool TryGetPreConsolidationInfo(out PreConsolidationReport preConsolidationReport)
 		{
+			if (!_fileAccess.Exists())
+			{
+				preConsolidationReport = null;
+				return false;
+			}
+
+			preConsolidationReport = new PreConsolidationReport();
 			var document = XDocument.Load(_fileAccess.OpenReader());
-			
+
+			preConsolidationReport.ClientScriptGroups = CollectResourceGroups(document.Root.Element("scripts")).ToList();
+			preConsolidationReport.CssGroups = CollectResourceGroups(document.Root.Element("stylesheets")).ToList();
+
+			return true;
 		}
+
 
 		public void SavePreConsolidationInfo(PreConsolidationReport preConsolidationReport)
 		{
@@ -42,11 +56,25 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 				{
 					using (writer.Element("preConsolidationReport"))
 					{
-						WriteResourceGroups(writer, "clientScripts", preConsolidationReport.ClientScriptGroups);
-						WriteResourceGroups(writer, "cssFiles", preConsolidationReport.CssGroups);
+						WriteResourceGroups(writer, "scripts", preConsolidationReport.ClientScriptGroups);
+						WriteResourceGroups(writer, "stylesheets", preConsolidationReport.CssGroups);
 					}
 				}
 			}
+		}
+
+		private IEnumerable<PreConsolidatedResourceGroup> CollectResourceGroups(XElement containerElement)
+		{
+			return from groupElement in containerElement.Elements("group")
+			       select new PreConsolidatedResourceGroup
+			       {
+			       	ConsolidatedUrl = (string) groupElement.Attribute("consolidatedUrl"),
+			       	Resources = groupElement.Elements("resource").Select(r => new PreConsolidatedResourcePiece
+			       	{
+			       		Path = (string) r.Attribute("path"),
+			       		Dependencies = r.Elements("dependency").Select(d => (string) d.Attribute("path")).ToList()
+			       	}).ToList()
+			       };
 		}
 
 		private void WriteResourceGroups(XmlWriter writer, string collectionElementName,
@@ -64,7 +92,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 							{
 								foreach (var dependency in resource.Dependencies)
 								{
-									using(writer.Element("dependency", src => dependency)) {}
+									using(writer.Element("dependency", path => dependency)) {}
 								}
 							}
 						}

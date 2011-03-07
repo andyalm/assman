@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 
-using AlmWitt.Web.ResourceManagement.Configuration;
+using AlmWitt.Web.ResourceManagement.IO;
 using AlmWitt.Web.ResourceManagement.TestSupport;
+
+using Moq;
 
 using NUnit.Framework;
 
@@ -11,11 +13,14 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 	public class TestCompiledFilePersister
 	{
 		private CompiledFilePersister _persister;
+		private StubFileAccess _fileAccess;
 
 		[SetUp]
 		public void SetupContext()
 		{
-			_persister = new CompiledFilePersister("c:\\inetpub\\wwwroot\\mysite");
+			_fileAccess = new StubFileAccess();
+			
+			_persister = new CompiledFilePersister(_fileAccess);
 		}
 
 		[Test]
@@ -97,7 +102,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			{
 				groups1[i].ConsolidatedUrl.ShouldEqual(groups2[i].ConsolidatedUrl);
 				groups1[i].Resources.CountShouldEqual(groups2[i].Resources.Count);
-				ResourcePiecesShouldBeEqual(groups1[i].Resources, groups2[2].Resources);
+				ResourcePiecesShouldBeEqual(groups1[i].Resources, groups2[i].Resources);
 			}
 		}
 
@@ -108,7 +113,8 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			for (int i = 0; i < pieces1.Count; i++)
 			{
 				pieces1[i].Path.ShouldEqual(pieces2[i].Path);
-				pieces1.ShouldContainAll(pieces2);
+				
+				pieces1[i].Dependencies.ShouldContainAll(pieces2[i].Dependencies);
 			}
 
 		}
