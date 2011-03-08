@@ -9,9 +9,9 @@ namespace AlmWitt.Web.ResourceManagement.ContentFiltering
 
 		internal JSMinContentFilterFactory() { }
 
-		public IContentFilter CreateFilter(IResourceGroup group)
+		public IContentFilter CreateFilter(IResourceGroup group, ResourceMode mode)
 		{
-			if (group.Compress)
+			if (group.ShouldMinify(mode))
 			{
 				return new JSMinFilter();
 			}

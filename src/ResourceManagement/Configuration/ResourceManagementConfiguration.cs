@@ -54,15 +54,20 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
                 _configLoader = value;
             }
 	    }
-		
-		/// <summary>
-		/// Opens an instance of the configuration to be edited.
-		/// </summary>
-		/// <param name="configuration">The <see cref="Configuration"/> object used to manage the configuration.</param>
-		/// <returns></returns>
-		public static ResourceManagementConfiguration OpenForEditing(out System.Configuration.Configuration configuration)
+
+		private VirtualPathResolver _pathResolver;
+
+		private VirtualPathResolver PathResolver
 		{
-		    return _configLoader.GetSectionForEditing<ResourceManagementConfiguration>(SECTION_NAME, out configuration);
+			get
+			{
+				if(_pathResolver == null)
+				{
+					_pathResolver = VirtualPathResolver.GetInstance(RootFilePath);
+				}
+
+				return _pathResolver;
+			}
 		}
 
         /// <summary>
@@ -175,9 +180,9 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		}
 
 		private DateTime? _lastModified;
-		public DateTime LastModified()
+		public DateTime LastModified(VirtualPathResolver pathResolver)
 		{
-			return _lastModified ?? ConfigurationHelper.GetLastModified(this);
+			return _lastModified ?? ConfigurationHelper.LastModified(this, pathResolver);
 		}
 
 		public void LastModified(DateTime value)
@@ -207,7 +212,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			var context = ResourceManagementContext.Create();
 
-			context.ConfigurationLastModified = LastModified();
+			context.ConfigurationLastModified = LastModified(PathResolver);
 			context.ConsolidateClientScripts = Consolidate && ClientScripts.Consolidate;
 			context.ConsolidateCssFiles = Consolidate && CssFiles.Consolidate;
 			context.ManageDependencies = ManageDependencies;
@@ -232,13 +237,10 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return context;
 		}
 
-		/// <summary>
-		/// Saves the configuration.
-		/// </summary>
-		/// <param name="config"></param>
-		public void SaveChanges(System.Configuration.Configuration config)
+		public void SavePreConsolidationReport(PreConsolidationReport report)
 		{
-			config.Save();
+			var preConsolidationPersister = CompiledFilePersister.ForWebDirectory(RootFilePath);
+			preConsolidationPersister.SavePreConsolidationInfo(report);
 		}
 	}
 }

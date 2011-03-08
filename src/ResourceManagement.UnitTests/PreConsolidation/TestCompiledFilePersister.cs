@@ -83,7 +83,8 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 							}
 						}
 					}
-				}
+				},
+				Version = "321"
 			};
 
 			_persister.SavePreConsolidationInfo(report);
@@ -93,6 +94,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 
 			ResourceGroupsShouldBeEqual(report.ClientScriptGroups, deserializedReport.ClientScriptGroups);
 			ResourceGroupsShouldBeEqual(report.CssGroups, deserializedReport.CssGroups);
+			report.Version.ShouldEqual(deserializedReport.Version);
 		}
 
 		private void ResourceGroupsShouldBeEqual(List<PreConsolidatedResourceGroup> groups1, List<PreConsolidatedResourceGroup> groups2)

@@ -6,7 +6,7 @@ using Crockford;
 namespace AlmWitt.Web.ResourceManagement.ContentFiltering
 {
     ///<summary>
-    /// Defines a content filter for javascript that uses the JSMin library to compress it.
+    /// Defines a content filter for javascript that uses the JSMin library to minify it.
     ///</summary>
     public class JSMinFilter : IContentFilter
     {
@@ -15,7 +15,7 @@ namespace AlmWitt.Web.ResourceManagement.ContentFiltering
         #region IContentFilter Members
 
         /// <summary>
-        /// Compresses javascript content using the JSMin library.
+        /// Minifies javascript content using the JSMin library.
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>

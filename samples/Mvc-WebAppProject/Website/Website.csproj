@@ -144,8 +144,10 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target> -->
-  <Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
-    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)" />
+  <UsingTask TaskName="PreConsolidateResources" AssemblyFile="bin\AlmWitt.Web.ResourceManagement.dll" />
+  <Target Name="AfterBuild">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)" Condition="'$(MvcBuildViews)'=='true'" />
+    <PreConsolidateResources WebRoot="$(MSBuildProjectDirectory)" Condition="$(Configuration)=='Release'" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>

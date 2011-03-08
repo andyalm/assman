@@ -33,7 +33,7 @@ namespace AlmWitt.Web.ResourceManagement.TestObjects
 
 		public ResourceType ResourceType { get; set; }
 
-		public bool Compress { get; set; }
+		public bool Minify { get; set; }
 
 		public IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources, ResourceMode mode)
 		{
@@ -50,7 +50,7 @@ namespace AlmWitt.Web.ResourceManagement.TestObjects
 		{
 			return new ResourceGroup(consolidatedUrl, resources)
 			{
-				Compress = this.Compress
+				Minify = this.Minify
 			};
 		}
 	}

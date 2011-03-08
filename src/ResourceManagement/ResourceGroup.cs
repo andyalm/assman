@@ -14,7 +14,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 		public string ConsolidatedUrl { get; private set; }
 
-		public bool Compress { get; set; }
+		public bool Minify { get; set; }
 
 		public IEnumerable<IResource> GetResources()
 		{

@@ -5,7 +5,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public const string Consolidate = "consolidate";
 		public const string Exclude = "exclude";
 		public const string Include = "include";
-		public const string Compress = "compress";
+		public const string Minify = "minify";
 		public const string ConsolidatedUrl = "consolidatedUrl";
 		public const string Groups = "groups";
 		public const string InclusionRedirects = "inclusionRedirects";

@@ -43,6 +43,18 @@ namespace AlmWitt.Web.ResourceManagement
 		}
 
 		[Test]
+		public void WhenPreConsolidationReportIsLoaded_VersionIsSet()
+		{
+			var preConsolidationReport = new PreConsolidationReport
+			{
+				Version = "311"
+			};
+			_context.LoadPreCompilationReport(preConsolidationReport);
+
+			_context.Version.ShouldEqual("311");
+		}
+
+		[Test]
 		public void WhenPreConsolidatedReportIsLoaded_DependenciesAreCachedSoThatDependencyProviderIsNotCalled()
 		{
 			var preConsolidationReport = new PreConsolidationReport();

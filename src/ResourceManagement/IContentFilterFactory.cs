@@ -2,6 +2,6 @@ namespace AlmWitt.Web.ResourceManagement.ContentFiltering
 {
 	public interface IContentFilterFactory
 	{
-		IContentFilter CreateFilter(IResourceGroup group);
+		IContentFilter CreateFilter(IResourceGroup group, ResourceMode mode);
 	}
 }

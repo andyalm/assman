@@ -10,9 +10,9 @@ namespace AlmWitt.Web.ResourceManagement
 		string ConsolidatedUrl { get; }
 		
 		/// <summary>
-		/// Indicates whether compression is enabled for the content of the resources in this resource group.
+		/// Indicates whether to minify the resources contents when in Release mode.
 		/// </summary>
-		bool Compress { get; }
+		bool Minify { get; }
 
 		/// <summary>
 		/// Indicates whether the given resource exists in the resource group.
@@ -23,5 +23,13 @@ namespace AlmWitt.Web.ResourceManagement
 		/// Gets the resources that belong to the group.
 		/// </summary>
 		IEnumerable<IResource> GetResources();
+	}
+
+	public static class ResourceGroupExtensions
+	{
+		public static bool ShouldMinify(this IResourceGroup group, ResourceMode mode)
+		{
+			return group.Minify && mode == ResourceMode.Release;
+		}
 	}
 }

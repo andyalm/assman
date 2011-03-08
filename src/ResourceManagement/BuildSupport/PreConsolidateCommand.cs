@@ -22,7 +22,6 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
 
         private readonly string _websiteRootDirectory;
         private VirtualPathResolver _resolver;
-        private System.Configuration.Configuration _config;
     	private ResourceManagementContext _context;
         private ILogger _logger = NullLogger.Instance;
     	
@@ -70,31 +69,17 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
             ResourceManagementConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
             _resolver = GetResolver(configSection.RootFilePath);
 			
-			SetCompression(configSection);
 			ConsolidateAll(configSection);
-			SetVersion(configSection); 
 			
-			SaveConfigChanges(configSection);
-            LogMessage("End consolidating resources.");
+			LogMessage("End consolidating resources.");
         }
-
-		private void SetCompression(ResourceManagementConfiguration configSection)
-		{
-			var compress = Mode == ResourceMode.Release;
-			configSection.ClientScripts.Compress = compress;
-			configSection.CssFiles.Compress = compress;
-		}
-
-    	private void SetVersion(ResourceManagementConfiguration section)
-    	{
-    		section.Version = this.Version ?? DateTime.Now.ToString("yyMMddHHmm");
-		}
 
 		private void ConsolidateAll(ResourceManagementConfiguration configSection)
 		{
 			_context = configSection.BuildContext();
-			_context.ConsolidateAll(WriteConsolidatedResource, Mode);
-			//TODO: Persist the pre-consolidation report
+			var report = _context.ConsolidateAll(WriteConsolidatedResource, Mode);
+			report.Version = this.Version ?? DateTime.Now.ToString("yyMMddHHmm");
+			configSection.SavePreConsolidationReport(report);
 		}
 
 		private void WriteConsolidatedResource(ConsolidatedResource consolidatedResource, IResourceGroup group)
@@ -122,18 +107,10 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
         {
             ResourceManagementConfiguration.ConfigLoader = new MappedConfigLoader(webRoot);
 
-            ResourceManagementConfiguration configSection = ResourceManagementConfiguration.OpenForEditing(out _config);
+        	var configSection = ResourceManagementConfiguration.Current;
             configSection.RootFilePath = webRoot;
-            //set this instance of the config section to current so that the components
-            //that need to read from configuration can see it.
-            ResourceManagementConfiguration.Current = configSection;
 
             return configSection;
-        }
-
-        private void SaveConfigChanges(ResourceManagementConfiguration configSection)
-        {
-            configSection.SaveChanges(_config);
         }
 
         private VirtualPathResolver GetResolver(string webRoot)

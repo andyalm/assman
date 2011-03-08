@@ -20,7 +20,7 @@ namespace AlmWitt.Web.ResourceManagement.IO
 
 		public TextWriter OpenWriter()
 		{
-			return new StreamWriter(_filePath, false);
+			return new StreamWriter(_filePath);
 		}
 
 		public bool Exists()

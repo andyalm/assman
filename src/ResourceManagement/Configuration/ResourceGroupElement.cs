@@ -56,18 +56,18 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			}
 		}
 
-		private bool? _compress;
+		private bool? _minify;
 
 		/// <summary>
-		/// Gets or sets whether the scripts will be compressed when they are consolidated.
+		/// Gets or sets whether the scripts/styles will be minified when they are consolidated in Release mode.
 		/// </summary>
-		public bool Compress
+		public bool Minify
 		{
 			get
 			{
-				return _compress ?? CompressDefaultValue;
+				return _minify ?? MinifyDefaultValue;
 			}
-			set { _compress = value; }
+			set { _minify = value; }
 		}
 
 		private ConsolidatedUrlTemplate ConsolidatedUrlTemplate
@@ -81,16 +81,16 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			}
 		}
 
-		internal bool CompressDefaultValue { get; set; }
+		internal bool MinifyDefaultValue { get; set; }
 
 		public abstract ResourceType ResourceType { get; }
 
 		protected override bool OnDeserializeUnrecognizedAttribute(string name, string value)
 		{
-			bool compress;
-			if (name == PropertyNames.Compress && Boolean.TryParse(value, out compress))
+			bool minify;
+			if (name == PropertyNames.Minify && Boolean.TryParse(value, out minify))
 			{
-				_compress = compress;
+				_minify = minify;
 				return true;
 			}
 			else
@@ -140,7 +140,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			return new ResourceGroup(consolidatedUrl, resourcesInGroup)
 			{
-				Compress = this.Compress
+				Minify = this.Minify
 			};
 		}
 

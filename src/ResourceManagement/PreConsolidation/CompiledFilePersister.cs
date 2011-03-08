@@ -34,8 +34,13 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			}
 
 			preConsolidationReport = new PreConsolidationReport();
-			var document = XDocument.Load(_fileAccess.OpenReader());
-
+			XDocument document;
+			using (var reader = _fileAccess.OpenReader())
+			{
+				document = XDocument.Load(reader);
+			}
+			
+			preConsolidationReport.Version = (string) document.Root.Attribute("version");
 			preConsolidationReport.ClientScriptGroups = CollectResourceGroups(document.Root.Element("scripts")).ToList();
 			preConsolidationReport.CssGroups = CollectResourceGroups(document.Root.Element("stylesheets")).ToList();
 
@@ -54,7 +59,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			{
 				using(writer.Document())
 				{
-					using (writer.Element("preConsolidationReport"))
+					using (writer.Element("preConsolidationReport", version => preConsolidationReport.Version))
 					{
 						WriteResourceGroups(writer, "scripts", preConsolidationReport.ClientScriptGroups);
 						WriteResourceGroups(writer, "stylesheets", preConsolidationReport.CssGroups);

@@ -6,7 +6,7 @@ namespace AlmWitt.Web.ResourceManagement
 	{
 		bool MatchesConsolidatedUrl(string consolidatedUrl);
 		ResourceType ResourceType { get; }
-		bool Compress { get; }
+		bool Minify { get; }
 		IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources, ResourceMode mode);
 		bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl);
 	}

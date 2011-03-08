@@ -29,6 +29,18 @@ namespace AlmWitt.Web.ResourceManagement
 			return CollapseDependencies(dependencyList);
 		}
 
+		public IEnumerable<string> GetDependencies(IResource resource)
+		{
+			IEnumerable<string> cachedDependencies;
+			if (_dependencyCache.TryGetDependencies(resource.VirtualPath, out cachedDependencies))
+				return cachedDependencies;
+
+			var dependencyList = new List<IEnumerable<string>>();
+			AccumulateDependencies(dependencyList, resource);
+
+			return CollapseDependencies(dependencyList);
+		}
+
 		private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, string virtualPath)
 		{
 			IEnumerable<string> cachedDependencies;
@@ -42,7 +54,13 @@ namespace AlmWitt.Web.ResourceManagement
 			if(resource == null)
 				return;
 
-			if(_dependencyCache.TryGetDependencies(resource, out cachedDependencies))
+			AccumulateDependencies(dependencyList, resource);
+		}
+
+		private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, IResource resource)
+		{
+			IEnumerable<string> cachedDependencies;
+			if (_dependencyCache.TryGetDependencies(resource, out cachedDependencies))
 			{
 				dependencyList.Insert(0, cachedDependencies);
 				//store in cache so that it will also be indexed by virtual path
@@ -51,12 +69,12 @@ namespace AlmWitt.Web.ResourceManagement
 			}
 
 			IDependencyProvider provider;
-			if(!_parsers.TryGetValue(resource.FileExtension, out provider))
+			if (!_parsers.TryGetValue(resource.FileExtension, out provider))
 				return;
 
 			var dependencyListEntrySize = dependencyList.Count;
 			var dependencies = provider.GetDependencies(resource);
-			if(dependencies.Any())
+			if (dependencies.Any())
 			{
 				dependencyList.Insert(0, dependencies);
 				foreach (var dependency in dependencies)

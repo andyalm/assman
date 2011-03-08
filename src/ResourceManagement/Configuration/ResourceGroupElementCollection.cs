@@ -36,18 +36,18 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		}
 
 		/// <summary>
-		/// Gets or sets whether the scripts will be compressed when they are consolidated.
+		/// Gets or sets whether the scripts/styles will be minified when they are consolidated in Release mode.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.Compress, DefaultValue = false)]
-		public bool Compress
+		[ConfigurationProperty(PropertyNames.Minify, DefaultValue = true)]
+		public bool Minify
 		{
-			get { return (bool)this[PropertyNames.Compress]; }
+			get { return (bool)this[PropertyNames.Minify]; }
 			set
 			{
-				this[PropertyNames.Compress] = value;
+				this[PropertyNames.Minify] = value;
 				foreach (ResourceGroupElement groupElement in this)
 				{
-					groupElement.CompressDefaultValue = value;
+					groupElement.MinifyDefaultValue = value;
 				}
 			}
 		}
@@ -69,9 +69,9 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		protected override ConfigurationElement CreateNewElement()
 		{
 			var element = new TGroupElement();
-			//set the compress property so that it defaults to the value
+			//set the minify property so that it defaults to the value
 			//set by its parent (i.e. this collection).
-			element.CompressDefaultValue = Compress;
+			element.MinifyDefaultValue = Minify;
 
 			return element;
 		}

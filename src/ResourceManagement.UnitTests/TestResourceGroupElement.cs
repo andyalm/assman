@@ -217,14 +217,14 @@ namespace AlmWitt.Web.ResourceManagement
 		}
 
 		[Test]
-		public void GroupHasCompressionSetCorrectly()
+		public void GroupHasMinificationSetCorrectly()
 		{
 			CreateResources("file1.js", "file2.js");
-			_element.Compress = true;
+			_element.Minify = true;
 
 			var group = _element.GetGroups(_allResources, ResourceMode.Release).Single();
 
-			group.Compress.ShouldBeTrue();
+			group.Minify.ShouldBeTrue();
 		}
 
 		private void VerifyUrlIsConsolidated(string virtualPath)

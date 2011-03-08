@@ -1,11 +1,12 @@
 using System;
-using System.Configuration;
+using System.IO;
+using System.Web.Configuration;
 
 namespace AlmWitt.Web.ResourceManagement.Configuration
 {
     public class MappedConfigLoader : IConfigLoader
     {
-        private string _basePath;
+        private readonly string _basePath;
 
         public MappedConfigLoader(string basePath)
         {
@@ -14,16 +15,21 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
         public TSection GetSection<TSection>(string sectionName) where TSection : class
         {
-            var configuration = ConfigurationHelper.OpenWebConfiguration(_basePath);
+        	var map = new WebConfigurationFileMap();
+        	map.VirtualDirectories.Add("/", GetVDirMapping());
+        	var configuration = WebConfigurationManager.OpenMappedWebConfiguration(map, "/");
 
             return configuration.GetSection(sectionName) as TSection;
         }
 
-        public TSection GetSectionForEditing<TSection>(string sectionName, out System.Configuration.Configuration configuration) where TSection : ConfigurationSection, new()
-        {
-            configuration = ConfigurationHelper.OpenWebConfiguration(_basePath);
-
-            return ConfigurationHelper.OpenForEditing<TSection>(sectionName, configuration);
-        }
+    	private VirtualDirectoryMapping GetVDirMapping()
+		{
+    		string directory;
+    		if (_basePath.EndsWith(".config"))
+    			directory = Path.GetDirectoryName(_basePath);
+    		else
+    			directory = _basePath;
+    		return new VirtualDirectoryMapping(directory, isAppRoot : true);
+    	}
     }
 }

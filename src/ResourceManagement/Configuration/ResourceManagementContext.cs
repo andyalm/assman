@@ -121,15 +121,15 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				throw new Exception("No group with consolidatedUrl '" + groupConsolidatedUrl + "' could be found.");
 			}
 
-			return ConsolidateGroup(group, groupTemplateContext);
+			return ConsolidateGroup(group, groupTemplateContext, mode);
 		}
 
-		public ConsolidatedResource ConsolidateGroup(IResourceGroup group, GroupTemplateContext groupTemplateContext)
+		public ConsolidatedResource ConsolidateGroup(IResourceGroup group, GroupTemplateContext groupTemplateContext, ResourceMode mode)
 		{
 			Func<IResource, IContentFilter> createContentFilter = resource =>
 			{
 				var contentFilterFactory = GetFilterFactoryForExtension(resource.FileExtension);
-				return contentFilterFactory.CreateFilter(group);
+				return contentFilterFactory.CreateFilter(group, mode);
 			};
 
 			return group.GetResources()
@@ -138,10 +138,13 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				.Consolidate(createContentFilter, groupTemplateContext.GroupTemplate.ResourceType.Separator);
 		}
 
-		public void ConsolidateAll(Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource, ResourceMode mode)
+		public PreConsolidationReport ConsolidateAll(Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource, ResourceMode mode)
 		{
-			ConsolidateAllInternal(ClientScriptGroups, handleConsolidatedResource, mode);
-			ConsolidateAllInternal(CssFileGroups, handleConsolidatedResource, mode);
+			return new PreConsolidationReport
+			{
+				ClientScriptGroups = ConsolidateAllInternal(ClientScriptGroups, handleConsolidatedResource, mode).ToList(),
+				CssGroups = ConsolidateAllInternal(CssFileGroups, handleConsolidatedResource, mode).ToList()
+			};
 		}
 
 		public GroupTemplateContext FindGroupTemplate(string consolidatedUrl)
@@ -181,6 +184,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			PopulateResourceUrlMap(preConsolidationReport.ClientScriptGroups);
 			PopulateResourceUrlMap(preConsolidationReport.CssGroups);
 
+			Version = preConsolidationReport.Version;
 			PreConsolidated = true;
 		}
 
@@ -244,26 +248,39 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return resourceUrl;
 		}
 
-		private void ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates,
+		private IEnumerable<PreConsolidatedResourceGroup> ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates,
 		                                    Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource,
 		                                    ResourceMode mode)
 		{
 			if (!groupTemplates.Any())
-				return;
+				Enumerable.Empty<PreConsolidatedResourceGroup>();
 
 			var allResources = _finder.FindResources(groupTemplates.First().ResourceType);
 
+			var preConsolidatedGroups = new List<PreConsolidatedResourceGroup>();
 			groupTemplates.ForEach(templateContext =>
 			{
 				var groups = templateContext.GroupTemplate.GetGroups(allResources, mode);
 				foreach (var group in groups)
 				{
-					var consolidatedResource = ConsolidateGroup(group, templateContext);
+					var consolidatedResource = ConsolidateGroup(group, templateContext, mode);
 					handleConsolidatedResource(consolidatedResource, group);
-				}
+					var preConsolidatedGroup = new PreConsolidatedResourceGroup
+					{
+						ConsolidatedUrl = group.ConsolidatedUrl,
+						Resources = consolidatedResource.Resources.Select(resource => new PreConsolidatedResourcePiece
+						{
+								Path = resource.VirtualPath,
+								Dependencies = _dependencyManager.GetDependencies(resource).ToList()
+						}).ToList()
+					};
+					preConsolidatedGroups.Add(preConsolidatedGroup);
+				}	
 
 				return true;
 			});
+
+			return preConsolidatedGroups;
 		}
 
 		private IEnumerable<IResourceGroup> GetGroupsFromTemplate(GroupTemplateContext groupTemplateContext, ResourceMode mode)
