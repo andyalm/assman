@@ -1,8 +1,6 @@
-using System.Web;
-
 namespace AlmWitt.Web.ResourceManagement.Mvc
 {
-	public class DummyStringResult : IHtmlString
+	public class DummyStringResult
 	{
 		private static readonly DummyStringResult _instance = new DummyStringResult();
 
@@ -13,11 +11,6 @@ namespace AlmWitt.Web.ResourceManagement.Mvc
 
 		private DummyStringResult() {}
 		
-		public string ToHtmlString()
-		{
-			return string.Empty;
-		}
-
 		public override string ToString()
 		{
 			return string.Empty;

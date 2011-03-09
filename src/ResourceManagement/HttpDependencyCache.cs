@@ -24,7 +24,17 @@ namespace AlmWitt.Web.ResourceManagement
 		public bool TryGetDependencies(string virtualPath, out IEnumerable<string> dependencies)
 		{
 			var cacheByVirtualPath = GetCacheKeyedByVirtualPath();
-			return cacheByVirtualPath.TryGetValue(virtualPath, out dependencies);
+			if (cacheByVirtualPath.TryGetValue(virtualPath, out dependencies))
+				return true;
+
+			CacheItem cacheItem;
+			if(_longRunningCache.TryGetValue(virtualPath, out cacheItem) && cacheItem.DoesNotExpire())
+			{
+				dependencies = cacheItem.Dependencies;
+				return true;
+			}
+
+			return false;
 		}
 
 		public bool TryGetDependencies(IResource resource, out IEnumerable<string> dependencies)
@@ -55,6 +65,14 @@ namespace AlmWitt.Web.ResourceManagement
 			};
 		}
 
+		public void StoreDependencies(string virtualPath, IEnumerable<string> dependencies)
+		{
+			var cacheByVirtualPath = GetCacheKeyedByVirtualPath();
+			cacheByVirtualPath[virtualPath] = dependencies;
+
+			_longRunningCache[virtualPath] = CacheItem.Unexpiring(dependencies);
+		}
+
 		private IDictionary<string,IEnumerable<string>> GetCacheKeyedByVirtualPath()
 		{
 			return _httpContextAccessor().Items.GetOrCreate<IDictionary<string, IEnumerable<string>>>(_httpItemsKey,
@@ -63,8 +81,22 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private class CacheItem
 		{
+			public static CacheItem Unexpiring(IEnumerable<string> dependencies)
+			{
+				return new CacheItem
+				{
+					Dependencies = dependencies,
+					LastModified = DateTime.MaxValue
+				};
+			}
+			
 			public IEnumerable<string > Dependencies { get; set; }
 			public DateTime LastModified { get; set; }
+
+			public bool DoesNotExpire()
+			{
+				return LastModified == DateTime.MaxValue;
+			}
 		}
 	}
 }

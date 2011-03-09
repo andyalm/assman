@@ -14,6 +14,8 @@
     <AssemblyName>Website</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,32 +35,42 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Spark">
+    <Reference Include="AlmWitt.Web.ResourceManagement, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\output\lib\AlmWitt.Web.ResourceManagement.dll</HintPath>
+    </Reference>
+    <Reference Include="AlmWitt.Web.ResourceManagement.Less, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\output\lib\AlmWitt.Web.ResourceManagement.Less.dll</HintPath>
+    </Reference>
+    <Reference Include="AlmWitt.Web.ResourceManagement.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\output\lib\Mvc2\.NetFramework 2.0\AlmWitt.Web.ResourceManagement.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="AlmWitt.Web.ResourceManagement.Spark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\output\lib\AlmWitt.Web.ResourceManagement.Spark.dll</HintPath>
+    </Reference>
+    <Reference Include="Spark, Version=1.5.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Spark.1.5\lib\.NetFramework 2.0\Spark.dll</HintPath>
     </Reference>
-    <Reference Include="Spark.Web.Mvc">
+    <Reference Include="Spark.Web.Mvc, Version=1.5.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Spark.Web.Mvc2.1.5\lib\.NetFramework 2.0\Spark.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ComponentModel.DataAnnotations">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -66,6 +78,7 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppStart_SparkWebMvc.cs" />
@@ -119,24 +132,6 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Views\Shared\_global.spark" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\ResourceManagement.Less\ResourceManagement.Less.csproj">
-      <Project>{31F16E4E-7DAA-410B-970A-D26C270C3012}</Project>
-      <Name>ResourceManagement.Less</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\ResourceManagement.Mvc\ResourceManagement.Mvc.csproj">
-      <Project>{DF604504-959B-464A-92C5-4C279FCD8846}</Project>
-      <Name>ResourceManagement.Mvc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\ResourceManagement.Spark\ResourceManagement.Spark.csproj">
-      <Project>{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F}</Project>
-      <Name>ResourceManagement.Spark</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\ResourceManagement\ResourceManagement.csproj">
-      <Project>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</Project>
-      <Name>ResourceManagement</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

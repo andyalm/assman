@@ -17,14 +17,17 @@ namespace AlmWitt.Web.ResourceManagement
 	{
 		private ResourceManagementContext _context;
 		private Mock<IDependencyProvider> _dependencyProvider;
+		private Mock<IResourceFinder> _finder;
 
 		[SetUp]
 		public void SetupContext()
 		{
 			_dependencyProvider = new Mock<IDependencyProvider>();
+			_finder = new Mock<IResourceFinder>();
 			
 			_context = new ResourceManagementContext();
 			_context.MapExtensionToDependencyProvider(".js", _dependencyProvider.Object);
+			_context.AddFinder(_finder.Object);
 		}
 
 		[Test]
@@ -81,6 +84,39 @@ namespace AlmWitt.Web.ResourceManagement
 			dependencies.First().ShouldEqual("~/scripts/jquery.js");
 
 			_dependencyProvider.Verify(p => p.GetDependencies(It.IsAny<IResource>()), Times.Never());
+		}
+
+		[Test]
+		public void WhenPreConsolidatedReportHasBeenLoaded_DependenciesForFilesThatWereNotPreconsolidatedCanStillBeResolved()
+		{
+			var preConsolidationReport = new PreConsolidationReport();
+			var scriptGroup = new PreConsolidatedResourceGroup
+			{
+				ConsolidatedUrl = "~/scripts/consolidated/common.js",
+				Resources = new List<PreConsolidatedResourcePiece>
+				{
+					new PreConsolidatedResourcePiece
+					{
+						Path = "~/scripts/myscript.js",
+						Dependencies = new List<string>
+						{
+							"~/scripts/jquery.js"
+						}
+					}
+				}
+			};
+			preConsolidationReport.ClientScriptGroups.Add(scriptGroup);
+			_context.LoadPreCompilationReport(preConsolidationReport);
+
+			const string unconsolidatedVirtualPath = "~/scripts/unconsolidated-script.js";
+			_finder.Setup(f => f.FindResource(unconsolidatedVirtualPath)).Returns(StubResource.WithPath(unconsolidatedVirtualPath));
+			
+			_dependencyProvider.Setup(p => p.GetDependencies(It.Is<IResource>(r => r.VirtualPath == unconsolidatedVirtualPath)))
+				.Returns(new[] {"~/scripts/unconsolidated-dependency.js"});
+			
+			var dependencies = _context.GetResourceDependencies(unconsolidatedVirtualPath);
+			dependencies.CountShouldEqual(1);
+			dependencies.First().ShouldEqual("~/scripts/unconsolidated-dependency.js");
 		}
 
 		[Test]

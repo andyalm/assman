@@ -37,14 +37,10 @@
   </Target>
 
   <Target Name="_BuildWithProfile">
-    <ItemGroup>
-      <ObjFiles Include="obj\$(Configuration)\*.*" />
-    </ItemGroup>
-    <Delete Files="@(ObjFiles)" />
     <PropertyGroup>
       <ProjectPath>%(Project.FullPath)</ProjectPath>
     </PropertyGroup>
-    <MSBuild Projects="$(ProjectPath)" Targets="Build" Properties="$(Properties);%(BuildProfile.Properties)" />
+    <MSBuild Projects="$(ProjectPath)" Targets="Rebuild" Properties="$(Properties);%(BuildProfile.Properties)" />
   </Target>
 
   <Target Name="_ExportAssembly">

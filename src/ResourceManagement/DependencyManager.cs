@@ -93,9 +93,9 @@ namespace AlmWitt.Web.ResourceManagement
 				.ToList();
 		}
 
-		public void SetCache(IDependencyCache dependencyCache)
+		public void SetDependencies(string virtualPath, IEnumerable<string> dependencies)
 		{
-			_dependencyCache = dependencyCache;
+			_dependencyCache.StoreDependencies(virtualPath, dependencies);
 		}
 	}
 }

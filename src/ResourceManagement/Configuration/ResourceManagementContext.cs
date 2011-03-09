@@ -176,10 +176,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
 		{
-			var preConsolidatedDependencyCache = new PreConsolidatedDependencyCache();
-			PopulateDependencyCache(preConsolidationReport.ClientScriptGroups, preConsolidatedDependencyCache);
-			PopulateDependencyCache(preConsolidationReport.CssGroups, preConsolidatedDependencyCache);
-			_dependencyManager.SetCache(preConsolidatedDependencyCache);
+			PopulateDependencyCache(preConsolidationReport.ClientScriptGroups);
+			PopulateDependencyCache(preConsolidationReport.CssGroups);
 
 			PopulateResourceUrlMap(preConsolidationReport.ClientScriptGroups);
 			PopulateResourceUrlMap(preConsolidationReport.CssGroups);
@@ -197,12 +195,11 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			_resolvedResourceUrls.AddRange(resourceUrlMap);
 		}
 
-		private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceGroup> groups,
-		                                     PreConsolidatedDependencyCache preConsolidatedDependencyCache)
+		private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceGroup> groups)
 		{
 			foreach (var resource in groups.SelectMany(@group => @group.Resources))
 			{
-				preConsolidatedDependencyCache.SetDependencies(resource.Path, resource.Dependencies);
+				_dependencyManager.SetDependencies(resource.Path, resource.Dependencies);
 			}
 		}
 
