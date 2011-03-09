@@ -6,6 +6,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 	{
 		public List<PreConsolidatedResourceGroup> ClientScriptGroups { get; set; }
 		public List<PreConsolidatedResourceGroup> CssGroups { get; set; }
+		public List<PreConsolidatedResourceDependencies> Dependencies { get; set; }
 		public string Version { get; set; }
 
 		public PreConsolidationReport()
@@ -13,6 +14,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			Version = "";
 			ClientScriptGroups = new List<PreConsolidatedResourceGroup>();
 			CssGroups = new List<PreConsolidatedResourceGroup>();
+			Dependencies = new List<PreConsolidatedResourceDependencies>();
 		}
 	}
 }

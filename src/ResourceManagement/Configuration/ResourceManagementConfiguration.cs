@@ -190,19 +190,16 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			_lastModified = value;
 		}
 
-		public ResourceManagementContext BuildContext()
+		public ResourceManagementContext BuildContext(bool usePreConsolidationReportIfPresent = true)
 		{
-			IResourceFinder fileFinder;
-			IPreConsolidationReportPersister preConsolidationPersister;
-			if (String.IsNullOrEmpty(RootFilePath))
-			{
-				fileFinder = ResourceFinderFactory.Null;
-				preConsolidationPersister = new NullPreConsolidationPersister();
-			}
-			else
+			IResourceFinder fileFinder = ResourceFinderFactory.Null;
+			IPreConsolidationReportPersister preConsolidationPersister = NullPreConsolidationPersister.Instance;
+			
+			if(!String.IsNullOrEmpty(RootFilePath))
 			{
 				fileFinder = ResourceFinderFactory.GetInstance(RootFilePath);
-				preConsolidationPersister = CompiledFilePersister.ForWebDirectory(RootFilePath);
+				if(usePreConsolidationReportIfPresent)
+					preConsolidationPersister = CompiledFilePersister.ForWebDirectory(RootFilePath);
 			}
 
 			return BuildContext(fileFinder, preConsolidationPersister);

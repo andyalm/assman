@@ -60,15 +60,13 @@ namespace AlmWitt.Web.ResourceManagement
 		[Test]
 		public void WhenPreConsolidatedReportIsLoaded_DependenciesAreCachedSoThatDependencyProviderIsNotCalled()
 		{
-			var preConsolidationReport = new PreConsolidationReport();
-			var scriptGroup = new PreConsolidatedResourceGroup
+			var preConsolidationReport = new PreConsolidationReport
 			{
-				ConsolidatedUrl = "~/scripts/consolidated/common.js",
-				Resources = new List<PreConsolidatedResourcePiece>
+				Dependencies = new List<PreConsolidatedResourceDependencies>
 				{
-					new PreConsolidatedResourcePiece
+					new PreConsolidatedResourceDependencies
 					{
-						Path = "~/scripts/myscript.js",
+						ResourcePath = "~/scripts/myscript.js",
 						Dependencies = new List<string>
 						{
 							"~/scripts/jquery.js"
@@ -76,7 +74,6 @@ namespace AlmWitt.Web.ResourceManagement
 					}
 				}
 			};
-			preConsolidationReport.ClientScriptGroups.Add(scriptGroup);
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
 			var dependencies = _context.GetResourceDependencies("~/scripts/myscript.js");
@@ -84,39 +81,6 @@ namespace AlmWitt.Web.ResourceManagement
 			dependencies.First().ShouldEqual("~/scripts/jquery.js");
 
 			_dependencyProvider.Verify(p => p.GetDependencies(It.IsAny<IResource>()), Times.Never());
-		}
-
-		[Test]
-		public void WhenPreConsolidatedReportHasBeenLoaded_DependenciesForFilesThatWereNotPreconsolidatedCanStillBeResolved()
-		{
-			var preConsolidationReport = new PreConsolidationReport();
-			var scriptGroup = new PreConsolidatedResourceGroup
-			{
-				ConsolidatedUrl = "~/scripts/consolidated/common.js",
-				Resources = new List<PreConsolidatedResourcePiece>
-				{
-					new PreConsolidatedResourcePiece
-					{
-						Path = "~/scripts/myscript.js",
-						Dependencies = new List<string>
-						{
-							"~/scripts/jquery.js"
-						}
-					}
-				}
-			};
-			preConsolidationReport.ClientScriptGroups.Add(scriptGroup);
-			_context.LoadPreCompilationReport(preConsolidationReport);
-
-			const string unconsolidatedVirtualPath = "~/scripts/unconsolidated-script.js";
-			_finder.Setup(f => f.FindResource(unconsolidatedVirtualPath)).Returns(StubResource.WithPath(unconsolidatedVirtualPath));
-			
-			_dependencyProvider.Setup(p => p.GetDependencies(It.Is<IResource>(r => r.VirtualPath == unconsolidatedVirtualPath)))
-				.Returns(new[] {"~/scripts/unconsolidated-dependency.js"});
-			
-			var dependencies = _context.GetResourceDependencies(unconsolidatedVirtualPath);
-			dependencies.CountShouldEqual(1);
-			dependencies.First().ShouldEqual("~/scripts/unconsolidated-dependency.js");
 		}
 
 		[Test]
@@ -129,12 +93,9 @@ namespace AlmWitt.Web.ResourceManagement
 			var scriptGroup = new PreConsolidatedResourceGroup
 			{
 				ConsolidatedUrl = "~/scripts/consolidated/common.js",
-				Resources = new List<PreConsolidatedResourcePiece>
+				Resources = new List<string>
 				{
-					new PreConsolidatedResourcePiece
-					{
-						Path = "~/scripts/myscript.js"
-					}
+					 "~/scripts/myscript.js"
 				}
 			};
 			preConsolidationReport.ClientScriptGroups.Add(scriptGroup);

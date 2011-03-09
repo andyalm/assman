@@ -93,7 +93,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <None Include="Views\Home\Index.spark" />
-    <None Include="Views\IntegrationTests\Index.spark" />
+    <None Include="Views\IntegrationTests\Index.spark">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Scripts\ResourceManagement-TestBootstrapper.js" />
     <Content Include="Views\bindings.xml" />
     <Content Include="Scripts\Dependency.js" />

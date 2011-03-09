@@ -1,9 +1,7 @@
+using System;
 using System.Collections.Generic;
 
-using AlmWitt.Web.ResourceManagement.IO;
 using AlmWitt.Web.ResourceManagement.TestSupport;
-
-using Moq;
 
 using NUnit.Framework;
 
@@ -33,36 +31,18 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 					new PreConsolidatedResourceGroup
 					{
 						ConsolidatedUrl = "~/scripts/consolidated/common.js",
-						Resources = new List<PreConsolidatedResourcePiece>
+						Resources = new List<string>
 						{
-							new PreConsolidatedResourcePiece
-							{
-								Path = "~/scripts/jquery.js"
-							},
-							new PreConsolidatedResourcePiece
-							{
-								Path = "~/scripts/myscript1.js",
-								Dependencies = new List<string>
-								{
-									"~/scripts/jquery.js"
-								}
-							}
+							"~/scripts/jquery.js",
+							"~/scripts/myscript1.js"
 						}
 					},
 					new PreConsolidatedResourceGroup
 					{
 						ConsolidatedUrl = "~/scripts/consolidated/search.js",
-						Resources = new List<PreConsolidatedResourcePiece>
+						Resources = new List<string>
 						{
-							new PreConsolidatedResourcePiece
-							{
-								Path = "~/Views/Search/Index.js",
-								Dependencies = new List<string>
-								{
-									"~/scripts/jquery.js",
-									"~/scripts/myscript1.js"
-								}
-							}
+							"~/Views/Search/Index.js"
 						}
 					}
 				},
@@ -71,16 +51,30 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 					new PreConsolidatedResourceGroup
 					{
 						ConsolidatedUrl = "~/Content/consolidated.css",
-						Resources = new List<PreConsolidatedResourcePiece>
+						Resources = new List<string>
 						{
-							new PreConsolidatedResourcePiece
-							{
-								Path = "~/Content/Site.css"
-							},
-							new PreConsolidatedResourcePiece
-							{
-								Path = "~/Views/Search/Search.css"
-							}
+							"~/Content/Site.css",
+							"~/Views/Search/Search.css"
+						}
+					}
+				},
+				Dependencies = new List<PreConsolidatedResourceDependencies>
+				{
+					new PreConsolidatedResourceDependencies
+					{
+						ResourcePath = "~/scripts/myscript1.js",
+						Dependencies = new List<string>
+						{
+							"~/scripts/jquery.js"
+						}
+					},
+					new PreConsolidatedResourceDependencies
+					{
+						ResourcePath = "~/Views/Search/Index.js",
+						Dependencies = new List<string>
+						{
+							"~/scripts/jquery.js",
+							"~/scripts/myscript1.js"
 						}
 					}
 				},
@@ -94,6 +88,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 
 			ResourceGroupsShouldBeEqual(report.ClientScriptGroups, deserializedReport.ClientScriptGroups);
 			ResourceGroupsShouldBeEqual(report.CssGroups, deserializedReport.CssGroups);
+			ResourceDependenciesShouldBeEqual(report.Dependencies, deserializedReport.Dependencies);
 			report.Version.ShouldEqual(deserializedReport.Version);
 		}
 
@@ -104,21 +99,19 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			{
 				groups1[i].ConsolidatedUrl.ShouldEqual(groups2[i].ConsolidatedUrl);
 				groups1[i].Resources.CountShouldEqual(groups2[i].Resources.Count);
-				ResourcePiecesShouldBeEqual(groups1[i].Resources, groups2[i].Resources);
+				groups1[i].Resources.ShouldContainAll(groups2[i].Resources);
 			}
 		}
 
-		private void ResourcePiecesShouldBeEqual(List<PreConsolidatedResourcePiece> pieces1,
-		                                         List<PreConsolidatedResourcePiece> pieces2)
+		private void ResourceDependenciesShouldBeEqual(List<PreConsolidatedResourceDependencies> dependencies1, List<PreConsolidatedResourceDependencies> dependencies2)
 		{
-			pieces1.CountShouldEqual(pieces2.Count);
-			for (int i = 0; i < pieces1.Count; i++)
+			dependencies1.CountShouldEqual(dependencies2.Count);
+			for (int i = 0; i < dependencies1.Count; i++)
 			{
-				pieces1[i].Path.ShouldEqual(pieces2[i].Path);
-				
-				pieces1[i].Dependencies.ShouldContainAll(pieces2[i].Dependencies);
+				dependencies1[i].ResourcePath.ShouldEqual(dependencies2[i].ResourcePath);
+				dependencies1[i].Dependencies.CountShouldEqual(dependencies2[i].Dependencies.Count);
+				dependencies1[i].Dependencies.ShouldContainAll(dependencies2[i].Dependencies);
 			}
-
 		}
 	}
 }

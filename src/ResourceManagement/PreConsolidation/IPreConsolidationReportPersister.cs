@@ -10,6 +10,15 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 
 	internal class NullPreConsolidationPersister : IPreConsolidationReportPersister
 	{
+		private static readonly IPreConsolidationReportPersister _instance = new NullPreConsolidationPersister();
+
+		public static IPreConsolidationReportPersister Instance
+		{
+			get { return _instance; }
+		}
+
+		private NullPreConsolidationPersister() {}
+
 		public bool TryGetPreConsolidationInfo(out PreConsolidationReport preConsolidationReport)
 		{
 			preConsolidationReport = null;

@@ -41,6 +41,11 @@ namespace AlmWitt.Web.ResourceManagement
 			return CollapseDependencies(dependencyList);
 		}
 
+		public void SetCache(IDependencyCache cache)
+		{
+			_dependencyCache = cache;
+		}
+
 		private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, string virtualPath)
 		{
 			IEnumerable<string> cachedDependencies;
@@ -91,11 +96,6 @@ namespace AlmWitt.Web.ResourceManagement
 			return dependencyList.SelectMany(d => d)
 				.Distinct(StringComparer.OrdinalIgnoreCase)
 				.ToList();
-		}
-
-		public void SetDependencies(string virtualPath, IEnumerable<string> dependencies)
-		{
-			_dependencyCache.StoreDependencies(virtualPath, dependencies);
 		}
 	}
 }

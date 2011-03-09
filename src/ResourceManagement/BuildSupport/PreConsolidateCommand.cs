@@ -76,7 +76,7 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
 
 		private void ConsolidateAll(ResourceManagementConfiguration configSection)
 		{
-			_context = configSection.BuildContext();
+			_context = configSection.BuildContext(usePreConsolidationReportIfPresent: false);
 			var report = _context.ConsolidateAll(WriteConsolidatedResource, Mode);
 			report.Version = this.Version ?? DateTime.Now.ToString("yyMMddHHmm");
 			configSection.SavePreConsolidationReport(report);

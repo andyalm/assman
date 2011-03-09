@@ -7,11 +7,11 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 	{
 		public string ConsolidatedUrl { get; set; }
 
-		public List<PreConsolidatedResourcePiece> Resources { get; set; }
+		public List<string> Resources { get; set; }
 
 		public PreConsolidatedResourceGroup()
 		{
-			Resources = new List<PreConsolidatedResourcePiece>();
+			Resources = new List<string>();
 		}
 
 		public override string ToString()

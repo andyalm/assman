@@ -101,7 +101,8 @@
     <Compile Include="Configuration\MappedConfigLoader.cs" />
     <Compile Include="Configuration\PluginElement.cs" />
     <Compile Include="Configuration\PluginElementCollection.cs" />
-    <Compile Include="PreConsolidation\PreConsolidationPersisterFactory.cs" />
+    <Compile Include="PreConsolidation\PreConsolidatedDependencyCache.cs" />
+    <Compile Include="PreConsolidation\PreConsolidatedResourceDependencies.cs" />
     <Compile Include="PreConsolidation\PreConsolidationReport.cs" />
     <Compile Include="Configuration\PropertyNames.cs" />
     <Compile Include="Configuration\ResourceGroupElement.cs" />
@@ -135,7 +136,6 @@
     <Compile Include="IResourceHandlerFactory.cs" />
     <Compile Include="PathResourceMatch.cs" />
     <Compile Include="PreConsolidation\PreConsolidatedResourceGroup.cs" />
-    <Compile Include="PreConsolidation\PreConsolidatedResourcePiece.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistryAccessor.cs" />
     <Compile Include="Registration\DependencyResolvingResourceRegistry.cs" />

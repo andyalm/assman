@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace AlmWitt.Web.ResourceManagement
 {
 	[TestFixture]
-	public class TestDefaultDependencyCache
+	public class TestHttpDependencyCache
 	{
 		private HttpDependencyCache _cache;
 		private IDictionary _httpItems;
@@ -48,17 +48,6 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			IEnumerable<string> cachedDependencies;
 			_cache.TryGetDependencies(_resource, out cachedDependencies).ShouldBeTrue();
-			cachedDependencies.ShouldContainAll(_dependencies);
-		}
-
-		[Test]
-		public void WhenResourceDependenciesAreStoredByVirtualPath_TheyArePutInLongRunningCacheWithNoExpiration()
-		{
-			_cache.StoreDependencies(_resource.VirtualPath, _dependencies);
-			_resource.LastModified = DateTime.Now;
-			_httpItems.Clear();
-			IEnumerable<string> cachedDependencies;
-			_cache.TryGetDependencies(_resource.VirtualPath, out cachedDependencies).ShouldBeTrue();
 			cachedDependencies.ShouldContainAll(_dependencies);
 		}
 

@@ -24,12 +24,6 @@ namespace AlmWitt.Web.ResourceManagement
 			_resourceCache[resource.VirtualPath] = dependencies;
 		}
 
-		public void StoreDependencies(string virtualPath, IEnumerable<string> dependencies)
-		{
-			_virtualPathCache[virtualPath] = dependencies;
-			_resourceCache[virtualPath] = dependencies;
-		}
-
 		public void StoreDependenciesByResourceOnly(IResource resource, IEnumerable<string> dependencies)
 		{
 			_resourceCache[resource.VirtualPath] = dependencies;

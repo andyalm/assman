@@ -43,6 +43,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			preConsolidationReport.Version = (string) document.Root.Attribute("version");
 			preConsolidationReport.ClientScriptGroups = CollectResourceGroups(document.Root.Element("scripts")).ToList();
 			preConsolidationReport.CssGroups = CollectResourceGroups(document.Root.Element("stylesheets")).ToList();
+			preConsolidationReport.Dependencies = CollectDependencies(document.Root.Element("dependencies")).ToList();
 
 			return true;
 		}
@@ -63,6 +64,19 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 					{
 						WriteResourceGroups(writer, "scripts", preConsolidationReport.ClientScriptGroups);
 						WriteResourceGroups(writer, "stylesheets", preConsolidationReport.CssGroups);
+						using(writer.Element("dependencies"))
+						{
+							foreach (var resourceWithDependency in preConsolidationReport.Dependencies)
+							{
+								using (writer.Element("resource", path => resourceWithDependency.ResourcePath))
+								{
+									foreach (var dependency in resourceWithDependency.Dependencies)
+									{
+										using (writer.Element("dependency", path => dependency)) {}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -74,11 +88,17 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			       select new PreConsolidatedResourceGroup
 			       {
 			       	ConsolidatedUrl = (string) groupElement.Attribute("consolidatedUrl"),
-			       	Resources = groupElement.Elements("resource").Select(r => new PreConsolidatedResourcePiece
-			       	{
-			       		Path = (string) r.Attribute("path"),
-			       		Dependencies = r.Elements("dependency").Select(d => (string) d.Attribute("path")).ToList()
-			       	}).ToList()
+					Resources = groupElement.Elements("resource").Select(r => (string)r.Attribute("path")).ToList()
+			       };
+		}
+
+		private IEnumerable<PreConsolidatedResourceDependencies> CollectDependencies(XElement containerElement)
+		{
+			return from dependencyElement in containerElement.Elements("resource")
+			       select new PreConsolidatedResourceDependencies
+			       {
+			       	ResourcePath = (string) dependencyElement.Attribute("path"),
+			       	Dependencies = dependencyElement.Elements("dependency").Select(d => (string) d.Attribute("path")).ToList()
 			       };
 		}
 
@@ -93,13 +113,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 					{
 						foreach (var resource in @group.Resources)
 						{
-							using(writer.Element("resource", path => resource.Path))
-							{
-								foreach (var dependency in resource.Dependencies)
-								{
-									using(writer.Element("dependency", path => dependency)) {}
-								}
-							}
+							using(writer.Element("resource", path => resource)) {}
 						}
 					}
 				}

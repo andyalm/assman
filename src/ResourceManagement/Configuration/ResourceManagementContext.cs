@@ -142,9 +142,25 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			return new PreConsolidationReport
 			{
+				Dependencies = GetAllDependencies().ToList(),
 				ClientScriptGroups = ConsolidateAllInternal(ClientScriptGroups, handleConsolidatedResource, mode).ToList(),
 				CssGroups = ConsolidateAllInternal(CssFileGroups, handleConsolidatedResource, mode).ToList()
 			};
+		}
+
+		private IEnumerable<PreConsolidatedResourceDependencies> GetAllDependencies()
+		{
+			var allResources = _finder.FindResources(ResourceType.ClientScript)
+									  .Union(_finder.FindResources(ResourceType.Css));
+
+			return from resource in allResources
+			       let dependencies = _dependencyManager.GetDependencies(resource)
+			       where dependencies.Any()
+			       select new PreConsolidatedResourceDependencies
+			       {
+					ResourcePath = resource.VirtualPath,
+					Dependencies = dependencies.ToList()
+			       };
 		}
 
 		public GroupTemplateContext FindGroupTemplate(string consolidatedUrl)
@@ -176,31 +192,31 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
 		{
-			PopulateDependencyCache(preConsolidationReport.ClientScriptGroups);
-			PopulateDependencyCache(preConsolidationReport.CssGroups);
-
 			PopulateResourceUrlMap(preConsolidationReport.ClientScriptGroups);
 			PopulateResourceUrlMap(preConsolidationReport.CssGroups);
-
+			PopulateDependencyCache(preConsolidationReport.Dependencies);
 			Version = preConsolidationReport.Version;
 			PreConsolidated = true;
+		}
+
+		private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceDependencies> dependencies)
+		{
+			var cache = new PreConsolidatedDependencyCache();
+			foreach (var resourceWithDependency in dependencies)
+			{
+				cache.SetDependencies(resourceWithDependency.ResourcePath, resourceWithDependency.Dependencies);
+			}
+
+			_dependencyManager.SetCache(cache);
 		}
 
 		private void PopulateResourceUrlMap(IEnumerable<PreConsolidatedResourceGroup> groups)
 		{
 			var resourceUrlMap = from @group in groups
-								 from resourcePiece in @group.Resources
-								 select new KeyValuePair<string, string>(resourcePiece.Path, @group.ConsolidatedUrl);
+								 from resourcePath in @group.Resources
+								 select new KeyValuePair<string, string>(resourcePath, @group.ConsolidatedUrl);
 
 			_resolvedResourceUrls.AddRange(resourceUrlMap);
-		}
-
-		private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceGroup> groups)
-		{
-			foreach (var resource in groups.SelectMany(@group => @group.Resources))
-			{
-				_dependencyManager.SetDependencies(resource.Path, resource.Dependencies);
-			}
 		}
 
 		internal IResourceFinder Finder
@@ -265,11 +281,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 					var preConsolidatedGroup = new PreConsolidatedResourceGroup
 					{
 						ConsolidatedUrl = group.ConsolidatedUrl,
-						Resources = consolidatedResource.Resources.Select(resource => new PreConsolidatedResourcePiece
-						{
-								Path = resource.VirtualPath,
-								Dependencies = _dependencyManager.GetDependencies(resource).ToList()
-						}).ToList()
+						Resources = consolidatedResource.Resources.Select(resource => resource.VirtualPath).ToList()
 					};
 					preConsolidatedGroups.Add(preConsolidatedGroup);
 				}	
