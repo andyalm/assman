@@ -5,6 +5,8 @@ using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.ResourceManagement.TestSupport;
 using AlmWitt.Web.ResourceManagement.TestObjects;
 
+using Moq;
+
 using NUnit.Framework;
 
 namespace AlmWitt.Web.ResourceManagement
@@ -34,6 +36,33 @@ namespace AlmWitt.Web.ResourceManagement
 			
 			consolidatedResource.ShouldNotBeNull();
 			consolidatedResource.Resources.Count().ShouldEqual(2);
+		}
+
+		[Test]
+		public void ConsolidateGroupSortsResourcesByDependencies()
+		{
+			var group = new ResourceGroup("~/consolidated.js", new IResource[]
+			{
+				StubResource.WithPath("~/dependency-leaf.js"),
+				StubResource.WithPath("~/dependency-root.js"),
+				StubResource.WithPath("~/dependency-middle.js")
+			});
+
+			var groupTemplate = new StubResourceGroupTemplate(group);
+			groupTemplate.ResourceType = ResourceType.ClientScript;
+
+			var dependencyProvider = new StubDependencyProvider();
+			dependencyProvider.SetDependencies("~/dependency-leaf", "~/dependency-middle.js");
+			dependencyProvider.SetDependencies("~/dependency-middle.js", "~/dependency-root.js");
+			
+			var context = new ResourceManagementContext();
+			context.MapExtensionToDependencyProvider(".js", dependencyProvider);
+
+			var consolidatedResource = context.ConsolidateGroup(group, new GroupTemplateContext(groupTemplate), ResourceMode.Debug);
+			var resources = consolidatedResource.Resources.ToList();
+			resources[0].VirtualPath.ShouldEqual("~/dependency-root.js");
+			resources[1].VirtualPath.ShouldEqual("~/dependency-middle.js");
+			resources[2].VirtualPath.ShouldEqual("~/dependency-leaf.js");
 		}
 
 		//TODO: Write tests for refactored GetResourceUrl
