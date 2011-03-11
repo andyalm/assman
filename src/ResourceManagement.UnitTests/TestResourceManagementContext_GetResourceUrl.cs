@@ -139,5 +139,16 @@ namespace AlmWitt.Web.ResourceManagement
 
 			resolvedScriptPath2.ShouldEqual(resolvedScriptPath1);
 		}
+
+		[Test]
+		public void WhenGroupUrlIsPassedIntoGetResourceUrlAndConsolidationIsEnabled_GroupUrlIsReturned()
+		{
+			_groupElement.Include.AddPath(myScript);
+			_groupElement.Include.AddPath(mySecondScript);
+			
+			var resolvedScriptPath = _instance.GetScriptUrl(consolidatedScriptStatic);
+			
+			resolvedScriptPath.ShouldEqual(consolidatedScript);
+		}
 	}
 }

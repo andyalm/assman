@@ -65,7 +65,42 @@ namespace AlmWitt.Web.ResourceManagement
 			resources[2].VirtualPath.ShouldEqual("~/dependency-leaf.js");
 		}
 
-		//TODO: Write tests for refactored GetResourceUrl
+		[Test]
+		public void WhenConsolidatedUrlMatchesPatternOfAGroup_ItIsNotIncludedInTheConsolidatedResource()
+		{
+			var jquery = StubResource.WithPath("~/scripts/jquery.js");
+			var component = StubResource.WithPath("~/scripts/component.js");
+			var core = StubResource.WithPath("~/scripts/core.js");
+			var otherscript = StubResource.WithPath("~/scripts/otherscript.js");
+			
+			var finder = new StubResourceFinder();
+			finder.AddResources(jquery, component, core, otherscript);
+			
+			var group1 = new ResourceGroup("~/scripts/core.js", new IResource[]
+			{
+				jquery,
+				component
+			});
+			var group2 = new ResourceGroup("~/scripts/everything-else.js", new IResource[]
+			{
+				core,
+				otherscript
+			});
+
+			var context = new ResourceManagementContext();
+			context.AddFinder(finder);
+			var group1Template = new StubResourceGroupTemplate(group1) { ResourceType = ResourceType.ClientScript };
+			var group2Template = new StubResourceGroupTemplate(group2) { ResourceType = ResourceType.ClientScript };
+			context.ClientScriptGroups.Add(group1Template);
+			context.ClientScriptGroups.Add(group2Template);
+
+			var preConsolidationReport = context.ConsolidateAll((resource, @group) => { }, ResourceMode.Release);
+
+			var group2Consolidated = preConsolidationReport.ClientScriptGroups.Where(g => g.ConsolidatedUrl == "~/scripts/everything-else.js").Single();
+
+			group2Consolidated.Resources.CountShouldEqual(1);
+			group2Consolidated.Resources[0].ShouldEqual("~/scripts/otherscript.js");
+		}
 
 		private IResourceFilter ToFilter(Predicate<IResource> predicate)
 		{
