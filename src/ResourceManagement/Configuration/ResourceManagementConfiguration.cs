@@ -219,6 +219,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			context.CssFileGroups.AddRange(CssFiles.Cast<IResourceGroupTemplate>());
 			context.MapExtensionToFilter(".js", JSMinContentFilterFactory.GetInstance());
 			context.MapExtensionToDependencyProvider(".js", VisualStudioScriptDependencyProvider.GetInstance());
+			context.MapExtensionToDependencyProvider(".css", CssDependencyProvider.GetInstance());
 
 			PreConsolidationReport preConsolidationReport;
 			if (preConsolidationPersister.TryGetPreConsolidationInfo(out preConsolidationReport))

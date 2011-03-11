@@ -78,7 +78,7 @@ namespace AlmWitt.Web.ResourceManagement
 				return;
 
 			var dependencyListEntrySize = dependencyList.Count;
-			var dependencies = provider.GetDependencies(resource);
+			var dependencies = provider.GetDependencies(resource).ToList();
 			if (dependencies.Any())
 			{
 				dependencyList.Insert(0, dependencies);

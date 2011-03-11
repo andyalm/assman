@@ -10,6 +10,7 @@ namespace AlmWitt.Web.ResourceManagement.Less
 		{
 			ResourceType.Css.AddFileExtension(LessFileExtension);
 			context.MapExtensionToFilter(LessFileExtension, new LessContentFilterFactory());
+			context.MapExtensionToDependencyProvider(LessFileExtension, CssDependencyProvider.GetInstance());
 		}
 	}
 }

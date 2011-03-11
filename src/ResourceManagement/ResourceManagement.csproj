@@ -89,6 +89,7 @@
     <Compile Include="Configuration\AssemblyElementCollection.cs" />
     <Compile Include="Configuration\ClientScriptGroupElement.cs" />
     <Compile Include="Configuration\ClientScriptGroupElementCollection.cs" />
+    <Compile Include="CssDependencyProvider.cs" />
     <Compile Include="IO\IFileAccess.cs" />
     <Compile Include="PreConsolidation\CompiledFilePersister.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />

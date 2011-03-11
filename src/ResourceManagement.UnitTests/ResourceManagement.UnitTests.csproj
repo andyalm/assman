@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PreConsolidation\TestCompiledFilePersister.cs" />
+    <Compile Include="TestCssDependencyProvider.cs" />
     <Compile Include="TestHttpDependencyCache.cs" />
     <Compile Include="Registration\TestDependencyResolvingResourceRegistry.cs" />
     <Compile Include="Registration\TestConsolidatingResourceRegistry.cs" />
