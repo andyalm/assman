@@ -35,7 +35,7 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			var excludeFilter = new CompositeResourceFilter();
 			//add a filter to exclude all resources that match the consolidated url of a group
-			excludeFilter.AddFilter(new GroupPathFilter(this.Select<IResourceGroupTemplate,Func<string,bool>>(t => t.MatchesConsolidatedUrl).ToList()));
+			excludeFilter.AddFilter(new ConsolidatedUrlFilter(this));
 			foreach (var groupTemplate in this)
 			{
 				var templateContext = new GroupTemplateContext(groupTemplate)
@@ -49,18 +49,18 @@ namespace AlmWitt.Web.ResourceManagement
 			}
 		}
 
-		private class GroupPathFilter : IResourceFilter
+		private class ConsolidatedUrlFilter : IResourceFilter
 		{
-			private readonly IEnumerable<Func<string,bool>> _isMatchPredicates;
+			private readonly IEnumerable<IResourceGroupTemplate> _templates;
 
-			public GroupPathFilter(IEnumerable<Func<string,bool>> isMatchPredicates)
+			public ConsolidatedUrlFilter(IEnumerable<IResourceGroupTemplate> templates)
 			{
-				_isMatchPredicates = isMatchPredicates;
+				_templates = templates;
 			}
 
 			public bool IsMatch(IResource resource)
 			{
-				return _isMatchPredicates.Any(predicate => predicate(resource.VirtualPath));
+				return _templates.Any(t => t.MatchesConsolidatedUrl(resource.VirtualPath));
 			}
 		}
 	}
