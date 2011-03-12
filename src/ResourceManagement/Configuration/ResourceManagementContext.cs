@@ -231,6 +231,11 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 								 select new KeyValuePair<string, string>(resourcePath, @group.ConsolidatedUrl);
 
 			_resolvedResourceUrls.AddRange(resourceUrlMap);
+
+			var consolidatedUrls = from @group in groups
+			                       select new KeyValuePair<string, string>(@group.ConsolidatedUrl, @group.ConsolidatedUrl);
+
+			_resolvedResourceUrls.AddRange(consolidatedUrls);
 		}
 
 		internal IResourceFinder Finder

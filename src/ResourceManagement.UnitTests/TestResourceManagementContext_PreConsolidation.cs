@@ -105,7 +105,34 @@ namespace AlmWitt.Web.ResourceManagement
 			var resolvedUrl = _context.GetScriptUrl("~/scripts/myscript.js");
 			resolvedUrl.ShouldEqual("~/scripts/consolidated/common.js");
 			
-			//verify that the group template was not looked it (that proves the value came from the prepopulated cache)
+			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)
+			string consolidatedUrl;
+			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), out consolidatedUrl), Times.Never());
+		}
+
+		[Test]
+		public void WhenPreConsolidatedReportIsLoaded_ConsolidatedUrlsAreCachedAsThemselvesSoGroupsCanBeIncludedDirectly()
+		{
+			var groupTemplate = new Mock<IResourceGroupTemplate>();
+			_context.ClientScriptGroups.Add(groupTemplate.Object);
+
+			var preConsolidationReport = new PreConsolidationReport();
+			var scriptGroup = new PreConsolidatedResourceGroup
+			{
+				ConsolidatedUrl = "~/scripts/consolidated/common.js",
+				Resources = new List<string>
+				{
+					 "~/scripts/myscript.js"
+				}
+			};
+			preConsolidationReport.ClientScriptGroups.Add(scriptGroup);
+
+			_context.LoadPreCompilationReport(preConsolidationReport);
+
+			var resolvedUrl = _context.GetScriptUrl("~/scripts/consolidated/common.js");
+			resolvedUrl.ShouldEqual("~/scripts/consolidated/common.js");
+
+			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)
 			string consolidatedUrl;
 			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), out consolidatedUrl), Times.Never());
 		}
