@@ -251,7 +251,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl,
 				                                                 () => CalculateResourceUrl(groupTemplates, unresolvedUrl));
 
-				if (resolvedUrl != unresolvedUrl || IsGroupPath(groupTemplates, resolvedUrl))
+				if (resolvedUrl != unresolvedUrl || IsConsolidatedUrl(groupTemplates, resolvedUrl))
 				{
 					if (!PreConsolidated)
 						resolvedUrl = UrlType.Dynamic.ConvertUrl(resolvedUrl);
@@ -266,7 +266,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return resourceUrl;
 		}
 
-		private bool IsGroupPath(IEnumerable<IResourceGroupTemplate> groupTemplates, string path)
+		private bool IsConsolidatedUrl(IEnumerable<IResourceGroupTemplate> groupTemplates, string path)
 		{
 			return groupTemplates.Any(t => t.MatchesConsolidatedUrl(path));
 		}

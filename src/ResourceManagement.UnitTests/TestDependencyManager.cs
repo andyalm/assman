@@ -109,23 +109,17 @@ namespace AlmWitt.Web.ResourceManagement
 
 			_dependencyManager.GetDependencies(myscript.VirtualPath).ToList();
 			
-			IEnumerable<string> myscriptDependencies;
-			_dependencyCache.TryGetDependencies(myscript.VirtualPath, out myscriptDependencies).ShouldBeTrue();
-			myscriptDependencies.CountShouldEqual(3);
-			myscriptDependencies.ElementAt(0).ShouldEqual("~/scripts/jquery.js");
-			myscriptDependencies.ElementAt(1).ShouldEqual("~/scripts/jquery-plugin-a.js");
-			myscriptDependencies.ElementAt(2).ShouldEqual("~/scripts/jquery-plugin-b.js");
+			VerifyDependenciesAreCached(myscript.VirtualPath, jquery.VirtualPath, jquerypluginA.VirtualPath, jquerypluginB.VirtualPath);
+			VerifyDependenciesAreCached(jquerypluginB.VirtualPath, jquery.VirtualPath, jquerypluginA.VirtualPath);
+			VerifyDependenciesAreCached(jquerypluginA.VirtualPath, jquery.VirtualPath);
+		}
 
-			IEnumerable<string> jqueryPluginBDependencies;
-			_dependencyCache.TryGetDependencies(jquerypluginB, out jqueryPluginBDependencies).ShouldBeTrue();
-			jqueryPluginBDependencies.CountShouldEqual(2);
-			jqueryPluginBDependencies.ElementAt(0).ShouldEqual("~/scripts/jquery.js");
-			jqueryPluginBDependencies.ElementAt(1).ShouldEqual("~/scripts/jquery-plugin-a.js");
-
-			IEnumerable<string> jqueryPluginADependencies;
-			_dependencyCache.TryGetDependencies(jquerypluginA, out jqueryPluginADependencies).ShouldBeTrue();
-			jqueryPluginADependencies.CountShouldEqual(1);
-			jqueryPluginADependencies.ElementAt(0).ShouldEqual("~/scripts/jquery.js");
+		private void VerifyDependenciesAreCached(string resourcePath, params string[] expectedDependencies)
+		{
+			IEnumerable<string> actualDependencies;
+			_dependencyCache.TryGetDependencies(resourcePath, out actualDependencies).ShouldBeTrue();
+			actualDependencies.CountShouldEqual(expectedDependencies.Length);
+			actualDependencies.SequenceEqual(expectedDependencies).ShouldBeTrue();
 		}
 
 		private void SetDependencies(IResource resource, params string[] dependencies)
