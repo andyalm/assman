@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using AlmWitt.Web.ResourceManagement.Configuration;
+using AlmWitt.Web.ResourceManagement.TestObjects;
 using AlmWitt.Web.ResourceManagement.TestSupport;
 
 using NUnit.Framework;
@@ -14,6 +16,8 @@ namespace AlmWitt.Web.ResourceManagement
 		private StubDependencyProvider _dependencyProvider;
 		private StubResourceFinder _resourceFinder;
 		private InMemoryDependencyCache _dependencyCache;
+		private ResourceGroupTemplateCollection _scriptGroups;
+		private ResourceGroupTemplateCollection _styleGroups;
 		private DependencyManager _dependencyManager;
 
 		[SetUp]
@@ -22,8 +26,10 @@ namespace AlmWitt.Web.ResourceManagement
 			_dependencyProvider = new StubDependencyProvider();
 			_resourceFinder = new StubResourceFinder();
 			_dependencyCache = new InMemoryDependencyCache();
+			_scriptGroups = new ResourceGroupTemplateCollection();
+			_styleGroups = new ResourceGroupTemplateCollection();
 
-			_dependencyManager = new DependencyManager(_resourceFinder, _dependencyCache);
+			_dependencyManager = new DependencyManager(_resourceFinder, _dependencyCache, _scriptGroups, _styleGroups);
 			_dependencyManager.MapProvider(".js", _dependencyProvider);
 		}
 
@@ -112,6 +118,40 @@ namespace AlmWitt.Web.ResourceManagement
 			VerifyDependenciesAreCached(myscript.VirtualPath, jquery.VirtualPath, jquerypluginA.VirtualPath, jquerypluginB.VirtualPath);
 			VerifyDependenciesAreCached(jquerypluginB.VirtualPath, jquery.VirtualPath, jquerypluginA.VirtualPath);
 			VerifyDependenciesAreCached(jquerypluginA.VirtualPath, jquery.VirtualPath);
+		}
+
+		[Test]
+		public void WhenGivenPathIsConsolidatedUrl_AllDependenciesOfChildrenThatAreNotInTheGivenGroupAreReturned()
+		{
+			var jquery = StubResource.WithPath("~/scripts/jquery.js");
+			var jquerypluginA = StubResource.WithPath("~/scripts/jquery-plugin-a.js");
+			var jquerypluginB = StubResource.WithPath("~/scripts/jquery-plugin-b.js");
+			var myscript = StubResource.WithPath("~/scripts/myscript.js");
+			var myotherscript = StubResource.WithPath("~/scripts/myotherscript.js");
+
+			_resourceFinder.AddResources(jquery, jquerypluginA, jquerypluginB, myscript, myotherscript);
+
+			SetDependencies(jquerypluginB, jquery.VirtualPath, jquerypluginA.VirtualPath);
+			SetDependencies(jquerypluginA, jquery.VirtualPath);
+			SetDependencies(myscript, jquerypluginB.VirtualPath);
+			SetDependencies(myotherscript, myscript.VirtualPath, jquery.VirtualPath);
+
+			var coreGroup = new ResourceGroup("~/scripts/core.js", new[]
+			{
+				jquery, jquerypluginA, jquerypluginB
+			});
+			_scriptGroups.Add(new StubResourceGroupTemplate(coreGroup));
+			var leafGroup = new ResourceGroup("~/scripts/leaf.js", new[]
+			{
+				myscript, myotherscript
+			});
+			_scriptGroups.Add(new StubResourceGroupTemplate(leafGroup));
+
+			var dependencies = _dependencyManager.GetDependencies("~/scripts/leaf.js").ToList();
+			dependencies.CountShouldEqual(3);
+			dependencies[0].ShouldEqual(jquery.VirtualPath);
+			dependencies[1].ShouldEqual(jquerypluginA.VirtualPath);
+			dependencies[2].ShouldEqual(jquerypluginB.VirtualPath);
 		}
 
 		private void VerifyDependenciesAreCached(string resourcePath, params string[] expectedDependencies)

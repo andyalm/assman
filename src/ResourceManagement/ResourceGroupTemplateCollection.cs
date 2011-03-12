@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
+using AlmWitt.Web.ResourceManagement.Configuration;
+
 namespace AlmWitt.Web.ResourceManagement
 {
 	public class ResourceGroupTemplateCollection : Collection<IResourceGroupTemplate>
@@ -75,5 +77,16 @@ namespace AlmWitt.Web.ResourceManagement
 
 		public IResourceGroupTemplate GroupTemplate { get; private set; }
 		public IResourceFilter ExcludeFilter { get; set; }
+
+		public IResourceGroup FindGroupOrDefault(IResourceFinder finder, string consolidatedUrl, ResourceMode mode)
+		{
+			var resources = finder
+				.FindResources(GroupTemplate.ResourceType)
+				.WhereNot(ExcludeFilter);
+
+			return (from @group in GroupTemplate.GetGroups(resources, mode)
+			        where UrlType.ArePathsEqual(@group.ConsolidatedUrl, consolidatedUrl)
+			        select @group).SingleOrDefault();
+		}
 	}
 }

@@ -8,12 +8,16 @@ namespace AlmWitt.Web.ResourceManagement
 	{
 		private readonly IResourceFinder _resourceFinder;
 		private IDependencyCache _dependencyCache;
+		private readonly ResourceGroupTemplateCollection _scriptGroups;
+		private readonly ResourceGroupTemplateCollection _styleGroups;
 		private readonly IDictionary<string, IDependencyProvider> _parsers = new Dictionary<string, IDependencyProvider>(StringComparer.OrdinalIgnoreCase);
 
-		public DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache)
+		public DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache, ResourceGroupTemplateCollection scriptGroups, ResourceGroupTemplateCollection styleGroups)
 		{
 			_resourceFinder = resourceFinder;
 			_dependencyCache = dependencyCache;
+			_scriptGroups = scriptGroups;
+			_styleGroups = styleGroups;
 		}
 
 		public void MapProvider(string extension, IDependencyProvider dependencyProvider)
@@ -23,10 +27,53 @@ namespace AlmWitt.Web.ResourceManagement
 
 		public IEnumerable<string> GetDependencies(string virtualPath)
 		{	
-			var dependencyList = new List<IEnumerable<string>>();
-			AccumulateDependencies(dependencyList, virtualPath);
+			IEnumerable<string> cachedDependencies;
+			if (_dependencyCache.TryGetDependencies(virtualPath, out cachedDependencies))
+				return cachedDependencies;
 
-			return CollapseDependencies(dependencyList);
+			var dependencyList = new List<IEnumerable<string>>();
+			IEnumerable<IResource> resourcesInGroup;
+			if(IsConsolidatedUrl(virtualPath, out resourcesInGroup))
+			{
+				//TODO: figure out if we need to sort these resources by their dependencies here
+				foreach (var resource in resourcesInGroup)
+				{
+					AccumulateDependencies(dependencyList, resource);
+				}
+
+				//filter out dependencies within the group
+				return CollapseDependencies(dependencyList).Where(
+						d => !resourcesInGroup.Any(r => r.VirtualPath.Equals(d, StringComparison.OrdinalIgnoreCase)));
+			}
+			else
+			{
+				AccumulateDependencies(dependencyList, virtualPath);
+				return CollapseDependencies(dependencyList);
+			}	
+		}
+
+		private bool IsConsolidatedUrl(string virtualPath, out IEnumerable<IResource> resourcesInGroup)
+		{
+			//TODO: Figure out how to cache the IsConsolidatedUrl question as it could potentially be run for every unique script that is included
+			//in a dev environment, which could be slow
+			if (IsConsolidatedUrl(virtualPath, _scriptGroups, out resourcesInGroup))
+				return true;
+			if (IsConsolidatedUrl(virtualPath, _styleGroups, out resourcesInGroup))
+				return true;
+
+			return false;
+		}
+
+		private bool IsConsolidatedUrl(string virtualPath, ResourceGroupTemplateCollection groupTemplates, out IEnumerable<IResource> resourcesInGroup)
+		{
+			resourcesInGroup = null;
+			var groupTemplateContext = groupTemplates.FindGroupTemplate(virtualPath);
+			if (groupTemplateContext == null)
+				return false;
+
+			var group = groupTemplateContext.FindGroupOrDefault(_resourceFinder, virtualPath, ResourceMode.Debug);
+			resourcesInGroup = group.GetResources();
+			return true;
 		}
 
 		public IEnumerable<string> GetDependencies(IResource resource)

@@ -6,9 +6,9 @@ namespace AlmWitt.Web.ResourceManagement
 	{
 		private static readonly IDependencyCache _dependencyCache = CreateDependencyCache();
 		
-		public static DependencyManager GetDependencyManager(IResourceFinder finder)
+		public static DependencyManager GetDependencyManager(IResourceFinder finder, ResourceGroupTemplateCollection scriptGroups, ResourceGroupTemplateCollection styleGroups)
 		{
-			return new DependencyManager(finder, _dependencyCache);
+			return new DependencyManager(finder, _dependencyCache, scriptGroups, styleGroups);
 		}
 
 		private static IDependencyCache CreateDependencyCache()

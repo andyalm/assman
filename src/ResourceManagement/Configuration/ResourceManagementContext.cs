@@ -47,7 +47,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			_clientScriptGroups = new ResourceGroupTemplateCollection();
 			_cssFileGroups = new ResourceGroupTemplateCollection();
 			_assemblies = new List<Assembly>();
-			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder);
+			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _clientScriptGroups, _cssFileGroups);
 			ConsolidateClientScripts = true;
 			ConsolidateCssFiles = true;
 		}
@@ -112,9 +112,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		public ConsolidatedResource ConsolidateGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext, ResourceMode mode)
 		{
-			var group = GetGroupsFromTemplate(groupTemplateContext, mode)
-				.Where(g => UrlType.ArePathsEqual(g.ConsolidatedUrl, groupConsolidatedUrl))
-				.SingleOrDefault();
+			var group = groupTemplateContext.FindGroupOrDefault(_finder, groupConsolidatedUrl, mode);
 			
 			if(group == null)
 			{
@@ -314,15 +312,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			});
 
 			return preConsolidatedGroups;
-		}
-
-		private IEnumerable<IResourceGroup> GetGroupsFromTemplate(GroupTemplateContext groupTemplateContext, ResourceMode mode)
-		{
-			var resources = _finder
-				.FindResources(groupTemplateContext.GroupTemplate.ResourceType)
-				.WhereNot(groupTemplateContext.ExcludeFilter);
-
-			return groupTemplateContext.GroupTemplate.GetGroups(resources, mode);
 		}
 
 		private ResourceGroupTemplateCollection GroupTemplatesOfType(ResourceType resourceType)
