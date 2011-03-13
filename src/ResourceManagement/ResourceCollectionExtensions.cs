@@ -72,7 +72,9 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <summary>
 		/// Writes the contents of all of the contained resources to the given <see cref="TextWriter"/>.
 		/// </summary>
+		/// <param name="writer"></param>
 		/// <param name="separator">A string that will be between each resource.</param>
+		/// <param name="resources"></param>
 		public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, string separator)
 		{
 			resources.ConsolidateContentTo(writer, null, separator);
@@ -81,6 +83,7 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <summary>
 		/// Writes the contents of all of the contained resources to the given <see cref="TextWriter"/>.
 		/// </summary>
+		/// <param name="resources"></param>
 		/// <param name="writer"></param>
 		/// <param name="createContentFilter"></param>
 		public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, Func<IResource, IContentFilter> createContentFilter)
@@ -91,6 +94,7 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <summary>
 		/// Writes the contents of all of the contained resources to the given <see cref="TextWriter"/>.
 		/// </summary>
+		/// <param name="resources"></param>
 		/// <param name="writer"></param>
 		/// <param name="createContentFilter"></param>
 		/// <param name="separator">A string that will be between each resource.</param>
@@ -120,6 +124,7 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <summary>
 		/// Consolidated all of the resources in the collection into a <see cref="ConsolidatedResource"/>.
 		/// </summary>
+		/// <param name="resources"></param>
 		/// <param name="createContentFilter"></param>
 		/// <param name="separator"></param>
 		public static ConsolidatedResource Consolidate(this IEnumerable<IResource> resources, Func<IResource, IContentFilter> createContentFilter, string separator)

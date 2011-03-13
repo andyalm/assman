@@ -141,25 +141,35 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			return new PreConsolidationReport
 			{
-				Dependencies = GetAllDependencies().ToList(),
 				ClientScriptGroups = ConsolidateAllInternal(ClientScriptGroups, handleConsolidatedResource, mode).ToList(),
-				CssGroups = ConsolidateAllInternal(CssFileGroups, handleConsolidatedResource, mode).ToList()
+				CssGroups = ConsolidateAllInternal(CssFileGroups, handleConsolidatedResource, mode).ToList(),
+				Dependencies = GetAllDependencies(mode).ToList()
 			};
 		}
 
-		private IEnumerable<PreConsolidatedResourceDependencies> GetAllDependencies()
+		private IEnumerable<PreConsolidatedResourceDependencies> GetAllDependencies(ResourceMode mode)
 		{
 			var allResources = _finder.FindResources(ResourceType.ClientScript)
 									  .Union(_finder.FindResources(ResourceType.Css));
 
-			return from resource in allResources
-			       let dependencies = _dependencyManager.GetDependencies(resource)
-			       where dependencies.Any()
-			       select new PreConsolidatedResourceDependencies
-			       {
-					ResourcePath = resource.VirtualPath,
-					Dependencies = dependencies.ToList()
-			       };
+			//we must gather the dependencies for the consolidated url's before we gather them for specific url's
+			//because the consolidated url's could actually exist on disk if pre-consolidation was run before
+			//in that case, if we did the specific resources first, it would use the IDependencyProvider against the
+			//consolidated resource and not find any dependencies.  Then that value is cached and prevents us from finding
+			//the dependencies for the group.
+			var scriptDependenciesByConsolidatedUrl = GetDependenciesForConsolidatedUrls(ClientScriptGroups, allResources, mode);
+			var styleDependenciesByConsolidatedUrl = GetDependenciesForConsolidatedUrls(CssFileGroups, allResources, mode);
+
+			var specificResourceDependencies = from resource in allResources
+											   let dependencies = _dependencyManager.GetDependencies(resource)
+											   where dependencies.Any()
+											   select new PreConsolidatedResourceDependencies
+											   {
+												   ResourcePath = resource.VirtualPath,
+												   Dependencies = dependencies.ToList()
+											   };
+
+			return scriptDependenciesByConsolidatedUrl.Union(styleDependenciesByConsolidatedUrl).Union(specificResourceDependencies);
 		}
 
 		public GroupTemplateContext FindGroupTemplate(string consolidatedUrl)
@@ -299,6 +309,18 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			});
 
 			return preConsolidatedGroups;
+		}
+
+		private IEnumerable<PreConsolidatedResourceDependencies> GetDependenciesForConsolidatedUrls(IEnumerable<IResourceGroupTemplate> groupTemplates, IEnumerable<IResource> allResources, ResourceMode mode)
+		{
+			return from @group in groupTemplates.SelectMany(g => g.GetGroups(allResources, mode))
+			       let dependencies = _dependencyManager.GetDependencies(@group.ConsolidatedUrl)
+			       where dependencies.Any()
+			       select new PreConsolidatedResourceDependencies
+			       {
+			       	ResourcePath = @group.ConsolidatedUrl,
+			       	Dependencies = dependencies.ToList()
+			       };
 		}
 
 		private ResourceGroupTemplateCollection GroupTemplatesOfType(ResourceType resourceType)

@@ -92,6 +92,8 @@ namespace AlmWitt.Web.ResourceManagement
 				return false;
 
 			var group = groupTemplateContext.FindGroupOrDefault(_resourceFinder, virtualPath, ResourceMode.Debug);
+			if (group == null) //could be null group is defined by convention, but there were no resources that matched the group pattern
+				return false;
 			resourcesInGroup = group.GetResources().SortByDependencies(this);
 			return true;
 		}
