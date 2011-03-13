@@ -35,7 +35,7 @@ namespace AlmWitt.Web.ResourceManagement.TestObjects
 
 		public bool Minify { get; set; }
 
-		public IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources, ResourceMode mode)
+		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{
 			return from @group in _groups
 				   select CreateGroup(@group.ConsolidatedUrl, allResources.Where(@group.Contains));

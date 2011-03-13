@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.TestSupport;
 
@@ -33,7 +34,7 @@ namespace AlmWitt.Web.ResourceManagement
 			string resourceName2 = "myscriptfile2.js";
 			_dirMgr.CreateFile(resourceName2, "");
 
-			ResourceCollection resources = _finder.FindResources(ResourceType.ClientScript);
+			var resources = _finder.FindResources(ResourceType.ClientScript).ToList();
 
 			Assert.IsNotNull(resources);
 			Assert.AreEqual(2, resources.Count);
@@ -47,7 +48,7 @@ namespace AlmWitt.Web.ResourceManagement
 			string resourceName = "myscriptfile.js";
 			_dirMgr.CreateFile("mysubdir", resourceName, "");
 
-			ResourceCollection resources = _finder.FindResources(ResourceType.ClientScript);
+			var resources = _finder.FindResources(ResourceType.ClientScript).ToList();
 
 			Assert.That(resources, Is.Not.Null);
 			Assert.That(resources.Count, Is.EqualTo(1));
@@ -63,8 +64,8 @@ namespace AlmWitt.Web.ResourceManagement
 			_dirMgr.CreateFile(filteredResourceName, "");
 
 			_finder = ResourceFinderFactory.GetInstance(_dirMgr.DirectoryName);
-			ResourceCollection resources = _finder.FindResources(ResourceType.ClientScript)
-				.Where(r => r.Name != filteredResourceName);
+			var resources = _finder.FindResources(ResourceType.ClientScript)
+				.Where(r => r.Name != filteredResourceName).ToList();
 
             Assert.That(resources, Is.Not.Null);
             Assert.That(resources.Count, Is.EqualTo(1));

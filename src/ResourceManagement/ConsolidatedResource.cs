@@ -17,7 +17,7 @@ namespace AlmWitt.Web.ResourceManagement
 		internal ConsolidatedResource(ResourceCollection resources, MemoryStream consolidatedContent)
 		{
 			_resources = resources;
-			_lastModified = resources.LastModified;
+			_lastModified = resources.LastModified();
 			_contentStream = consolidatedContent;
 		}
 

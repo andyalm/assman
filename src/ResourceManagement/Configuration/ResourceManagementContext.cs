@@ -132,8 +132,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 			return group.GetResources()
 				.ToResourceCollection()
-				.WhereNot(groupTemplateContext.ExcludeFilter)
-				.Sort(DependencyComparer)
+				.Exclude(groupTemplateContext.ExcludeFilter)
+				.SortByDependencies(_dependencyManager)
 				.Consolidate(createContentFilter, groupTemplateContext.GroupTemplate.ResourceType.Separator);
 		}
 
@@ -196,19 +196,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			PopulateDependencyCache(preConsolidationReport.Dependencies);
 			Version = preConsolidationReport.Version;
 			PreConsolidated = true;
-		}
-
-		private int DependencyComparer(IResource x, IResource y)
-		{
-			var xDepends = _dependencyManager.GetDependencies(x);
-			var yDepends = _dependencyManager.GetDependencies(y);
-
-			if (xDepends.Contains(y.VirtualPath, StringComparer.OrdinalIgnoreCase))
-				return 1;
-			if (yDepends.Contains(x.VirtualPath, StringComparer.OrdinalIgnoreCase))
-				return -1;
-
-			return 0;
 		}
 
 		private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceDependencies> dependencies)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AlmWitt.Web.ResourceManagement
@@ -23,19 +24,16 @@ namespace AlmWitt.Web.ResourceManagement
 		/// </summary>
 		/// <param name="resourceType">The resource type to be found.</param>
 		/// <returns></returns>
-		public ResourceCollection FindResources(ResourceType resourceType)
+		public IEnumerable<IResource> FindResources(ResourceType resourceType)
 		{
-			var resources = new ResourceCollection();
 			foreach (var extension in resourceType.FileExtensions)
 			{
 				string[] files = Directory.GetFiles(_directory, "*" + extension, SearchOption.AllDirectories);
 				foreach (string filePath in files)
 				{
-					resources.Add(new FileResource(filePath, _directory));
+					yield return new FileResource(filePath, _directory);
 				}
 			}
-			
-			return resources;
 		}
 
 		public IResource FindResource(string virtualPath)

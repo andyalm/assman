@@ -18,7 +18,7 @@ namespace AlmWitt.Web.ResourceManagement
 			resources.Add(CreateResource(DateTime.Now.AddDays(-1)));
 
 			ConsolidatedResource consolidated = new ConsolidatedResource(resources, new MemoryStream());
-			Assert.That(consolidated.LastModified, Is.EqualTo(resources.LastModified));
+			Assert.That(consolidated.LastModified, Is.EqualTo(resources.LastModified()));
 		}
 
 		private IResource CreateResource(DateTime lastModified)

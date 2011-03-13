@@ -82,7 +82,7 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			var resources = finder
 				.FindResources(GroupTemplate.ResourceType)
-				.WhereNot(ExcludeFilter);
+				.Exclude(ExcludeFilter);
 
 			return (from @group in GroupTemplate.GetGroups(resources, mode)
 			        where UrlType.ArePathsEqual(@group.ConsolidatedUrl, consolidatedUrl)

@@ -9,8 +9,6 @@ namespace AlmWitt.Web.ResourceManagement.Spark
 {
 	public class SparkResourceFinder : IResourceFinder
 	{
-		private static readonly ResourceCollection _emptyResourceCollection = new ResourceCollection();
-		
 		private readonly IEnumerable<Assembly> _assemblies;
 		private readonly ISparkResourceContentFetcher _contentFetcher;
 		private readonly ISparkJavascriptActionFinder _actionFinder;
@@ -22,18 +20,16 @@ namespace AlmWitt.Web.ResourceManagement.Spark
 			_actionFinder = actionFinder;
 		}
 
-		public ResourceCollection FindResources(ResourceType resourceType)
+		public IEnumerable<IResource> FindResources(ResourceType resourceType)
 		{
 			if(resourceType != ResourceType.ClientScript)
 			{
-				return _emptyResourceCollection;
+				return Enumerable.Empty<IResource>();
 			}
 
 			var controllerTypes = _assemblies.SelectMany(a => a.GetTypes()).Where(t => t.Is<ControllerBase>());
-			var sparkResources = controllerTypes.SelectMany(controllerType => _actionFinder.FindJavascriptActions(controllerType),
+			return controllerTypes.SelectMany(controllerType => _actionFinder.FindJavascriptActions(controllerType),
 			                                                CreateResource);
-			
-			return new ResourceCollection(sparkResources);
 		}
 
 		public IResource FindResource(string virtualPath)

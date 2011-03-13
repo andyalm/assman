@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.TestSupport;
 using AlmWitt.Web.ResourceManagement.TestObjects;
@@ -10,7 +12,7 @@ namespace AlmWitt.Web.ResourceManagement
     [TestFixture]
     public class TestEmbeddedResourceFinder
     {
-        private const string _embeddedNs = "AlmWitt.Web.ResourceManagement.EmbeddedResources";
+        private const string EmbeddedNs = "AlmWitt.Web.ResourceManagement.EmbeddedResources";
         private IResourceFinder _instance;
 
         [SetUp]
@@ -22,22 +24,22 @@ namespace AlmWitt.Web.ResourceManagement
         [Test]
         public void FindsFile()
         {
-            ResourceCollection resources = _instance.FindResources(ResourceType.Css);
+            var resources = _instance.FindResources(ResourceType.Css).ToList();
 
             Assert.That(resources, Is.Not.Null);
             Assert.That(resources.Count, Is.EqualTo(1));
-            Assert.That(resources[0].Name, Is.EqualTo(_embeddedNs + ".Embedded1.css"));
+            Assert.That(resources[0].Name, Is.EqualTo(EmbeddedNs + ".Embedded1.css"));
         }
 
         [Test]
         public void FindsMultipleFiles()
         {
-            ResourceCollection resources = _instance.FindResources(ResourceType.ClientScript);
+			var resources = _instance.FindResources(ResourceType.ClientScript).ToList();
 
             Assert.That(resources, Is.Not.Null);
             Assert.That(resources.Count, Is.EqualTo(2));
-            AssertContains(resources, _embeddedNs + ".Embedded1.js");
-            AssertContains(resources, _embeddedNs + ".Embedded2.js");
+            AssertContains(resources, EmbeddedNs + ".Embedded1.js");
+            AssertContains(resources, EmbeddedNs + ".Embedded2.js");
         }
 
 [Test]
@@ -46,20 +48,16 @@ namespace AlmWitt.Web.ResourceManagement
 			var resourceType = new StubResourceType("text/css", ".css");
 			resourceType.AddFileExtension(".txt");
 
-			var resources = _instance.FindResources(resourceType);
+			var resources = _instance.FindResources(resourceType).ToList();
 
 			resources.Count.ShouldEqual(2);
-			AssertContains(resources, _embeddedNs + ".Embedded1.css");
-			AssertContains(resources, _embeddedNs + ".Embedded1.txt");
+			AssertContains(resources, EmbeddedNs + ".Embedded1.css");
+			AssertContains(resources, EmbeddedNs + ".Embedded1.txt");
 		}
-        private void AssertContains(ResourceCollection collection, string name)
-        {
-            IResource foundResource = collection.FindOne(delegate(IResource resource)
-                                {
-                                    return resource.Name == name;
-                                });
 
-            Assert.That(foundResource, Is.Not.Null);
+        private void AssertContains(IEnumerable<IResource> collection, string name)
+        {
+            collection.ShouldContain(r => r.Name == name);
         }
     }
 }

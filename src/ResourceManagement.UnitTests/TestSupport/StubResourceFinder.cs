@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AlmWitt.Web.ResourceManagement.TestSupport
@@ -26,7 +27,7 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 
     	public ResourceCollection Resources { get { return _resources; } }
 
-    	public ResourceCollection FindResources(ResourceType resourceType)
+    	public IEnumerable<IResource> FindResources(ResourceType resourceType)
     	{
     		return _resources;
     	}

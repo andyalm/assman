@@ -21,7 +21,7 @@ namespace AlmWitt.Web.ResourceManagement
             resources.Add(CreateResource(mostRecent));
             resources.Add(CreateResource(mostRecent.AddDays(-30)));
 
-            Assert.That(resources.LastModified, Is.EqualTo(mostRecent));
+            Assert.That(resources.LastModified(), Is.EqualTo(mostRecent));
         }
 
         [Test]

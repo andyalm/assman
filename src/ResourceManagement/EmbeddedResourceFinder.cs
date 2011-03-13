@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -13,11 +14,11 @@ namespace AlmWitt.Web.ResourceManagement
 			_assembly = assembly;
 		}
 
-		public ResourceCollection FindResources(ResourceType resourceType)
+		public IEnumerable<IResource> FindResources(ResourceType resourceType)
 		{
-			return (from resourceName in _assembly.GetManifestResourceNames()
+			return from resourceName in _assembly.GetManifestResourceNames()
 			        where resourceType.FileExtensions.Any(resourceName.EndsWith)
-			        select CreateEmbeddedResource(resourceName)).ToResourceCollection();
+			        select CreateEmbeddedResource(resourceName);
 		}
 
 		public IResource FindResource(string virtualPath)

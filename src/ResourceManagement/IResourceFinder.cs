@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace AlmWitt.Web.ResourceManagement
 {
 	/// <summary>
@@ -8,7 +10,7 @@ namespace AlmWitt.Web.ResourceManagement
 		/// <summary>
 		/// Finds resources of the given file <see cref="ResourceType"/>.
 		/// </summary>
-		ResourceCollection FindResources(ResourceType resourceType);
+		IEnumerable<IResource> FindResources(ResourceType resourceType);
 
 		/// <summary>
 		/// Finds the resource with the given virtual path.

@@ -104,7 +104,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return ConsolidatedUrlTemplate.Matches(consolidatedUrl);
 		}
 
-		public IEnumerable<IResourceGroup> GetGroups(ResourceCollection allResources, ResourceMode mode)
+		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{
 			return  from resource in allResources
 					let match = GetMatch(resource.VirtualPath)

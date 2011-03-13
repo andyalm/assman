@@ -7,12 +7,12 @@ namespace AlmWitt.Web.ResourceManagement
 	{
 		readonly List<IResourceFinder> _finders = new List<IResourceFinder>();
 
-		public ResourceCollection FindResources(ResourceType resourceType)
+		public IEnumerable<IResource> FindResources(ResourceType resourceType)
 		{
-			var combined = new ResourceCollection();
+			var combined = new List<IResource>();
 			foreach (IResourceFinder finder in _finders)
 			{
-				ResourceCollection found = finder.FindResources(resourceType);
+				var found = finder.FindResources(resourceType);
 				combined.AddRange(found);
 			}
 

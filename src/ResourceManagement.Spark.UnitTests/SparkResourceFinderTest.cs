@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Web.Mvc;
 
 using Moq;
@@ -29,7 +30,7 @@ namespace AlmWitt.Web.ResourceManagement.Spark
 		[Test]
 		public void WhenResourceTypeIsCss_EmptyResourceCollectionReturned()
 		{
-			int resourceCount = _resourceFinder.FindResources(ResourceType.Css).Count;
+			int resourceCount = _resourceFinder.FindResources(ResourceType.Css).Count();
 
             Assert.That(resourceCount, Is.EqualTo(0));
 		}
@@ -65,7 +66,7 @@ namespace AlmWitt.Web.ResourceManagement.Spark
 				}
 			});
 
-			var resources = _resourceFinder.FindResources(ResourceType.ClientScript);
+			var resources = _resourceFinder.FindResources(ResourceType.ClientScript).ToList();
 
 			Assert.That(resources.Count, Is.EqualTo(4));
 			Assert.That(resources[0].Name, Is.EqualTo("MyFirst/Action1"));

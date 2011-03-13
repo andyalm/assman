@@ -1,5 +1,5 @@
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace AlmWitt.Web.ResourceManagement
@@ -50,9 +50,9 @@ namespace AlmWitt.Web.ResourceManagement
             {
             }
 
-			public ResourceCollection FindResources(ResourceType resourceType)
+			public IEnumerable<IResource> FindResources(ResourceType resourceType)
 			{
-				return new ResourceCollection();
+				yield break;
 			}
 
         	public IResource FindResource(string virtualPath)

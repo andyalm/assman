@@ -35,7 +35,6 @@ namespace AlmWitt.Web.ResourceManagement
 			IEnumerable<IResource> resourcesInGroup;
 			if(IsConsolidatedUrl(virtualPath, out resourcesInGroup))
 			{
-				//TODO: figure out if we need to sort these resources by their dependencies here
 				foreach (var resource in resourcesInGroup)
 				{
 					AccumulateDependencies(dependencyList, resource);
@@ -50,6 +49,27 @@ namespace AlmWitt.Web.ResourceManagement
 				AccumulateDependencies(dependencyList, virtualPath);
 				return CollapseDependencies(dependencyList);
 			}	
+		}
+
+		public IEnumerable<IResource> SortByDependencies(IEnumerable<IResource> resources)
+		{
+			var resourceList = resources.ToList();
+			resourceList.Sort(Comparer);
+
+			return resourceList;
+		}
+
+		public int Comparer(IResource x, IResource y)
+		{
+			var xDepends = GetDependencies(x);
+			var yDepends = GetDependencies(y);
+
+			if (xDepends.Contains(y.VirtualPath, StringComparer.OrdinalIgnoreCase))
+				return 1;
+			if (yDepends.Contains(x.VirtualPath, StringComparer.OrdinalIgnoreCase))
+				return -1;
+
+			return 0;
 		}
 
 		private bool IsConsolidatedUrl(string virtualPath, out IEnumerable<IResource> resourcesInGroup)
@@ -72,7 +92,7 @@ namespace AlmWitt.Web.ResourceManagement
 				return false;
 
 			var group = groupTemplateContext.FindGroupOrDefault(_resourceFinder, virtualPath, ResourceMode.Debug);
-			resourcesInGroup = group.GetResources();
+			resourcesInGroup = group.GetResources().SortByDependencies(this);
 			return true;
 		}
 
@@ -143,6 +163,14 @@ namespace AlmWitt.Web.ResourceManagement
 			return dependencyList.SelectMany(d => d)
 				.Distinct(StringComparer.OrdinalIgnoreCase)
 				.ToList();
+		}
+	}
+
+	public static class DependencyManagerExtensions
+	{
+		public static IEnumerable<IResource> SortByDependencies(this IEnumerable<IResource> resources, DependencyManager dependencyManager)
+		{
+			return resources.Sort(dependencyManager.Comparer);
 		}
 	}
 }

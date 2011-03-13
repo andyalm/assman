@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.ResourceManagement.PreConsolidation;
@@ -32,7 +33,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_instance.Assemblies.Add(this.GetType().Assembly.GetName().Name);
 			var fileFinder = ResourceFinderFactory.Null;
 			var context = _instance.BuildContext(fileFinder, NullPreConsolidationPersister.Instance);
-			ResourceCollection resources = context.Finder.FindResources(ResourceType.Css);
+			var resources = context.Finder.FindResources(ResourceType.Css).ToList();
 			Assert.IsNotNull(resources);
 			Assert.IsTrue(resources.Count > 0, "Resource count should be greater than zero.");
 		}

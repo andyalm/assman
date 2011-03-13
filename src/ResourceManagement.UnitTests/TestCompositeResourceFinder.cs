@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.TestSupport;
 
@@ -32,7 +31,7 @@ namespace AlmWitt.Web.ResourceManagement
             _instance.AddFinder(finder2);
 
 
-            ResourceCollection resources = _instance.FindResources(ResourceType.ClientScript);
+            var resources = _instance.FindResources(ResourceType.ClientScript).ToList();
             Assert.That(resources, Is.Not.Null);
             Assert.That(resources.Count, Is.EqualTo(3));
             Assert.That(resources[0].VirtualPath, Is.EqualTo("~/myfile1.js"));
