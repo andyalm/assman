@@ -86,14 +86,15 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private bool IsConsolidatedUrl(string virtualPath, ResourceGroupTemplateCollection groupTemplates, out IEnumerable<IResource> resourcesInGroup)
 		{
-			resourcesInGroup = null;
-			var groupTemplateContext = groupTemplates.FindGroupTemplate(virtualPath);
-			if (groupTemplateContext == null)
+			var mode = ResourceMode.Debug; //this value shouldn't matter here, we'll use Debug because this code will only be executed on a dev box when you haven't pre-consolidated.
+			var group = groupTemplates.GetGroupOrDefault(virtualPath, mode, _resourceFinder);
+			
+			if (group == null)
+			{
+				resourcesInGroup = null;
 				return false;
-
-			var group = groupTemplateContext.FindGroupOrDefault(_resourceFinder, virtualPath, ResourceMode.Debug);
-			if (group == null) //could be null group is defined by convention, but there were no resources that matched the group pattern
-				return false;
+			}
+			
 			resourcesInGroup = group.GetResources().SortByDependencies(this);
 			return true;
 		}

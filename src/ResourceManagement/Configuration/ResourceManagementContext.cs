@@ -153,8 +153,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 									  .Union(_finder.FindResources(ResourceType.Css));
 
 			//we must gather the dependencies for the consolidated url's before we gather them for specific url's
-			//because the consolidated url's could actually exist on disk if pre-consolidation was run before
-			//in that case, if we did the specific resources first, it would use the IDependencyProvider against the
+			//because the consolidated url's could actually exist on disk if pre-consolidation was run before.
+			//In that case, if we did the specific resources first, it would use the IDependencyProvider against the
 			//consolidated resource and not find any dependencies.  Then that value is cached and prevents us from finding
 			//the dependencies for the group.
 			var scriptDependenciesByConsolidatedUrl = GetDependenciesForConsolidatedUrls(ClientScriptGroups, allResources, mode);
@@ -176,7 +176,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			var resourceType = ResourceType.FromPath(consolidatedUrl);
 
-			return GroupTemplatesOfType(resourceType).FindGroupTemplate(consolidatedUrl);
+			return GroupTemplatesOfType(resourceType).GetGroupTemplateOrDefault(consolidatedUrl);
 		}
 
 		public IEnumerable<string> GetResourceDependencies(string virtualPath)

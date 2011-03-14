@@ -17,7 +17,7 @@ namespace AlmWitt.Web.ResourceManagement
 			}
 		}
 		
-		public GroupTemplateContext FindGroupTemplate(string consolidatedUrl)
+		public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
 		{
 			GroupTemplateContext groupTemplateContext = null;
 			ForEach(c =>
@@ -31,6 +31,19 @@ namespace AlmWitt.Web.ResourceManagement
 			});
 			
 			return groupTemplateContext;
+		}
+
+		public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+		{
+			var groupTemplateContext = GetGroupTemplateOrDefault(consolidatedUrl);
+			if (groupTemplateContext == null)
+				return null;
+
+			var group = groupTemplateContext.FindGroupOrDefault(finder, consolidatedUrl, mode);
+			if (group == null)
+				return null;
+
+			return group;
 		}
 
 		public void ForEach(Func<GroupTemplateContext,bool> handler)

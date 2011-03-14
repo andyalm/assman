@@ -51,14 +51,10 @@ namespace AlmWitt.Web.ResourceManagement
 		/// </summary>
 		public static DateTime LastModified(this IEnumerable<IResource> resources)
 		{
-			DateTime mostRecent = DateTime.MinValue;
-			foreach (IResource resource in resources)
-			{
-				if (resource.LastModified > mostRecent)
-					mostRecent = resource.LastModified;
-			}
+			if (!resources.Any())
+				return DateTime.MinValue;
 
-			return mostRecent;
+			return resources.Max(r => r.LastModified);
 		}
 
 		/// <summary>
