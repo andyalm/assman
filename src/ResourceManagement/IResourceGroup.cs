@@ -15,6 +15,11 @@ namespace AlmWitt.Web.ResourceManagement
 		bool Minify { get; }
 
 		/// <summary>
+		/// Gets the <see cref="ResourceType"/> of the resources in the group.
+		/// </summary>
+		ResourceType ResourceType { get; }
+
+		/// <summary>
 		/// Indicates whether the given resource exists in the resource group.
 		/// </summary>
 		bool Contains(IResource resource);

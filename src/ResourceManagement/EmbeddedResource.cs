@@ -20,9 +20,9 @@ namespace AlmWitt.Web.ResourceManagement
             return String.Format("assembly://{0}/{1}", assemblyName, resourceName);
         }
 
-        private Assembly _assembly;
+        private readonly Assembly _assembly;
 
-        private string _resourceName;
+        private readonly string _resourceName;
 
         private DateTime? _lastModified;
 

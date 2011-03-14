@@ -45,7 +45,7 @@ namespace AlmWitt.Web.ResourceManagement
 			var configContext = ResourceManagementContext.Create();
 			configContext.AddFinder(_finder.Object);
 			
-			_instance = new ResourceHandler(VirtualPath, configContext, new GroupTemplateContext(groupTemplate));
+			_instance = new ResourceHandler(VirtualPath, configContext, groupTemplate.WithEmptyContext());
 			_instance.GetConfigurationLoader = () => configLoader.Object;
 		}
 

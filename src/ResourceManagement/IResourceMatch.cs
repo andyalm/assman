@@ -24,7 +24,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private class FalseResourceMatch : IResourceMatch
 		{
-			private string _value;
+			private readonly string _value;
 
 			public FalseResourceMatch(string value)
 			{

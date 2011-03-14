@@ -13,7 +13,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 	/// </summary>
 	public class ResourceManagementConfiguration : ConfigurationSection
 	{
-		private const string SECTION_NAME = "almWitt.web.resourceManagement";
+		private const string SectionName = "almWitt.web.resourceManagement";
         private string _rootFilePath;
 		private static readonly ResourceManagementConfiguration _defaultSection = new ResourceManagementConfiguration();
 		private static ResourceManagementConfiguration _config = null;
@@ -28,7 +28,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			{
 				if(_config == null)
 				{
-				    _config = _configLoader.GetSection<ResourceManagementConfiguration>(SECTION_NAME) ?? _defaultSection;
+				    _config = _configLoader.GetSection<ResourceManagementConfiguration>(SectionName) ?? _defaultSection;
 				}
 
 				return _config;
@@ -215,8 +215,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			context.ManageDependencies = ManageDependencies;
 			context.AddFinder(fileFinder);
 			context.AddAssemblies(Assemblies.GetAssemblies());
-			context.ClientScriptGroups.AddRange(ClientScripts.Cast<IResourceGroupTemplate>());
-			context.CssFileGroups.AddRange(CssFiles.Cast<IResourceGroupTemplate>());
+			context.ScriptGroups.AddRange(ClientScripts.Cast<IResourceGroupTemplate>());
+			context.StyleGroups.AddRange(CssFiles.Cast<IResourceGroupTemplate>());
 			context.MapExtensionToFilter(".js", JSMinContentFilterFactory.GetInstance());
 			context.MapExtensionToDependencyProvider(".js", VisualStudioScriptDependencyProvider.GetInstance());
 			context.MapExtensionToDependencyProvider(".css", CssDependencyProvider.GetInstance());

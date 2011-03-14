@@ -45,27 +45,6 @@ namespace Crockford
         int theLookahead = EOF;
 
 
-        static void Main(string[] args)
-        {
-            if (args.Length != 2)
-            {
-                Console.WriteLine("invalid arguments, 2 required, 1 in, 1 out");
-                return;
-            }
-            new JavaScriptMinifier().Minify(args[0], args[1]);
-        }
-
-        public void Minify(string src, string dst)
-        {
-            using (sr = new StreamReader(src))
-            {
-                using (sw = new StreamWriter(dst))
-                {
-                    jsmin();
-                }
-            }
-        }
-
         public void Minify(TextReader srcReader, TextWriter dstWriter)
         {
             sr = srcReader;

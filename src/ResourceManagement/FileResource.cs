@@ -9,8 +9,8 @@ namespace AlmWitt.Web.ResourceManagement
 	public class FileResource : IResource
 	{
 		private FileInfo _fileInfo;
-		private string _filePath;
-		private string _basePath;
+		private readonly string _filePath;
+		private readonly string _basePath;
 
 		/// <summary>
 		/// Creates a new instance of a <see cref="FileResource"/>.

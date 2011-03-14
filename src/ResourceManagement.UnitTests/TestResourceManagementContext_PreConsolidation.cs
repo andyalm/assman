@@ -87,7 +87,7 @@ namespace AlmWitt.Web.ResourceManagement
 		public void WhenPreConsolidatedReportIsLoaded_ResourceUrlCacheIsPrepopulated()
 		{
 			var groupTemplate = new Mock<IResourceGroupTemplate>();
-			_context.ClientScriptGroups.Add(groupTemplate.Object);
+			_context.ScriptGroups.Add(groupTemplate.Object);
 
 			var preConsolidationReport = new PreConsolidationReport();
 			var scriptGroup = new PreConsolidatedResourceGroup
@@ -114,7 +114,7 @@ namespace AlmWitt.Web.ResourceManagement
 		public void WhenPreConsolidatedReportIsLoaded_ConsolidatedUrlsAreCachedAsThemselvesSoGroupsCanBeIncludedDirectly()
 		{
 			var groupTemplate = new Mock<IResourceGroupTemplate>();
-			_context.ClientScriptGroups.Add(groupTemplate.Object);
+			_context.ScriptGroups.Add(groupTemplate.Object);
 
 			var preConsolidationReport = new PreConsolidationReport();
 			var scriptGroup = new PreConsolidatedResourceGroup
@@ -142,7 +142,7 @@ namespace AlmWitt.Web.ResourceManagement
 		public void WhenPreConsolidatedReportIsLoaded_ConsolidatedUrlsDependenciesAreCached()
 		{
 			var groupTemplate = new Mock<IResourceGroupTemplate>();
-			_context.ClientScriptGroups.Add(groupTemplate.Object);
+			_context.ScriptGroups.Add(groupTemplate.Object);
 
 			var preConsolidationReport = new PreConsolidationReport();
 			var coreGroup = new PreConsolidatedResourceGroup

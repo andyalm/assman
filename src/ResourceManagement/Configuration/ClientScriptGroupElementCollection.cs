@@ -1,5 +1,3 @@
-using System.Configuration;
-
 namespace AlmWitt.Web.ResourceManagement.Configuration
 {
 	/// <summary>

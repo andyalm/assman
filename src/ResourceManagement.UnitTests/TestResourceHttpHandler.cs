@@ -27,7 +27,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_context = ResourceManagementContext.Create();
 			_groupElement = new ClientScriptGroupElement();
 			_groupElement.ConsolidatedUrl = "~" + ConsolidatedPath;
-			_context.ClientScriptGroups.Add(_groupElement);
+			_context.ScriptGroups.Add(_groupElement);
 
 			_handlerFactory = new FakeHandlerFactory();
 

@@ -62,7 +62,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private class PredicateResourceFilter : IResourceFilter
 		{
-			private Predicate<IResource> _match;
+			private readonly Predicate<IResource> _match;
 
 			public PredicateResourceFilter(Predicate<IResource> match)
 			{

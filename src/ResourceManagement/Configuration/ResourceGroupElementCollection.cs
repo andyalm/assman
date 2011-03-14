@@ -99,6 +99,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		#endregion
 	}
 
-	internal delegate void ResourceGroupElementProcessor<TGroupElement>(TGroupElement groupElement, IResourceFilter excludeFilter)
+	internal delegate void ResourceGroupElementProcessor<in TGroupElement>(TGroupElement groupElement, IResourceFilter excludeFilter)
 		where TGroupElement : ResourceGroupElement, new();
 }

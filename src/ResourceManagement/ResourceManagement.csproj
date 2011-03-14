@@ -161,7 +161,6 @@
     <Compile Include="ResourceGroup.cs" />
     <Compile Include="ResourceMode.cs" />
     <Compile Include="ThreadSafeInMemoryCache.cs" />
-    <Compile Include="Util.cs" />
     <Compile Include="EmbeddedResource.cs" />
     <Compile Include="EmbeddedResourceFinder.cs" />
     <Compile Include="FileResourceFinder.cs" />

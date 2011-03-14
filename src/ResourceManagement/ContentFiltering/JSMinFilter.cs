@@ -10,7 +10,7 @@ namespace AlmWitt.Web.ResourceManagement.ContentFiltering
     ///</summary>
     public class JSMinFilter : IContentFilter
     {
-        private readonly JavaScriptMinifier minifier = new JavaScriptMinifier();
+        private readonly JavaScriptMinifier _minifier = new JavaScriptMinifier();
 
         #region IContentFilter Members
 
@@ -21,11 +21,11 @@ namespace AlmWitt.Web.ResourceManagement.ContentFiltering
         /// <returns></returns>
         public string FilterContent(string content)
         {
-            using (StringReader input = new StringReader(content))
+            using (var input = new StringReader(content))
             {
-                using (StringWriter output = new StringWriter())
+                using (var output = new StringWriter())
                 {
-                    minifier.Minify(input, output);
+                    _minifier.Minify(input, output);
                     return output.ToString();
                 }
             }

@@ -22,7 +22,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		{
 			_innerRegistry = new Mock<IResourceRegistry>();
 			_context = ResourceManagementContext.Create();
-			_context.ClientScriptGroups.Add(new ClientScriptGroupElement
+			_context.ScriptGroups.Add(new ClientScriptGroupElement
 			{
 				ConsolidatedUrl = ConsolidatedUrl,
 				Include = new ResourceMatchElementCollection

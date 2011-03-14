@@ -7,7 +7,7 @@ namespace AlmWitt.Web.ResourceManagement
 	internal class FileResourceFinder : IResourceFinder
 	{
 		private readonly string _directory;
-		private VirtualPathResolver _pathResolver;
+		private readonly VirtualPathResolver _pathResolver;
 
 		/// <summary>
 		/// Constructs a new <see cref="FileResourceFinder"/>.

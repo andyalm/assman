@@ -5,8 +5,6 @@ using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.ResourceManagement.TestSupport;
 using AlmWitt.Web.ResourceManagement.TestObjects;
 
-using Moq;
-
 using NUnit.Framework;
 
 namespace AlmWitt.Web.ResourceManagement
@@ -28,11 +26,8 @@ namespace AlmWitt.Web.ResourceManagement
 			
 			var context = new ResourceManagementContext();
 			context.AddFinder(stubFinder);
-			var consolidatedResource = context.ConsolidateGroup(group.ConsolidatedUrl,
-			                                                           new GroupTemplateContext(groupTemplate)
-			                                                           {
-			                                                           	ExcludeFilter = ToFilter(r => r.VirtualPath.Contains("file2"))
-			                                                           }, ResourceMode.Debug);
+			var excludeFilter = ToFilter(r => r.VirtualPath.Contains("file2"));
+			var consolidatedResource = context.ConsolidateGroup(group.ConsolidatedUrl, new GroupTemplateContext(groupTemplate, excludeFilter), ResourceMode.Debug);
 			
 			consolidatedResource.ShouldNotBeNull();
 			consolidatedResource.Resources.Count().ShouldEqual(2);
@@ -58,7 +53,7 @@ namespace AlmWitt.Web.ResourceManagement
 			var context = new ResourceManagementContext();
 			context.MapExtensionToDependencyProvider(".js", dependencyProvider);
 
-			var consolidatedResource = context.ConsolidateGroup(group, new GroupTemplateContext(groupTemplate), ResourceMode.Debug);
+			var consolidatedResource = context.ConsolidateGroup(group, ResourceMode.Debug);
 			var resources = consolidatedResource.Resources.ToList();
 			resources[0].VirtualPath.ShouldEqual("~/dependency-root.js");
 			resources[1].VirtualPath.ShouldEqual("~/dependency-middle.js");
@@ -91,8 +86,8 @@ namespace AlmWitt.Web.ResourceManagement
 			context.AddFinder(finder);
 			var group1Template = new StubResourceGroupTemplate(group1) { ResourceType = ResourceType.ClientScript };
 			var group2Template = new StubResourceGroupTemplate(group2) { ResourceType = ResourceType.ClientScript };
-			context.ClientScriptGroups.Add(group1Template);
-			context.ClientScriptGroups.Add(group2Template);
+			context.ScriptGroups.Add(group1Template);
+			context.ScriptGroups.Add(group2Template);
 
 			var preConsolidationReport = context.ConsolidateAll((resource, @group) => { }, ResourceMode.Release);
 

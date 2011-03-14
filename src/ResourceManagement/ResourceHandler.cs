@@ -45,7 +45,7 @@ namespace AlmWitt.Web.ResourceManagement
 			else
 			{
 				context.SetLastModified(lastModified);
-				context.ContentType = _groupTemplateContext.GroupTemplate.ResourceType.ContentType;
+				context.ContentType = _groupTemplateContext.ResourceType.ContentType;
 				resource.WriteTo(context.OutputStream);
 			}
 		}

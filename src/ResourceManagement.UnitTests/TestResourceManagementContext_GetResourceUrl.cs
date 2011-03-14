@@ -28,7 +28,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_groupElement = new ClientScriptGroupElement();
 			_groupElement.ConsolidatedUrl = consolidatedScript;
 			_groupElement.Exclude.AddPattern(excludedScript);
-			_instance.ClientScriptGroups.Add(_groupElement);
+			_instance.ScriptGroups.Add(_groupElement);
 		}
 
 		[Test]
@@ -109,7 +109,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_instance.ConsolidateClientScripts = true;
 			_groupElement.Exclude.AddPattern(mySecondScript);
 			var secondGroupElement = new ClientScriptGroupElement();
-			_instance.ClientScriptGroups.Add(secondGroupElement);
+			_instance.ScriptGroups.Add(secondGroupElement);
 			secondGroupElement.ConsolidatedUrl = secondGroupUrl;
 
 			string scriptToInclude = _instance.GetScriptUrl(mySecondScript);
@@ -134,7 +134,7 @@ namespace AlmWitt.Web.ResourceManagement
 			var resolvedScriptPath1 = _instance.GetScriptUrl(myScript);
 			if(resolvedScriptPath1 != consolidatedScript)
 				Assert.Inconclusive("The first call to GetScriptUrl did not return the expected result");
-			_instance.ClientScriptGroups.Clear();
+			_instance.ScriptGroups.Clear();
 			var resolvedScriptPath2 = _instance.GetScriptUrl(myScript);
 
 			resolvedScriptPath2.ShouldEqual(resolvedScriptPath1);

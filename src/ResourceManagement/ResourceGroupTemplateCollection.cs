@@ -20,7 +20,7 @@ namespace AlmWitt.Web.ResourceManagement
 		public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
 		{
 			GroupTemplateContext groupTemplateContext = null;
-			ForEach(c =>
+			EachTemplate(c =>
 			{
 				if (c.GroupTemplate.MatchesConsolidatedUrl(consolidatedUrl))
 				{
@@ -46,22 +46,33 @@ namespace AlmWitt.Web.ResourceManagement
 			return group;
 		}
 
-		public void ForEach(Func<GroupTemplateContext,bool> handler)
+		public void EachTemplate(Func<GroupTemplateContext,bool> handler)
 		{
 			var excludeFilter = new CompositeResourceFilter();
 			//add a filter to exclude all resources that match the consolidated url of a group
 			excludeFilter.AddFilter(new ConsolidatedUrlFilter(this));
 			foreach (var groupTemplate in this)
 			{
-				var templateContext = new GroupTemplateContext(groupTemplate)
-				{
-					ExcludeFilter = excludeFilter
-				};
+				var templateContext = new GroupTemplateContext(groupTemplate, excludeFilter);
 				if(!handler(templateContext))
 					break;
 
 				excludeFilter.AddFilter(groupTemplate);
 			}
+		}
+
+		public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
+		{
+			EachTemplate(templateContext =>
+			{
+				var groups = templateContext.GetGroups(allResources, mode);
+				foreach (var group in groups)
+				{
+					handler(group);
+				}
+
+				return true;
+			});
 		}
 
 		private class ConsolidatedUrlFilter : IResourceFilter
@@ -82,24 +93,57 @@ namespace AlmWitt.Web.ResourceManagement
 
 	public class GroupTemplateContext
 	{
-		public GroupTemplateContext(IResourceGroupTemplate groupTemplate)
+		private readonly IResourceFilter _excludeFilter;
+		
+		internal GroupTemplateContext(IResourceGroupTemplate groupTemplate, IResourceFilter excludeFilter)
 		{
 			GroupTemplate = groupTemplate;
-			ExcludeFilter = ResourceFilters.False;
+			_excludeFilter = excludeFilter;
 		}
 
 		public IResourceGroupTemplate GroupTemplate { get; private set; }
-		public IResourceFilter ExcludeFilter { get; set; }
+
+		public ResourceType ResourceType
+		{
+			get { return GroupTemplate.ResourceType; }
+		}
 
 		public IResourceGroup FindGroupOrDefault(IResourceFinder finder, string consolidatedUrl, ResourceMode mode)
 		{
-			var resources = finder
-				.FindResources(GroupTemplate.ResourceType)
-				.Exclude(ExcludeFilter);
+			var resources = finder.FindResources(GroupTemplate.ResourceType);
 
-			return (from @group in GroupTemplate.GetGroups(resources, mode)
-			        where UrlType.ArePathsEqual(@group.ConsolidatedUrl, consolidatedUrl)
-			        select @group).SingleOrDefault();
+			return FindGroupOrDefault(resources, consolidatedUrl, mode);
+		}
+
+		public IResourceGroup FindGroupOrDefault(IEnumerable<IResource> allResources, string consolidatedUrl, ResourceMode mode)
+		{
+			return (from @group in GetGroups(allResources, mode)
+					where UrlType.ArePathsEqual(@group.ConsolidatedUrl, consolidatedUrl)
+					select @group).SingleOrDefault();
+		}
+
+		public IEnumerable<IResourceGroup> GetGroups(IResourceFinder finder, ResourceMode mode)
+		{
+			var resources = finder.FindResources(GroupTemplate.ResourceType);
+			return GetGroups(resources, mode);
+		}
+
+		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
+		{
+			return GroupTemplate.GetGroups(allResources.Exclude(_excludeFilter), mode);
+		}
+	}
+
+	public static class GroupTemplateExtensions
+	{
+		public static GroupTemplateContext WithContext(this IResourceGroupTemplate groupTemplate, IResourceFilter excludeFilter)
+		{
+			return new GroupTemplateContext(groupTemplate, excludeFilter);
+		}
+
+		public static GroupTemplateContext WithEmptyContext(this IResourceGroupTemplate groupTemplate)
+		{
+			return new GroupTemplateContext(groupTemplate, ResourceFilters.False);
 		}
 	}
 }

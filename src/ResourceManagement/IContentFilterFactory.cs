@@ -1,4 +1,6 @@
-namespace AlmWitt.Web.ResourceManagement.ContentFiltering
+using AlmWitt.Web.ResourceManagement.ContentFiltering;
+
+namespace AlmWitt.Web.ResourceManagement
 {
 	public interface IContentFilterFactory
 	{

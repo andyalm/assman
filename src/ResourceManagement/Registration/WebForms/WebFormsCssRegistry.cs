@@ -6,13 +6,13 @@ namespace AlmWitt.Web.ResourceManagement.Registration.WebForms
 {
 	internal class WebFormsCssRegistry : WebFormsRegistryBase
 	{
-		const string linkTemplate = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"{0}\" />";
+		const string LinkTemplate = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"{0}\" />";
 		
 		public WebFormsCssRegistry(Control control) : base(control) { }
 
 		public override void IncludePath(string urlToInclude)
 		{
-			var linkElement = String.Format(linkTemplate, urlToInclude);
+			var linkElement = String.Format(LinkTemplate, urlToInclude);
 			AddToHeader(urlToInclude, linkElement);
 		}
 

@@ -86,8 +86,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private bool IsConsolidatedUrl(string virtualPath, ResourceGroupTemplateCollection groupTemplates, out IEnumerable<IResource> resourcesInGroup)
 		{
-			var mode = ResourceMode.Debug; //this value shouldn't matter here, we'll use Debug because this code will only be executed on a dev box when you haven't pre-consolidated.
-			var group = groupTemplates.GetGroupOrDefault(virtualPath, mode, _resourceFinder);
+			var group = groupTemplates.GetGroupOrDefault(virtualPath, ResourceMode.Debug, _resourceFinder); //the ResourceMode value shouldn't matter here, we'll use Debug because this code will only be executed on a dev box when you haven't pre-consolidated.
 			
 			if (group == null)
 			{
