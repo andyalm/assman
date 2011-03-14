@@ -8,11 +8,11 @@ namespace AlmWitt.Web.ResourceManagement
 	{
 		private readonly IResourceFinder _resourceFinder;
 		private IDependencyCache _dependencyCache;
-		private readonly ResourceGroupTemplateCollection _scriptGroups;
-		private readonly ResourceGroupTemplateCollection _styleGroups;
+		private readonly IResourceGroupManager _scriptGroups;
+		private readonly IResourceGroupManager _styleGroups;
 		private readonly IDictionary<string, IDependencyProvider> _parsers = new Dictionary<string, IDependencyProvider>(StringComparer.OrdinalIgnoreCase);
 
-		public DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache, ResourceGroupTemplateCollection scriptGroups, ResourceGroupTemplateCollection styleGroups)
+		public DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups)
 		{
 			_resourceFinder = resourceFinder;
 			_dependencyCache = dependencyCache;
@@ -84,7 +84,7 @@ namespace AlmWitt.Web.ResourceManagement
 			return false;
 		}
 
-		private bool IsConsolidatedUrl(string virtualPath, ResourceGroupTemplateCollection groupTemplates, out IEnumerable<IResource> resourcesInGroup)
+		private bool IsConsolidatedUrl(string virtualPath, IResourceGroupManager groupTemplates, out IEnumerable<IResource> resourcesInGroup)
 		{
 			var group = groupTemplates.GetGroupOrDefault(virtualPath, ResourceMode.Debug, _resourceFinder); //the ResourceMode value shouldn't matter here, we'll use Debug because this code will only be executed on a dev box when you haven't pre-consolidated.
 			

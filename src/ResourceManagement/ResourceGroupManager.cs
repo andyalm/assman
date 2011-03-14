@@ -1,22 +1,49 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
 namespace AlmWitt.Web.ResourceManagement
 {
-	public class ResourceGroupTemplateCollection : Collection<IResourceGroupTemplate>
+	public class ResourceGroupManager : IResourceGroupManager
 	{
-		public void AddRange(IEnumerable<IResourceGroupTemplate> items)
+		private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
+
+		public void Add(IResourceGroupTemplate template)
 		{
-			foreach (var item in items)
-			{
-				Add(item);
-			}
+			_templates.Add(template);
 		}
-		
+
+		public void Clear()
+		{
+			_templates.Clear();
+		}
+
+		public bool Any()
+		{
+			return _templates.Any();
+		}
+
+		public bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl)
+		{
+			foreach (var groupTemplate in _templates)
+			{
+				if (groupTemplate.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl))
+				{
+					return true;
+				}
+			}
+
+			consolidatedUrl = null;
+			return false;
+		}
+
+		public bool IsConsolidatedUrl(string virtualPath)
+		{
+			return _templates.Any(t => t.MatchesConsolidatedUrl(virtualPath));
+		}
+
 		public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
 		{
 			GroupTemplateContext groupTemplateContext = null;
@@ -46,21 +73,6 @@ namespace AlmWitt.Web.ResourceManagement
 			return group;
 		}
 
-		public void EachTemplate(Func<GroupTemplateContext,bool> handler)
-		{
-			var excludeFilter = new CompositeResourceFilter();
-			//add a filter to exclude all resources that match the consolidated url of a group
-			excludeFilter.AddFilter(new ConsolidatedUrlFilter(this));
-			foreach (var groupTemplate in this)
-			{
-				var templateContext = new GroupTemplateContext(groupTemplate, excludeFilter);
-				if(!handler(templateContext))
-					break;
-
-				excludeFilter.AddFilter(groupTemplate);
-			}
-		}
-
 		public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
 		{
 			EachTemplate(templateContext =>
@@ -73,6 +85,21 @@ namespace AlmWitt.Web.ResourceManagement
 
 				return true;
 			});
+		}
+
+		private void EachTemplate(Func<GroupTemplateContext,bool> handler)
+		{
+			var excludeFilter = new CompositeResourceFilter();
+			//add a filter to exclude all resources that match the consolidated url of a group
+			excludeFilter.AddFilter(new ConsolidatedUrlFilter(_templates));
+			foreach (var groupTemplate in _templates)
+			{
+				var templateContext = new GroupTemplateContext(groupTemplate, excludeFilter);
+				if(!handler(templateContext))
+					break;
+
+				excludeFilter.AddFilter(groupTemplate);
+			}
 		}
 
 		private class ConsolidatedUrlFilter : IResourceFilter

@@ -91,6 +91,7 @@
     <Compile Include="Configuration\ClientScriptGroupElementCollection.cs" />
     <Compile Include="CssDependencyProvider.cs" />
     <Compile Include="IO\IFileAccess.cs" />
+    <Compile Include="IResourceGroupManager.cs" />
     <Compile Include="PreConsolidation\CompiledFilePersister.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="Configuration\ConsolidatedUrlTemplate.cs" />
@@ -157,7 +158,7 @@
     <Compile Include="Registration\ResourceRegistryRenderer.cs" />
     <Compile Include="Registration\TextWriterExtensions.cs" />
     <Compile Include="ResourceCollectionExtensions.cs" />
-    <Compile Include="ResourceGroupTemplateCollection.cs" />
+    <Compile Include="ResourceGroupManager.cs" />
     <Compile Include="ResourceGroup.cs" />
     <Compile Include="ResourceMode.cs" />
     <Compile Include="ThreadSafeInMemoryCache.cs" />

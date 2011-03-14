@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 
-using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.ResourceManagement.TestObjects;
 using AlmWitt.Web.ResourceManagement.TestSupport;
 
@@ -16,8 +15,8 @@ namespace AlmWitt.Web.ResourceManagement
 		private StubDependencyProvider _dependencyProvider;
 		private StubResourceFinder _resourceFinder;
 		private InMemoryDependencyCache _dependencyCache;
-		private ResourceGroupTemplateCollection _scriptGroups;
-		private ResourceGroupTemplateCollection _styleGroups;
+		private ResourceGroupManager _scriptGroups;
+		private ResourceGroupManager _styleGroups;
 		private DependencyManager _dependencyManager;
 
 		[SetUp]
@@ -26,8 +25,8 @@ namespace AlmWitt.Web.ResourceManagement
 			_dependencyProvider = new StubDependencyProvider();
 			_resourceFinder = new StubResourceFinder();
 			_dependencyCache = new InMemoryDependencyCache();
-			_scriptGroups = new ResourceGroupTemplateCollection();
-			_styleGroups = new ResourceGroupTemplateCollection();
+			_scriptGroups = new ResourceGroupManager();
+			_styleGroups = new ResourceGroupManager();
 
 			_dependencyManager = new DependencyManager(_resourceFinder, _dependencyCache, _scriptGroups, _styleGroups);
 			_dependencyManager.MapProvider(".js", _dependencyProvider);

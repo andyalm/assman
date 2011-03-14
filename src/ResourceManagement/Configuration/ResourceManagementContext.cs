@@ -34,8 +34,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		private readonly CompositeResourceFinder _finder;
 		private readonly ContentFilterMap _filterMap;
-		private readonly ResourceGroupTemplateCollection _scriptGroups;
-		private readonly ResourceGroupTemplateCollection _styleGroups;
+		private readonly IResourceGroupManager _scriptGroups;
+		private readonly IResourceGroupManager _styleGroups;
 		private readonly List<Assembly> _assemblies;
 		private readonly DependencyManager _dependencyManager;
 		private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -44,8 +44,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			_finder = new CompositeResourceFinder();
 			_filterMap = new ContentFilterMap();
-			_scriptGroups = new ResourceGroupTemplateCollection();
-			_styleGroups = new ResourceGroupTemplateCollection();
+			_scriptGroups = new ResourceGroupManager();
+			_styleGroups = new ResourceGroupManager();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
 			ConsolidateClientScripts = true;
@@ -66,12 +66,12 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			_filterMap.MapExtension(fileExtension, filterFactory);
 		}
 
-		public ResourceGroupTemplateCollection ScriptGroups
+		public IResourceGroupManager ScriptGroups
 		{
 			get { return _scriptGroups; }
 		}
 
-		public ResourceGroupTemplateCollection StyleGroups
+		public IResourceGroupManager StyleGroups
 		{
 			get { return _styleGroups; }
 		}
@@ -139,8 +139,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			return new PreConsolidationReport
 			{
-				ClientScriptGroups = ConsolidateAllInternal(ScriptGroups, handleConsolidatedResource, mode).ToList(),
-				CssGroups = ConsolidateAllInternal(StyleGroups, handleConsolidatedResource, mode).ToList(),
+				ClientScriptGroups = ConsolidateAllInternal(ResourceType.ClientScript, ScriptGroups, mode, handleConsolidatedResource).ToList(),
+				CssGroups = ConsolidateAllInternal(ResourceType.Css, StyleGroups, mode, handleConsolidatedResource).ToList(),
 				Dependencies = GetAllDependencies(mode).ToList()
 			};
 		}
@@ -174,7 +174,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		{
 			var resourceType = ResourceType.FromPath(consolidatedUrl);
 
-			return GroupTemplatesOfType(resourceType).GetGroupTemplateOrDefault(consolidatedUrl);
+			return GroupManagerOfType(resourceType).GetGroupTemplateOrDefault(consolidatedUrl);
 		}
 
 		public IEnumerable<string> GetResourceDependencies(string virtualPath)
@@ -236,15 +236,15 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			get { return _finder; }
 		}
 
-		private string GetResourceUrl(bool consolidate, IEnumerable<IResourceGroupTemplate> groupTemplates, string resourceUrl)
+		private string GetResourceUrl(bool consolidate, IResourceGroupManager groupManager, string resourceUrl)
 		{
 			if (consolidate)
 			{
 				string unresolvedUrl = resourceUrl;
 				var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl,
-				                                                 () => CalculateResourceUrl(groupTemplates, unresolvedUrl));
+				                                                 () => CalculateResourceUrl(groupManager, unresolvedUrl));
 
-				if (resolvedUrl != unresolvedUrl || IsConsolidatedUrl(groupTemplates, resolvedUrl))
+				if (resolvedUrl != unresolvedUrl || groupManager.IsConsolidatedUrl(resolvedUrl))
 				{
 					if (!PreConsolidated)
 						resolvedUrl = UrlType.Dynamic.ConvertUrl(resolvedUrl);
@@ -259,33 +259,21 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return resourceUrl;
 		}
 
-		private bool IsConsolidatedUrl(IEnumerable<IResourceGroupTemplate> groupTemplates, string path)
+		private string CalculateResourceUrl(IResourceGroupManager groupManager, string resourceUrl)
 		{
-			return groupTemplates.Any(t => t.MatchesConsolidatedUrl(path));
+			string consolidatedUrl;
+			if (groupManager.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
+				return consolidatedUrl;
+			else
+				return resourceUrl;
 		}
 
-		private string CalculateResourceUrl(IEnumerable<IResourceGroupTemplate> groupTemplates, string resourceUrl)
-		{
-			foreach (var groupTemplate in groupTemplates)
-			{
-				string consolidatedUrl;
-				if (groupTemplate.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
-				{
-					return consolidatedUrl;
-				}
-			}
-
-			return resourceUrl;
-		}
-
-		private IEnumerable<PreConsolidatedResourceGroup> ConsolidateAllInternal(ResourceGroupTemplateCollection groupTemplates,
-		                                    Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource,
-		                                    ResourceMode mode)
+		private IEnumerable<PreConsolidatedResourceGroup> ConsolidateAllInternal(ResourceType resourceType, IResourceGroupManager groupTemplates, ResourceMode mode, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)
 		{
 			if (!groupTemplates.Any())
 				return Enumerable.Empty<PreConsolidatedResourceGroup>();
 
-			var allResources = _finder.FindResources(groupTemplates.First().ResourceType);
+			var allResources = _finder.FindResources(resourceType);
 
 			var preConsolidatedGroups = new List<PreConsolidatedResourceGroup>();
 			groupTemplates.EachGroup(allResources, mode, group =>
@@ -303,19 +291,27 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			return preConsolidatedGroups;
 		}
 
-		private IEnumerable<PreConsolidatedResourceDependencies> GetDependenciesForConsolidatedUrls(IEnumerable<IResourceGroupTemplate> groupTemplates, IEnumerable<IResource> allResources, ResourceMode mode)
+		private IEnumerable<PreConsolidatedResourceDependencies> GetDependenciesForConsolidatedUrls(IResourceGroupManager groupTemplates, IEnumerable<IResource> allResources, ResourceMode mode)
 		{
-			return from @group in groupTemplates.SelectMany(g => g.GetGroups(allResources, mode))
-			       let dependencies = _dependencyManager.GetDependencies(@group.ConsolidatedUrl)
-			       where dependencies.Any()
-			       select new PreConsolidatedResourceDependencies
-			       {
-			       	ResourcePath = @group.ConsolidatedUrl,
-			       	Dependencies = dependencies.ToList()
-			       };
+			var preConsolidatedDependencies = new List<PreConsolidatedResourceDependencies>();
+			
+			groupTemplates.EachGroup(allResources, mode, @group =>
+			{
+				var dependencies = _dependencyManager.GetDependencies(@group.ConsolidatedUrl);
+				if(dependencies.Any())
+				{
+					preConsolidatedDependencies.Add(new PreConsolidatedResourceDependencies
+					{
+						ResourcePath = @group.ConsolidatedUrl,
+						Dependencies = dependencies.ToList()
+					});
+				}
+			});
+
+			return preConsolidatedDependencies;
 		}
 
-		private ResourceGroupTemplateCollection GroupTemplatesOfType(ResourceType resourceType)
+		private IResourceGroupManager GroupManagerOfType(ResourceType resourceType)
 		{
 			if (resourceType == ResourceType.ClientScript)
 				return _scriptGroups;
