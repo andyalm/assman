@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Web;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
@@ -121,7 +122,21 @@ namespace AlmWitt.Web.ResourceManagement
 		public void ConsolidatedUrlIsStaticWhenPreConsolidated()
 		{
 			_instance.ConsolidateClientScripts = true;
-			_instance.LoadPreCompilationReport(new PreConsolidationReport());
+			var preConsolidationReport = new PreConsolidationReport
+			{
+				ClientScriptGroups = new List<PreConsolidatedResourceGroup>
+				{
+					new PreConsolidatedResourceGroup
+					{
+						ConsolidatedUrl = consolidatedScriptStatic,
+						Resources = new List<string>
+						{
+							myScript
+						}
+					}
+				}
+			};
+			_instance.LoadPreCompilationReport(preConsolidationReport);
 
 			string scriptToInclude = _instance.GetScriptUrl(myScript);
 

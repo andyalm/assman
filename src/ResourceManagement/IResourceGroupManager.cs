@@ -11,7 +11,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 		bool Any();
 
-		bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl);
+		string GetResourceUrl(string virtualPath);
 
 		bool IsConsolidatedUrl(string virtualPath);
 

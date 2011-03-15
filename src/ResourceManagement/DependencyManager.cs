@@ -51,15 +51,7 @@ namespace AlmWitt.Web.ResourceManagement
 			}	
 		}
 
-		public IEnumerable<IResource> SortByDependencies(IEnumerable<IResource> resources)
-		{
-			var resourceList = resources.ToList();
-			resourceList.Sort(Comparer);
-
-			return resourceList;
-		}
-
-		public int Comparer(IResource x, IResource y)
+		internal int Comparer(IResource x, IResource y)
 		{
 			var xDepends = GetDependencies(x);
 			var yDepends = GetDependencies(y);
@@ -74,8 +66,6 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private bool IsConsolidatedUrl(string virtualPath, out IEnumerable<IResource> resourcesInGroup)
 		{
-			//TODO: Figure out how to cache the IsConsolidatedUrl question as it could potentially be run for every unique script that is included
-			//in a dev environment, which could be slow
 			if (IsConsolidatedUrl(virtualPath, _scriptGroups, out resourcesInGroup))
 				return true;
 			if (IsConsolidatedUrl(virtualPath, _styleGroups, out resourcesInGroup))

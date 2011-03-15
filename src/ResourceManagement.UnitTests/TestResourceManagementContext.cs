@@ -27,7 +27,7 @@ namespace AlmWitt.Web.ResourceManagement
 			var context = new ResourceManagementContext();
 			context.AddFinder(stubFinder);
 			var excludeFilter = ToFilter(r => r.VirtualPath.Contains("file2"));
-			var consolidatedResource = context.ConsolidateGroup(group.ConsolidatedUrl, new GroupTemplateContext(groupTemplate, excludeFilter), ResourceMode.Debug);
+			var consolidatedResource = context.ConsolidateGroup(group.ConsolidatedUrl, groupTemplate.WithContext(excludeFilter), ResourceMode.Debug);
 			
 			consolidatedResource.ShouldNotBeNull();
 			consolidatedResource.Resources.Count().ShouldEqual(2);

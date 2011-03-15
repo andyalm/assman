@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using AlmWitt.Web.ResourceManagement.Configuration;
-
 namespace AlmWitt.Web.ResourceManagement
 {
 	public class ResourceGroupManager : IResourceGroupManager
 	{
+		public static IResourceGroupManager GetInstance()
+		{
+			return new CachingResourceGroupManager(new ResourceGroupManager());
+		}
+		
 		private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
 
 		public void Add(IResourceGroupTemplate template)
@@ -25,18 +28,18 @@ namespace AlmWitt.Web.ResourceManagement
 			return _templates.Any();
 		}
 
-		public bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl)
+		public string GetResourceUrl(string virtualPath)
 		{
 			foreach (var groupTemplate in _templates)
 			{
+				string consolidatedUrl;
 				if (groupTemplate.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl))
 				{
-					return true;
+					return consolidatedUrl;
 				}
 			}
 
-			consolidatedUrl = null;
-			return false;
+			return virtualPath;
 		}
 
 		public bool IsConsolidatedUrl(string virtualPath)
@@ -94,7 +97,7 @@ namespace AlmWitt.Web.ResourceManagement
 			excludeFilter.AddFilter(new ConsolidatedUrlFilter(_templates));
 			foreach (var groupTemplate in _templates)
 			{
-				var templateContext = new GroupTemplateContext(groupTemplate, excludeFilter);
+				var templateContext = groupTemplate.WithContext(excludeFilter);
 				if(!handler(templateContext))
 					break;
 
@@ -116,61 +119,56 @@ namespace AlmWitt.Web.ResourceManagement
 				return _templates.Any(t => t.MatchesConsolidatedUrl(resource.VirtualPath));
 			}
 		}
-	}
 
-	public class GroupTemplateContext
-	{
-		private readonly IResourceFilter _excludeFilter;
-		
-		internal GroupTemplateContext(IResourceGroupTemplate groupTemplate, IResourceFilter excludeFilter)
+		internal class CachingResourceGroupManager : IResourceGroupManager
 		{
-			GroupTemplate = groupTemplate;
-			_excludeFilter = excludeFilter;
-		}
+			private readonly IResourceGroupManager _inner;
+			private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
 
-		public IResourceGroupTemplate GroupTemplate { get; private set; }
+			public CachingResourceGroupManager(IResourceGroupManager inner)
+			{
+				_inner = inner;
+			}
 
-		public ResourceType ResourceType
-		{
-			get { return GroupTemplate.ResourceType; }
-		}
+			public void Add(IResourceGroupTemplate template)
+			{
+				_inner.Add(template);
+			}
 
-		public IResourceGroup FindGroupOrDefault(IResourceFinder finder, string consolidatedUrl, ResourceMode mode)
-		{
-			var resources = finder.FindResources(GroupTemplate.ResourceType);
+			public void Clear()
+			{
+				_inner.Clear();
+			}
 
-			return FindGroupOrDefault(resources, consolidatedUrl, mode);
-		}
+			public bool Any()
+			{
+				return _inner.Any();
+			}
 
-		public IResourceGroup FindGroupOrDefault(IEnumerable<IResource> allResources, string consolidatedUrl, ResourceMode mode)
-		{
-			return (from @group in GetGroups(allResources, mode)
-					where UrlType.ArePathsEqual(@group.ConsolidatedUrl, consolidatedUrl)
-					select @group).SingleOrDefault();
-		}
+			public string GetResourceUrl(string virtualPath)
+			{
+				return _resolvedResourceUrls.GetOrAdd(virtualPath, () => _inner.GetResourceUrl(virtualPath));
+			}
 
-		public IEnumerable<IResourceGroup> GetGroups(IResourceFinder finder, ResourceMode mode)
-		{
-			var resources = finder.FindResources(GroupTemplate.ResourceType);
-			return GetGroups(resources, mode);
-		}
+			public bool IsConsolidatedUrl(string virtualPath)
+			{
+				return _inner.IsConsolidatedUrl(virtualPath);
+			}
 
-		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
-		{
-			return GroupTemplate.GetGroups(allResources.Exclude(_excludeFilter), mode);
-		}
-	}
+			public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
+			{
+				return _inner.GetGroupTemplateOrDefault(consolidatedUrl);
+			}
 
-	public static class GroupTemplateExtensions
-	{
-		public static GroupTemplateContext WithContext(this IResourceGroupTemplate groupTemplate, IResourceFilter excludeFilter)
-		{
-			return new GroupTemplateContext(groupTemplate, excludeFilter);
-		}
+			public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+			{
+				return _inner.GetGroupOrDefault(consolidatedUrl, mode, finder);
+			}
 
-		public static GroupTemplateContext WithEmptyContext(this IResourceGroupTemplate groupTemplate)
-		{
-			return new GroupTemplateContext(groupTemplate, ResourceFilters.False);
+			public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
+			{
+				_inner.EachGroup(allResources, mode, handler);
+			}
 		}
 	}
 }

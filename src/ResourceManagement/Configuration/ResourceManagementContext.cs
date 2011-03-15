@@ -34,18 +34,17 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		private readonly CompositeResourceFinder _finder;
 		private readonly ContentFilterMap _filterMap;
-		private readonly IResourceGroupManager _scriptGroups;
-		private readonly IResourceGroupManager _styleGroups;
+		private IResourceGroupManager _scriptGroups;
+		private IResourceGroupManager _styleGroups;
 		private readonly List<Assembly> _assemblies;
 		private readonly DependencyManager _dependencyManager;
-		private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
 
 		internal ResourceManagementContext()
 		{
 			_finder = new CompositeResourceFinder();
 			_filterMap = new ContentFilterMap();
-			_scriptGroups = new ResourceGroupManager();
-			_styleGroups = new ResourceGroupManager();
+			_scriptGroups = ResourceGroupManager.GetInstance();
+			_styleGroups = ResourceGroupManager.GetInstance();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
 			ConsolidateClientScripts = true;
@@ -199,36 +198,11 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
 		{
-			PopulateResourceUrlMap(preConsolidationReport.ClientScriptGroups);
-			PopulateResourceUrlMap(preConsolidationReport.CssGroups);
-			PopulateDependencyCache(preConsolidationReport.Dependencies);
+			_scriptGroups = new PreConsolidatedGroupManager(preConsolidationReport.ClientScriptGroups);
+			_styleGroups = new PreConsolidatedGroupManager(preConsolidationReport.CssGroups);
+			_dependencyManager.SetCache(new PreConsolidatedDependencyCache(preConsolidationReport.Dependencies));
 			Version = preConsolidationReport.Version;
 			PreConsolidated = true;
-		}
-
-		private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceDependencies> dependencies)
-		{
-			var cache = new PreConsolidatedDependencyCache();
-			foreach (var resourceWithDependency in dependencies)
-			{
-				cache.SetDependencies(resourceWithDependency.ResourcePath, resourceWithDependency.Dependencies);
-			}
-
-			_dependencyManager.SetCache(cache);
-		}
-
-		private void PopulateResourceUrlMap(IEnumerable<PreConsolidatedResourceGroup> groups)
-		{
-			var resourceUrlMap = from @group in groups
-								 from resourcePath in @group.Resources
-								 select new KeyValuePair<string, string>(resourcePath, @group.ConsolidatedUrl);
-
-			_resolvedResourceUrls.AddRange(resourceUrlMap);
-
-			var consolidatedUrls = from @group in groups
-			                       select new KeyValuePair<string, string>(@group.ConsolidatedUrl, @group.ConsolidatedUrl);
-
-			_resolvedResourceUrls.AddRange(consolidatedUrls);
 		}
 
 		internal IResourceFinder Finder
@@ -241,8 +215,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			if (consolidate)
 			{
 				string unresolvedUrl = resourceUrl;
-				var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl,
-				                                                 () => CalculateResourceUrl(groupManager, unresolvedUrl));
+				var resolvedUrl = groupManager.GetResourceUrl(resourceUrl);
 
 				if (resolvedUrl != unresolvedUrl || groupManager.IsConsolidatedUrl(resolvedUrl))
 				{
@@ -257,15 +230,6 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			if (!String.IsNullOrEmpty(Version) && !resourceUrl.Contains("?"))
 				resourceUrl += "?v=" + HttpUtility.UrlEncode(Version);
 			return resourceUrl;
-		}
-
-		private string CalculateResourceUrl(IResourceGroupManager groupManager, string resourceUrl)
-		{
-			string consolidatedUrl;
-			if (groupManager.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
-				return consolidatedUrl;
-			else
-				return resourceUrl;
 		}
 
 		private IEnumerable<PreConsolidatedResourceGroup> ConsolidateAllInternal(ResourceType resourceType, IResourceGroupManager groupTemplates, ResourceMode mode, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)
