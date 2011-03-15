@@ -162,6 +162,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 			public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
 			{
+				//TODO: Add caching
 				return _inner.GetGroupOrDefault(consolidatedUrl, mode, finder);
 			}
 
