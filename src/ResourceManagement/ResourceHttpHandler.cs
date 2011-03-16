@@ -61,7 +61,7 @@ namespace AlmWitt.Web.ResourceManagement
 			{
 				return null;
 			}
-			var handler = _handlerFactory.CreateHandler(appRelativePath, _resourceContext, templateContext);
+			var handler = _handlerFactory.CreateHandler(appRelativePath, _resourceContext.GetConsolidator(), templateContext);
 			handler.MinLastModified = _minLastModified;
 			
 			_handlerRegistry[appRelativePath] = handler;

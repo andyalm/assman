@@ -8,16 +8,16 @@ namespace AlmWitt.Web.ResourceManagement
 	internal class ResourceHandler : IResourceHandler
 	{
 		private readonly string _path;
-		private readonly ResourceManagementContext _configContext;
+		private readonly ResourceConsolidator _consolidator;
 		private readonly GroupTemplateContext _groupTemplateContext;
 		private DateTime _minLastModified = DateTime.MinValue;
 		private ConsolidatedResource _cachedConsolidatedResource;
 		internal Func<IConfigLoader> GetConfigurationLoader = () => new DefaultConfigLoader();
 
-		public ResourceHandler(string path, ResourceManagementContext configContext, GroupTemplateContext groupTemplateContext)
+		public ResourceHandler(string path, ResourceConsolidator consolidator, GroupTemplateContext groupTemplateContext)
 		{
 			_path = path;
-			_configContext = configContext;
+			_consolidator = consolidator;
 			_groupTemplateContext = groupTemplateContext;
 		}
 
@@ -62,7 +62,7 @@ namespace AlmWitt.Web.ResourceManagement
 				return _cachedConsolidatedResource;
 			}
 
-			var consolidatedResource = _configContext.ConsolidateGroup(_path, _groupTemplateContext, IsDebugMode ? ResourceMode.Debug : ResourceMode.Release);
+			var consolidatedResource = _consolidator.ConsolidateGroup(_path, _groupTemplateContext, IsDebugMode ? ResourceMode.Debug : ResourceMode.Release);
 			if(CachingEnabled)
 			{
 				_cachedConsolidatedResource = consolidatedResource;

@@ -99,7 +99,7 @@ namespace AlmWitt.Web.ResourceManagement
 				get { return _handlersCreated.Count; }
 			}
 
-			public IResourceHandler CreateHandler(string path, ResourceManagementContext configContext, GroupTemplateContext groupTemplateContext)
+			public IResourceHandler CreateHandler(string path, ResourceConsolidator consolidator, GroupTemplateContext groupTemplateContext)
 			{
 				var handler = new Mock<IResourceHandler>();
 				_handlersCreated.Add(handler);

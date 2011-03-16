@@ -161,6 +161,7 @@
     <Compile Include="Registration\ResourceRegistryRenderer.cs" />
     <Compile Include="Registration\TextWriterExtensions.cs" />
     <Compile Include="ResourceCollectionExtensions.cs" />
+    <Compile Include="ResourceConsolidator.cs" />
     <Compile Include="ResourceGroupManager.cs" />
     <Compile Include="ResourceGroup.cs" />
     <Compile Include="ResourceMode.cs" />

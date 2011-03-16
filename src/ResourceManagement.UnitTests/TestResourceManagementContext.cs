@@ -27,7 +27,8 @@ namespace AlmWitt.Web.ResourceManagement
 			var context = new ResourceManagementContext();
 			context.AddFinder(stubFinder);
 			var excludeFilter = ToFilter(r => r.VirtualPath.Contains("file2"));
-			var consolidatedResource = context.ConsolidateGroup(group.ConsolidatedUrl, groupTemplate.WithContext(excludeFilter), ResourceMode.Debug);
+			var consolidator = context.GetConsolidator();
+			var consolidatedResource = consolidator.ConsolidateGroup(group.ConsolidatedUrl, groupTemplate.WithContext(excludeFilter), ResourceMode.Debug);
 			
 			consolidatedResource.ShouldNotBeNull();
 			consolidatedResource.Resources.Count().ShouldEqual(2);
@@ -53,7 +54,8 @@ namespace AlmWitt.Web.ResourceManagement
 			var context = new ResourceManagementContext();
 			context.MapExtensionToDependencyProvider(".js", dependencyProvider);
 
-			var consolidatedResource = context.ConsolidateGroup(group, ResourceMode.Debug);
+			var consolidator = context.GetConsolidator();
+			var consolidatedResource = consolidator.ConsolidateGroup(group, ResourceMode.Debug);
 			var resources = consolidatedResource.Resources.ToList();
 			resources[0].VirtualPath.ShouldEqual("~/dependency-root.js");
 			resources[1].VirtualPath.ShouldEqual("~/dependency-middle.js");
@@ -88,8 +90,8 @@ namespace AlmWitt.Web.ResourceManagement
 			var group2Template = new StubResourceGroupTemplate(group2) { ResourceType = ResourceType.ClientScript };
 			context.ScriptGroups.Add(group1Template);
 			context.ScriptGroups.Add(group2Template);
-
-			var preConsolidationReport = context.ConsolidateAll((resource, @group) => { }, ResourceMode.Release);
+			var consolidator = context.GetConsolidator();
+			var preConsolidationReport = consolidator.ConsolidateAll((resource, @group) => { }, ResourceMode.Release);
 
 			var group2Consolidated = preConsolidationReport.ClientScriptGroups.Where(g => g.ConsolidatedUrl == "~/scripts/everything-else.js").Single();
 

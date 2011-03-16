@@ -22,7 +22,6 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
 
         private readonly string _websiteRootDirectory;
         private VirtualPathResolver _resolver;
-    	private ResourceManagementContext _context;
         private ILogger _logger = NullLogger.Instance;
     	
         private PreConsolidateCommand(string websiteRootDirectory)
@@ -76,8 +75,9 @@ namespace AlmWitt.Web.ResourceManagement.BuildSupport
 
 		private void ConsolidateAll(ResourceManagementConfiguration configSection)
 		{
-			_context = configSection.BuildContext(usePreConsolidationReportIfPresent: false);
-			var report = _context.ConsolidateAll(WriteConsolidatedResource, Mode);
+			var context = configSection.BuildContext(usePreConsolidationReportIfPresent: false);
+			var consolidator = context.GetConsolidator();
+			var report = consolidator.ConsolidateAll(WriteConsolidatedResource, Mode);
 			report.Version = this.Version ?? DateTime.Now.ToString("yyMMddHHmm");
 			configSection.SavePreConsolidationReport(report);
 		}
