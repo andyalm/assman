@@ -41,8 +41,8 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			}
 			
 			preConsolidationReport.Version = (string) document.Root.Attribute("version");
-			preConsolidationReport.ClientScriptGroups = CollectResourceGroups(document.Root.Element("scripts")).ToList();
-			preConsolidationReport.CssGroups = CollectResourceGroups(document.Root.Element("stylesheets")).ToList();
+			preConsolidationReport.ScriptGroups = CollectResourceGroups(document.Root.Element("scriptGroups")).ToList();
+			preConsolidationReport.StyleGroups = CollectResourceGroups(document.Root.Element("styleGroups")).ToList();
 			preConsolidationReport.Dependencies = CollectDependencies(document.Root.Element("dependencies")).ToList();
 
 			return true;
@@ -62,8 +62,8 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 				{
 					using (writer.Element("preConsolidationReport", version => preConsolidationReport.Version))
 					{
-						WriteResourceGroups(writer, "scripts", preConsolidationReport.ClientScriptGroups);
-						WriteResourceGroups(writer, "stylesheets", preConsolidationReport.CssGroups);
+						WriteResourceGroups(writer, "scriptGroups", preConsolidationReport.ScriptGroups);
+						WriteResourceGroups(writer, "styleGroups", preConsolidationReport.StyleGroups);
 						using(writer.Element("dependencies"))
 						{
 							foreach (var resourceWithDependency in preConsolidationReport.Dependencies)

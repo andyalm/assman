@@ -20,11 +20,14 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 		
 		public IEnumerable<string> GetDependencies(IResource resource)
 		{
+			GetDependenciesWasCalled = true;
 			IEnumerable<string> dependencies;
 			if (_dependencyMap.TryGetValue(resource.VirtualPath, out dependencies))
 				return dependencies;
 			else
 				return _noDependencies;
 		}
+
+		public bool GetDependenciesWasCalled { get; set; }
 	}
 }

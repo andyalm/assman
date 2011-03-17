@@ -124,7 +124,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_instance.ConsolidateClientScripts = true;
 			var preConsolidationReport = new PreConsolidationReport
 			{
-				ClientScriptGroups = new List<PreConsolidatedResourceGroup>
+				ScriptGroups = new List<PreConsolidatedResourceGroup>
 				{
 					new PreConsolidatedResourceGroup
 					{

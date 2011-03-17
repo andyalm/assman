@@ -73,9 +73,11 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 			return (T)obj;
 		}
 
-		public static void ShouldContain<T>(this IEnumerable<T> collection, Func<T, bool> predicate)
+		public static T ShouldContain<T>(this IEnumerable<T> collection, Func<T, bool> predicate)
 		{
 			collection.Any<T>(predicate).ShouldEqual(true);
+
+			return collection.First(predicate);
 		}
 
 		public static void ShouldContainAll<T>(this IEnumerable<T> collection, IEnumerable<T> otherCollection)

@@ -4,7 +4,7 @@ using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
 
-namespace AlmWitt.Web.ResourceManagement.TestObjects
+namespace AlmWitt.Web.ResourceManagement.TestSupport
 {
 	public class StubResourceGroupTemplate : IResourceGroupTemplate
 	{

@@ -54,8 +54,8 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			return new PreConsolidationReport
 			{
-				ClientScriptGroups = ConsolidateAllInternal(ResourceType.ClientScript, _scriptGroups, mode, handleConsolidatedResource).ToList(),
-				CssGroups = ConsolidateAllInternal(ResourceType.Css, _styleGroups, mode, handleConsolidatedResource).ToList(),
+				ScriptGroups = ConsolidateAllInternal(ResourceType.ClientScript, _scriptGroups, mode, handleConsolidatedResource).ToList(),
+				StyleGroups = ConsolidateAllInternal(ResourceType.Css, _styleGroups, mode, handleConsolidatedResource).ToList(),
 				Dependencies = GetAllDependencies(mode).ToList()
 			};
 		}

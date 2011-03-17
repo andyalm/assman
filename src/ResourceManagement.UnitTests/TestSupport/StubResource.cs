@@ -3,7 +3,7 @@ using System.IO;
 
 namespace AlmWitt.Web.ResourceManagement.TestSupport
 {
-	internal class StubResource : IResource
+	public class StubResource : IResource
 	{
 		public static StubResource WithContent(string content)
 		{

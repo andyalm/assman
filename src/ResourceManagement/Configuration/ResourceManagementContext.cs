@@ -141,8 +141,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
 		{
-			_scriptGroups = new PreConsolidatedGroupManager(preConsolidationReport.ClientScriptGroups);
-			_styleGroups = new PreConsolidatedGroupManager(preConsolidationReport.CssGroups);
+			_scriptGroups = new PreConsolidatedGroupManager(preConsolidationReport.ScriptGroups);
+			_styleGroups = new PreConsolidatedGroupManager(preConsolidationReport.StyleGroups);
 			_dependencyManager.SetCache(new PreConsolidatedDependencyCache(preConsolidationReport.Dependencies));
 			Version = preConsolidationReport.Version;
 			PreConsolidated = true;

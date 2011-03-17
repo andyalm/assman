@@ -8,7 +8,15 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
     {
         private readonly ResourceCollection _resources = new ResourceCollection();
         
-        public void AddResource(IResource resource)
+        public StubResource CreateResource(string virtualPath)
+        {
+        	var resource = StubResource.WithPath(virtualPath);
+			AddResource(resource);
+
+        	return resource;
+        }
+		
+		public void AddResource(IResource resource)
         {
         	_resources.Add(resource);
         }

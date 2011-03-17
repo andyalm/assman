@@ -4,16 +4,16 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 {
 	public class PreConsolidationReport
 	{
-		public List<PreConsolidatedResourceGroup> ClientScriptGroups { get; set; }
-		public List<PreConsolidatedResourceGroup> CssGroups { get; set; }
+		public List<PreConsolidatedResourceGroup> ScriptGroups { get; set; }
+		public List<PreConsolidatedResourceGroup> StyleGroups { get; set; }
 		public List<PreConsolidatedResourceDependencies> Dependencies { get; set; }
 		public string Version { get; set; }
 
 		public PreConsolidationReport()
 		{
 			Version = "";
-			ClientScriptGroups = new List<PreConsolidatedResourceGroup>();
-			CssGroups = new List<PreConsolidatedResourceGroup>();
+			ScriptGroups = new List<PreConsolidatedResourceGroup>();
+			StyleGroups = new List<PreConsolidatedResourceGroup>();
 			Dependencies = new List<PreConsolidatedResourceDependencies>();
 		}
 	}

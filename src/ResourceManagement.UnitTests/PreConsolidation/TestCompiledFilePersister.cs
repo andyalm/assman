@@ -26,7 +26,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 		{
 			var report = new PreConsolidationReport
 			{
-				ClientScriptGroups = new List<PreConsolidatedResourceGroup>
+				ScriptGroups = new List<PreConsolidatedResourceGroup>
 				{
 					new PreConsolidatedResourceGroup
 					{
@@ -46,7 +46,7 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 						}
 					}
 				},
-				CssGroups = new List<PreConsolidatedResourceGroup>
+				StyleGroups = new List<PreConsolidatedResourceGroup>
 				{
 					new PreConsolidatedResourceGroup
 					{
@@ -86,8 +86,8 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			PreConsolidationReport deserializedReport;
 			_persister.TryGetPreConsolidationInfo(out deserializedReport).ShouldBeTrue();
 
-			ResourceGroupsShouldBeEqual(report.ClientScriptGroups, deserializedReport.ClientScriptGroups);
-			ResourceGroupsShouldBeEqual(report.CssGroups, deserializedReport.CssGroups);
+			ResourceGroupsShouldBeEqual(report.ScriptGroups, deserializedReport.ScriptGroups);
+			ResourceGroupsShouldBeEqual(report.StyleGroups, deserializedReport.StyleGroups);
 			ResourceDependenciesShouldBeEqual(report.Dependencies, deserializedReport.Dependencies);
 			report.Version.ShouldEqual(deserializedReport.Version);
 		}

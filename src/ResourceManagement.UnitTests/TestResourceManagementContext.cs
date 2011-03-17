@@ -93,7 +93,7 @@ namespace AlmWitt.Web.ResourceManagement
 			var consolidator = context.GetConsolidator();
 			var preConsolidationReport = consolidator.ConsolidateAll((resource, @group) => { }, ResourceMode.Release);
 
-			var group2Consolidated = preConsolidationReport.ClientScriptGroups.Where(g => g.ConsolidatedUrl == "~/scripts/everything-else.js").Single();
+			var group2Consolidated = preConsolidationReport.ScriptGroups.Where(g => g.ConsolidatedUrl == "~/scripts/everything-else.js").Single();
 
 			group2Consolidated.Resources.CountShouldEqual(1);
 			group2Consolidated.Resources[0].ShouldEqual("~/scripts/otherscript.js");

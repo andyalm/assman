@@ -98,7 +98,7 @@ namespace AlmWitt.Web.ResourceManagement
 					 "~/scripts/myscript.js"
 				}
 			};
-			preConsolidationReport.ClientScriptGroups.Add(scriptGroup);
+			preConsolidationReport.ScriptGroups.Add(scriptGroup);
 
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
@@ -125,7 +125,7 @@ namespace AlmWitt.Web.ResourceManagement
 					 "~/scripts/myscript.js"
 				}
 			};
-			preConsolidationReport.ClientScriptGroups.Add(scriptGroup);
+			preConsolidationReport.ScriptGroups.Add(scriptGroup);
 
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
@@ -136,86 +136,5 @@ namespace AlmWitt.Web.ResourceManagement
 			string consolidatedUrl;
 			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), out consolidatedUrl), Times.Never());
 		}
-
-		[Test]
-		[Ignore("This test was invalid...it should be run against the ConsolidateAll method of ResourceManagementContext")]
-		public void WhenPreConsolidatedReportIsLoaded_ConsolidatedUrlsDependenciesAreCached()
-		{
-			var groupTemplate = new Mock<IResourceGroupTemplate>();
-			_context.ScriptGroups.Add(groupTemplate.Object);
-
-			var preConsolidationReport = new PreConsolidationReport();
-			var coreGroup = new PreConsolidatedResourceGroup
-			{
-				ConsolidatedUrl = "~/scripts/consolidated/core.js",
-				Resources = new List<string>
-				{
-					"~/scripts/jquery.js",
-					"~/scripts/site.js"
-				}
-			};
-			preConsolidationReport.ClientScriptGroups.Add(coreGroup);
-			var commonGroup = new PreConsolidatedResourceGroup
-			{
-				ConsolidatedUrl = "~/scripts/consolidated/common.js",
-				Resources = new List<string>
-				{
-					 "~/scripts/mycomponent.js",
-					 "~/scripts/myothercomponent.js",
-				}
-			};
-			preConsolidationReport.ClientScriptGroups.Add(commonGroup);
-			var pageGroup = new PreConsolidatedResourceGroup
-			{
-				ConsolidatedUrl = "~/scripts/consolidated/home.js",
-				Resources = new List<string>
-				{
-					"~/Views/Home/Index.js",
-					"~/Views/Home/_MyPartial.js"
-				}
-			};
-			preConsolidationReport.ClientScriptGroups.Add(pageGroup);
-
-			preConsolidationReport.Dependencies.Add(new PreConsolidatedResourceDependencies
-			{
-				ResourcePath = "~/Views/Home/Index.js",
-				Dependencies = new List<string>
-				{
-					"~/scripts/jquery.js",
-					"~/scripts/mycomponent.js"
-				}
-			});
-			preConsolidationReport.Dependencies.Add(new PreConsolidatedResourceDependencies
-			{
-				ResourcePath = "~/Views/Home/_MyPartial.js",
-				Dependencies = new List<string>
-				{
-					"~/scripts/jquery.js",
-					"~/scripts/site.js"
-				}
-			});
-			preConsolidationReport.Dependencies.Add(new PreConsolidatedResourceDependencies
-			{
-				ResourcePath = "~/Views/Account/Index.js",
-				Dependencies = new List<string>
-				{
-					"~/scripts/myothercomponent.js"
-				}
-			});
-
-			_context.LoadPreCompilationReport(preConsolidationReport);
-
-			var homeIndexDependencies = _context.GetResourceDependencies("~/scripts/consolidated/home.js").ToList();
-			homeIndexDependencies.CountShouldEqual(3);
-			homeIndexDependencies[0].ShouldEqual("~/scripts/jquery.js");
-			homeIndexDependencies[1].ShouldEqual("~/scripts/site.js");
-			homeIndexDependencies[2].ShouldEqual("~/scripts/mycomponent.js");
-
-			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)
-			string consolidatedUrl;
-			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), out consolidatedUrl), Times.Never());
-		}
 	}
-
-	
 }
