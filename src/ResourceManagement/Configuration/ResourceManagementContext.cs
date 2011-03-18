@@ -160,7 +160,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 				string unresolvedUrl = resourceUrl;
 				var resolvedUrl = groupManager.GetResourceUrl(resourceUrl);
 
-				if (resolvedUrl != unresolvedUrl || groupManager.IsConsolidatedUrl(resolvedUrl))
+				var resolvedUrlWithoutQuery = resolvedUrl.WithoutQuery();
+				if (resolvedUrlWithoutQuery != unresolvedUrl || groupManager.IsConsolidatedUrl(resolvedUrlWithoutQuery))
 				{
 					if (!PreConsolidated)
 						resolvedUrl = UrlType.Dynamic.ConvertUrl(resolvedUrl);
@@ -170,8 +171,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 
 				resourceUrl = resolvedUrl;
 			}
-			if (!String.IsNullOrEmpty(Version) && !resourceUrl.Contains("?"))
-				resourceUrl += "?v=" + HttpUtility.UrlEncode(Version);
+			if (!String.IsNullOrEmpty(Version))
+				resourceUrl = resourceUrl.AddQueryParam("v", Version);
 			return resourceUrl;
 		}
 

@@ -79,6 +79,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AspNetShortLivedResourceCache.cs" />
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="BuildSupport\ILogger.cs" />
     <Compile Include="BuildSupport\MSBuild\PreConsolidateResources.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="GroupTemplateContext.cs" />
     <Compile Include="IO\IFileAccess.cs" />
+    <Compile Include="IResourceCache.cs" />
     <Compile Include="IResourceGroupManager.cs" />
     <Compile Include="PreConsolidation\CompiledFilePersister.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="Registration\ResourceRegistryConfiguration.cs" />
     <Compile Include="Registration\ResourceRegistryRenderer.cs" />
     <Compile Include="Registration\TextWriterExtensions.cs" />
+    <Compile Include="ResourceCacheFactory.cs" />
     <Compile Include="ResourceCollectionExtensions.cs" />
     <Compile Include="ResourceConsolidator.cs" />
     <Compile Include="ResourceGroupManager.cs" />
@@ -194,6 +197,7 @@
     </Compile>
     <Compile Include="Registration\WebForms\WebFormsAjaxScriptIncluder.cs" />
     <Compile Include="Registration\WebForms\WebFormsClientScriptRegistry.cs" />
+    <Compile Include="VirtualPathUtil.cs" />
     <Compile Include="VisualStudioScriptDependencyProvider.cs" />
     <Compile Include="Xml\XmlWriterExtensions.cs" />
   </ItemGroup>

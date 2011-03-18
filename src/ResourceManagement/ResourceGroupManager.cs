@@ -8,7 +8,7 @@ namespace AlmWitt.Web.ResourceManagement
 	{
 		public static IResourceGroupManager GetInstance()
 		{
-			return new CachingResourceGroupManager(new ResourceGroupManager());
+			return new CachingResourceGroupManager(new ResourceGroupManager(), ResourceCacheFactory.GetCache());
 		}
 		
 		private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
@@ -123,11 +123,13 @@ namespace AlmWitt.Web.ResourceManagement
 		internal class CachingResourceGroupManager : IResourceGroupManager
 		{
 			private readonly IResourceGroupManager _inner;
+			private readonly IResourceCache _resourceCache;
 			private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
 
-			public CachingResourceGroupManager(IResourceGroupManager inner)
+			public CachingResourceGroupManager(IResourceGroupManager inner, IResourceCache resourceCache)
 			{
 				_inner = inner;
+				_resourceCache = resourceCache;
 			}
 
 			public void Add(IResourceGroupTemplate template)
@@ -147,7 +149,14 @@ namespace AlmWitt.Web.ResourceManagement
 
 			public string GetResourceUrl(string virtualPath)
 			{
-				return _resolvedResourceUrls.GetOrAdd(virtualPath, () => _inner.GetResourceUrl(virtualPath));
+				var resourceUrl = _resolvedResourceUrls.GetOrAdd(virtualPath, () => _inner.GetResourceUrl(virtualPath));
+				var resourceCacheKey = _resourceCache.CurrentCacheKey;
+				if(!String.IsNullOrEmpty(resourceCacheKey))
+				{
+					resourceUrl = resourceUrl.AddQueryParam("c", resourceCacheKey);
+				}
+
+				return resourceUrl;
 			}
 
 			public bool IsConsolidatedUrl(string virtualPath)
@@ -162,8 +171,10 @@ namespace AlmWitt.Web.ResourceManagement
 
 			public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
 			{
-				//TODO: Add caching
-				return _inner.GetGroupOrDefault(consolidatedUrl, mode, finder);
+				return _resourceCache.GetOrAddGroup(consolidatedUrl, mode, () =>
+				{
+					return _inner.GetGroupOrDefault(consolidatedUrl, mode, finder);
+				});
 			}
 
 			public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)

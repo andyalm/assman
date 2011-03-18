@@ -15,6 +15,7 @@ namespace Website
 		public static void RegisterRoutes(RouteCollection routes)
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+			routes.IgnoreRoute("{*consolidatedurls}", new { consolidatedurls = @".*(\.jsx|\.cssx)(/.*)?" });
 
 			routes.MapRoute(
 				"Default", // Route name

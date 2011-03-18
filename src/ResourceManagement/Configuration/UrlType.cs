@@ -38,10 +38,12 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
         {
             public override string ConvertUrl(string url)
             {
-                if (url.EndsWith("x", StringComparison.OrdinalIgnoreCase))
-                    url = url.Substring(0, url.Length - 1);
+            	var urlParts = GetUrlParts(url);
+				
+				if (urlParts.Path.EndsWith("x", StringComparison.OrdinalIgnoreCase))
+                    urlParts.Path = urlParts.Path.Substring(0, url.Length - 1);
 
-                return url;
+                return urlParts.ToString();
             }
         }
 
@@ -49,12 +51,40 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
         {
             public override string ConvertUrl(string url)
             {
-                if (!url.EndsWith("x", StringComparison.OrdinalIgnoreCase))
-                    url += "x";
+            	var urlParts = GetUrlParts(url);
 
-                return url;
+				if (!urlParts.Path.EndsWith("x", StringComparison.OrdinalIgnoreCase))
+					urlParts.Path += "x";
+
+				return urlParts.ToString();
             }
         }
+
+		private static UrlParts GetUrlParts(string url)
+		{
+			var parts = url.Split('?');
+
+			return new UrlParts
+			{
+				Path = parts[0],
+				Query = (parts.Length > 1) ? parts[1] : String.Empty
+			};
+		}
+
+		private class UrlParts
+		{
+			public string Path { get; set; }
+			public string Query { get; set; }
+
+			public override string ToString()
+			{
+				var url = Path;
+				if(!String.IsNullOrEmpty(Query))
+					url += "?" + Query;
+
+				return url;
+			}
+		}
 	}
 
 	

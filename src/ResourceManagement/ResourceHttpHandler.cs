@@ -84,6 +84,9 @@ namespace AlmWitt.Web.ResourceManagement
 			public HttpRequestContext(HttpContextBase httpContext)
 			{
 				_httpContext = httpContext;
+				var resourceCacheKey = httpContext.Request.QueryString["c"];
+				if (!String.IsNullOrEmpty(resourceCacheKey))
+					_httpContext.SetResourceCacheKey(resourceCacheKey);
 			}
 
 			public DateTime? IfModifiedSince

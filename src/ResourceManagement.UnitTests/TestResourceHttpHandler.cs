@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Web;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
@@ -80,6 +81,7 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			var httpContext = new Mock<HttpContextBase>();
 			httpContext.Setup(c => c.Request.Path).Returns(path);
+			httpContext.Setup(c => c.Request.QueryString).Returns(new NameValueCollection());
 			httpContext.SetupProperty(c => c.Response.StatusCode);
 
 			return httpContext;
