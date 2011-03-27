@@ -93,6 +93,7 @@
     <Compile Include="CssDependencyProvider.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="GroupTemplateContext.cs" />
+    <Compile Include="HttpHandlerBase.cs" />
     <Compile Include="IO\IFileAccess.cs" />
     <Compile Include="IResourceCache.cs" />
     <Compile Include="IResourceGroupManager.cs" />
@@ -117,7 +118,6 @@
     <Compile Include="Configuration\ResourceManagementContext.cs" />
     <Compile Include="Configuration\ResourceMatchElement.cs" />
     <Compile Include="Configuration\ResourceMatchElementCollection.cs" />
-    <Compile Include="Configuration\UrlType.cs" />
     <Compile Include="BuildSupport\PreConsolidateCommand.cs" />
     <Compile Include="ConsolidatedResource.cs" />
     <Compile Include="ContentFiltering\JSMinContentFilterFactory.cs" />
@@ -167,6 +167,7 @@
     <Compile Include="ResourceConsolidator.cs" />
     <Compile Include="ResourceGroupManager.cs" />
     <Compile Include="ResourceGroup.cs" />
+    <Compile Include="ResourceHttpHandler.cs" />
     <Compile Include="ResourceMode.cs" />
     <Compile Include="ThreadSafeInMemoryCache.cs" />
     <Compile Include="EmbeddedResource.cs" />
@@ -178,7 +179,7 @@
     <Compile Include="IResourceFilter.cs" />
     <Compile Include="IResourceFinder.cs" />
     <Compile Include="ResourceFilters.cs" />
-    <Compile Include="ResourceHttpHandler.cs" />
+    <Compile Include="DynamicResourceHttpHandler.cs" />
     <Compile Include="Registration\WebForms\CssInclude.cs" />
     <Compile Include="Registration\WebForms\ClientScriptInclude.cs" />
     <Compile Include="Registration\WebForms\WebFormsCssRegistry.cs" />

@@ -13,7 +13,7 @@ namespace AlmWitt.Web.ResourceManagement
 	public class TestResourceManagementConfiguration
 	{
 		private ResourceManagementConfiguration _instance;
-		private const string consolidatedScript = "~/consolidated.jsx";
+		private const string consolidatedScript = "~/consolidated.js";
 		private const string excludedScript = "excluded.js";
 
 		[SetUp]

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
@@ -32,7 +33,7 @@ namespace AlmWitt.Web.ResourceManagement
 		public IResourceGroup FindGroupOrDefault(IEnumerable<IResource> allResources, string consolidatedUrl, ResourceMode mode)
 		{
 			return (from @group in GetGroups(allResources, mode)
-			        where UrlType.ArePathsEqual(@group.ConsolidatedUrl, consolidatedUrl)
+			        where @group.ConsolidatedUrl.Equals(consolidatedUrl, StringComparison.OrdinalIgnoreCase)
 			        select @group).SingleOrDefault();
 		}
 

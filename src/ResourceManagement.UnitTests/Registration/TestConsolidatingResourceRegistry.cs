@@ -15,7 +15,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		private ConsolidatingResourceRegistry _consolidatingRegistry;
 		private const string UrlNotToBeConsolidated = "~/random/location/script.js";
 		private const string UrlToBeConsolidated = "~/configured/location/script.js";
-		private const string ConsolidatedUrl = "~/scripts/consolidated/core.jsx";
+		private const string ConsolidatedUrl = "~/scripts/consolidated/core.js";
 
 		[SetUp]
 		public void SetupContext()

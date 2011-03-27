@@ -28,7 +28,7 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 
 		public bool MatchesConsolidatedUrl(string consolidatedUrl)
 		{
-			return Groups.Any(group => UrlType.ArePathsEqual(group.ConsolidatedUrl, consolidatedUrl));
+			return Groups.Any(group => group.ConsolidatedUrl.Equals(consolidatedUrl, StringComparison.OrdinalIgnoreCase));
 		}
 
 		public ResourceType ResourceType { get; set; }

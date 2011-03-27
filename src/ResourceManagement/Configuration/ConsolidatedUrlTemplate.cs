@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace AlmWitt.Web.ResourceManagement.Configuration
@@ -44,7 +45,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		public bool Matches(string consolidatedUrl)
 		{
 			if (!HasParameters)
-				return UrlType.ArePathsEqual(_consolidatedUrlString, consolidatedUrl);
+				return _consolidatedUrlString.Equals(consolidatedUrl, StringComparison.OrdinalIgnoreCase);
 
 			return MatchRegex.IsMatch(consolidatedUrl);
 		}

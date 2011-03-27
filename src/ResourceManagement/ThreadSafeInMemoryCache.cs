@@ -4,7 +4,15 @@ using System.Threading;
 
 namespace AlmWitt.Web.ResourceManagement
 {
-	/// <summary>
+    internal interface IThreadSafeInMemoryCache<TKey, TValue>
+    {
+        int Count { get; }
+        TValue Get(TKey key);
+        TValue GetOrAdd(TKey key, Func<TValue> getValue);
+        void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> pairs);
+    }
+
+    /// <summary>
 	/// This class is intended to be used when you are accumulating a cache of stuff that can be accessed by multiple threads.
 	/// It wraps a Dictionary, but is thread safe.  I didn't make it implement IDictionary because IDictionary's interface
 	/// is pretty broad and that would be more work (YAGNI).
@@ -12,8 +20,8 @@ namespace AlmWitt.Web.ResourceManagement
 	/// <remarks>
 	/// When we move to .NET 4, we can replace this with a ConcurrentDictionary.
 	/// </remarks>
-	internal class ThreadSafeInMemoryCache<TKey, TValue>
-	{
+	internal class ThreadSafeInMemoryCache<TKey, TValue> : IThreadSafeInMemoryCache<TKey, TValue>
+    {
 		private readonly IDictionary<TKey, TValue> _dictionary;
 		private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
@@ -112,4 +120,26 @@ namespace AlmWitt.Web.ResourceManagement
 			}
 		}
 	}
+
+    public class NullThreadSafeInMemoryCache<TKey,TValue> : IThreadSafeInMemoryCache<TKey, TValue>
+    {
+        public NullThreadSafeInMemoryCache(){}
+        
+        public int Count
+        {
+            get { return 0; }
+        }
+
+        public TValue Get(TKey key)
+        {
+            return default(TValue);
+        }
+
+        public TValue GetOrAdd(TKey key, Func<TValue> getValue)
+        {
+            return getValue();
+        }
+
+        public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> pairs) {}
+    }
 }

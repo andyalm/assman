@@ -15,8 +15,7 @@ namespace AlmWitt.Web.ResourceManagement
 		private ResourceManagementContext _instance;
 		private const string myScript = "myscript.js";
 		private const string mySecondScript = "mysecondscript.js";
-		private const string consolidatedScript = "~/consolidated.jsx";
-		private const string consolidatedScriptStatic = "~/consolidated.js";
+		private const string consolidatedScript = "~/consolidated.js";
 		private const string excludedScript = "excluded.js";
 		private ClientScriptGroupElement _groupElement;
 
@@ -106,7 +105,7 @@ namespace AlmWitt.Web.ResourceManagement
 		[Test]
 		public void FilesInSecondGroupAndNotInFirstReturnSecondGroupUrl()
 		{
-			const string secondGroupUrl = "~/mysecondconsolidation.jsx";
+			const string secondGroupUrl = "~/mysecondconsolidation.js";
 			_instance.ConsolidateClientScripts = true;
 			_groupElement.Exclude.AddPattern(mySecondScript);
 			var secondGroupElement = new ClientScriptGroupElement();
@@ -116,31 +115,6 @@ namespace AlmWitt.Web.ResourceManagement
 			string scriptToInclude = _instance.GetScriptUrl(mySecondScript);
 
 			Assert.That(scriptToInclude, Is.EqualTo(secondGroupUrl).IgnoreCase);
-		}
-
-		[Test]
-		public void ConsolidatedUrlIsStaticWhenPreConsolidated()
-		{
-			_instance.ConsolidateClientScripts = true;
-			var preConsolidationReport = new PreConsolidationReport
-			{
-				ScriptGroups = new List<PreConsolidatedResourceGroup>
-				{
-					new PreConsolidatedResourceGroup
-					{
-						ConsolidatedUrl = consolidatedScriptStatic,
-						Resources = new List<string>
-						{
-							myScript
-						}
-					}
-				}
-			};
-			_instance.LoadPreCompilationReport(preConsolidationReport);
-
-			string scriptToInclude = _instance.GetScriptUrl(myScript);
-
-			Assert.That(scriptToInclude, Is.EqualTo(consolidatedScriptStatic).IgnoreCase);
 		}
 
 		[Test]
@@ -161,7 +135,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_groupElement.Include.AddPath(myScript);
 			_groupElement.Include.AddPath(mySecondScript);
 			
-			var resolvedScriptPath = _instance.GetScriptUrl(consolidatedScriptStatic);
+			var resolvedScriptPath = _instance.GetScriptUrl(consolidatedScript);
 			
 			resolvedScriptPath.ShouldEqual(consolidatedScript);
 		}

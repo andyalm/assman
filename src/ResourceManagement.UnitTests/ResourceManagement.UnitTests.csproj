@@ -101,7 +101,7 @@
     <Compile Include="TestEmbeddedResourceFinder.cs" />
     <Compile Include="TestPluginElement.cs" />
     <Compile Include="TestResourceConsolidator.cs" />
-    <Compile Include="TestResourceHttpHandler.cs" />
+    <Compile Include="TestDynamicResourceHttpHandler.cs" />
     <Compile Include="TestResourceManagementContext.cs" />
     <Compile Include="TestResourceManagementContext_GetResourceUrl.cs" />
     <Compile Include="TestResourceManagementContext_PreConsolidation.cs" />

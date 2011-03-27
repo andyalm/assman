@@ -13,9 +13,9 @@ using NUnit.Framework;
 namespace AlmWitt.Web.ResourceManagement
 {
 	[TestFixture]
-	public class TestResourceHttpHandler
+	public class TestDynamicResourceHttpHandler
 	{
-		private ResourceHttpHandler _httpHandler;
+		private DynamicResourceHttpHandler _httpHandler;
 		private ResourceManagementContext _context;
 		private FakeHandlerFactory _handlerFactory;
 		private Mock<HttpContextBase> _httpContext;
@@ -32,14 +32,14 @@ namespace AlmWitt.Web.ResourceManagement
 
 			_handlerFactory = new FakeHandlerFactory();
 
-			_httpHandler = new ResourceHttpHandler(_context, _handlerFactory);
+			_httpHandler = new DynamicResourceHttpHandler(_context, _handlerFactory);
 			_httpHandler.ToAppRelativePath = ToAppRelative;
 		}
 
 		[Test]
 		public void WhenUrlIsFirstRequested_NewHandlerIsCreatedAndCalled()
 		{
-			var scriptsPath = ConsolidatedPath + "x";
+			var scriptsPath = ConsolidatedPath;
 			ProcessRequest(scriptsPath);
 
 			_handlerFactory.NumberOfCreateCalls.ShouldEqual(1);
@@ -49,7 +49,7 @@ namespace AlmWitt.Web.ResourceManagement
 		[Test]
 		public void WhenUrlIsRequestedAgain_HandlerIsReusedAndCalledAgain()
 		{
-			var scriptsPath = ConsolidatedPath + "x";
+			var scriptsPath = ConsolidatedPath;
 			ProcessRequest(scriptsPath);
 			ProcessRequest(scriptsPath);
 
@@ -60,7 +60,7 @@ namespace AlmWitt.Web.ResourceManagement
 		[Test]
 		public void WhenUrlDoesNotMatchAnyGroupTemplates_NoHandlerIsCreatedAnd404IsReturned()
 		{
-			ProcessRequest("/bogus.jsx");
+			ProcessRequest("/bogus.js");
 
 			_handlerFactory.NumberOfCreateCalls.ShouldEqual(0);
 			_httpContext.Object.Response.StatusCode.ShouldEqual(404);
