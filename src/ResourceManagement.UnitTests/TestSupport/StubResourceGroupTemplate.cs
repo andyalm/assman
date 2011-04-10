@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using AlmWitt.Web.ResourceManagement.Configuration;
-
 namespace AlmWitt.Web.ResourceManagement.TestSupport
 {
 	public class StubResourceGroupTemplate : IResourceGroupTemplate
@@ -34,6 +32,8 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 		public ResourceType ResourceType { get; set; }
 
 		public bool Minify { get; set; }
+
+	    public bool Consolidate { get; set; }
 
 		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{

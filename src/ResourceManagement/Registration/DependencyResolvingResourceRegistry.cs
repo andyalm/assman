@@ -17,9 +17,9 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			_context = context;
 		}
 
-		public bool TryResolvePath(string path, out string resolvedVirtualPath)
+		public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
 		{
-			return _inner.TryResolvePath(path, out resolvedVirtualPath);
+			return _inner.TryResolvePath(path, out resolvedVirtualPaths);
 		}
 
 		public void IncludePath(string urlToInclude)

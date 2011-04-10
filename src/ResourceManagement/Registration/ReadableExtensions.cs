@@ -22,9 +22,9 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				_inner = inner;
 			}
 
-			public bool TryResolvePath(string path, out string resolvedVirtualPath)
+			public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
 			{
-				return _inner.TryResolvePath(path, out resolvedVirtualPath);
+				return _inner.TryResolvePath(path, out resolvedVirtualPaths);
 			}
 
 			public IEnumerable<string> GetIncludes()

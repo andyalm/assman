@@ -102,7 +102,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
-			var resolvedUrl = _context.GetScriptUrl("~/scripts/myscript.js");
+			var resolvedUrl = _context.GetScriptUrls("~/scripts/myscript.js").Single();
 			resolvedUrl.ShouldEqual("~/scripts/consolidated/common.js");
 			
 			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)
@@ -129,7 +129,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
-			var resolvedUrl = _context.GetScriptUrl("~/scripts/consolidated/common.js");
+			var resolvedUrl = _context.GetScriptUrls("~/scripts/consolidated/common.js").Single();
 			resolvedUrl.ShouldEqual("~/scripts/consolidated/common.js");
 
 			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)

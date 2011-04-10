@@ -13,6 +13,11 @@ namespace AlmWitt.Web.ResourceManagement
 		
 		private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
 
+	    public ResourceGroupManager()
+	    {
+	        Consolidate = true;
+	    }
+
 		public void Add(IResourceGroupTemplate template)
 		{
 			_templates.Add(template);
@@ -28,21 +33,42 @@ namespace AlmWitt.Web.ResourceManagement
 			return _templates.Any();
 		}
 
-		public string GetResourceUrl(string virtualPath)
-		{
-			foreach (var groupTemplate in _templates)
-			{
-				string consolidatedUrl;
-				if (groupTemplate.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl))
-				{
-					return consolidatedUrl;
-				}
-			}
+        public bool Consolidate { get; set; }
 
-			return virtualPath;
-		}
+	    public string ResolveResourceUrl(string resourceUrl)
+	    {
+            if (!Consolidate)
+                return resourceUrl;
+            
+            foreach (var groupTemplate in _templates)
+            {
+                string consolidatedUrl;
+                if (groupTemplate.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
+                {
+                    return consolidatedUrl;
+                }
+            }
 
-		public bool IsConsolidatedUrl(string virtualPath)
+            return resourceUrl;
+	    }
+
+	    public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
+	    {
+	        var groupTemplate = GetGroupTemplateOrDefault(resourceUrl);
+
+	        return groupTemplate != null && (!Consolidate || !groupTemplate.GroupTemplate.Consolidate);
+	    }
+
+	    public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+	    {
+            var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
+            if (group == null)
+                return new string[0];
+
+            return group.GetResources().Select(r => r.VirtualPath);
+	    }
+
+	    public bool IsConsolidatedUrl(string virtualPath)
 		{
 			return _templates.Any(t => t.MatchesConsolidatedUrl(virtualPath));
 		}
@@ -125,6 +151,7 @@ namespace AlmWitt.Web.ResourceManagement
 			private readonly IResourceGroupManager _inner;
 			private readonly IResourceCache _resourceCache;
 			private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
+            private readonly ThreadSafeInMemoryCache<string, IEnumerable<string>> _resourceGroupUrls = new ThreadSafeInMemoryCache<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase);
 
 			public CachingResourceGroupManager(IResourceGroupManager inner, IResourceCache resourceCache)
 			{
@@ -147,29 +174,50 @@ namespace AlmWitt.Web.ResourceManagement
 				return _inner.Any();
 			}
 
-			public string GetResourceUrl(string virtualPath)
-			{
-				var resourceUrl = _resolvedResourceUrls.GetOrAdd(virtualPath, () => _inner.GetResourceUrl(virtualPath));
-				var resourceCacheKey = _resourceCache.CurrentCacheKey;
-				if(!String.IsNullOrEmpty(resourceCacheKey))
-				{
-					resourceUrl = resourceUrl.AddQueryParam("c", resourceCacheKey);
-				}
+		    public bool Consolidate
+		    {
+                get { return _inner.Consolidate; }
+                set { _inner.Consolidate = value; }
+		    }
 
-				return resourceUrl;
-			}
+		    public string ResolveResourceUrl(string resourceUrl)
+		    {
+                var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl, () => _inner.ResolveResourceUrl(resourceUrl));
+                return AppendCacheKey(resolvedUrl);
+		    }
 
-			public bool IsConsolidatedUrl(string virtualPath)
+		    public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
+		    {
+		        return _inner.IsGroupUrlWithConsolidationDisabled(resourceUrl);
+		    }
+
+		    public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+		    {
+		        var resourceUrls = _resourceGroupUrls.GetOrAdd(consolidatedUrl + mode, () =>
+		        {
+		            //We don't delegate to _inner here so that we can make use of our cache for GetGroupOrDefault.
+                    //A little duplication here, but its pretty trivial
+                    var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
+		            if (group == null)
+		                return new string[0];
+
+		            return group.GetResources().Select(r => AppendCacheKey(r.VirtualPath));
+		        });
+
+		        return resourceUrls.Select(AppendCacheKey);
+		    }
+
+		    public bool IsConsolidatedUrl(string virtualPath)
 			{
 				return _inner.IsConsolidatedUrl(virtualPath);
 			}
 
-			public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
+		    public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
 			{
 				return _inner.GetGroupTemplateOrDefault(consolidatedUrl);
 			}
 
-			public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+		    public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
 			{
 				return _resourceCache.GetOrAddGroup(consolidatedUrl, mode, () =>
 				{
@@ -177,10 +225,20 @@ namespace AlmWitt.Web.ResourceManagement
 				});
 			}
 
-			public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
+		    public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
 			{
 				_inner.EachGroup(allResources, mode, handler);
 			}
+
+		    private string AppendCacheKey(string resourceUrl)
+            {
+		        var resourceCacheKey = _resourceCache.CurrentCacheKey;
+
+		        if (!String.IsNullOrEmpty(resourceCacheKey))
+		            return resourceUrl.AddQueryParam("c", resourceCacheKey);
+		        else
+		            return resourceUrl;
+		    }
 		}
 	}
 }

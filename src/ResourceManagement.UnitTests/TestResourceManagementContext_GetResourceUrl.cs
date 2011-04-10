@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
-using AlmWitt.Web.ResourceManagement.PreConsolidation;
 using AlmWitt.Web.ResourceManagement.TestSupport;
 
 using NUnit.Framework;
@@ -18,13 +17,20 @@ namespace AlmWitt.Web.ResourceManagement
 		private const string consolidatedScript = "~/consolidated.js";
 		private const string excludedScript = "excluded.js";
 		private ClientScriptGroupElement _groupElement;
+	    private StubResourceFinder _finder;
 
 		[SetUp]
 		public void Init()
 		{
-			_instance = new ResourceManagementContext();
+		    _finder = new StubResourceFinder();
+		    _finder.CreateResource(myScript);
+		    _finder.CreateResource(mySecondScript);
+		    _finder.CreateResource(excludedScript);
+            
+            _instance = new ResourceManagementContext();
 			_instance.ConsolidateClientScripts = true;
 			_instance.ConfigurationLastModified = DateTime.MinValue;
+		    _instance.AddFinder(_finder);
 			_groupElement = new ClientScriptGroupElement();
 			_groupElement.ConsolidatedUrl = consolidatedScript;
 			_groupElement.Exclude.AddPattern(excludedScript);
@@ -36,7 +42,7 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			_instance.ConsolidateClientScripts = true;
 
-			string scriptToInclude = _instance.GetScriptUrl(myScript);
+			var scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
 			Assert.That(scriptToInclude, Is.EqualTo(consolidatedScript).IgnoreCase);
 		}
@@ -45,7 +51,7 @@ namespace AlmWitt.Web.ResourceManagement
 		public void ReturnsSelfWhenScriptConsolidationDisabled()
 		{
 			_instance.ConsolidateClientScripts = false;
-			string scriptToInclude = _instance.GetScriptUrl(myScript);
+			string scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
 			Assert.That(scriptToInclude, Is.EqualTo(myScript));
 		}
@@ -56,7 +62,7 @@ namespace AlmWitt.Web.ResourceManagement
 			const string version = "2";
 			_instance.ConsolidateClientScripts = true;
 			_instance.Version = version;
-			string scriptToInclude = _instance.GetScriptUrl(myScript);
+			string scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
 			Assert.AreEqual(consolidatedScript + "?v=" + version, scriptToInclude);
 		}
@@ -67,7 +73,7 @@ namespace AlmWitt.Web.ResourceManagement
 			const string version = "2";
 			_instance.ConsolidateClientScripts = false;
 			_instance.Version = version;
-			string scriptToInclude = _instance.GetScriptUrl(myScript);
+			string scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
 			Assert.AreEqual(myScript + "?v=" + version, scriptToInclude);
 		}
@@ -78,7 +84,7 @@ namespace AlmWitt.Web.ResourceManagement
 			const string version = "2 2";
 			_instance.ConsolidateClientScripts = true;
 			_instance.Version = version;
-			string scriptToInclude = _instance.GetScriptUrl(myScript);
+			string scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
 			Assert.AreEqual(consolidatedScript + "?v=" + HttpUtility.UrlEncode(version), scriptToInclude);
 		}
@@ -88,7 +94,7 @@ namespace AlmWitt.Web.ResourceManagement
 		public void NeverReturnsConsolidatedScriptFileWhenScriptIsExcluded()
 		{
 			_instance.ConsolidateClientScripts = true;
-			string scriptToInclude = _instance.GetScriptUrl(excludedScript);
+			string scriptToInclude = _instance.GetScriptUrls(excludedScript).Single();
 
 			Assert.That(scriptToInclude, Is.EqualTo(excludedScript));
 		}
@@ -97,7 +103,7 @@ namespace AlmWitt.Web.ResourceManagement
 		public void ExclusionsAreCaseInsensitive()
 		{
 			_instance.ConsolidateClientScripts = true;
-			string scriptToInclude = _instance.GetScriptUrl(excludedScript.ToUpperInvariant());
+			string scriptToInclude = _instance.GetScriptUrls(excludedScript.ToUpperInvariant()).Single();
 
 			Assert.That(scriptToInclude, Is.EqualTo(excludedScript).IgnoreCase);
 		}
@@ -112,7 +118,7 @@ namespace AlmWitt.Web.ResourceManagement
 			_instance.ScriptGroups.Add(secondGroupElement);
 			secondGroupElement.ConsolidatedUrl = secondGroupUrl;
 
-			string scriptToInclude = _instance.GetScriptUrl(mySecondScript);
+			string scriptToInclude = _instance.GetScriptUrls(mySecondScript).Single();
 
 			Assert.That(scriptToInclude, Is.EqualTo(secondGroupUrl).IgnoreCase);
 		}
@@ -120,11 +126,11 @@ namespace AlmWitt.Web.ResourceManagement
 		[Test]
 		public void ScriptUrlIsLazilyCached()
 		{
-			var resolvedScriptPath1 = _instance.GetScriptUrl(myScript);
+			var resolvedScriptPath1 = _instance.GetScriptUrls(myScript).Single();
 			if(resolvedScriptPath1 != consolidatedScript)
 				Assert.Inconclusive("The first call to GetScriptUrl did not return the expected result");
 			_instance.ScriptGroups.Clear();
-			var resolvedScriptPath2 = _instance.GetScriptUrl(myScript);
+			var resolvedScriptPath2 = _instance.GetScriptUrls(myScript).Single();
 
 			resolvedScriptPath2.ShouldEqual(resolvedScriptPath1);
 		}
@@ -135,9 +141,23 @@ namespace AlmWitt.Web.ResourceManagement
 			_groupElement.Include.AddPath(myScript);
 			_groupElement.Include.AddPath(mySecondScript);
 			
-			var resolvedScriptPath = _instance.GetScriptUrl(consolidatedScript);
+			var resolvedScriptPath = _instance.GetScriptUrls(consolidatedScript).Single();
 			
 			resolvedScriptPath.ShouldEqual(consolidatedScript);
 		}
+
+	    [Test]
+	    public void WhenGroupUrlIsPassedInAndConsolidationForThatGroupIsDisabled_PathToEachResourceInGroupIsReturned()
+	    {
+	        _groupElement.Include.AddPath(myScript);
+            _groupElement.Include.AddPath(mySecondScript);
+	        _groupElement.Consolidate = false;
+
+	        var resolvedScriptPaths = _instance.GetScriptUrls(consolidatedScript).ToList();
+
+            resolvedScriptPaths.CountShouldEqual(2);
+            resolvedScriptPaths[0].ShouldEqual(myScript);
+            resolvedScriptPaths[1].ShouldEqual(mySecondScript);
+	    }
 	}
 }

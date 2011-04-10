@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AlmWitt.Web.ResourceManagement.Registration
@@ -12,9 +13,9 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		/// Tries to resolve the given path into a true virtual file path.
 		/// </summary>
 		/// <param name="path"></param>
-		/// <param name="resolvedVirtualPath"></param>
+		/// <param name="resolvedVirtualPaths"></param>
 		/// <returns></returns>
-		bool TryResolvePath(string path, out string resolvedVirtualPath);
+        bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths);
 
 		/// <summary>
 		/// Includes the resource at the given path on the current web page.

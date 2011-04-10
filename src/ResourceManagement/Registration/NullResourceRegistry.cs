@@ -30,9 +30,9 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			yield break;
 		}
 
-		public bool TryResolvePath(string path, out string resolvedVirtualPath)
+		public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
 		{
-			resolvedVirtualPath = path;
+			resolvedVirtualPaths = new [] {path};
 			return true;
 		}
 

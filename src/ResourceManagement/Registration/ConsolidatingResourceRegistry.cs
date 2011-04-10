@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web;
 
 namespace AlmWitt.Web.ResourceManagement.Registration
@@ -16,12 +17,12 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 	public class ConsolidatingResourceRegistry : IReadableResourceRegistry
 	{
 		private readonly IResourceRegistry _inner;
-		private readonly Func<string, string> _getResourceUrl;
+		private readonly Func<string, IEnumerable<string>> _getResourceUrls;
 
-		internal ConsolidatingResourceRegistry(IResourceRegistry inner, Func<string, string> getResourceUrl)
+		internal ConsolidatingResourceRegistry(IResourceRegistry inner, Func<string, IEnumerable<string>> getResourceUrls)
 		{
 			_inner = inner;
-			_getResourceUrl = getResourceUrl;
+			_getResourceUrls = getResourceUrls;
 		}
 
 		public IResourceRegistry Inner
@@ -29,17 +30,17 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			get { return _inner; }
 		}
 
-		public bool TryResolvePath(string path, out string resolvedVirtualPath)
+		public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
 		{
-			var resolvedPath = _getResourceUrl(path);
-			if(!resolvedPath.Equals(path,  StringComparison.OrdinalIgnoreCase))
+			var resolvedPaths = _getResourceUrls(path);
+			if(resolvedPaths.HasAtLeast(2) || !resolvedPaths.Single().Equals(path,  StringComparison.OrdinalIgnoreCase))
 			{
-				resolvedVirtualPath = resolvedPath;
+				resolvedVirtualPaths = resolvedPaths;
 				return true;
 			}
 			else
 			{
-				resolvedVirtualPath = null;
+				resolvedVirtualPaths = null;
 				return false;
 			}
 		}
@@ -47,9 +48,10 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		public void IncludePath(string virtualPath)
 		{
 			virtualPath = ToCanonicalUrl(virtualPath);
-			virtualPath = _getResourceUrl(virtualPath);
-
-			_inner.IncludePath(virtualPath);
+			foreach(var pathToInclude in _getResourceUrls(virtualPath))
+			{
+                _inner.IncludePath(pathToInclude);
+			}
 		}
 
 		public void RegisterInlineBlock(Action<TextWriter> block, object key)

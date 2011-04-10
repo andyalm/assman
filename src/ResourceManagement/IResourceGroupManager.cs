@@ -11,15 +11,21 @@ namespace AlmWitt.Web.ResourceManagement
 
 		bool Any();
 
-		string GetResourceUrl(string virtualPath);
+        bool Consolidate { get; set; }
 
-		bool IsConsolidatedUrl(string virtualPath);
+	    string ResolveResourceUrl(string resourceUrl);
 
-		GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl);
+	    IEnumerable<string> GetResourceUrlsInGroup(string groupUrl, ResourceMode mode, IResourceFinder finder);
+	    
+        bool IsGroupUrlWithConsolidationDisabled(string resourceUrl);
 
-		IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder);
+	    bool IsConsolidatedUrl(string virtualPath);
 
-		void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler);
+	    GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl);
+
+	    IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder);
+
+	    void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler);
 	}
 
 	public static class ResourceGroupManagerExtensions

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Configuration;
 
 using AlmWitt.Web.ResourceManagement.PreConsolidation;
 
@@ -36,6 +38,7 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 		private IResourceGroupManager _styleGroups;
 		private readonly List<Assembly> _assemblies;
 		private readonly DependencyManager _dependencyManager;
+	    private readonly IResourceModeProvider _resourceModeProvider;
 
 		internal ResourceManagementContext()
 		{
@@ -45,14 +48,22 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			_styleGroups = ResourceGroupManager.GetInstance();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
-			ConsolidateClientScripts = true;
-			ConsolidateCssFiles = true;
+		    _resourceModeProvider = ConfigDrivenResourceModeProvider.GetInstance();
 		}
 
 		public DateTime ConfigurationLastModified { get; set; }
 		public bool PreConsolidated { get; private set; }
-		public bool ConsolidateClientScripts { get; set; }
-		public bool ConsolidateCssFiles { get; set; }
+	    public bool ConsolidateClientScripts
+	    {
+            get { return _scriptGroups.Consolidate; }
+            set { _scriptGroups.Consolidate = value; }
+	    }
+
+	    public bool ConsolidateCssFiles
+	    {
+            get { return _styleGroups.Consolidate; }
+            set { _styleGroups.Consolidate = value; }
+	    }
 
 		public bool ManageDependencies { get; set; }
 
@@ -129,14 +140,14 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			_dependencyManager.MapProvider(fileExtension, dependencyProvider);
 		}
 
-		public string GetScriptUrl(string scriptUrl)
+		public IEnumerable<string> GetScriptUrls(string scriptUrl)
 		{
-			return GetResourceUrl(ConsolidateClientScripts, ScriptGroups, scriptUrl);
+			return GetResourceUrls(ScriptGroups, scriptUrl);
 		}
 
-		public string GetStylesheetUrl(string stylesheetUrl)
+		public IEnumerable<string> GetStylesheetUrls(string stylesheetUrl)
 		{
-			return GetResourceUrl(ConsolidateCssFiles, StyleGroups, stylesheetUrl);
+			return GetResourceUrls(StyleGroups, stylesheetUrl);
 		}
 
 		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
@@ -153,18 +164,26 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
 			get { return _finder; }
 		}
 
-		private string GetResourceUrl(bool consolidate, IResourceGroupManager groupManager, string resourceUrl)
+		private IEnumerable<string> GetResourceUrls(IResourceGroupManager groupManager, string resourceUrl)
 		{
-			if (consolidate)
-			{
-			    resourceUrl = groupManager.GetResourceUrl(resourceUrl);
-			}
-			if (!String.IsNullOrEmpty(Version))
-				resourceUrl = resourceUrl.AddQueryParam("v", Version);
-			return resourceUrl;
+		    IEnumerable<string> resolvedResourceUrls;
+            if(!groupManager.IsGroupUrlWithConsolidationDisabled(resourceUrl))
+		    {
+		        resolvedResourceUrls = new [] {groupManager.ResolveResourceUrl(resourceUrl)};
+		    }
+            else
+            {
+                var resourceMode = _resourceModeProvider.GetCurrentResourceMode();
+                resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, resourceMode, _finder);
+            }
+            
+            if (!String.IsNullOrEmpty(Version))
+                return resolvedResourceUrls.Select(u => u.AddQueryParam("v", Version));
+            else
+                return resolvedResourceUrls;
 		}
 
-		private IResourceGroupManager GroupManagerOfType(ResourceType resourceType)
+	    private IResourceGroupManager GroupManagerOfType(ResourceType resourceType)
 		{
 			if (resourceType == ResourceType.ClientScript)
 				return _scriptGroups;

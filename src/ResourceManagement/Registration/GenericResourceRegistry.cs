@@ -9,9 +9,9 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		private readonly HashSet<string> _includes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<object, Action<TextWriter>> _inlineBlocks = new Dictionary<object, Action<TextWriter>>();
 
-		public bool TryResolvePath(string path, out string resolvedVirtualPath)
+		public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
 		{
-			resolvedVirtualPath = path;
+			resolvedVirtualPaths = new[] {path};
 			return true;
 		}
 

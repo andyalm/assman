@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 using AlmWitt.Web.ResourceManagement.Configuration;
 using AlmWitt.Web.ResourceManagement.TestSupport;
 
@@ -34,7 +37,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				}
 			});
 
-			_consolidatingRegistry = new ConsolidatingResourceRegistry(_innerRegistry.Object, _context.GetScriptUrl);
+			_consolidatingRegistry = new ConsolidatingResourceRegistry(_innerRegistry.Object, _context.GetScriptUrls);
 		}
 
 		[Test]
@@ -56,7 +59,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		[Test]
 		public void WhenTryingToResolveAPathThatIsNotConfiguredToBeConsolidated_ItIsNotResolved()
 		{
-			string resolvedVirtualPath;
+			IEnumerable<string> resolvedVirtualPath;
 			_consolidatingRegistry.TryResolvePath(UrlNotToBeConsolidated, out resolvedVirtualPath).ShouldBeFalse();
 			resolvedVirtualPath.ShouldBeNull();
 		}
@@ -64,9 +67,9 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 		[Test]
 		public void WhenTryingToResolveAPathThatIsConfiguredToBeConsolidated_ItIsResolved()
 		{
-			string resolvedVirtualPath;
+            IEnumerable<string> resolvedVirtualPath;
 			_consolidatingRegistry.TryResolvePath(UrlToBeConsolidated, out resolvedVirtualPath).ShouldBeTrue();
-			resolvedVirtualPath.ShouldEqual(ConsolidatedUrl);
+			resolvedVirtualPath.Single().ShouldEqual(ConsolidatedUrl);
 		}
 	}
 }

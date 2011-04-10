@@ -7,11 +7,12 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 	public class PreConsolidatedGroupManager : IResourceGroupManager
 	{
 		private readonly IDictionary<string,string> _resourceUrlMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-		private readonly HashSet<string> _consolidatedUrls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+		private readonly IDictionary<string, IEnumerable<string>> _consolidatedUrlMap = new Dictionary<string,IEnumerable<string>>(StringComparer.OrdinalIgnoreCase);
 
 		public PreConsolidatedGroupManager(IEnumerable<PreConsolidatedResourceGroup> preConsolidatedGroups)
 		{
 			PopulateResourceUrlMap(preConsolidatedGroups);
+		    Consolidate = true;
 		}
 
 		public void Add(IResourceGroupTemplate template) {}
@@ -21,18 +22,34 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			return true;
 		}
 
-		public string GetResourceUrl(string virtualPath)
-		{
-			string resolvedPath;
-			if (_resourceUrlMap.TryGetValue(virtualPath, out resolvedPath))
-				return resolvedPath;
-			else
-				return virtualPath;
-		}
+        public bool Consolidate { get; set; }
 
-		public bool IsConsolidatedUrl(string virtualPath)
+	    public string ResolveResourceUrl(string resourceUrl)
+	    {
+            string resolvedPath;
+            if (_resourceUrlMap.TryGetValue(resourceUrl, out resolvedPath))
+                return resolvedPath;
+            else
+                return resourceUrl;
+	    }
+
+	    public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
+	    {
+	        return !Consolidate && IsConsolidatedUrl(resourceUrl);
+	    }
+
+	    public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+	    {
+	        IEnumerable<string> resourceUrls;
+            if (_consolidatedUrlMap.TryGetValue(consolidatedUrl, out resourceUrls))
+                return resourceUrls;
+            else
+                return Enumerable.Empty<string>();
+	    }
+
+	    public bool IsConsolidatedUrl(string virtualPath)
 		{
-			return _consolidatedUrls.Contains(virtualPath);
+			return _consolidatedUrlMap.ContainsKey(virtualPath);
 		}
 
 		public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
@@ -63,11 +80,11 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 
 			_resourceUrlMap.AddRange(resourceUrlMap);
 
-			var consolidatedUrls = from @group in groups
-								   select new KeyValuePair<string, string>(@group.ConsolidatedUrl, @group.ConsolidatedUrl);
-
-			_resourceUrlMap.AddRange(consolidatedUrls);
-			_consolidatedUrls.AddRange(consolidatedUrls.Select(p => p.Key));
+		    foreach (var @group in groups)
+		    {
+		        _resourceUrlMap.Add(@group.ConsolidatedUrl, @group.ConsolidatedUrl);
+                _consolidatedUrlMap.Add(@group.ConsolidatedUrl, @group.Resources);
+		    }
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using AlmWitt.Web.ResourceManagement.Configuration;
@@ -14,9 +15,11 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 
 		public static void IncludeEmbeddedResource(this IResourceRegistry registry, string assemblyName, string resourceName)
 		{
-			var url = GetEmbeddedResourceUrl(registry, assemblyName, resourceName);
-
-			registry.IncludePath(url);
+			var urls = GetEmbeddedResourceUrls(registry, assemblyName, resourceName);
+		    foreach (var url in urls)
+		    {
+		        registry.IncludePath(url);
+		    }
 		}
 
 		/// <summary>
@@ -40,12 +43,12 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 			registry.RegisterInlineBlock(block, null);
 		}
 
-		private static string GetEmbeddedResourceUrl(IResourceRegistry registry, string assemblyName, string resourceName)
+		private static IEnumerable<string> GetEmbeddedResourceUrls(IResourceRegistry registry, string assemblyName, string resourceName)
 		{
 			string shortAssemblyName = assemblyName.ToShortAssemblyName();
 			string virtualPath = EmbeddedResource.GetVirtualPath(shortAssemblyName, resourceName);
-			string consolidatedUrl;
-			if (!registry.TryResolvePath(virtualPath, out consolidatedUrl))
+			IEnumerable<string> resolvedUrls;
+			if (!registry.TryResolvePath(virtualPath, out resolvedUrls))
 			{
 				throw new InvalidOperationException(
 					@"Cannot include embedded resource because it has not been configured in the ResourceManagement.config to be consolidated anywhere.
@@ -58,7 +61,7 @@ namespace AlmWitt.Web.ResourceManagement.Registration
 				                                    + assemblyName + "' then please add it to the <assemblies> list.");
 			}
 
-			return consolidatedUrl;
+			return resolvedUrls;
 		}
 	}
 }
