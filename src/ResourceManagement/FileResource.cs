@@ -38,8 +38,7 @@ namespace AlmWitt.Web.ResourceManagement
 		{
 			get
 			{
-				string virtualPath = _filePath.ToLowerInvariant();
-				virtualPath = virtualPath.Replace(_basePath.ToLowerInvariant(), "~/");
+				var virtualPath = _filePath.Replace(_basePath, "~/", StringComparison.OrdinalIgnoreCase);
 				virtualPath = virtualPath.Replace(@"\", "/");
 				return virtualPath;
 			}

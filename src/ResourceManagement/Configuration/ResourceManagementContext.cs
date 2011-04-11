@@ -174,7 +174,8 @@ namespace AlmWitt.Web.ResourceManagement.Configuration
             else
             {
                 var resourceMode = _resourceModeProvider.GetCurrentResourceMode();
-                resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, resourceMode, _finder);
+                resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, resourceMode, _finder)
+                    .SortByDependencies(_dependencyManager);
             }
             
             if (!String.IsNullOrEmpty(Version))

@@ -170,6 +170,7 @@
     <Compile Include="ResourceGroup.cs" />
     <Compile Include="ResourceHttpHandler.cs" />
     <Compile Include="ResourceMode.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="ThreadSafeInMemoryCache.cs" />
     <Compile Include="EmbeddedResource.cs" />
     <Compile Include="EmbeddedResourceFinder.cs" />

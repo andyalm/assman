@@ -63,9 +63,9 @@ namespace AlmWitt.Web.ResourceManagement
 	    {
             var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
             if (group == null)
-                return new string[0];
-
-            return group.GetResources().Select(r => r.VirtualPath);
+                return Enumerable.Empty<string>();
+            else
+                return group.GetResources().Select(r => r.VirtualPath);
 	    }
 
 	    public bool IsConsolidatedUrl(string virtualPath)
@@ -151,7 +151,6 @@ namespace AlmWitt.Web.ResourceManagement
 			private readonly IResourceGroupManager _inner;
 			private readonly IResourceCache _resourceCache;
 			private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
-            private readonly ThreadSafeInMemoryCache<string, IEnumerable<string>> _resourceGroupUrls = new ThreadSafeInMemoryCache<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase);
 
 			public CachingResourceGroupManager(IResourceGroupManager inner, IResourceCache resourceCache)
 			{
@@ -193,18 +192,13 @@ namespace AlmWitt.Web.ResourceManagement
 
 		    public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
 		    {
-		        var resourceUrls = _resourceGroupUrls.GetOrAdd(consolidatedUrl + mode, () =>
-		        {
-		            //We don't delegate to _inner here so that we can make use of our cache for GetGroupOrDefault.
-                    //A little duplication here, but its pretty trivial
-                    var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
-		            if (group == null)
-		                return new string[0];
-
-		            return group.GetResources().Select(r => AppendCacheKey(r.VirtualPath));
-		        });
-
-		        return resourceUrls.Select(AppendCacheKey);
+		        //NOTE: This is basically a duplication of the implementation in _inner.GetResourceUrlsInGroup, but we don't delegate
+                //to it because then it would bypass the _resourceCache
+                var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
+                if (group == null)
+                    return Enumerable.Empty<string>();
+                else
+                    return group.GetResources().Select(r => AppendCacheKey(r.VirtualPath));
 		    }
 
 		    public bool IsConsolidatedUrl(string virtualPath)

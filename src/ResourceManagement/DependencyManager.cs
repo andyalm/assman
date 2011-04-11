@@ -64,6 +64,19 @@ namespace AlmWitt.Web.ResourceManagement
 			return 0;
 		}
 
+        internal int Comparer(string virtualPath1, string virtualPath2)
+        {
+            var xDepends = GetDependencies(virtualPath1);
+            var yDepends = GetDependencies(virtualPath2);
+
+            if (xDepends.Contains(virtualPath2, StringComparer.OrdinalIgnoreCase))
+                return 1;
+            if (yDepends.Contains(virtualPath1, StringComparer.OrdinalIgnoreCase))
+                return -1;
+
+            return 0;
+        }
+
 		private bool IsConsolidatedUrl(string virtualPath, out IEnumerable<IResource> resourcesInGroup)
 		{
 			if (IsConsolidatedUrl(virtualPath, _scriptGroups, out resourcesInGroup))
@@ -76,7 +89,7 @@ namespace AlmWitt.Web.ResourceManagement
 
 		private bool IsConsolidatedUrl(string virtualPath, IResourceGroupManager groupTemplates, out IEnumerable<IResource> resourcesInGroup)
 		{
-			var group = groupTemplates.GetGroupOrDefault(virtualPath, ResourceMode.Debug, _resourceFinder); //the ResourceMode value shouldn't matter here, we'll use Debug because this code will only be executed on a dev box when you haven't pre-consolidated.
+			var group = groupTemplates.GetGroupOrDefault(virtualPath, ResourceMode.Debug, _resourceFinder); //the ResourceMode value shouldn't matter here, we'll use Debug because this code will only be executed when you haven't pre-consolidated.
 			
 			if (group == null)
 			{
@@ -160,9 +173,17 @@ namespace AlmWitt.Web.ResourceManagement
 
 	public static class DependencyManagerExtensions
 	{
-		public static IEnumerable<IResource> SortByDependencies(this IEnumerable<IResource> resources, DependencyManager dependencyManager)
+		//we use a stable sort here because the resources are already sorted within their groups (by the order in which they are included in the config), so we should try to preserve that order unless
+        //the dependencies instruct otherwise
+        
+        public static IEnumerable<IResource> SortByDependencies(this IEnumerable<IResource> resources, DependencyManager dependencyManager)
 		{
-			return resources.Sort(dependencyManager.Comparer);
+			return resources.StableSort(dependencyManager.Comparer);
 		}
+
+        public static IEnumerable<string> SortByDependencies(this IEnumerable<string> resourcePaths, DependencyManager dependencyManager)
+        {
+            return resourcePaths.StableSort(dependencyManager.Comparer);
+        }
 	}
 }

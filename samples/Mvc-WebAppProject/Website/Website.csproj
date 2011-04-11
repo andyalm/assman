@@ -97,6 +97,8 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Scripts\ResourceManagement-TestBootstrapper.js" />
+    <Content Include="Scripts\Unconsolidated\MyScript1.js" />
+    <Content Include="Scripts\Unconsolidated\MyScript2.js" />
     <Content Include="Views\bindings.xml" />
     <Content Include="Scripts\Dependency.js" />
     <Content Include="Scripts\DependencyLeaf.js" />

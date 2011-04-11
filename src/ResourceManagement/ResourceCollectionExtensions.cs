@@ -17,14 +17,6 @@ namespace AlmWitt.Web.ResourceManagement
 			return resourceCollection;
 		}
 
-		public static IEnumerable<IResource> Sort(this IEnumerable<IResource> resources, Comparison<IResource> comparison)
-		{
-			var list = new List<IResource>(resources);
-			list.Sort(comparison);
-
-			return list;
-		}
-
 		/// <summary>
 		/// Adds a collection of resources to this collection.
 		/// </summary>

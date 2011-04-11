@@ -12,12 +12,13 @@ namespace AlmWitt.Web.ResourceManagement
 	public class TestResourceManagementContext_GetResourceUrl
 	{
 		private ResourceManagementContext _instance;
-		private const string myScript = "myscript.js";
-		private const string mySecondScript = "mysecondscript.js";
+		private const string myScript = "~/myscript.js";
+		private const string mySecondScript = "~/mysecondscript.js";
 		private const string consolidatedScript = "~/consolidated.js";
-		private const string excludedScript = "excluded.js";
+		private const string excludedScript = "~/excluded.js";
 		private ClientScriptGroupElement _groupElement;
 	    private StubResourceFinder _finder;
+	    private StubDependencyProvider _dependencyProvider;
 
 		[SetUp]
 		public void Init()
@@ -26,11 +27,15 @@ namespace AlmWitt.Web.ResourceManagement
 		    _finder.CreateResource(myScript);
 		    _finder.CreateResource(mySecondScript);
 		    _finder.CreateResource(excludedScript);
-            
+
+            _dependencyProvider = new StubDependencyProvider();
+            DependencyManagerFactory.ClearDependencyCache();
+
             _instance = new ResourceManagementContext();
 			_instance.ConsolidateClientScripts = true;
 			_instance.ConfigurationLastModified = DateTime.MinValue;
 		    _instance.AddFinder(_finder);
+		    _instance.MapExtensionToDependencyProvider(".js", _dependencyProvider);
 			_groupElement = new ClientScriptGroupElement();
 			_groupElement.ConsolidatedUrl = consolidatedScript;
 			_groupElement.Exclude.AddPattern(excludedScript);
@@ -149,7 +154,7 @@ namespace AlmWitt.Web.ResourceManagement
 	    [Test]
 	    public void WhenGroupUrlIsPassedInAndConsolidationForThatGroupIsDisabled_PathToEachResourceInGroupIsReturned()
 	    {
-	        _groupElement.Include.AddPath(myScript);
+            _groupElement.Include.AddPath(myScript);
             _groupElement.Include.AddPath(mySecondScript);
 	        _groupElement.Consolidate = false;
 
@@ -158,6 +163,21 @@ namespace AlmWitt.Web.ResourceManagement
             resolvedScriptPaths.CountShouldEqual(2);
             resolvedScriptPaths[0].ShouldEqual(myScript);
             resolvedScriptPaths[1].ShouldEqual(mySecondScript);
+	    }
+
+	    [Test]
+	    public void WhenGroupUrlIsPassedInAndConsolidationForThatGroupIsDisabled_PathToEachResourceIsReturnedRespectingDependencies()
+	    {
+	        _dependencyProvider.SetDependencies(myScript, mySecondScript);
+            _groupElement.Include.AddPath(myScript);
+            _groupElement.Include.AddPath(mySecondScript);
+            _groupElement.Consolidate = false;
+
+            var resolvedScriptPaths = _instance.GetScriptUrls(consolidatedScript).ToList();
+
+            resolvedScriptPaths.CountShouldEqual(2);
+            resolvedScriptPaths[0].ShouldEqual(mySecondScript);
+            resolvedScriptPaths[1].ShouldEqual(myScript);
 	    }
 	}
 }

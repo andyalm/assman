@@ -22,5 +22,10 @@ namespace AlmWitt.Web.ResourceManagement
 				return new InMemoryDependencyCache();
 			}
 		}
+
+        public static void ClearDependencyCache()
+        {
+            _dependencyCache.Clear();
+        }
 	}
 }

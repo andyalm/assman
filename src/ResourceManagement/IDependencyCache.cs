@@ -7,5 +7,6 @@ namespace AlmWitt.Web.ResourceManagement
 		bool TryGetDependencies(string virtualPath, out IEnumerable<string> dependencies);
 		bool TryGetDependencies(IResource resource, out IEnumerable<string> dependencies);
 		void StoreDependencies(IResource resource, IEnumerable<string> dependencies);
+	    void Clear();
 	}
 }

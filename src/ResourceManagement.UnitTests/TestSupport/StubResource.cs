@@ -64,5 +64,10 @@ namespace AlmWitt.Web.ResourceManagement.TestSupport
 		{
 			return _content;
 		}
+
+        public override string ToString()
+        {
+            return VirtualPath;
+        }
 	}
 }

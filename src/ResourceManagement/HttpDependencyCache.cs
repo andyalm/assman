@@ -55,6 +55,12 @@ namespace AlmWitt.Web.ResourceManagement
 			};
 		}
 
+        public void Clear()
+        {
+            GetCacheKeyedByVirtualPath().Clear();
+            _longRunningCache.Clear();
+        }
+
 		private IDictionary<string,IEnumerable<string>> GetCacheKeyedByVirtualPath()
 		{
 			return _httpContextAccessor().Items.GetOrCreate<IDictionary<string, IEnumerable<string>>>(_httpItemsKey,

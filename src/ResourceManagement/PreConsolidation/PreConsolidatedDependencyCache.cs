@@ -32,7 +32,12 @@ namespace AlmWitt.Web.ResourceManagement.PreConsolidation
 			//no-op
 		}
 
-		private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceDependencies> dependencies)
+	    public void Clear()
+	    {
+	        throw new NotSupportedException("You should not clear the dependency cache when in preconsolidation mode");
+	    }
+
+	    private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceDependencies> dependencies)
 		{
 			foreach (var resourceWithDependency in dependencies)
 			{
