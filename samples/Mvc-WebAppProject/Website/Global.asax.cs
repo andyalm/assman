@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 
-using AlmWitt.Web.ResourceManagement.Mvc;
+using Assman.Mvc;
 
 namespace Website
 {

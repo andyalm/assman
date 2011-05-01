@@ -56,7 +56,7 @@
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Styles\Form.css" />
-    <Content Include="ResourceManagement.config" />
+    <Content Include="Assman.config" />
     <None Include="Styles\Menu.less" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
@@ -135,13 +135,13 @@
     <Content Include="Site.Master" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ResourceManagement.Less\ResourceManagement.Less.csproj">
+    <ProjectReference Include="..\..\src\Assman.Less\Assman.Less.csproj">
       <Project>{31F16E4E-7DAA-410B-970A-D26C270C3012}</Project>
-      <Name>ResourceManagement.Less</Name>
+      <Name>Assman.Less</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\ResourceManagement\ResourceManagement.csproj">
+    <ProjectReference Include="..\..\src\Assman\Assman.csproj">
       <Project>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</Project>
-      <Name>ResourceManagement</Name>
+      <Name>Assman</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

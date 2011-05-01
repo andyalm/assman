@@ -4,12 +4,12 @@
   <Import Project="$(MSBuildProjectDirectory)\..\packages\Build1.0.0\head.targets"/>
 
   <ItemGroup>
-    <Projects Include="ResourceManagement\Build.proj"/>
-    <Projects Include="ResourceManagement.Mvc\Build.proj"/>
-    <Projects Include="ResourceManagement.Spark\Build.proj"/>
-    <Projects Include="ResourceManagement.Less\Build.proj"/>
-    <Projects Include="ResourceManagement.UnitTests\Build.proj"/>
-    <Projects Include="ResourceManagement.Spark.UnitTests\Build.proj"/>
+    <Projects Include="Assman\Build.proj"/>
+    <Projects Include="Assman.Mvc\Build.proj"/>
+    <Projects Include="Assman.Spark\Build.proj"/>
+    <Projects Include="Assman.Less\Build.proj"/>
+    <Projects Include="Assman.UnitTests\Build.proj"/>
+    <Projects Include="Assman.Spark.UnitTests\Build.proj"/>
     <Projects Include="PackageSpecs\Build.proj"/>
   </ItemGroup>
 

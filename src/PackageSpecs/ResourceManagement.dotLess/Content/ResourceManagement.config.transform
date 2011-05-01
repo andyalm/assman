@@ -1,5 +1,0 @@
-<almWitt.web.resourceManagement>
-	<plugins>
-		<add type="AlmWitt.Web.ResourceManagement.Less.LessResourceManagementPlugin, AlmWitt.Web.ResourceManagement.Less, Version=1.0.0.0, Culture=neutral" />
-	</plugins>
-</almWitt.web.resourceManagement>

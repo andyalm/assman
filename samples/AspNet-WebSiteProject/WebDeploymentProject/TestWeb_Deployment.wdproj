@@ -32,7 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\ResourceManagement\ResourceManagement.csproj">
       <Project>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</Project>
-      <Name>AlmWitt.Web.ResourceManagement</Name>
+      <Name>Assman</Name>
     </ProjectReference>
     <ProjectReference Include="..\WebsiteLib\WebsiteLib.csproj">
       <Project>{F853FC33-CE3C-4501-8177-4BF2EF557826}</Project>
@@ -40,7 +40,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WebDeployment\v9.0\Microsoft.WebDeployment.targets" />
-  <UsingTask TaskName="PreConsolidateResources" AssemblyFile="..\Website\Bin\AlmWitt.Web.ResourceManagement.dll"/>
+  <UsingTask TaskName="PreConsolidateResources" AssemblyFile="..\Website\Bin\Assman.dll"/>
   <Target Name="AfterBuild">
     <PreConsolidateResources WebRoot="$(OutputPath)" />
   </Target>

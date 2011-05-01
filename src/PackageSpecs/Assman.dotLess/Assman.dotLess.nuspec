@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Assman.dotLess</id>
+    <version>1.9</version>
+    <title>Assman dotLess Integration</title>
+    <authors>Andy Alm</authors>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://jscssconsolidate.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Integrates dotLess with Assman.  This allows you to automatically consolidate your .less files in with other .less or .css files</description>
+    <tags>javascript css mash consolidation mvc</tags>
+    <dependencies>
+      <dependency id="Assman" version="1.9" />
+      <dependency id="dotLess" version="[1.1.0,)" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\..\output\lib\**\Assman.Less.dll" target="lib" />
+    <file src="..\..\..\output\lib\**\Assman.Less.xml" target="lib" />
+    <file src="Content\**\*.*" target="Content" />
+  </files>
+</package>

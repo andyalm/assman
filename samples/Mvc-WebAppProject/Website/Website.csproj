@@ -35,21 +35,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AlmWitt.Web.ResourceManagement, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Assman, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\output\lib\AlmWitt.Web.ResourceManagement.dll</HintPath>
+      <HintPath>..\..\..\output\lib\Assman.dll</HintPath>
     </Reference>
-    <Reference Include="AlmWitt.Web.ResourceManagement.Less, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Assman.Less, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\output\lib\AlmWitt.Web.ResourceManagement.Less.dll</HintPath>
+      <HintPath>..\..\..\output\lib\Assman.Less.dll</HintPath>
     </Reference>
-    <Reference Include="AlmWitt.Web.ResourceManagement.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Assman.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\output\lib\Mvc2\.NetFramework 2.0\AlmWitt.Web.ResourceManagement.Mvc.dll</HintPath>
+      <HintPath>..\..\..\output\lib\Mvc2\.NetFramework 2.0\Assman.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="AlmWitt.Web.ResourceManagement.Spark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Assman.Spark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\output\lib\AlmWitt.Web.ResourceManagement.Spark.dll</HintPath>
+      <HintPath>..\..\..\output\lib\Assman.Spark.dll</HintPath>
     </Reference>
     <Reference Include="Spark, Version=1.5.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,7 +96,7 @@
     <None Include="Views\IntegrationTests\Index.spark">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Scripts\ResourceManagement-TestBootstrapper.js" />
+    <Content Include="Scripts\Assman-TestBootstrapper.js" />
     <Content Include="Scripts\Unconsolidated\MyScript1.js" />
     <Content Include="Scripts\Unconsolidated\MyScript2.js" />
     <Content Include="Views\bindings.xml" />
@@ -132,7 +132,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ResourceManagement.config">
+    <Content Include="Assman.config">
       <SubType>Designer</SubType>
     </Content>
     <None Include="Views\Shared\_global.spark" />
@@ -143,7 +143,7 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target> -->
-  <UsingTask TaskName="PreConsolidateResources" AssemblyFile="bin\AlmWitt.Web.ResourceManagement.dll" />
+  <UsingTask TaskName="PreConsolidateResources" AssemblyFile="bin\Assman.dll" />
   <Target Name="AfterBuild">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)" Condition="'$(MvcBuildViews)'=='true'" />
     <PreConsolidateResources WebRoot="$(MSBuildProjectDirectory)" Condition="$(Configuration)=='Release'" />

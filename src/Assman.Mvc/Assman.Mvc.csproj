@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DF604504-959B-464A-92C5-4C279FCD8846}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Assman.Mvc</RootNamespace>
+    <AssemblyName>Assman.Mvc</AssemblyName>
+    <TargetClrVersion Condition="$(TargetClrVersion)==''">4.0</TargetClrVersion>
+    <TargetFrameworkVersion Condition="$(TargetClrVersion)!='4.0'">v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="$(TargetClrVersion)=='4.0'">v4.0</TargetFrameworkVersion>
+    <MvcVersion Condition="$(MvcVersion)==''">3.0</MvcVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath Condition="$(MvcVersion)!='3.0'">bin\Debug\Mvc2\.NetFramework $(TargetClrVersion)</OutputPath>
+    <OutputPath Condition="$(MvcVersion)=='3.0'">bin\Debug\Mvc3\.NetFramework $(TargetClrVersion)</OutputPath>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">DEBUG;TRACE;NET_40;MVC3</DefineConstants>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">DEBUG;TRACE;NET_40</DefineConstants>
+    <DefineConstants Condition="$(TargetClrVersion)!='4.0'">DEBUG;TRACE;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath Condition="$(MvcVersion)!='3.0'">bin\Release\Mvc2\.NetFramework $(TargetClrVersion)</OutputPath>
+    <OutputPath Condition="$(MvcVersion)=='3.0'">bin\Release\Mvc3\.NetFramework $(TargetClrVersion)</OutputPath>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">TRACE;NET_40;MVC3</DefineConstants>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">TRACE;NET_40</DefineConstants>
+    <DefineConstants Condition="$(TargetClrVersion)!='4.0'">TRACE;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" Condition="$(MvcVersion)!='3.0'">
+      <SpecificVersion>True</SpecificVersion>
+      <HintPath>..\..\packages\Mvc.2.0.0\lib\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" Condition="$(MvcVersion)=='3.0'">
+      <SpecificVersion>True</SpecificVersion>
+      <HintPath>..\..\packages\Mvc.3.0.0\lib\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Html\DummyStringResult.cs" />
+    <Compile Include="Html\AjaxHelperExtensions.cs" />
+    <Compile Include="Html\HtmlHelperExtensions.cs" />
+    <Compile Include="Html\IHtmlString.cs" />
+    <Compile Include="IgnoreRoutesForConsolidatedUrls.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceIncludeResolver.cs" />
+    <Compile Include="ViewContextExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Assman\Assman.csproj">
+      <Project>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</Project>
+      <Name>Assman</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

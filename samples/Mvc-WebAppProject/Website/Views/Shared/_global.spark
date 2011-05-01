@@ -3,8 +3,8 @@
 <use namespace="System.Linq"/>
 <use namespace="System.Web.Mvc"/>
 <use namespace="System.Web.Mvc.Html"/>
-<use namespace="AlmWitt.Web.ResourceManagement.Mvc.Html" />
-<use namespace="AlmWitt.Web.ResourceManagement.Spark.Registration" />
+<use namespace="Assman.Mvc.Html" />
+<use namespace="Assman.Spark.Registration" />
 
 <use assembly="Spark.Web.Mvc"/>
 <use assembly="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/>

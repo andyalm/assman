@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Assman</RootNamespace>
+    <AssemblyName>Assman</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Assman.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Assman.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Depends\Microsoft.AjaxExtensions\1.0.61025\System.Web.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AspNetShortLivedResourceCache.cs" />
+    <Compile Include="AssemblyExtensions.cs" />
+    <Compile Include="BuildSupport\ILogger.cs" />
+    <Compile Include="BuildSupport\MSBuild\PreConsolidateResources.cs" />
+    <Compile Include="BuildSupport\NullLogger.cs" />
+    <Compile Include="CompositeResourceFilter.cs" />
+    <Compile Include="CompositeResourceFinder.cs" />
+    <Compile Include="Configuration\AssemblyElement.cs" />
+    <Compile Include="Configuration\AssemblyElementCollection.cs" />
+    <Compile Include="Configuration\ClientScriptGroupElement.cs" />
+    <Compile Include="Configuration\ClientScriptGroupElementCollection.cs" />
+    <Compile Include="Configuration\IResourceModeProvider.cs" />
+    <Compile Include="CssDependencyProvider.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="GroupTemplateContext.cs" />
+    <Compile Include="HttpHandlerBase.cs" />
+    <Compile Include="IO\IFileAccess.cs" />
+    <Compile Include="IResourceCache.cs" />
+    <Compile Include="IResourceGroupManager.cs" />
+    <Compile Include="PreConsolidation\CompiledFilePersister.cs" />
+    <Compile Include="Configuration\ConfigurationHelper.cs" />
+    <Compile Include="Configuration\ConsolidatedUrlTemplate.cs" />
+    <Compile Include="Configuration\ContentFilterMap.cs" />
+    <Compile Include="Configuration\CssGroupElement.cs" />
+    <Compile Include="Configuration\CssGroupElementCollection.cs" />
+    <Compile Include="PreConsolidation\IPreConsolidationReportPersister.cs" />
+    <Compile Include="Configuration\IResourceManagementPlugin.cs" />
+    <Compile Include="Configuration\MappedConfigLoader.cs" />
+    <Compile Include="Configuration\PluginElement.cs" />
+    <Compile Include="Configuration\PluginElementCollection.cs" />
+    <Compile Include="PreConsolidation\PreConsolidatedDependencyCache.cs" />
+    <Compile Include="PreConsolidation\PreConsolidatedGroupManager.cs" />
+    <Compile Include="PreConsolidation\PreConsolidatedResourceDependencies.cs" />
+    <Compile Include="PreConsolidation\PreConsolidationReport.cs" />
+    <Compile Include="Configuration\PropertyNames.cs" />
+    <Compile Include="Configuration\ResourceGroupElement.cs" />
+    <Compile Include="Configuration\ResourceGroupElementCollection.cs" />
+    <Compile Include="Configuration\ResourceManagementContext.cs" />
+    <Compile Include="Configuration\ResourceMatchElement.cs" />
+    <Compile Include="Configuration\ResourceMatchElementCollection.cs" />
+    <Compile Include="BuildSupport\PreConsolidateCommand.cs" />
+    <Compile Include="ConsolidatedResource.cs" />
+    <Compile Include="ContentFiltering\JSMinContentFilterFactory.cs" />
+    <Compile Include="ContentFiltering\JSMin\JavaScriptMinifier.cs" />
+    <Compile Include="ContentFiltering\IContentFilter.cs" />
+    <Compile Include="ContentFiltering\JSMinFilter.cs" />
+    <Compile Include="ContentFiltering\NullContentFilter.cs" />
+    <Compile Include="Configuration\DefaultConfigLoader.cs" />
+    <Compile Include="Configuration\IConfigLoader.cs" />
+    <Compile Include="HttpContextUtils.cs" />
+    <Compile Include="HttpDependencyCache.cs" />
+    <Compile Include="DependencyManager.cs" />
+    <Compile Include="DependencyManagerFactory.cs" />
+    <Compile Include="IDependencyCache.cs" />
+    <Compile Include="IDependencyProvider.cs" />
+    <Compile Include="IContentFilterFactory.cs" />
+    <Compile Include="InMemoryDependencyCache.cs" />
+    <Compile Include="IO\IFileFinder.cs" />
+    <Compile Include="IResourceFinderFactory.cs" />
+    <Compile Include="IResourceGroup.cs" />
+    <Compile Include="IResourceGroupTemplate.cs" />
+    <Compile Include="IResourceHandler.cs" />
+    <Compile Include="IResourceHandlerFactory.cs" />
+    <Compile Include="PathResourceMatch.cs" />
+    <Compile Include="PreConsolidation\PreConsolidatedResourceGroup.cs" />
+    <Compile Include="Registration\ConsolidatingResourceRegistry.cs" />
+    <Compile Include="Registration\ConsolidatingResourceRegistryAccessor.cs" />
+    <Compile Include="Registration\DependencyResolvingResourceRegistry.cs" />
+    <Compile Include="Registration\GenericResourceRegistry.cs" />
+    <Compile Include="Registration\GenericResourceRegistryAccessor.cs" />
+    <Compile Include="Registration\IReadableResourceRegistry.cs" />
+    <Compile Include="Registration\IResourceRegistryAccessor.cs" />
+    <Compile Include="IResourceMatch.cs" />
+    <Compile Include="NullContentFilterFactory.cs" />
+    <Compile Include="RegexResourceMatch.cs" />
+    <Compile Include="Registration\IResourceWriter.cs" />
+    <Compile Include="Registration\NullResourceRegistry.cs" />
+    <Compile Include="Registration\ReadableExtensions.cs" />
+    <Compile Include="Registration\RegisteredResources.cs" />
+    <Compile Include="Registration\ResourceRegistryExtensions.cs" />
+    <Compile Include="Registration\ResourceRegistryMap.cs" />
+    <Compile Include="Registration\ResourceRegistryConfiguration.cs" />
+    <Compile Include="Registration\ResourceRegistryRenderer.cs" />
+    <Compile Include="Registration\TextWriterExtensions.cs" />
+    <Compile Include="ResourceCacheFactory.cs" />
+    <Compile Include="ResourceCollectionExtensions.cs" />
+    <Compile Include="ResourceConsolidator.cs" />
+    <Compile Include="ResourceGroupManager.cs" />
+    <Compile Include="ResourceGroup.cs" />
+    <Compile Include="ResourceHttpHandler.cs" />
+    <Compile Include="ResourceMode.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="ThreadSafeInMemoryCache.cs" />
+    <Compile Include="EmbeddedResource.cs" />
+    <Compile Include="EmbeddedResourceFinder.cs" />
+    <Compile Include="FileResourceFinder.cs" />
+    <Compile Include="Registration\IResourceRegistry.cs" />
+    <Compile Include="IRequestContext.cs" />
+    <Compile Include="Configuration\ResourceManagementConfiguration.cs" />
+    <Compile Include="IResourceFilter.cs" />
+    <Compile Include="IResourceFinder.cs" />
+    <Compile Include="ResourceFilters.cs" />
+    <Compile Include="DynamicResourceHttpHandler.cs" />
+    <Compile Include="Registration\WebForms\CssInclude.cs" />
+    <Compile Include="Registration\WebForms\ClientScriptInclude.cs" />
+    <Compile Include="Registration\WebForms\WebFormsCssRegistry.cs" />
+    <Compile Include="Registration\WebForms\WebFormsRegistryBase.cs" />
+    <Compile Include="Registration\WebForms\WebFormsRegistryAccessor.cs" />
+    <Compile Include="Registration\WebForms\WebResourceIncludeControl.cs" />
+    <Compile Include="IResource.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FileResource.cs" />
+    <Compile Include="ResourceCollection.cs" />
+    <Compile Include="ResourceHandler.cs" />
+    <Compile Include="ResourceFinderFactory.cs" />
+    <Compile Include="ResourceType.cs" />
+    <Compile Include="VirtualPathResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Registration\WebForms\WebFormsAjaxScriptIncluder.cs" />
+    <Compile Include="Registration\WebForms\WebFormsClientScriptRegistry.cs" />
+    <Compile Include="VirtualPathUtil.cs" />
+    <Compile Include="VisualStudioScriptDependencyProvider.cs" />
+    <Compile Include="Xml\XmlWriterExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
