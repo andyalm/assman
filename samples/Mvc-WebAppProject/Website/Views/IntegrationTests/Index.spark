@@ -52,5 +52,5 @@
 	</dl>
 	
 	<!-- don't use Resource Registries here so that it tests will fail appropriately if necessary --> 
-	<script type="text/javascript" src="${Url.Content('~/Scripts/ResourceManagement-TestBootstrapper.js')}"></script>
+	<script type="text/javascript" src="${Url.Content('~/Scripts/Assman-TestBootstrapper.js')}"></script>
 </content>

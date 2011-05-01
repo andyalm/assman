@@ -11,14 +11,14 @@ namespace Assman.Registration
 	{
 		private GenericResourceRegistryAccessor _innerAccessor;
 		private IResourceRegistryAccessor _consolidatingAccessor;
-		private ResourceManagementContext _context;
+		private AssmanContext _context;
 
 		[SetUp]
 		public void SetupContext()
 		{
-			_context = ResourceManagementContext.Create();
+			_context = AssmanContext.Create();
 			_context.ManageDependencies = false;
-			ResourceManagementContext.Current = _context;
+			AssmanContext.Current = _context;
 			_innerAccessor = new GenericResourceRegistryAccessor();
 			_consolidatingAccessor = _innerAccessor.UseConsolidation();
 		}
@@ -26,7 +26,7 @@ namespace Assman.Registration
 		[TearDown]
 		public void TeardownContext()
 		{
-			ResourceManagementContext.Current = null;
+			AssmanContext.Current = null;
 		}
 
 		[Test]

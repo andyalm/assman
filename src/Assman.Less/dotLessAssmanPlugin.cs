@@ -2,11 +2,11 @@ using Assman.Configuration;
 
 namespace Assman.Less
 {
-	public class LessResourceManagementPlugin : IResourceManagementPlugin
+	public class dotLessAssmanPlugin : IAssmanPlugin
 	{
 		private const string LessFileExtension = ".less";
 		
-		public void Initialize(ResourceManagementContext context)
+		public void Initialize(AssmanContext context)
 		{
 			ResourceType.Css.AddFileExtension(LessFileExtension);
 			context.MapExtensionToFilter(LessFileExtension, new LessContentFilterFactory());

@@ -2,29 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Web;
-using System.Web.Configuration;
 
 using Assman.PreConsolidation;
 
 namespace Assman.Configuration
 {
-	public class ResourceManagementContext
+	public class AssmanContext
 	{
-		public static ResourceManagementContext Create()
+		public static AssmanContext Create()
 		{
-			return new ResourceManagementContext();
+			return new AssmanContext();
 		}
 
-		private static ResourceManagementContext _current;
+		private static AssmanContext _current;
 
-		public static ResourceManagementContext Current
+		public static AssmanContext Current
 		{
 			get
 			{
 				if(_current == null)
 				{
-					_current = ResourceManagementConfiguration.Current.BuildContext();
+					_current = AssmanConfiguration.Current.BuildContext();
 				}
 
 				return _current;
@@ -40,7 +38,7 @@ namespace Assman.Configuration
 		private readonly DependencyManager _dependencyManager;
 	    private readonly IResourceModeProvider _resourceModeProvider;
 
-		internal ResourceManagementContext()
+		internal AssmanContext()
 		{
 			_finder = new CompositeResourceFinder();
 			_filterMap = new ContentFilterMap();

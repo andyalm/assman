@@ -9,9 +9,9 @@ using NUnit.Framework;
 
 namespace Assman
 {
-	public class TestResourceManagementContext_GetResourceUrl
+	public class TestAssmanContext_GetResourceUrl
 	{
-		private ResourceManagementContext _instance;
+		private AssmanContext _instance;
 		private const string myScript = "~/myscript.js";
 		private const string mySecondScript = "~/mysecondscript.js";
 		private const string consolidatedScript = "~/consolidated.js";
@@ -31,7 +31,7 @@ namespace Assman
             _dependencyProvider = new StubDependencyProvider();
             DependencyManagerFactory.ClearDependencyCache();
 
-            _instance = new ResourceManagementContext();
+            _instance = new AssmanContext();
 			_instance.ConsolidateClientScripts = true;
 			_instance.ConfigurationLastModified = DateTime.MinValue;
 		    _instance.AddFinder(_finder);

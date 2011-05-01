@@ -12,7 +12,7 @@ namespace Assman.Configuration
 			set { this[PropertyNames.Type] = value; }
 		}
 
-		public IResourceManagementPlugin CreatePlugin()
+		public IAssmanPlugin CreatePlugin()
 		{
 			if (!String.IsNullOrEmpty(this.Type))
 			{
@@ -22,24 +22,24 @@ namespace Assman.Configuration
 			throw ConfigException("The custom finder element must either specify the 'type' or 'factory' attribute.");
 		}
 
-		private IResourceManagementPlugin CreatePluginFromType()
+		private IAssmanPlugin CreatePluginFromType()
 		{
 			var pluginType = System.Type.GetType(this.Type);
-			AssertTypeImplements<IResourceManagementPlugin>(pluginType, "type");
+			AssertTypeImplements<IAssmanPlugin>(pluginType, "type");
 
-			return (IResourceManagementPlugin)Activator.CreateInstance(pluginType);
+			return (IAssmanPlugin)Activator.CreateInstance(pluginType);
 		}
 
 		private void AssertTypeImplements<TInterface>(Type pluginType, string attributeName)
 		{
 			if(pluginType == null)
 			{
-				throw ConfigException("The ResourceManagement Plugin " + attributeName + " '" + this.Type + "' could not be found.");
+				throw ConfigException("The Assman Plugin " + attributeName + " '" + this.Type + "' could not be found.");
 			}
 			if(!typeof(TInterface).IsAssignableFrom(pluginType))
 			{
 				throw ConfigException("The type '" + this.Type + "' must implement the '" +
-				                      typeof (IResourceManagementPlugin).FullName + "' interface.");
+				                      typeof (IAssmanPlugin).FullName + "' interface.");
 			}
 		}
 

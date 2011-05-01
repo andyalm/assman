@@ -24,7 +24,7 @@ namespace Assman.Less
 				MinifyOutput = _resourceGroup.ShouldMinify(_mode),
 				Web = HttpContext.Current != null,
 				LessSource = typeof(VirtualPathFileReader),
-				CacheEnabled = false /* no need to cache as we let ResourceManagement framework manage its own cache */
+				CacheEnabled = false /* no need to cache as we let the Assman framework manage its own cache */
 			};
 			return dotless.Core.Less.Parse(content, config);
 		}

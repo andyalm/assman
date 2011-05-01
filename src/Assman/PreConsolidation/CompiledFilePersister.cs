@@ -14,7 +14,7 @@ namespace Assman.PreConsolidation
 	{
 		public static CompiledFilePersister ForWebDirectory(string rootWebDirectory)
 		{
-			var fileAccess = new FileAccessWrapper(Path.Combine(rootWebDirectory, "bin\\ResourceManagement.compiled"));
+			var fileAccess = new FileAccessWrapper(Path.Combine(rootWebDirectory, "bin\\Assman.compiled"));
 			return new CompiledFilePersister(fileAccess);
 		}
 		

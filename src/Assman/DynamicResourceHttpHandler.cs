@@ -13,13 +13,13 @@ namespace Assman
 	{
 		private readonly IResourceHandlerFactory _handlerFactory;
 		private readonly IDictionary<string, IResourceHandler> _handlerRegistry;
-		private readonly ResourceManagementContext _resourceContext;
+		private readonly AssmanContext _resourceContext;
 		private readonly DateTime _minLastModified;
 		internal Func<string, string> ToAppRelativePath = path => VirtualPathUtility.ToAppRelative(path);
 
-		public DynamicResourceHttpHandler() : this(ResourceManagementContext.Current, new ResourceHandlerFactory()) {}
+		public DynamicResourceHttpHandler() : this(AssmanContext.Current, new ResourceHandlerFactory()) {}
 
-		internal DynamicResourceHttpHandler(ResourceManagementContext context, IResourceHandlerFactory handlerFactory)
+		internal DynamicResourceHttpHandler(AssmanContext context, IResourceHandlerFactory handlerFactory)
 		{
 			_handlerFactory = handlerFactory;
 			_resourceContext = context;

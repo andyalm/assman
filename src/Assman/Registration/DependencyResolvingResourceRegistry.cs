@@ -9,9 +9,9 @@ namespace Assman.Registration
 	public class DependencyResolvingResourceRegistry : IReadableResourceRegistry
 	{
 		private readonly IResourceRegistry _inner;
-		private readonly ResourceManagementContext _context;
+		private readonly AssmanContext _context;
 
-		public DependencyResolvingResourceRegistry(IResourceRegistry inner, ResourceManagementContext context)
+		public DependencyResolvingResourceRegistry(IResourceRegistry inner, AssmanContext context)
 		{
 			_inner = inner;
 			_context = context;

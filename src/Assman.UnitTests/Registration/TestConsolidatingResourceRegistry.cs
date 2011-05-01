@@ -14,7 +14,7 @@ namespace Assman.Registration
 	public class TestConsolidatingResourceRegistry
 	{
 		private Mock<IResourceRegistry> _innerRegistry;
-		private ResourceManagementContext _context;
+		private AssmanContext _context;
 		private ConsolidatingResourceRegistry _consolidatingRegistry;
 		private const string UrlNotToBeConsolidated = "~/random/location/script.js";
 		private const string UrlToBeConsolidated = "~/configured/location/script.js";
@@ -24,7 +24,7 @@ namespace Assman.Registration
 		public void SetupContext()
 		{
 			_innerRegistry = new Mock<IResourceRegistry>();
-			_context = ResourceManagementContext.Create();
+			_context = AssmanContext.Create();
 			_context.ScriptGroups.Add(new ClientScriptGroupElement
 			{
 				ConsolidatedUrl = ConsolidatedUrl,

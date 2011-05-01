@@ -11,24 +11,24 @@ namespace Assman.Configuration
 	/// <summary>
 	/// Represents the configuration section for resource management.
 	/// </summary>
-	public class ResourceManagementConfiguration : ConfigurationSection
+	public class AssmanConfiguration : ConfigurationSection
 	{
 		private const string SectionName = "assman";
         private string _rootFilePath;
-		private static readonly ResourceManagementConfiguration _defaultSection = new ResourceManagementConfiguration();
-		private static ResourceManagementConfiguration _config = null;
+		private static readonly AssmanConfiguration _defaultSection = new AssmanConfiguration();
+		private static AssmanConfiguration _config = null;
 	    private static IConfigLoader _configLoader = new DefaultConfigLoader();
 
 		/// <summary>
 		/// Gets the current configuration.
 		/// </summary>
-		public static ResourceManagementConfiguration Current
+		public static AssmanConfiguration Current
 		{
 			get
 			{
 				if(_config == null)
 				{
-				    _config = _configLoader.GetSection<ResourceManagementConfiguration>(SectionName) ?? _defaultSection;
+				    _config = _configLoader.GetSection<AssmanConfiguration>(SectionName) ?? _defaultSection;
 				}
 
 				return _config;
@@ -190,7 +190,7 @@ namespace Assman.Configuration
 			_lastModified = value;
 		}
 
-		public ResourceManagementContext BuildContext(bool usePreConsolidationReportIfPresent = true)
+		public AssmanContext BuildContext(bool usePreConsolidationReportIfPresent = true)
 		{
 			IResourceFinder fileFinder = ResourceFinderFactory.Null;
 			IPreConsolidationReportPersister preConsolidationPersister = NullPreConsolidationPersister.Instance;
@@ -205,9 +205,9 @@ namespace Assman.Configuration
 			return BuildContext(fileFinder, preConsolidationPersister);
 		}
 
-		public ResourceManagementContext BuildContext(IResourceFinder fileFinder, IPreConsolidationReportPersister preConsolidationPersister)
+		public AssmanContext BuildContext(IResourceFinder fileFinder, IPreConsolidationReportPersister preConsolidationPersister)
 		{
-			var context = ResourceManagementContext.Create();
+			var context = AssmanContext.Create();
 
 			context.ConfigurationLastModified = LastModified(PathResolver);
 			context.ConsolidateClientScripts = Consolidate && ClientScripts.Consolidate;

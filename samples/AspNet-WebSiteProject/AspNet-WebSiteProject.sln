@@ -28,9 +28,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Website", "Website", "{95E6
 		VWDPort = "49813"
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResourceManagement", "ResourceManagement", "{CE45046E-30AF-4FC2-BEC7-BCEFCD4A2CE1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assman", "Assman", "{CE45046E-30AF-4FC2-BEC7-BCEFCD4A2CE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManagement", "..\..\src\ResourceManagement\ResourceManagement.csproj", "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assman", "..\..\src\Assman\Assman.csproj", "{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{907AA67C-3E35-4B09-8591-E59ACCABE93D}"
 	ProjectSection(SolutionItems) = preProject
@@ -38,29 +38,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs03.codeplex.com/
-		SccProjectUniqueName0 = ..\\..\\src\\ResourceManagement\\ResourceManagement.csproj
-		SccProjectTopLevelParentUniqueName0 = AspNet-WebSiteProject.sln
-		SccProjectName0 = ../../src/ResourceManagement
-		SccAuxPath0 = https://tfs03.codeplex.com
-		SccLocalPath0 = ..\\..\\src\\ResourceManagement
-		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccWebProject1 = true
-		SccProjectUniqueName1 = Website
-		SccProjectName1 = Website
-		SccAuxPath1 = https://tfs03.codeplex.com
-		SccLocalPath1 = Website
-		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectEnlistmentChoice1 = 2
-		SccProjectUniqueName2 = WebsiteLib\\WebsiteLib.csproj
-		SccProjectName2 = WebsiteLib
-		SccAuxPath2 = https://tfs03.codeplex.com
-		SccLocalPath2 = WebsiteLib
-		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
 		Debug|Any CPU = Debug|Any CPU

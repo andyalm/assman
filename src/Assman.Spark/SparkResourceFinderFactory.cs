@@ -13,7 +13,7 @@ namespace Assman.Spark
 
 		public IResourceFinder CreateFinder()
 		{
-			var assemblies = ResourceManagementConfiguration.Current.Assemblies.GetAssemblies();
+			var assemblies = AssmanConfiguration.Current.Assemblies.GetAssemblies();
 
 			return new SparkResourceFinder(assemblies, ContentFetcher, ActionFinder);
 		}

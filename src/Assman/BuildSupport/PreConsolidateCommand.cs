@@ -65,7 +65,7 @@ namespace Assman.BuildSupport
         public void Execute()
         {
             LogMessage("Begin consolidating resources...");
-            ResourceManagementConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
+            AssmanConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
             _resolver = GetResolver(configSection.RootFilePath);
 			
 			ConsolidateAll(configSection);
@@ -73,7 +73,7 @@ namespace Assman.BuildSupport
 			LogMessage("End consolidating resources.");
         }
 
-		private void ConsolidateAll(ResourceManagementConfiguration configSection)
+		private void ConsolidateAll(AssmanConfiguration configSection)
 		{
 			var context = configSection.BuildContext(usePreConsolidationReportIfPresent: false);
 			var consolidator = context.GetConsolidator();
@@ -103,11 +103,11 @@ namespace Assman.BuildSupport
             _logger.LogMessage(message);
         }
 
-        private ResourceManagementConfiguration GetConfigSection(string webRoot)
+        private AssmanConfiguration GetConfigSection(string webRoot)
         {
-            ResourceManagementConfiguration.ConfigLoader = new MappedConfigLoader(webRoot);
+            AssmanConfiguration.ConfigLoader = new MappedConfigLoader(webRoot);
 
-        	var configSection = ResourceManagementConfiguration.Current;
+        	var configSection = AssmanConfiguration.Current;
             configSection.RootFilePath = webRoot;
 
             return configSection;

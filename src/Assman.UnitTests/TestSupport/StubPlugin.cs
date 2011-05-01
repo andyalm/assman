@@ -2,8 +2,8 @@ using Assman.Configuration;
 
 namespace Assman.TestObjects
 {
-	public class StubPlugin : IResourceManagementPlugin
+	public class StubPlugin : IAssmanPlugin
 	{
-		public void Initialize(ResourceManagementContext context) {}
+		public void Initialize(AssmanContext context) {}
 	}
 }

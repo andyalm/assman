@@ -30,7 +30,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\ResourceManagement\ResourceManagement.csproj">
+    <ProjectReference Include="..\..\..\src\Assman\Assman.csproj">
       <Project>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</Project>
       <Name>Assman</Name>
     </ProjectReference>

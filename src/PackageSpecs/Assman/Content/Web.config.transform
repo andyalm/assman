@@ -1,6 +1,6 @@
 <configuration>
 	<configSections>
-		<section name="assman" type="Assman.Configuration.ResourceManagementConfiguration, Assman, Version=1.0.0.0, Culture=neutral" restartOnExternalChanges="true"/>
+		<section name="assman" type="Assman.Configuration.AssmanConfiguration, Assman, Version=1.0.0.0, Culture=neutral" restartOnExternalChanges="true"/>
 	</configSections>
 	<system.web>
 		<httpHandlers>
@@ -14,5 +14,5 @@
 			<add name="ConsolidatedCssHandler" preCondition="integratedMode" verb="GET,HEAD" path="*.css" type="Assman.ResourceHttpHandler, Assman, Version=1.0.0.0, Culture=neutral"/>
 		</handlers>
 	</system.webServer>
-	<assman configSource="ResourceManagement.config" />
+	<assman configSource="Assman.config" />
 </configuration>

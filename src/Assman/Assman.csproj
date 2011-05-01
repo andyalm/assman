@@ -105,7 +105,7 @@
     <Compile Include="Configuration\CssGroupElement.cs" />
     <Compile Include="Configuration\CssGroupElementCollection.cs" />
     <Compile Include="PreConsolidation\IPreConsolidationReportPersister.cs" />
-    <Compile Include="Configuration\IResourceManagementPlugin.cs" />
+    <Compile Include="Configuration\IAssmanPlugin.cs" />
     <Compile Include="Configuration\MappedConfigLoader.cs" />
     <Compile Include="Configuration\PluginElement.cs" />
     <Compile Include="Configuration\PluginElementCollection.cs" />
@@ -116,7 +116,7 @@
     <Compile Include="Configuration\PropertyNames.cs" />
     <Compile Include="Configuration\ResourceGroupElement.cs" />
     <Compile Include="Configuration\ResourceGroupElementCollection.cs" />
-    <Compile Include="Configuration\ResourceManagementContext.cs" />
+    <Compile Include="Configuration\AssmanContext.cs" />
     <Compile Include="Configuration\ResourceMatchElement.cs" />
     <Compile Include="Configuration\ResourceMatchElementCollection.cs" />
     <Compile Include="BuildSupport\PreConsolidateCommand.cs" />
@@ -177,7 +177,7 @@
     <Compile Include="FileResourceFinder.cs" />
     <Compile Include="Registration\IResourceRegistry.cs" />
     <Compile Include="IRequestContext.cs" />
-    <Compile Include="Configuration\ResourceManagementConfiguration.cs" />
+    <Compile Include="Configuration\AssmanConfiguration.cs" />
     <Compile Include="IResourceFilter.cs" />
     <Compile Include="IResourceFinder.cs" />
     <Compile Include="ResourceFilters.cs" />

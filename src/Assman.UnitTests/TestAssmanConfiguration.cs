@@ -10,16 +10,16 @@ using NUnit.Framework;
 namespace Assman
 {
 	[TestFixture]
-	public class TestResourceManagementConfiguration
+	public class TestAssmanConfiguration
 	{
-		private ResourceManagementConfiguration _instance;
+		private AssmanConfiguration _instance;
 		private const string consolidatedScript = "~/consolidated.js";
 		private const string excludedScript = "excluded.js";
 
 		[SetUp]
 		public void Init()
 		{
-			_instance = new ResourceManagementConfiguration();
+			_instance = new AssmanConfiguration();
 			_instance.ClientScripts.Consolidate = true;
 			_instance.ClientScripts.Add(new ClientScriptGroupElement());
 			_instance.ClientScripts[0].ConsolidatedUrl = consolidatedScript;

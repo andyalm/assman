@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ResourceManagement.Spark.UnitTests")]
+[assembly: AssemblyTitle("Assman.Spark.UnitTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ResourceManagement.Spark.UnitTests")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
+[assembly: AssemblyProduct("Assman.Spark.UnitTests")]
+[assembly: AssemblyCopyright("Copyright © Andy Alm 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

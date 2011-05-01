@@ -15,20 +15,20 @@ namespace Assman.Registration
 			}
 			else
 			{
-				return new ConsolidatingResourceRegistryAccessor(registryAccessor, ResourceManagementContext.Current);
+				return new ConsolidatingResourceRegistryAccessor(registryAccessor, AssmanContext.Current);
 			}
 		}
 
 		private class ConsolidatingResourceRegistryAccessor : IResourceRegistryAccessor
 		{
 			private readonly IResourceRegistryAccessor _inner;
-			private readonly ResourceManagementContext _context;
+			private readonly AssmanContext _context;
 			private IResourceRegistry _scriptRegistry;
 			private IResourceRegistry _styleRegistry;
 			private readonly IDictionary<string, IResourceRegistry> _namedScriptRegistries = new Dictionary<string, IResourceRegistry>(StringComparer.OrdinalIgnoreCase);
 			private readonly IDictionary<string, IResourceRegistry> _namedStyleRegistries = new Dictionary<string, IResourceRegistry>(StringComparer.OrdinalIgnoreCase);
 			
-			public ConsolidatingResourceRegistryAccessor(IResourceRegistryAccessor inner, ResourceManagementContext context)
+			public ConsolidatingResourceRegistryAccessor(IResourceRegistryAccessor inner, AssmanContext context)
 			{
 				_inner = inner;
 				_context = context;

@@ -21,7 +21,7 @@ namespace Assman.Spark
 			_settings = settings;
 			_sparkViewEngine = new SparkViewEngine(_settings);
 			_sparkViewEngine.ViewFolder =
-				new FileSystemViewFolder(Path.Combine(ResourceManagementConfiguration.Current.RootFilePath, "Views"));
+				new FileSystemViewFolder(Path.Combine(AssmanConfiguration.Current.RootFilePath, "Views"));
 			_descriptorBuilder = new DefaultDescriptorBuilder(_sparkViewEngine);
 		}
 

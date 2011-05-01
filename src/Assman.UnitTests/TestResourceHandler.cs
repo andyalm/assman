@@ -42,7 +42,7 @@ namespace Assman
 			var configLoader = new Mock<IConfigLoader>();
 			configLoader.Setup(l => l.GetSection<CompilationSection>(It.IsAny<string>())).Returns(_compilationSection);
 
-			var configContext = ResourceManagementContext.Create();
+			var configContext = AssmanContext.Create();
 			configContext.AddFinder(_finder.Object);
 			
 			_instance = new ResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext());

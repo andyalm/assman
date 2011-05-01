@@ -11,7 +11,7 @@ namespace Assman.Registration
 	public class TestDependencyResolvingResourceRegistry
 	{
 		private DependencyResolvingResourceRegistry _registry;
-		private ResourceManagementContext _context;
+		private AssmanContext _context;
 		private Mock<IResourceRegistry> _inner;
 		private Mock<IResourceFinder> _finder;
 		private StubDependencyProvider _dependencyProvider;
@@ -24,7 +24,7 @@ namespace Assman.Registration
 			_finder = new Mock<IResourceFinder>();
 			_finder.Setup(f => f.FindResource(It.IsAny<string>())).Returns(
 				(string virtualPath) => StubResource.WithPath(virtualPath));
-			_context = new ResourceManagementContext();
+			_context = new AssmanContext();
 			_context.AddFinder(_finder.Object);
 			_context.MapExtensionToDependencyProvider(".js", _dependencyProvider);
 			

@@ -51,13 +51,13 @@ namespace Assman.Registration
 			if (!registry.TryResolvePath(virtualPath, out resolvedUrls))
 			{
 				throw new InvalidOperationException(
-					@"Cannot include embedded resource because it has not been configured in the ResourceManagement.config to be consolidated anywhere.
+					@"Cannot include embedded resource because it has not been configured in the Assman.config to be consolidated anywhere.
 					Please add an include rule that matches the path 'assembly://" +
 					assemblyName + "/" + resourceName + "'.");
 			}
-			if(!ResourceManagementConfiguration.Current.Assemblies.Contains(shortAssemblyName))
+			if(!AssmanConfiguration.Current.Assemblies.Contains(shortAssemblyName))
 			{
-				throw new InvalidOperationException(@"Cannot include embedded resource because the assembly has not been configured in the ResourceManagement.config.  If you would like to embed a resource from the assembly '"
+				throw new InvalidOperationException(@"Cannot include embedded resource because the assembly has not been configured in the Assman.config.  If you would like to embed a resource from the assembly '"
 				                                    + assemblyName + "' then please add it to the <assemblies> list.");
 			}
 

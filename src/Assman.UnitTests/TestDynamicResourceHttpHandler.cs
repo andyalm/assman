@@ -16,7 +16,7 @@ namespace Assman
 	public class TestDynamicResourceHttpHandler
 	{
 		private DynamicResourceHttpHandler _httpHandler;
-		private ResourceManagementContext _context;
+		private AssmanContext _context;
 		private FakeHandlerFactory _handlerFactory;
 		private Mock<HttpContextBase> _httpContext;
 		private ClientScriptGroupElement _groupElement;
@@ -25,7 +25,7 @@ namespace Assman
 		[SetUp]
 		public void SetupContext()
 		{
-			_context = ResourceManagementContext.Create();
+			_context = AssmanContext.Create();
 			_groupElement = new ClientScriptGroupElement();
 			_groupElement.ConsolidatedUrl = "~" + ConsolidatedPath;
 			_context.ScriptGroups.Add(_groupElement);

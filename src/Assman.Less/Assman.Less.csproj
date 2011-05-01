@@ -56,7 +56,7 @@
   <ItemGroup>
     <Compile Include="LessContentFilter.cs" />
     <Compile Include="LessContentFilterFactory.cs" />
-    <Compile Include="LessResourceManagementPlugin.cs" />
+    <Compile Include="dotLessAssmanPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VirtualPathFileReader.cs" />
   </ItemGroup>

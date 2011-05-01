@@ -18,7 +18,7 @@ namespace Assman.Configuration
 			return finderElement.Type ?? String.Empty;
 		}
 
-		public IEnumerable<IResourceManagementPlugin> GetPlugins()
+		public IEnumerable<IAssmanPlugin> GetPlugins()
 		{
 			foreach (PluginElement finderElement in this)
 			{

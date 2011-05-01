@@ -9,17 +9,17 @@ using NUnit.Framework;
 namespace Assman
 {
 	[TestFixture]
-	public class TestResourceManagementContext
+	public class TestAssmanContext
 	{
 	    private StubResourceFinder _finder;
-	    private ResourceManagementContext _context;
+	    private AssmanContext _context;
 
 	    [SetUp]
 	    public void SetupContext()
 	    {
 	        DependencyManagerFactory.ClearDependencyCache();
             _finder = new StubResourceFinder();
-            _context = new ResourceManagementContext();
+            _context = new AssmanContext();
             _context.AddFinder(_finder);
 	    }
         

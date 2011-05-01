@@ -12,7 +12,7 @@ namespace Assman.Less
 
 		public VirtualPathFileReader()
 		{
-			var config = ResourceManagementConfiguration.Current;
+			var config = AssmanConfiguration.Current;
 			_pathResolver = VirtualPathResolver.GetInstance(config.RootFilePath);
 		}
 

@@ -102,9 +102,9 @@
     <Compile Include="TestPluginElement.cs" />
     <Compile Include="TestResourceConsolidator.cs" />
     <Compile Include="TestDynamicResourceHttpHandler.cs" />
-    <Compile Include="TestResourceManagementContext.cs" />
-    <Compile Include="TestResourceManagementContext_GetResourceUrl.cs" />
-    <Compile Include="TestResourceManagementContext_PreConsolidation.cs" />
+    <Compile Include="TestAssmanContext.cs" />
+    <Compile Include="TestAssmanContext_GetResourceUrl.cs" />
+    <Compile Include="TestAssmanContext_PreConsolidation.cs" />
     <Compile Include="TestResourceType.cs" />
     <Compile Include="TestSupport\AssertionExtensions.cs" />
     <Compile Include="TestSupport\ResourceTestContext.cs" />
@@ -124,7 +124,7 @@
     <Compile Include="TestResourceGroupElement.cs" />
     <Compile Include="TestResourceFinder.cs" />
     <Compile Include="TestResourceHandler.cs" />
-    <Compile Include="TestResourceManagementConfiguration.cs" />
+    <Compile Include="TestAssmanConfiguration.cs" />
     <Compile Include="TestVirtualPathResolver.cs" />
     <Compile Include="TestVisualStudioDependencyProvider.cs" />
   </ItemGroup>
