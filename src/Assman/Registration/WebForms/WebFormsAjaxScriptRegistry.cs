@@ -3,17 +3,17 @@ using System.Web.UI;
 
 namespace Assman.Registration.WebForms
 {
-	internal class WebFormsAjaxScriptIncluder : WebFormsClientScriptRegistry
+	internal class WebFormsAjaxScriptRegistry : WebFormsClientScriptRegistry
 	{
 		private readonly ScriptManager _scriptManager;
 
-		public WebFormsAjaxScriptIncluder(Control control, ScriptManager scriptManager)
+		public WebFormsAjaxScriptRegistry(Control control, ScriptManager scriptManager)
 			: base(control)
 		{
 			_scriptManager = scriptManager;
 		}
 
-		public override void IncludePath(string urlToInclude)
+		public override void Require(string resourcePath)
 		{
 			//we have to check to see if a reference exists already
 			//because the ScriptManager is case-sensitive when removing
@@ -21,8 +21,8 @@ namespace Assman.Registration.WebForms
 			//ToLower for all of our url's, but I think that's ugly.  I want
 			//to be able to include my js files with proper casing without
 			//including duplicates if someone accidentally uses a different casing.
-			if (!ContainsReference(urlToInclude))
-				_scriptManager.Scripts.Add(CreateFileReference(urlToInclude));
+			if (!ContainsReference(resourcePath))
+				_scriptManager.Scripts.Add(CreateFileReference(resourcePath));
 		}
 
 		private bool ContainsReference(string url)

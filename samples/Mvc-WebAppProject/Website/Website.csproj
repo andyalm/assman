@@ -37,19 +37,19 @@
   <ItemGroup>
     <Reference Include="Assman, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\output\lib\Assman.dll</HintPath>
+      <HintPath>..\..\..\src\Assman\bin\$(Configuration)\Assman.dll</HintPath>
     </Reference>
     <Reference Include="Assman.Less, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\output\lib\Assman.Less.dll</HintPath>
+      <HintPath>..\..\..\src\Assman.Less\bin\$(Configuration)\Assman.Less.dll</HintPath>
     </Reference>
     <Reference Include="Assman.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\output\lib\Mvc2\.NetFramework 2.0\Assman.Mvc.dll</HintPath>
+      <HintPath>..\..\..\src\Assman.Mvc\bin\$(Configuration)\Mvc2\.NetFramework 2.0\Assman.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Assman.Spark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\output\lib\Assman.Spark.dll</HintPath>
+      <HintPath>..\..\..\src\Assman.Mvc\bin\$(Configuration)\Assman.Spark.dll</HintPath>
     </Reference>
     <Reference Include="Spark, Version=1.5.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

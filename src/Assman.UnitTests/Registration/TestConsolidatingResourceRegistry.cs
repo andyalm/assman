@@ -43,17 +43,17 @@ namespace Assman.Registration
 		[Test]
 		public void WhenIncludingAUrlThatIsNotConfiguredToBeConsolidated_ItIsIncludedAsIs()
 		{
-			_consolidatingRegistry.IncludePath(UrlNotToBeConsolidated);
+			_consolidatingRegistry.Require(UrlNotToBeConsolidated);
 
-			_innerRegistry.Verify(r => r.IncludePath(UrlNotToBeConsolidated));
+			_innerRegistry.Verify(r => r.Require(UrlNotToBeConsolidated));
 		}
 
 		[Test]
 		public void WhenIncludingAUrlThaIsConfiguredToBeConsolidated_TheConsolidatedUrlIsIncludedInstead()
 		{
-			_consolidatingRegistry.IncludePath(UrlToBeConsolidated);
+			_consolidatingRegistry.Require(UrlToBeConsolidated);
 
-			_innerRegistry.Verify(r => r.IncludePath(ConsolidatedUrl));
+			_innerRegistry.Verify(r => r.Require(ConsolidatedUrl));
 		}
 
 		[Test]

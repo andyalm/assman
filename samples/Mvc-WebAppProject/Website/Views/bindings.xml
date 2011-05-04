@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <bindings>
   <element name="ScriptBlock">
-    <start>#using(new InlineBlockOutputScope(this, Html.ScriptRegistry('@registry'))) {</start>
+    <start>#using(new InlineBlockOutputScope(this, Html.ScriptRegistry('@target'))) {</start>
     <end>#}</end>
   </element>
   <element name="ScriptBlock">
@@ -9,15 +9,15 @@
     <end>#}</end>
   </element>
   <element name="StyleBlock">
-    <start>#using(new InlineBlockOutputScope(this, Html.StyleRegistry('@registry'))) {</start>
+    <start>#using(new InlineBlockOutputScope(this, Html.StyleRegistry('@target'))) {</start>
     <end>#}</end>
   </element>
   <element name="StyleBlock">
     <start>#using(new InlineBlockOutputScope(this, Html.StyleRegistry())) {</start>
     <end>#}</end>
   </element>
-  <element name="ScriptInclude">#Html.IncludeScript('@src', '@registry');</element>
-  <element name="ScriptInclude">#Html.IncludeScript('@src');</element>
-  <element name="StyleInclude">#Html.IncludeStylesheet('@src', '@registry');</element>
-  <element name="StyleInclude">#Html.IncludeStylesheet('@src');</element>
+  <element name="RequireScript">#Html.RequireScript('@src', '@target');</element>
+  <element name="RequireScript">#Html.RequireScript('@src');</element>
+  <element name="RequireStylesheet">#Html.RequireStylesheet('@src', '@target');</element>
+  <element name="RequireStylesheet">#Html.RequireStylesheet('@src');</element>
 </bindings>

@@ -66,13 +66,13 @@ namespace Assman.Registration.WebForms
 			}
 			else
 			{
-				return new WebFormsAjaxScriptIncluder(_control, scriptManager);
+				return new WebFormsAjaxScriptRegistry(_control, scriptManager);
 			}
 		}
 
 		private IResourceRegistry CreateStyleRegistry()
 		{
-			return new WebFormsCssRegistry(_control);
+			return new WebFormsStyleRegistry(_control);
 		}
 	}
 }

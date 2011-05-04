@@ -23,7 +23,7 @@ namespace Assman.Registration.WebForms
 		/// <summary>
 		/// Gets or sets the url of the resource.
 		/// </summary>
-		protected string ResourceUrl { get; set; }
+		public string Path { get; set; }
 
 		/// <summary>
 		/// Gets the name of the <see cref="IResourceRegistry"/> that the resource will be included into.
@@ -48,11 +48,11 @@ namespace Assman.Registration.WebForms
 			
 			if(String.IsNullOrEmpty(AssemblyName))
 			{
-				registry.IncludePath(ResourceUrl);
+				registry.Require(Path);
 			}
 			else
 			{
-				registry.IncludeEmbeddedResource(AssemblyName, ResourceName);
+				registry.RequireEmbeddedResource(AssemblyName, ResourceName);
 			}
 		}
 

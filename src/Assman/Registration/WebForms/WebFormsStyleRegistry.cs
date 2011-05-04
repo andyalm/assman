@@ -4,16 +4,16 @@ using System.Web.UI;
 
 namespace Assman.Registration.WebForms
 {
-	internal class WebFormsCssRegistry : WebFormsRegistryBase
+	internal class WebFormsStyleRegistry : WebFormsRegistryBase
 	{
 		const string LinkTemplate = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"{0}\" />";
 		
-		public WebFormsCssRegistry(Control control) : base(control) { }
+		public WebFormsStyleRegistry(Control control) : base(control) { }
 
-		public override void IncludePath(string urlToInclude)
+		public override void Require(string resourcePath)
 		{
-			var linkElement = String.Format(LinkTemplate, urlToInclude);
-			AddToHeader(urlToInclude, linkElement);
+			var linkElement = String.Format(LinkTemplate, resourcePath);
+			AddToHeader(resourcePath, linkElement);
 		}
 
 		public override void RegisterInlineBlock(Action<TextWriter> block, object key)

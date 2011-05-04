@@ -30,27 +30,27 @@ namespace Assman.Registration
 			get { return _inner; }
 		}
 
-		public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
+		public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
 		{
-			var resolvedPaths = _getResourceUrls(path);
-			if(resolvedPaths.HasAtLeast(2) || !resolvedPaths.Single().Equals(path,  StringComparison.OrdinalIgnoreCase))
+			var resolvedPaths = _getResourceUrls(resourcePath);
+			if(resolvedPaths.HasAtLeast(2) || !resolvedPaths.Single().Equals(resourcePath,  StringComparison.OrdinalIgnoreCase))
 			{
-				resolvedVirtualPaths = resolvedPaths;
+				resolvedResourcePaths = resolvedPaths;
 				return true;
 			}
 			else
 			{
-				resolvedVirtualPaths = null;
+				resolvedResourcePaths = null;
 				return false;
 			}
 		}
 
-		public void IncludePath(string virtualPath)
+		public void Require(string resourcePath)
 		{
-			virtualPath = ToCanonicalUrl(virtualPath);
-			foreach(var pathToInclude in _getResourceUrls(virtualPath))
+			resourcePath = ToCanonicalUrl(resourcePath);
+			foreach(var pathToInclude in _getResourceUrls(resourcePath))
 			{
-                _inner.IncludePath(pathToInclude);
+                _inner.Require(pathToInclude);
 			}
 		}
 

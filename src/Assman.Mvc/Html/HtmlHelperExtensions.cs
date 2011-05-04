@@ -1,5 +1,4 @@
 using System;
-using System.Web;
 using System.Web.Mvc;
 
 using Assman.Registration;
@@ -11,27 +10,27 @@ namespace Assman.Mvc.Html
 	//return value allows you to call the helper methods with either expression or statement syntax.
 	public static class HtmlHelperExtensions
 	{	
-		public static DummyStringResult IncludeScript(this HtmlHelper html, string virtualPath)
+		public static DummyStringResult RequireScript(this HtmlHelper html, string virtualPath)
 		{
-			html.ScriptRegistry().IncludePath(virtualPath);
+			html.ScriptRegistry().Require(virtualPath);
 			return DummyStringResult.Instance;
 		}
 
-		public static DummyStringResult IncludeScript(this HtmlHelper html, string virtualPath, string registryName)
+		public static DummyStringResult RequireScript(this HtmlHelper html, string virtualPath, string registryName)
 		{
-			html.ScriptRegistry(registryName).IncludePath(virtualPath);
+			html.ScriptRegistry(registryName).Require(virtualPath);
 			return DummyStringResult.Instance;
 		}
 
-		public static DummyStringResult IncludeStylesheet(this HtmlHelper html, string virtualPath)
+		public static DummyStringResult RequireStylesheet(this HtmlHelper html, string virtualPath)
 		{
-			html.StyleRegistry().IncludePath(virtualPath);
+			html.StyleRegistry().Require(virtualPath);
 			return DummyStringResult.Instance;
 		}
 
-		public static DummyStringResult IncludeStylesheet(this HtmlHelper html, string virtualPath, string registryName)
+		public static DummyStringResult RequireStylesheet(this HtmlHelper html, string virtualPath, string registryName)
 		{
-			html.StyleRegistry(registryName).IncludePath(virtualPath);
+			html.StyleRegistry(registryName).Require(virtualPath);
 			return DummyStringResult.Instance;
 		}
 

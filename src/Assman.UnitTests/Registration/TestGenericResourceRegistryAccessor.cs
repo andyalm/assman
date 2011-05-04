@@ -37,8 +37,8 @@ namespace Assman.Registration
 		public void WhenGettingRegisteredScripts_IncludesAndScriptBlocksAssociatedWithNamedRegistryAreReturned()
 		{
 			var scriptRegistry = _accessor.NamedScriptRegistry("MyScriptRegistry");
-			scriptRegistry.IncludePath("~/myscript.js");
-			scriptRegistry.IncludePath("~/myotherscript.js");
+			scriptRegistry.Require("~/myscript.js");
+			scriptRegistry.Require("~/myotherscript.js");
 			scriptRegistry.RegisterInlineBlock("alert('do something');");
 			scriptRegistry.RegisterInlineBlock("alert('do something else');");
 
@@ -54,12 +54,12 @@ namespace Assman.Registration
 		public void WhenAScriptFileIsRegisteredInTwoRegistries_ItIsOnlyReturnedAsPartOfTheFirstOneRequested()
 		{
 			var scriptRegistry1 = _accessor.NamedScriptRegistry("MyScriptRegistry1");
-			scriptRegistry1.IncludePath("~/common.js");
-			scriptRegistry1.IncludePath("~/myscript1.js");
+			scriptRegistry1.Require("~/common.js");
+			scriptRegistry1.Require("~/myscript1.js");
 
 			var scriptRegistry2 = _accessor.NamedScriptRegistry("MyScriptRegistry2");
-			scriptRegistry2.IncludePath("~/common.js");
-			scriptRegistry2.IncludePath("~/myscript2.js");
+			scriptRegistry2.Require("~/common.js");
+			scriptRegistry2.Require("~/myscript2.js");
 
 			var registeredScripts1 = _accessor.GetRegisteredScripts("MyScriptRegistry1");
 			registeredScripts1.Includes.CountShouldEqual(2);

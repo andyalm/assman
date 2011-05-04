@@ -12,16 +12,16 @@ namespace Assman.Registration
 		/// <summary>
 		/// Tries to resolve the given path into a true virtual file path.
 		/// </summary>
-		/// <param name="path"></param>
-		/// <param name="resolvedVirtualPaths"></param>
+		/// <param name="resourcePath"></param>
+		/// <param name="resolvedResourcePaths"></param>
 		/// <returns></returns>
-        bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths);
+        bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths);
 
 		/// <summary>
-		/// Includes the resource at the given path on the current web page.
+		/// Registers the fact that the given resource is required on the current page.
 		/// </summary>
-		/// <param name="urlToInclude">The url of the resource to be included.</param>
-		void IncludePath(string urlToInclude);
+		/// <param name="resourcePath">The virtual path of the resource to be included.</param>
+		void Require(string resourcePath);
 
 		/// <summary>
 		/// Registers an inline block that will appear inline on the page directly below the includes of this <see cref="IResourceRegistry"/>.

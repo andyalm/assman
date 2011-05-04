@@ -12,10 +12,10 @@ namespace Assman.Registration.WebForms
 		{
 		}
 
-		public override void IncludePath(string urlToInclude)
+		public override void Require(string resourcePath)
 		{
-			var resolvedUrl = Control.ResolveUrl(urlToInclude);
-			Page.ClientScript.RegisterClientScriptInclude(typeof(WebFormsClientScriptRegistry), urlToInclude, resolvedUrl);
+			var resolvedUrl = Control.ResolveUrl(resourcePath);
+			Page.ClientScript.RegisterClientScriptInclude(typeof(WebFormsClientScriptRegistry), resourcePath, resolvedUrl);
 		}
 
 		public override void RegisterInlineBlock(Action<TextWriter> block, object key)

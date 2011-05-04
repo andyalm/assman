@@ -36,10 +36,10 @@ namespace Assman.Registration
 		{
 			_dependencyProvider.SetDependencies("~/scripts/myscript.js", "~/scripts/jquery.js");
 			
-			_registry.IncludePath("~/scripts/myscript.js");
+			_registry.Require("~/scripts/myscript.js");
 
-			_inner.Verify(r => r.IncludePath("~/scripts/jquery.js"));
-			_inner.Verify(r => r.IncludePath("~/scripts/myscript.js"));
+			_inner.Verify(r => r.Require("~/scripts/jquery.js"));
+			_inner.Verify(r => r.Require("~/scripts/myscript.js"));
 		}
 	}
 }

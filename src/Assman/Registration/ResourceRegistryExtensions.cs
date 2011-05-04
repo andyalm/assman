@@ -8,17 +8,17 @@ namespace Assman.Registration
 {
 	public static class ResourceRegistryExtensions
 	{
-		public static void IncludeEmbeddedResource(this IResourceRegistry registry, Type type, string resourceName)
+		public static void RequireEmbeddedResource(this IResourceRegistry registry, Type type, string resourceName)
 		{
-			registry.IncludeEmbeddedResource(type.Assembly.GetName().Name, resourceName);
+			registry.RequireEmbeddedResource(type.Assembly.GetName().Name, resourceName);
 		}
 
-		public static void IncludeEmbeddedResource(this IResourceRegistry registry, string assemblyName, string resourceName)
+		public static void RequireEmbeddedResource(this IResourceRegistry registry, string assemblyName, string resourceName)
 		{
 			var urls = GetEmbeddedResourceUrls(registry, assemblyName, resourceName);
 		    foreach (var url in urls)
 		    {
-		        registry.IncludePath(url);
+		        registry.Require(url);
 		    }
 		}
 

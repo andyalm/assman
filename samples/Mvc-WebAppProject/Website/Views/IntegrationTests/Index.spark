@@ -1,5 +1,5 @@
 <content name="main">
-  <StyleInclude src="~/Content/Consolidated/Shared.css" />
+  <RequireStylesheet src="~/Content/Consolidated/Shared.css" />
   <ScriptBlock>
     function IsScriptIncluded(path)
     {
@@ -13,11 +13,11 @@
       $("#script-block-binding").addClass("pass");
     </ScriptBlock>
     
-		<dt>&lt;ScriptInclude&gt; binding</dt>
+		<dt>&lt;RequireScript&gt; binding</dt>
 		<dd id="script-include-binding" class="test">running...</dd>
-    <ScriptInclude src="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
+    <RequireScript src="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
 		
-    <dt>ScriptInclude is consolidated</dt>
+    <dt>RequireScript is consolidated</dt>
 		<dd id="script-include-consolidated" class="test">running...</dd>
     <ScriptBlock>
       if($('script[src*="/Scripts/Consolidated/Controllers/IntegrationTests.js"]').length == 1
@@ -29,7 +29,7 @@
     
     <dt>Dependencies are automatically included</dt>
     <dd id="script-include-dependencies" class="test">running...</dd>
-    <ScriptInclude src="~/scripts/DependencyLeaf.js" />
+    <RequireScript src="~/scripts/DependencyLeaf.js" />
 
     <dt>Scripts included in two script registries only renders once</dt>
     <dd id="script-include-two-registries" class="test">running...</dd>
@@ -40,7 +40,7 @@
       }
     </ScriptBlock>
 
-    <ScriptInclude src="~/Scripts/Consolidated/Disabled.js" />
+    <RequireScript src="~/Scripts/Consolidated/Disabled.js" />
     <dt>Group with consolidation disabled that is included by ConsolidatedUrl includes all children</dt>
     <dd id="include-unconsolidated-group" class="test">running...</dd>
     <ScriptBlock>

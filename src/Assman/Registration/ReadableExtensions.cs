@@ -22,9 +22,9 @@ namespace Assman.Registration
 				_inner = inner;
 			}
 
-			public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
+			public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
 			{
-				return _inner.TryResolvePath(path, out resolvedVirtualPaths);
+				return _inner.TryResolvePath(resourcePath, out resolvedResourcePaths);
 			}
 
 			public IEnumerable<string> GetIncludes()
@@ -37,9 +37,9 @@ namespace Assman.Registration
 				return ReadableOrDefault().GetInlineBlocks();
 			}
 
-			public void IncludePath(string urlToInclude)
+			public void Require(string resourcePath)
 			{
-				_inner.IncludePath(urlToInclude);
+				_inner.Require(resourcePath);
 			}
 
 			public void RegisterInlineBlock(Action<TextWriter> block, object key)

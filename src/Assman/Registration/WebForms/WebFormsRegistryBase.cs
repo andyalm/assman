@@ -14,13 +14,13 @@ namespace Assman.Registration.WebForms
 			_control = control;
 		}
 
-		public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
+		public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
 		{
-			resolvedVirtualPaths = new [] {path};
+			resolvedResourcePaths = new [] {resourcePath};
 			return true;
 		}
 
-		public abstract void IncludePath(string urlToInclude);
+		public abstract void Require(string resourcePath);
 
 		public abstract void RegisterInlineBlock(Action<TextWriter> block, object key);
 

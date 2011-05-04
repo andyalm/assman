@@ -17,18 +17,18 @@ namespace Assman.Registration
 			_context = context;
 		}
 
-		public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
+		public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
 		{
-			return _inner.TryResolvePath(path, out resolvedVirtualPaths);
+			return _inner.TryResolvePath(resourcePath, out resolvedResourcePaths);
 		}
 
-		public void IncludePath(string urlToInclude)
+		public void Require(string resourcePath)
 		{
-			foreach(var dependency in _context.GetResourceDependencies(urlToInclude))
+			foreach(var dependency in _context.GetResourceDependencies(resourcePath))
 			{
-				_inner.IncludePath(dependency);
+				_inner.Require(dependency);
 			}
-			_inner.IncludePath(urlToInclude);
+			_inner.Require(resourcePath);
 		}
 
 		public void RegisterInlineBlock(Action<TextWriter> block, object key)

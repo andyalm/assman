@@ -9,9 +9,9 @@ namespace Assman.Registration
 		private readonly HashSet<string> _includes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<object, Action<TextWriter>> _inlineBlocks = new Dictionary<object, Action<TextWriter>>();
 
-		public bool TryResolvePath(string path, out IEnumerable<string> resolvedVirtualPaths)
+		public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
 		{
-			resolvedVirtualPaths = new[] {path};
+			resolvedResourcePaths = new[] {resourcePath};
 			return true;
 		}
 
@@ -25,11 +25,11 @@ namespace Assman.Registration
 			return _inlineBlocks.Values;
 		}
 
-		public void IncludePath(string urlToInclude)
+		public void Require(string resourcePath)
 		{
-			if (!_includes.Contains(urlToInclude))
+			if (!_includes.Contains(resourcePath))
 			{
-				_includes.Add(urlToInclude);
+				_includes.Add(resourcePath);
 			}
 		}
 

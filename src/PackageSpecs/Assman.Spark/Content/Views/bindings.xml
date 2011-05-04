@@ -16,8 +16,8 @@
     <start>#using(new InlineBlockOutputScope(this, Html.StyleRegistry())) {</start>
     <end>#}</end>
   </element>
-  <element name="ScriptInclude">#Html.IncludeScript('@src', '@target');</element>
-  <element name="ScriptInclude">#Html.IncludeScript('@src');</element>
-  <element name="StyleInclude">#Html.IncludeStylesheet('@src', '@target');</element>
-  <element name="StyleInclude">#Html.IncludeStylesheet('@src');</element>
+  <element name="RequireScript">#Html.RequireScript('@src', '@target');</element>
+  <element name="RequireScript">#Html.RequireScript('@src');</element>
+  <element name="RequireStylesheet">#Html.RequireStylesheet('@src', '@target');</element>
+  <element name="RequireStylesheet">#Html.RequireStylesheet('@src');</element>
 </bindings>

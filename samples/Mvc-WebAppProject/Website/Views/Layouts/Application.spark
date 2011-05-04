@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>${Title}</title>
-	<ScriptInclude src="~/Scripts/jquery-1.4.1.min.js" registry="head" />
+	<RequireScript src="~/Scripts/jquery-1.4.1.min.js" target="head" />
 	#Html.RenderStyles();
 	#Html.RenderScripts("head");
 </head>
