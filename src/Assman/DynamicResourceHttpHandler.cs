@@ -67,7 +67,7 @@ namespace Assman
 			public HttpRequestContext(HttpContextBase httpContext)
 			{
 				_httpContext = httpContext;
-				var resourceCacheKey = httpContext.Request.QueryString["c"];
+				var resourceCacheKey = httpContext.Request.QueryString[AspNetShortLivedResourceCache.QueryStringKey];
 				if (!String.IsNullOrEmpty(resourceCacheKey))
 					_httpContext.SetResourceCacheKey(resourceCacheKey);
 			}

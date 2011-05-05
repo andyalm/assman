@@ -17,7 +17,7 @@ namespace Assman.Mvc
 
         public static void IgnoreWebResourceRoutes(this RouteCollection routes)
         {
-            routes.IgnoreRoute("{*consolidatedurls}", new { consolidatedurls = @".*(\.jsx|\.cssx|\.js|\.css)(/.*)?" });   
+            routes.IgnoreRoute("{*consolidatedurls}", new { consolidatedurls = @".*(\.js|\.css)(/.*)?" });   
         }
 	}
 }

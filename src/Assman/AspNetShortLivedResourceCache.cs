@@ -7,7 +7,9 @@ namespace Assman
 {
 	public class AspNetShortLivedResourceCache : IResourceCache
 	{
-		private readonly Func<HttpContextBase> _getHttpContext;
+	    public const string QueryStringKey = "rid";
+        
+        private readonly Func<HttpContextBase> _getHttpContext;
 
 		public AspNetShortLivedResourceCache(Func<HttpContextBase> getHttpContext)
 		{

@@ -165,18 +165,18 @@ namespace Assman.Configuration
 		private IEnumerable<string> GetResourceUrls(IResourceGroupManager groupManager, string resourceUrl)
 		{
 		    IEnumerable<string> resolvedResourceUrls;
-            if(!groupManager.IsGroupUrlWithConsolidationDisabled(resourceUrl))
+		    if (groupManager.IsGroupUrlWithConsolidationDisabled(resourceUrl))
 		    {
-		        resolvedResourceUrls = new [] {groupManager.ResolveResourceUrl(resourceUrl)};
+		        var resourceMode = _resourceModeProvider.GetCurrentResourceMode();
+		        resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, resourceMode, _finder)
+		            .SortByDependencies(_dependencyManager);
 		    }
-            else
-            {
-                var resourceMode = _resourceModeProvider.GetCurrentResourceMode();
-                resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, resourceMode, _finder)
-                    .SortByDependencies(_dependencyManager);
-            }
-            
-            if (!String.IsNullOrEmpty(Version))
+		    else
+		    {
+		        resolvedResourceUrls = new[] {groupManager.ResolveResourceUrl(resourceUrl)};
+		    }
+
+		    if (!String.IsNullOrEmpty(Version))
                 return resolvedResourceUrls.Select(u => u.AddQueryParam("v", Version));
             else
                 return resolvedResourceUrls;

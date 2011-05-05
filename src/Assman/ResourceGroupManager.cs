@@ -229,7 +229,7 @@ namespace Assman
 		        var resourceCacheKey = _resourceCache.CurrentCacheKey;
 
 		        if (!String.IsNullOrEmpty(resourceCacheKey))
-		            return resourceUrl.AddQueryParam("c", resourceCacheKey);
+		            return resourceUrl.AddQueryParam(AspNetShortLivedResourceCache.QueryStringKey, resourceCacheKey);
 		        else
 		            return resourceUrl;
 		    }
