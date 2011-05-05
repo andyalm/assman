@@ -46,7 +46,13 @@ namespace Assman
 			{
 				context.SetLastModified(lastModified);
 				context.ContentType = _groupTemplateContext.ResourceType.ContentType;
-				resource.WriteTo(context.OutputStream);
+				
+                if(IsDebugMode)
+                {
+                    resource.WriteSummaryHeader(context.OutputStream);
+                }
+                
+                resource.WriteTo(context.OutputStream);
 			}
 		}
 
