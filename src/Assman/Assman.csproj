@@ -84,6 +84,7 @@
     <Compile Include="BuildSupport\ILogger.cs" />
     <Compile Include="BuildSupport\MSBuild\PreConsolidateResources.cs" />
     <Compile Include="BuildSupport\NullLogger.cs" />
+    <Compile Include="Comparers.cs" />
     <Compile Include="CompositeResourceFilter.cs" />
     <Compile Include="CompositeResourceFinder.cs" />
     <Compile Include="Configuration\AssemblyElement.cs" />

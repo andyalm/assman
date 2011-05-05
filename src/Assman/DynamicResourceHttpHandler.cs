@@ -24,7 +24,7 @@ namespace Assman
 			_handlerFactory = handlerFactory;
 			_resourceContext = context;
 			_minLastModified = context.ConfigurationLastModified;
-			_handlerRegistry = new Dictionary<string, IResourceHandler>(StringComparer.OrdinalIgnoreCase);
+			_handlerRegistry = new Dictionary<string, IResourceHandler>(Comparers.VirtualPath);
 		}
 
 		public override void ProcessRequest(HttpContextBase httpContext)

@@ -5,8 +5,8 @@ namespace Assman
 {
 	public class InMemoryDependencyCache : IDependencyCache
 	{
-		private readonly IDictionary<string, IEnumerable<string>> _virtualPathCache = new Dictionary<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase);
-		private readonly IDictionary<string, IEnumerable<string>> _resourceCache = new Dictionary<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase);
+		private readonly IDictionary<string, IEnumerable<string>> _virtualPathCache = new Dictionary<string, IEnumerable<string>>(Comparers.VirtualPath);
+		private readonly IDictionary<string, IEnumerable<string>> _resourceCache = new Dictionary<string, IEnumerable<string>>(Comparers.VirtualPath);
 
 		public bool TryGetDependencies(string virtualPath, out IEnumerable<string> dependencies)
 		{

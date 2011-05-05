@@ -7,8 +7,8 @@ namespace Assman.Registration
 {
 	internal class ResourceRegistryMap
 	{
-		private readonly IDictionary<string, IResourceRegistry> _registries = new Dictionary<string, IResourceRegistry>(StringComparer.OrdinalIgnoreCase);
-		private readonly IDictionary<string, string> _includeOwnerMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+		private readonly IDictionary<string, IResourceRegistry> _registries = new Dictionary<string, IResourceRegistry>(Comparers.RegistryNames);
+		private readonly IDictionary<string, string> _includeOwnerMap = new Dictionary<string, string>(Comparers.VirtualPath);
 		private readonly Func<IResourceRegistry> _createRegistry;
 
 		public ResourceRegistryMap(Func<IResourceRegistry> createRegistry)

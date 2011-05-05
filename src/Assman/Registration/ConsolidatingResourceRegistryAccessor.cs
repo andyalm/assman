@@ -25,8 +25,8 @@ namespace Assman.Registration
 			private readonly AssmanContext _context;
 			private IResourceRegistry _scriptRegistry;
 			private IResourceRegistry _styleRegistry;
-			private readonly IDictionary<string, IResourceRegistry> _namedScriptRegistries = new Dictionary<string, IResourceRegistry>(StringComparer.OrdinalIgnoreCase);
-			private readonly IDictionary<string, IResourceRegistry> _namedStyleRegistries = new Dictionary<string, IResourceRegistry>(StringComparer.OrdinalIgnoreCase);
+			private readonly IDictionary<string, IResourceRegistry> _namedScriptRegistries = new Dictionary<string, IResourceRegistry>(Comparers.RegistryNames);
+			private readonly IDictionary<string, IResourceRegistry> _namedStyleRegistries = new Dictionary<string, IResourceRegistry>(Comparers.RegistryNames);
 			
 			public ConsolidatingResourceRegistryAccessor(IResourceRegistryAccessor inner, AssmanContext context)
 			{

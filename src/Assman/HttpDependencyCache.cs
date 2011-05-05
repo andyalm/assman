@@ -13,7 +13,7 @@ namespace Assman
 		}
 		
 		private readonly Func<HttpContextBase> _httpContextAccessor;
-		private readonly IDictionary<string, CacheItem> _longRunningCache = new Dictionary<string, CacheItem>(StringComparer.OrdinalIgnoreCase);
+		private readonly IDictionary<string, CacheItem> _longRunningCache = new Dictionary<string, CacheItem>(Comparers.VirtualPath);
 		private static readonly Type _httpItemsKey = typeof (HttpDependencyCache);
 
 		public HttpDependencyCache(Func<HttpContextBase> httpContextAccessor)
@@ -64,7 +64,7 @@ namespace Assman
 		private IDictionary<string,IEnumerable<string>> GetCacheKeyedByVirtualPath()
 		{
 			return _httpContextAccessor().Items.GetOrCreate<IDictionary<string, IEnumerable<string>>>(_httpItemsKey,
-				() => new Dictionary<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase));
+				() => new Dictionary<string, IEnumerable<string>>(Comparers.VirtualPath));
 		} 
 
 		private class CacheItem

@@ -10,7 +10,7 @@ namespace Assman
 		private IDependencyCache _dependencyCache;
 		private readonly IResourceGroupManager _scriptGroups;
 		private readonly IResourceGroupManager _styleGroups;
-		private readonly IDictionary<string, IDependencyProvider> _parsers = new Dictionary<string, IDependencyProvider>(StringComparer.OrdinalIgnoreCase);
+		private readonly IDictionary<string, IDependencyProvider> _parsers = new Dictionary<string, IDependencyProvider>(Comparers.VirtualPath);
 
 		public DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups)
 		{
@@ -56,9 +56,9 @@ namespace Assman
 			var xDepends = GetDependencies(x);
 			var yDepends = GetDependencies(y);
 
-			if (xDepends.Contains(y.VirtualPath, StringComparer.OrdinalIgnoreCase))
+			if (xDepends.Contains(y.VirtualPath, Comparers.VirtualPath))
 				return 1;
-			if (yDepends.Contains(x.VirtualPath, StringComparer.OrdinalIgnoreCase))
+			if (yDepends.Contains(x.VirtualPath, Comparers.VirtualPath))
 				return -1;
 
 			return 0;
@@ -69,9 +69,9 @@ namespace Assman
             var xDepends = GetDependencies(virtualPath1);
             var yDepends = GetDependencies(virtualPath2);
 
-            if (xDepends.Contains(virtualPath2, StringComparer.OrdinalIgnoreCase))
+            if (xDepends.Contains(virtualPath2, Comparers.VirtualPath))
                 return 1;
-            if (yDepends.Contains(virtualPath1, StringComparer.OrdinalIgnoreCase))
+            if (yDepends.Contains(virtualPath1, Comparers.VirtualPath))
                 return -1;
 
             return 0;
@@ -166,7 +166,7 @@ namespace Assman
 		private IEnumerable<string> CollapseDependencies(IEnumerable<IEnumerable<string>> dependencyList)
 		{
 			return dependencyList.SelectMany(d => d)
-				.Distinct(StringComparer.OrdinalIgnoreCase)
+				.Distinct(Comparers.VirtualPath)
 				.ToList();
 		}
 	}

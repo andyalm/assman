@@ -150,7 +150,7 @@ namespace Assman
 		{
 			private readonly IResourceGroupManager _inner;
 			private readonly IResourceCache _resourceCache;
-			private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(StringComparer.OrdinalIgnoreCase);
+			private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(Comparers.VirtualPath);
 
 			public CachingResourceGroupManager(IResourceGroupManager inner, IResourceCache resourceCache)
 			{

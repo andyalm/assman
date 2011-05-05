@@ -6,8 +6,8 @@ namespace Assman.PreConsolidation
 {
 	public class PreConsolidatedGroupManager : IResourceGroupManager
 	{
-		private readonly IDictionary<string,string> _resourceUrlMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-		private readonly IDictionary<string, IEnumerable<string>> _consolidatedUrlMap = new Dictionary<string,IEnumerable<string>>(StringComparer.OrdinalIgnoreCase);
+		private readonly IDictionary<string,string> _resourceUrlMap = new Dictionary<string, string>(Comparers.VirtualPath);
+		private readonly IDictionary<string, IEnumerable<string>> _consolidatedUrlMap = new Dictionary<string,IEnumerable<string>>(Comparers.VirtualPath);
 
 		public PreConsolidatedGroupManager(IEnumerable<PreConsolidatedResourceGroup> preConsolidatedGroups)
 		{

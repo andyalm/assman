@@ -6,7 +6,7 @@ namespace Assman.PreConsolidation
 {
 	public class PreConsolidatedDependencyCache : IDependencyCache
 	{
-		private readonly IDictionary<string,IEnumerable<string>> _dependencyMap = new Dictionary<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase);
+		private readonly IDictionary<string,IEnumerable<string>> _dependencyMap = new Dictionary<string, IEnumerable<string>>(Comparers.VirtualPath);
 
 		public PreConsolidatedDependencyCache(IEnumerable<PreConsolidatedResourceDependencies> dependencies)
 		{

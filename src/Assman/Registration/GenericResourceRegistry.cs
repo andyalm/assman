@@ -6,7 +6,7 @@ namespace Assman.Registration
 {
 	public class GenericResourceRegistry : IReadableResourceRegistry
 	{
-		private readonly HashSet<string> _includes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+		private readonly HashSet<string> _includes = new HashSet<string>(Comparers.VirtualPath);
 		private readonly Dictionary<object, Action<TextWriter>> _inlineBlocks = new Dictionary<object, Action<TextWriter>>();
 
 		public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)

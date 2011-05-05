@@ -47,7 +47,7 @@ namespace Assman
             if (compilationSection != null && compilationSection.Debug)
                 return new NullThreadSafeInMemoryCache<string, bool>();
             else
-                return new ThreadSafeInMemoryCache<string, bool>(StringComparer.OrdinalIgnoreCase);
+                return new ThreadSafeInMemoryCache<string, bool>(Comparers.FileSystemPath);
         }
 
         private static IHttpHandler CreateStaticFileHandler()
