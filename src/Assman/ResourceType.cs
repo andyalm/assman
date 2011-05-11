@@ -10,32 +10,32 @@ namespace Assman
 	/// </summary>
 	public abstract class ResourceType
 	{
-		private static readonly ResourceType _clientScript = new ClientScriptResourceType();
-		private static readonly ResourceType _css = new CssResourceType();
+		private static readonly ResourceType _script = new ScriptResourceType();
+		private static readonly ResourceType _stylesheet = new StylesheetResourceType();
 
 		/// <summary>
-		/// Gets the client script resource type (i.e. javascript).
+		/// Gets the client script resource type (e.g. javascript).
 		/// </summary>
-		public static ResourceType ClientScript
+		public static ResourceType Script
 		{
-			get { return _clientScript; }
+			get { return _script; }
 		}
 
 		/// <summary>
-		/// Gets the css resource type.
+		/// Gets the stylesheet resource type (e.g. css).
 		/// </summary>
-		public static ResourceType Css
+		public static ResourceType Stylesheet
 		{
-			get { return _css; }
+			get { return _stylesheet; }
 		}
 
 		public static ResourceType FromPath(string path)
 		{
 			var extension = Path.GetExtension(path).ToLowerInvariant();
-			if (ClientScript.DefaultFileExtension == extension)
-				return ClientScript;
-			if (Css.DefaultFileExtension == extension)
-				return Css;
+			if (Script.DefaultFileExtension == extension)
+				return Script;
+			if (Stylesheet.DefaultFileExtension == extension)
+				return Stylesheet;
 
 			throw new ArgumentException("The path with extension '" + extension + "' does not map to a known ResourceType.");
 		}
@@ -69,7 +69,7 @@ namespace Assman
 		public abstract string DefaultFileExtension { get; }
 	}
 
-	internal class ClientScriptResourceType : ResourceType
+	internal class ScriptResourceType : ResourceType
 	{
 		public override string ContentType
 		{
@@ -82,7 +82,7 @@ namespace Assman
 		}
 	}
 
-	internal class CssResourceType : ResourceType
+	internal class StylesheetResourceType : ResourceType
 	{
 		public override string ContentType
 		{

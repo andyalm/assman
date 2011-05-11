@@ -34,7 +34,7 @@ namespace Assman
 			_instance.Assemblies.Add(this.GetType().Assembly.GetName().Name);
 			var fileFinder = ResourceFinderFactory.Null;
 			var context = _instance.BuildContext(fileFinder, NullPreConsolidationPersister.Instance);
-			var resources = context.Finder.FindResources(ResourceType.Css).ToList();
+			var resources = context.Finder.FindResources(ResourceType.Stylesheet).ToList();
 			Assert.IsNotNull(resources);
 			Assert.IsTrue(resources.Count > 0, "Resource count should be greater than zero.");
 		}

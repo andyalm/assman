@@ -184,7 +184,7 @@ namespace Assman.Configuration
 
 	    private IResourceGroupManager GroupManagerOfType(ResourceType resourceType)
 		{
-			if (resourceType == ResourceType.ClientScript)
+			if (resourceType == ResourceType.Script)
 				return _scriptGroups;
 			else
 				return _styleGroups;

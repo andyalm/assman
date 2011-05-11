@@ -44,7 +44,7 @@ namespace Assman.Spark
 
 		public string FileExtension
 		{
-			get { return ResourceType.ClientScript.DefaultFileExtension; }
+			get { return ResourceType.Script.DefaultFileExtension; }
 		}
 
 		public string GetContent()

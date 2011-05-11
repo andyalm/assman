@@ -31,7 +31,7 @@ namespace Assman
             _instance.AddFinder(finder2);
 
 
-            var resources = _instance.FindResources(ResourceType.ClientScript).ToList();
+            var resources = _instance.FindResources(ResourceType.Script).ToList();
             Assert.That(resources, Is.Not.Null);
             Assert.That(resources.Count, Is.EqualTo(3));
             Assert.That(resources[0].VirtualPath, Is.EqualTo("~/myfile1.js"));

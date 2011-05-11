@@ -22,7 +22,7 @@ namespace Assman.Spark
 
 		public IEnumerable<IResource> FindResources(ResourceType resourceType)
 		{
-			if(resourceType != ResourceType.ClientScript)
+			if(resourceType != ResourceType.Script)
 			{
 				return Enumerable.Empty<IResource>();
 			}

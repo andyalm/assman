@@ -33,7 +33,7 @@ namespace Assman
 			
 			var group = new ResourceGroup("~/consolidated.js", stubFinder.Resources);
 			var groupTemplate = new StubResourceGroupTemplate(group);
-			groupTemplate.ResourceType = ResourceType.ClientScript;
+			groupTemplate.ResourceType = ResourceType.Script;
 
             _context.AddFinder(stubFinder);
 			var excludeFilter = ToFilter(r => r.VirtualPath.Contains("file2"));
@@ -59,7 +59,7 @@ namespace Assman
 			});
             
 			var groupTemplate = new StubResourceGroupTemplate(group);
-			groupTemplate.ResourceType = ResourceType.ClientScript;
+			groupTemplate.ResourceType = ResourceType.Script;
 
 			var dependencyProvider = new StubDependencyProvider();
 			dependencyProvider.SetDependencies(dependencyLeaf, "~/dependency-middle.js");
@@ -98,8 +98,8 @@ namespace Assman
 			});
 
 		    _context.AddFinder(finder);
-			var group1Template = new StubResourceGroupTemplate(group1) { ResourceType = ResourceType.ClientScript };
-			var group2Template = new StubResourceGroupTemplate(group2) { ResourceType = ResourceType.ClientScript };
+			var group1Template = new StubResourceGroupTemplate(group1) { ResourceType = ResourceType.Script };
+			var group2Template = new StubResourceGroupTemplate(group2) { ResourceType = ResourceType.Script };
 			_context.ScriptGroups.Add(group1Template);
 			_context.ScriptGroups.Add(group2Template);
 			var consolidator = _context.GetConsolidator();

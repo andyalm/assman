@@ -24,7 +24,7 @@ namespace Assman
         [Test]
         public void FindsFile()
         {
-            var resources = _instance.FindResources(ResourceType.Css).ToList();
+            var resources = _instance.FindResources(ResourceType.Stylesheet).ToList();
 
             Assert.That(resources, Is.Not.Null);
             Assert.That(resources.Count, Is.EqualTo(1));
@@ -34,7 +34,7 @@ namespace Assman
         [Test]
         public void FindsMultipleFiles()
         {
-			var resources = _instance.FindResources(ResourceType.ClientScript).ToList();
+			var resources = _instance.FindResources(ResourceType.Script).ToList();
 
             Assert.That(resources, Is.Not.Null);
             Assert.That(resources.Count, Is.EqualTo(2));

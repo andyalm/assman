@@ -43,7 +43,7 @@ namespace Assman.TestSupport
 		public StubResourceGroup CreateGroup(string consolidatedUrl)
 		{
 			var group = new StubResourceGroup(consolidatedUrl);
-			if(group.ResourceType == ResourceType.ClientScript)
+			if(group.ResourceType == ResourceType.Script)
 				_scriptGroups.Add(new StubResourceGroupTemplate(group));
 			else
 				_styleGroups.Add(new StubResourceGroupTemplate(group));

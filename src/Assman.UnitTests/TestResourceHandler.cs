@@ -18,7 +18,7 @@ namespace Assman
 		private ResourceHandler _instance;
 		private Mock<IResourceFinder> _finder;
 		private CompilationSection _compilationSection;
-		private static readonly ResourceType _resourceType = ResourceType.ClientScript;
+		private static readonly ResourceType _resourceType = ResourceType.Script;
 		private const string VirtualPath = "~/myfile.js";
 
 		[SetUp]

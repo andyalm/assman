@@ -9,7 +9,7 @@ namespace Assman.Configuration
 	{
 		public override ResourceType ResourceType
 		{
-			get { return ResourceType.ClientScript; }
+			get { return ResourceType.Script; }
 		}
 	}
 

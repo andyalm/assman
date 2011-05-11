@@ -55,8 +55,8 @@ namespace Assman
 		{
 			return new PreConsolidationReport
 			{
-				ScriptGroups = ConsolidateAllInternal(ResourceType.ClientScript, _scriptGroups, mode, handleConsolidatedResource).ToList(),
-				StyleGroups = ConsolidateAllInternal(ResourceType.Css, _styleGroups, mode, handleConsolidatedResource).ToList(),
+				ScriptGroups = ConsolidateAllInternal(ResourceType.Script, _scriptGroups, mode, handleConsolidatedResource).ToList(),
+				StyleGroups = ConsolidateAllInternal(ResourceType.Stylesheet, _styleGroups, mode, handleConsolidatedResource).ToList(),
 				Dependencies = GetAllDependencies(mode).ToList()
 			};
 		}
@@ -86,8 +86,8 @@ namespace Assman
 
 		private IEnumerable<PreConsolidatedResourceDependencies> GetAllDependencies(ResourceMode mode)
 		{
-			var allResources = _finder.FindResources(ResourceType.ClientScript)
-				.Union(_finder.FindResources(ResourceType.Css));
+			var allResources = _finder.FindResources(ResourceType.Script)
+				.Union(_finder.FindResources(ResourceType.Stylesheet));
 
 			//we must gather the dependencies for the consolidated url's before we gather them for specific url's
 			//because the consolidated url's could actually exist on disk if pre-consolidation was run before.

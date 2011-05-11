@@ -34,7 +34,7 @@ namespace Assman
 			string resourceName2 = "myscriptfile2.js";
 			_dirMgr.CreateFile(resourceName2, "");
 
-			var resources = _finder.FindResources(ResourceType.ClientScript).ToList();
+			var resources = _finder.FindResources(ResourceType.Script).ToList();
 
 			Assert.IsNotNull(resources);
 			Assert.AreEqual(2, resources.Count);
@@ -48,7 +48,7 @@ namespace Assman
 			string resourceName = "myscriptfile.js";
 			_dirMgr.CreateFile("mysubdir", resourceName, "");
 
-			var resources = _finder.FindResources(ResourceType.ClientScript).ToList();
+			var resources = _finder.FindResources(ResourceType.Script).ToList();
 
 			Assert.That(resources, Is.Not.Null);
 			Assert.That(resources.Count, Is.EqualTo(1));
@@ -64,7 +64,7 @@ namespace Assman
 			_dirMgr.CreateFile(filteredResourceName, "");
 
 			_finder = ResourceFinderFactory.GetInstance(_dirMgr.DirectoryName);
-			var resources = _finder.FindResources(ResourceType.ClientScript)
+			var resources = _finder.FindResources(ResourceType.Script)
 				.Where(r => r.Name != filteredResourceName).ToList();
 
             Assert.That(resources, Is.Not.Null);

@@ -183,11 +183,11 @@ namespace Assman
 		{
 			var resourceType = ResourceType.FromPath(path);
 			IResourceGroupManager groupManager = null;
-			if(resourceType == ResourceType.ClientScript)
+			if(resourceType == ResourceType.Script)
 			{
 				groupManager = _scriptGroups;
 			}
-			else if(resourceType == ResourceType.Css)
+			else if(resourceType == ResourceType.Stylesheet)
 			{
 				groupManager = _styleGroups;
 			}

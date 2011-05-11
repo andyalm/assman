@@ -30,7 +30,7 @@ namespace Assman.Spark
 		[Test]
 		public void WhenResourceTypeIsCss_EmptyResourceCollectionReturned()
 		{
-			int resourceCount = _resourceFinder.FindResources(ResourceType.Css).Count();
+			int resourceCount = _resourceFinder.FindResources(ResourceType.Stylesheet).Count();
 
             Assert.That(resourceCount, Is.EqualTo(0));
 		}
@@ -66,7 +66,7 @@ namespace Assman.Spark
 				}
 			});
 
-			var resources = _resourceFinder.FindResources(ResourceType.ClientScript).ToList();
+			var resources = _resourceFinder.FindResources(ResourceType.Script).ToList();
 
 			Assert.That(resources.Count, Is.EqualTo(4));
 			Assert.That(resources[0].Name, Is.EqualTo("MyFirst/Action1"));

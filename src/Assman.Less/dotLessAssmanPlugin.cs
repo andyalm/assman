@@ -8,7 +8,7 @@ namespace Assman.Less
 		
 		public void Initialize(AssmanContext context)
 		{
-			ResourceType.Css.AddFileExtension(LessFileExtension);
+			ResourceType.Stylesheet.AddFileExtension(LessFileExtension);
 			context.MapExtensionToFilter(LessFileExtension, new LessContentFilterFactory());
 			context.MapExtensionToDependencyProvider(LessFileExtension, CssDependencyProvider.GetInstance());
 		}

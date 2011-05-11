@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Assman
 {
 	[TestFixture]
-	public class TestClientScriptGroupElementCollection
+	public class TestScriptGroupElementCollection
 	{
 		private int _elementId = 1;
 		
