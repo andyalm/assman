@@ -123,23 +123,41 @@ namespace Assman.Configuration
 		}
 
 		/// <summary>
-		/// Gets the <see cref="ClientScriptGroupElement"/> used to configure client script resources.
+		/// Gets the <see cref="ScriptGroupElement"/> used to configure client script resources.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.ClientScripts, IsRequired = false)]
-		[ConfigurationCollection(typeof(ClientScriptGroupElementCollection), AddItemName = "group")]
-		public ClientScriptGroupElementCollection ClientScripts
+		[ConfigurationProperty(PropertyNames.Scripts, IsRequired = false)]
+		public ScriptsConfigurationElement Scripts
 		{
-			get { return this[PropertyNames.ClientScripts] as ClientScriptGroupElementCollection; }
+            get
+            {
+                var element = this[PropertyNames.Scripts] as ScriptsConfigurationElement;
+
+                if(element == null)
+                {
+                    element = new ScriptsConfigurationElement();
+                    this[PropertyNames.Scripts] = element;
+                }
+                return element;
+            }
 		}
 
 		/// <summary>
-		/// Gets the <see cref="CssGroupElement"/> used to configure css resources.
+		/// Gets the <see cref="StylesheetGroupElement"/> used to configure css resources.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.CssFiles, IsRequired = false)]
-		[ConfigurationCollection(typeof(ResourceGroupElementCollection<ClientScriptGroupElement>), AddItemName = "group")]
-		public CssGroupElementCollection CssFiles
+		[ConfigurationProperty(PropertyNames.Stylesheets, IsRequired = false)]
+		public StylesheetsConfigurationElement Stylesheets
 		{
-			get { return this[PropertyNames.CssFiles] as CssGroupElementCollection; }
+			get
+			{
+                var element = this[PropertyNames.Stylesheets] as StylesheetsConfigurationElement;
+
+                if (element == null)
+                {
+                    element = new StylesheetsConfigurationElement();
+                    this[PropertyNames.Stylesheets] = element;
+                }
+                return element;
+			}
 		}
 
 	    /// <summary>
@@ -210,13 +228,13 @@ namespace Assman.Configuration
 			var context = AssmanContext.Create();
 
 			context.ConfigurationLastModified = LastModified(PathResolver);
-			context.ConsolidateClientScripts = Consolidate && ClientScripts.Consolidate;
-			context.ConsolidateCssFiles = Consolidate && CssFiles.Consolidate;
+			context.ConsolidateClientScripts = Consolidate && Scripts.Groups.Consolidate;
+			context.ConsolidateCssFiles = Consolidate && Stylesheets.Groups.Consolidate;
 			context.ManageDependencies = ManageDependencies;
 			context.AddFinder(fileFinder);
 			context.AddAssemblies(Assemblies.GetAssemblies());
-			context.ScriptGroups.AddRange(ClientScripts.Cast<IResourceGroupTemplate>());
-			context.StyleGroups.AddRange(CssFiles.Cast<IResourceGroupTemplate>());
+			context.ScriptGroups.AddRange(Scripts.Groups.Cast<IResourceGroupTemplate>());
+			context.StyleGroups.AddRange(Stylesheets.Groups.Cast<IResourceGroupTemplate>());
 			context.MapExtensionToFilter(".js", JSMinContentFilterFactory.GetInstance());
 			context.MapExtensionToDependencyProvider(".js", VisualStudioScriptDependencyProvider.GetInstance());
 			context.MapExtensionToDependencyProvider(".css", CssDependencyProvider.GetInstance());

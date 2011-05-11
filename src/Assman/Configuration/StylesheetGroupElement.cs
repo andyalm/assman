@@ -5,7 +5,7 @@ namespace Assman.Configuration
 	/// <summary>
 	/// A <see cref="ResourceGroupElement"/> used to configure css.
 	/// </summary>
-	public class CssGroupElement : ResourceGroupElement
+	public class StylesheetGroupElement : ResourceGroupElement
 	{
 		public override ResourceType ResourceType
 		{

@@ -14,7 +14,7 @@ namespace Assman
 		[Test]
 		public void SettingMinifyPropertyUpdatesMinifyDefaultValueOnAllChildren()
 		{
-			ClientScriptGroupElementCollection collection = new ClientScriptGroupElementCollection();
+			ScriptGroupElementCollection collection = new ScriptGroupElementCollection();
 			collection.Add(CreateGroupElement(false));
 			collection.Add(CreateGroupElement(true));
 			collection.Add(CreateGroupElement(false));
@@ -26,9 +26,9 @@ namespace Assman
 			Assert.That(collection[2].MinifyDefaultValue, Is.EqualTo(true));
 		}
 
-		private ClientScriptGroupElement CreateGroupElement(bool minifyDefaultValue)
+		private ScriptGroupElement CreateGroupElement(bool minifyDefaultValue)
 		{
-			var element = new ClientScriptGroupElement();
+			var element = new ScriptGroupElement();
 			element.ConsolidatedUrl = "~/myscript" + _elementId++ + ".js";
 			element.MinifyDefaultValue = minifyDefaultValue;
 

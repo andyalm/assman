@@ -8,20 +8,18 @@ namespace Assman.Configuration
 	/// <summary>
 	/// Represents a collection of <see cref="ResourceGroupElement"/>'s.
 	/// </summary>
-	/// <typeparam name="TGroupElement"></typeparam>
-	public class ResourceGroupElementCollection<TGroupElement> : ConfigurationElementCollection, IEnumerable<ResourceGroupElement>
-		where TGroupElement : ResourceGroupElement, new()
+	public abstract class ResourceGroupElementCollection : ConfigurationElementCollection, IEnumerable<ResourceGroupElement>
 	{
 		/// <summary>
 		/// Gets a <see cref="ResourceGroupElement"/> by index number.
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
-		public TGroupElement this[int index]
+		public ResourceGroupElement this[int index]
 		{
 			get
 			{
-				return (TGroupElement) BaseGet(index);
+				return (ResourceGroupElement) BaseGet(index);
 			}
 		}
 
@@ -56,7 +54,7 @@ namespace Assman.Configuration
 		/// Adds the given <see cref="ResourceGroupElement"/> to the collection.
 		/// </summary>
 		/// <param name="element"></param>
-		public void Add(TGroupElement element)
+		public void Add(ResourceGroupElement element)
 		{
 			BaseAdd(element);
 		}
@@ -66,15 +64,17 @@ namespace Assman.Configuration
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected override ConfigurationElement CreateNewElement()
+		protected override sealed ConfigurationElement CreateNewElement()
 		{
-			var element = new TGroupElement();
+			var element = CreateGroupElement();
 			//set the minify property so that it defaults to the value
 			//set by its parent (i.e. this collection).
 			element.MinifyDefaultValue = Minify;
 
 			return element;
 		}
+
+	    protected abstract ResourceGroupElement CreateGroupElement();
 
 		/// <summary>
 		/// 

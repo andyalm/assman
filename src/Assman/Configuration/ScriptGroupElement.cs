@@ -5,7 +5,7 @@ namespace Assman.Configuration
 	/// <summary>
 	/// A <see cref="ResourceGroupElement"/> used to configure client scripts.
 	/// </summary>
-	public class ClientScriptGroupElement : ResourceGroupElement
+	public class ScriptGroupElement : ResourceGroupElement
 	{
 		public override ResourceType ResourceType
 		{

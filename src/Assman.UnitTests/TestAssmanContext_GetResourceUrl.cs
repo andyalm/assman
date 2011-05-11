@@ -16,7 +16,7 @@ namespace Assman
 		private const string mySecondScript = "~/mysecondscript.js";
 		private const string consolidatedScript = "~/consolidated.js";
 		private const string excludedScript = "~/excluded.js";
-		private ClientScriptGroupElement _groupElement;
+		private ScriptGroupElement _groupElement;
 	    private StubResourceFinder _finder;
 	    private StubDependencyProvider _dependencyProvider;
 
@@ -36,7 +36,7 @@ namespace Assman
 			_instance.ConfigurationLastModified = DateTime.MinValue;
 		    _instance.AddFinder(_finder);
 		    _instance.MapExtensionToDependencyProvider(".js", _dependencyProvider);
-			_groupElement = new ClientScriptGroupElement();
+			_groupElement = new ScriptGroupElement();
 			_groupElement.ConsolidatedUrl = consolidatedScript;
 			_groupElement.Exclude.AddPattern(excludedScript);
 			_instance.ScriptGroups.Add(_groupElement);
@@ -119,7 +119,7 @@ namespace Assman
 			const string secondGroupUrl = "~/mysecondconsolidation.js";
 			_instance.ConsolidateClientScripts = true;
 			_groupElement.Exclude.AddPattern(mySecondScript);
-			var secondGroupElement = new ClientScriptGroupElement();
+			var secondGroupElement = new ScriptGroupElement();
 			_instance.ScriptGroups.Add(secondGroupElement);
 			secondGroupElement.ConsolidatedUrl = secondGroupUrl;
 

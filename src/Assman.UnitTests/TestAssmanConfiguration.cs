@@ -20,10 +20,10 @@ namespace Assman
 		public void Init()
 		{
 			_instance = new AssmanConfiguration();
-			_instance.ClientScripts.Consolidate = true;
-			_instance.ClientScripts.Add(new ClientScriptGroupElement());
-			_instance.ClientScripts[0].ConsolidatedUrl = consolidatedScript;
-			_instance.ClientScripts[0].Exclude.AddPattern(excludedScript);
+			_instance.Scripts.Groups.Consolidate = true;
+			_instance.Scripts.Groups.Add(new ScriptGroupElement());
+			_instance.Scripts.Groups[0].ConsolidatedUrl = consolidatedScript;
+			_instance.Scripts.Groups[0].Exclude.AddPattern(excludedScript);
 			_instance.LastModified(DateTime.MinValue);
 		}
 

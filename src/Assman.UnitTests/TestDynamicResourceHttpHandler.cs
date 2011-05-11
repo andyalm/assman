@@ -19,14 +19,14 @@ namespace Assman
 		private AssmanContext _context;
 		private FakeHandlerFactory _handlerFactory;
 		private Mock<HttpContextBase> _httpContext;
-		private ClientScriptGroupElement _groupElement;
+		private ScriptGroupElement _groupElement;
 		private const string ConsolidatedPath = "/scripts/consolidated.js";
 
 		[SetUp]
 		public void SetupContext()
 		{
 			_context = AssmanContext.Create();
-			_groupElement = new ClientScriptGroupElement();
+			_groupElement = new ScriptGroupElement();
 			_groupElement.ConsolidatedUrl = "~" + ConsolidatedPath;
 			_context.ScriptGroups.Add(_groupElement);
 

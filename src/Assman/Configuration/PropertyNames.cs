@@ -14,13 +14,14 @@ namespace Assman.Configuration
 		public const string Factory = "factory";
 		public const string Type = "type";
 		public const string ManageDependencies = "manageDependencies";
-		public const string ClientScripts = "clientScripts";
-		public const string CssFiles = "cssFiles";
+		public const string Scripts = "scripts";
+		public const string Stylesheets = "stylesheets";
 		public const string PreConsolidated = "preConsolidated";
 		public const string Version = "version";
 		public const string Assemblies = "assemblies";
 		public const string Plugins = "plugins";
 		public const string Path = "path";
 		public const string Mode = "mode";
+	    public const string GlobalDependencies = "globalDependencies";
 	}
 }

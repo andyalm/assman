@@ -18,7 +18,7 @@ namespace Assman
 		public void Init()
 		{
 			_allResources = new ResourceCollection();
-			_element = new ClientScriptGroupElement();
+			_element = new ScriptGroupElement();
 			_element.ConsolidatedUrl = "~/consolidated.js";
 		}
 
