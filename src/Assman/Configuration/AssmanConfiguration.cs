@@ -233,8 +233,10 @@ namespace Assman.Configuration
 			context.ManageDependencies = ManageDependencies;
 			context.AddFinder(fileFinder);
 			context.AddAssemblies(Assemblies.GetAssemblies());
+		    context.ScriptGroups.AddGlobalDependencies(Scripts.GlobalDependencies.Cast<GlobalDependenciesElement>().Select(e => e.Path));
 			context.ScriptGroups.AddRange(Scripts.Groups.Cast<IResourceGroupTemplate>());
-			context.StyleGroups.AddRange(Stylesheets.Groups.Cast<IResourceGroupTemplate>());
+            context.StyleGroups.AddGlobalDependencies(Scripts.GlobalDependencies.Cast<GlobalDependenciesElement>().Select(e => e.Path));
+            context.StyleGroups.AddRange(Stylesheets.Groups.Cast<IResourceGroupTemplate>());
 			context.MapExtensionToFilter(".js", JSMinContentFilterFactory.GetInstance());
 			context.MapExtensionToDependencyProvider(".js", VisualStudioScriptDependencyProvider.GetInstance());
 			context.MapExtensionToDependencyProvider(".css", CssDependencyProvider.GetInstance());

@@ -9,7 +9,7 @@ namespace Assman.Configuration
         public string Path
         {
             get { return (string) this[PropertyNames.Path]; }
-            set { this[PropertyNames.Path] = Path; }
+            set { this[PropertyNames.Path] = value; }
         } 
     }
 }

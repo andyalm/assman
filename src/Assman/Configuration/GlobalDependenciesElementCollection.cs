@@ -14,5 +14,10 @@ namespace Assman.Configuration
         {
             return ((GlobalDependenciesElement)element).Path;
         }
+
+        public void Add(string path)
+        {
+            BaseAdd(new GlobalDependenciesElement { Path = path });
+        }
     }
 }

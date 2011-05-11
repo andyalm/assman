@@ -26,6 +26,10 @@ namespace Assman
 	    IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder);
 
 	    void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler);
+	    
+        IEnumerable<string> GetGlobalDependencies();
+	    
+        void AddGlobalDependencies(IEnumerable<string> paths);
 	}
 
 	public static class ResourceGroupManagerExtensions

@@ -41,8 +41,8 @@ namespace Assman
 				}
 
 				//filter out dependencies within the group
-				return CollapseDependencies(dependencyList).Where(
-						d => !resourcesInGroup.Any(r => r.VirtualPath.Equals(d, StringComparison.OrdinalIgnoreCase)));
+				return CollapseDependencies(dependencyList)
+                    .Where(d => !resourcesInGroup.Any(r => r.VirtualPath.Equals(d, StringComparison.OrdinalIgnoreCase)));
 			}
 			else
 			{
@@ -51,7 +51,24 @@ namespace Assman
 			}	
 		}
 
-		internal int Comparer(IResource x, IResource y)
+	    public IEnumerable<string> GetDependencies(IResource resource)
+	    {
+	        IEnumerable<string> cachedDependencies;
+	        if (_dependencyCache.TryGetDependencies(resource.VirtualPath, out cachedDependencies))
+	            return cachedDependencies;
+
+	        var dependencyList = new List<IEnumerable<string>>();
+	        AccumulateDependencies(dependencyList, resource);
+
+	        return CollapseDependencies(dependencyList);
+	    }
+
+	    public void SetCache(IDependencyCache cache)
+	    {
+	        _dependencyCache = cache;
+	    }
+
+	    internal int Comparer(IResource x, IResource y)
 		{
 			var xDepends = GetDependencies(x);
 			var yDepends = GetDependencies(y);
@@ -101,24 +118,7 @@ namespace Assman
 			return true;
 		}
 
-		public IEnumerable<string> GetDependencies(IResource resource)
-		{
-			IEnumerable<string> cachedDependencies;
-			if (_dependencyCache.TryGetDependencies(resource.VirtualPath, out cachedDependencies))
-				return cachedDependencies;
-
-			var dependencyList = new List<IEnumerable<string>>();
-			AccumulateDependencies(dependencyList, resource);
-
-			return CollapseDependencies(dependencyList);
-		}
-
-		public void SetCache(IDependencyCache cache)
-		{
-			_dependencyCache = cache;
-		}
-
-		private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, string virtualPath)
+	    private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, string virtualPath)
 		{
 			IEnumerable<string> cachedDependencies;
 			if (_dependencyCache.TryGetDependencies(virtualPath, out cachedDependencies))

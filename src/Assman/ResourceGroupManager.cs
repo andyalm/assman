@@ -12,6 +12,7 @@ namespace Assman
 		}
 		
 		private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
+        private readonly List<string> _globalDependencies = new List<string>();
 
 	    public ResourceGroupManager()
 	    {
@@ -116,7 +117,17 @@ namespace Assman
 			});
 		}
 
-		private void EachTemplate(Func<GroupTemplateContext,bool> handler)
+	    public IEnumerable<string> GetGlobalDependencies()
+	    {
+	        return _globalDependencies;
+	    }
+
+	    public void AddGlobalDependencies(IEnumerable<string> paths)
+	    {
+	        _globalDependencies.AddRange(paths);
+	    }
+
+	    private void EachTemplate(Func<GroupTemplateContext,bool> handler)
 		{
 			var excludeFilter = new CompositeResourceFilter();
 			//add a filter to exclude all resources that match the consolidated url of a group
@@ -223,6 +234,16 @@ namespace Assman
 			{
 				_inner.EachGroup(allResources, mode, handler);
 			}
+
+		    public IEnumerable<string> GetGlobalDependencies()
+		    {
+		        return _inner.GetGlobalDependencies();
+		    }
+
+		    public void AddGlobalDependencies(IEnumerable<string> paths)
+		    {
+		        _inner.AddGlobalDependencies(paths);
+		    }
 
 		    private string AppendCacheKey(string resourceUrl)
             {

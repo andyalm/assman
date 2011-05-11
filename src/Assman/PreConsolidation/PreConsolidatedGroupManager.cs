@@ -67,7 +67,17 @@ namespace Assman.PreConsolidation
 			throw NotSupported();
 		}
 
-		private Exception NotSupported()
+        public IEnumerable<string> GetGlobalDependencies()
+        {
+            throw NotSupported();
+        }
+
+	    public void AddGlobalDependencies(IEnumerable<string> paths)
+	    {
+	        //no implementation needed as the global dependencies should have been included for each resource in the pre-consolidation report
+	    }
+
+	    private Exception NotSupported()
 		{
 			return new NotSupportedException("This method is not supported when resources have been pre-consolidated");
 		}

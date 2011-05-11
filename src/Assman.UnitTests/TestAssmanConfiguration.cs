@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Assman.Configuration;
@@ -48,5 +49,19 @@ namespace Assman
 
 			context.ConfigurationLastModified.ShouldEqual(lastModified);
 		}
+
+	    [Test]
+	    public void WhenBuildingContext_GlobalDependenciesAreAddedToGroupManager()
+	    {
+	        _instance.Scripts.GlobalDependencies.Add("~/scripts/shared.js");
+	        _instance.Scripts.GlobalDependencies.Add("~/scripts/otherglobal.js");
+
+	        var context = _instance.BuildContext(ResourceFinderFactory.Null, NullPreConsolidationPersister.Instance);
+
+	        List<string> globalDependencies = context.ScriptGroups.GetGlobalDependencies().ToList();
+	        globalDependencies.CountShouldEqual(2);
+            globalDependencies[0].ShouldEqual("~/scripts/shared.js");
+            globalDependencies[1].ShouldEqual("~/scripts/otherglobal.js");
+	    }
 	}
 }
