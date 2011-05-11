@@ -66,6 +66,24 @@ namespace Assman
 			dependencies[2].ShouldEqual(jquerypluginB.VirtualPath);
 		}
 
+	    [Test]
+	    public void GlobalDependenciesAreReturnedBeforeAllOthers()
+	    {
+            var jquery = StubResource.WithPath("~/scripts/jquery.js");
+            var jquerypluginA = StubResource.WithPath("~/scripts/jquery-plugin-a.js");
+            var myscript = StubResource.WithPath("~/scripts/myscript.js");
+
+            _resourceFinder.AddResources(jquery, jquerypluginA, myscript);
+            _scriptGroups.AddGlobalDependencies(new[] { jquery.VirtualPath });
+
+            SetDependencies(myscript, jquerypluginA.VirtualPath);
+
+	        var dependencies = _dependencyManager.GetDependencies(myscript.VirtualPath).ToList();
+            dependencies.CountShouldEqual(2);
+            dependencies[0].ShouldEqual(jquery.VirtualPath);
+            dependencies[1].ShouldEqual(jquerypluginA.VirtualPath);
+	    }
+
 		[Test]
 		public void GetDependenciesReturnsEmptyWhenNoDependencyProviderExistsForFileExtension()
 		{

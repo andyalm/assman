@@ -10,7 +10,7 @@ namespace Assman
 		private IDependencyCache _dependencyCache;
 		private readonly IResourceGroupManager _scriptGroups;
 		private readonly IResourceGroupManager _styleGroups;
-		private readonly IDictionary<string, IDependencyProvider> _parsers = new Dictionary<string, IDependencyProvider>(Comparers.VirtualPath);
+		private readonly IDictionary<string, IDependencyProvider> _providers = new Dictionary<string, IDependencyProvider>(Comparers.VirtualPath);
 
 		public DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups)
 		{
@@ -22,7 +22,7 @@ namespace Assman
 
 		public void MapProvider(string extension, IDependencyProvider dependencyProvider)
 		{
-			_parsers[extension] = dependencyProvider;
+			_providers[extension] = dependencyProvider;
 		}
 
 		public IEnumerable<string> GetDependencies(string virtualPath)
@@ -42,7 +42,7 @@ namespace Assman
 
 				//filter out dependencies within the group
 				return CollapseDependencies(dependencyList)
-                    .Where(d => !resourcesInGroup.Any(r => r.VirtualPath.Equals(d, StringComparison.OrdinalIgnoreCase)));
+					.Where(d => !resourcesInGroup.Any(r => r.VirtualPath.Equals(d, StringComparison.OrdinalIgnoreCase)));
 			}
 			else
 			{
@@ -51,24 +51,24 @@ namespace Assman
 			}	
 		}
 
-	    public IEnumerable<string> GetDependencies(IResource resource)
-	    {
-	        IEnumerable<string> cachedDependencies;
-	        if (_dependencyCache.TryGetDependencies(resource.VirtualPath, out cachedDependencies))
-	            return cachedDependencies;
+		public IEnumerable<string> GetDependencies(IResource resource)
+		{
+			IEnumerable<string> cachedDependencies;
+			if (_dependencyCache.TryGetDependencies(resource.VirtualPath, out cachedDependencies))
+				return cachedDependencies;
 
-	        var dependencyList = new List<IEnumerable<string>>();
-	        AccumulateDependencies(dependencyList, resource);
+			var dependencyList = new List<IEnumerable<string>>();
+			AccumulateDependencies(dependencyList, resource);
 
-	        return CollapseDependencies(dependencyList);
-	    }
+			return CollapseDependencies(dependencyList);
+		}
 
-	    public void SetCache(IDependencyCache cache)
-	    {
-	        _dependencyCache = cache;
-	    }
+		public void SetCache(IDependencyCache cache)
+		{
+			_dependencyCache = cache;
+		}
 
-	    internal int Comparer(IResource x, IResource y)
+		internal int Comparer(IResource x, IResource y)
 		{
 			var xDepends = GetDependencies(x);
 			var yDepends = GetDependencies(y);
@@ -81,18 +81,18 @@ namespace Assman
 			return 0;
 		}
 
-        internal int Comparer(string virtualPath1, string virtualPath2)
-        {
-            var xDepends = GetDependencies(virtualPath1);
-            var yDepends = GetDependencies(virtualPath2);
+		internal int Comparer(string virtualPath1, string virtualPath2)
+		{
+			var xDepends = GetDependencies(virtualPath1);
+			var yDepends = GetDependencies(virtualPath2);
 
-            if (xDepends.Contains(virtualPath2, Comparers.VirtualPath))
-                return 1;
-            if (yDepends.Contains(virtualPath1, Comparers.VirtualPath))
-                return -1;
+			if (xDepends.Contains(virtualPath2, Comparers.VirtualPath))
+				return 1;
+			if (yDepends.Contains(virtualPath1, Comparers.VirtualPath))
+				return -1;
 
-            return 0;
-        }
+			return 0;
+		}
 
 		private bool IsConsolidatedUrl(string virtualPath, out IEnumerable<IResource> resourcesInGroup)
 		{
@@ -118,7 +118,7 @@ namespace Assman
 			return true;
 		}
 
-	    private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, string virtualPath)
+		private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, string virtualPath)
 		{
 			IEnumerable<string> cachedDependencies;
 			if (_dependencyCache.TryGetDependencies(virtualPath, out cachedDependencies))
@@ -145,20 +145,29 @@ namespace Assman
 				return;
 			}
 
-			IDependencyProvider provider;
-			if (!_parsers.TryGetValue(resource.FileExtension, out provider))
-				return;
-
 			var dependencyListEntrySize = dependencyList.Count;
-			var dependencies = provider.GetDependencies(resource).ToList();
-			if (dependencies.Any())
+			
+			IDependencyProvider provider;
+			if (_providers.TryGetValue(resource.FileExtension, out provider))
 			{
-				dependencyList.Insert(0, dependencies);
-				foreach (var dependency in dependencies)
+
+				var dependencies = provider.GetDependencies(resource).ToList();
+				if (dependencies.Any())
 				{
-					AccumulateDependencies(dependencyList, dependency);
+					dependencyList.Insert(0, dependencies);
+					foreach (var dependency in dependencies)
+					{
+						AccumulateDependencies(dependencyList, dependency);
+					}
 				}
 			}
+
+			var globalDependencies = GlobalDependenciesFor(resource.VirtualPath);
+			if(globalDependencies.Any())
+			{
+				dependencyList.Insert(0, globalDependencies);
+			}
+			
 			var dependenciesForCurrentResource = CollapseDependencies(dependencyList.Take(dependencyList.Count - dependencyListEntrySize));
 			_dependencyCache.StoreDependencies(resource, dependenciesForCurrentResource);
 		}
@@ -169,21 +178,42 @@ namespace Assman
 				.Distinct(Comparers.VirtualPath)
 				.ToList();
 		}
+
+		private IEnumerable<string> GlobalDependenciesFor(string path)
+		{
+			var resourceType = ResourceType.FromPath(path);
+			IResourceGroupManager groupManager = null;
+			if(resourceType == ResourceType.ClientScript)
+			{
+				groupManager = _scriptGroups;
+			}
+			else if(resourceType == ResourceType.Css)
+			{
+				groupManager = _styleGroups;
+			}
+			
+			if(groupManager != null)
+			{
+				return groupManager.GetGlobalDependencies();
+			}
+
+			return Enumerable.Empty<string>();
+		}
 	}
 
 	public static class DependencyManagerExtensions
 	{
 		//we use a stable sort here because the resources are already sorted within their groups (by the order in which they are included in the config), so we should try to preserve that order unless
-        //the dependencies instruct otherwise
-        
-        public static IEnumerable<IResource> SortByDependencies(this IEnumerable<IResource> resources, DependencyManager dependencyManager)
+		//the dependencies instruct otherwise
+		
+		public static IEnumerable<IResource> SortByDependencies(this IEnumerable<IResource> resources, DependencyManager dependencyManager)
 		{
 			return resources.StableSort(dependencyManager.Comparer);
 		}
 
-        public static IEnumerable<string> SortByDependencies(this IEnumerable<string> resourcePaths, DependencyManager dependencyManager)
-        {
-            return resourcePaths.StableSort(dependencyManager.Comparer);
-        }
+		public static IEnumerable<string> SortByDependencies(this IEnumerable<string> resourcePaths, DependencyManager dependencyManager)
+		{
+			return resourcePaths.StableSort(dependencyManager.Comparer);
+		}
 	}
 }
