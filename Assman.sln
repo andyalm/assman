@@ -40,19 +40,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{EE3FB03B-5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc", "Mvc", "{8B1CBBE5-99F3-470B-AE9D-420EF2B7B7F6}"
 	ProjectSection(SolutionItems) = preProject
-		src\PackageSpecs\Assman-Mvc\Content\Assman.config.transform = src\PackageSpecs\Assman-Mvc\Content\Assman.config.transform
-		src\PackageSpecs\Assman-Mvc\Content\Web.config.transform = src\PackageSpecs\Assman-Mvc\Content\Web.config.transform
+		src\PackageSpecs\Assman.Mvc\Content\Assman.config.transform = src\PackageSpecs\Assman.Mvc\Content\Assman.config.transform
+		src\PackageSpecs\Assman.Mvc\Content\Web.config.transform = src\PackageSpecs\Assman.Mvc\Content\Web.config.transform
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc2", "Mvc2", "{163023D3-18F7-4B0C-970C-A2021E0A01E0}"
 	ProjectSection(SolutionItems) = preProject
-		src\PackageSpecs\Assman-Mvc\Assman-Mvc2.nuspec = src\PackageSpecs\Assman-Mvc\Assman-Mvc2.nuspec
+		src\PackageSpecs\Assman.Mvc\Assman.Mvc2.nuspec = src\PackageSpecs\Assman.Mvc\Assman.Mvc2.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc3", "Mvc3", "{CF340040-2A39-417F-9A00-A5316604E7C4}"
 	ProjectSection(SolutionItems) = preProject
-		src\PackageSpecs\Assman-Mvc\Assman-Mvc3.nuspec = src\PackageSpecs\Assman-Mvc\Assman-Mvc3.nuspec
-		src\PackageSpecs\Assman-Mvc\Mvc3\Content\Views\Web.config.transform = src\PackageSpecs\Assman-Mvc\Mvc3\Content\Views\Web.config.transform
+		src\PackageSpecs\Assman.Mvc\Assman.Mvc3.nuspec = src\PackageSpecs\Assman.Mvc\Assman.Mvc3.nuspec
+		src\PackageSpecs\Assman.Mvc\Mvc3\Content\Views\Web.config.transform = src\PackageSpecs\Assman.Mvc\Mvc3\Content\Views\Web.config.transform
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Spark", "Spark", "{1CE32C29-EAA4-42DE-94B7-D39A8BBFEB11}"
