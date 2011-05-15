@@ -26,12 +26,12 @@ namespace Assman
 			var matches = _referenceRegex.Matches(resource.GetContent());
 
 			return (from match in matches.Cast<Match>()
-					let virtualPath = ParseReferenceElement(match.Groups[1].Value)
+					let virtualPath = ParseReferenceElement(match.Groups[1].Value, resource)
 					where !String.IsNullOrEmpty(virtualPath)
 			        select virtualPath).ToList();
 		}
 
-		private string ParseReferenceElement(string serializedReferenceElement)
+		private string ParseReferenceElement(string serializedReferenceElement, IResource resource)
 		{
 			XElement referenceElement;
 			try
@@ -44,7 +44,12 @@ namespace Assman
 			}
 			var pathAttr = referenceElement.Attribute("path");
 			if (pathAttr != null)
-				return RemoveVsDocIfPresent(pathAttr.Value);
+			{
+                string path = RemoveVsDocIfPresent(pathAttr.Value);
+			    path = ResolvePathToAppRelative(path, resource);
+
+			    return path;
+			}	
 
 			var nameAttr = referenceElement.Attribute("name");
 			if(nameAttr != null)
@@ -55,7 +60,13 @@ namespace Assman
 			return null;
 		}
 
-		private string RemoveVsDocIfPresent(string path)
+	    private string ResolvePathToAppRelative(string unresolvedPath, IResource resource)
+	    {
+	        var result = unresolvedPath.ToAppPath(resource);
+	        return result;
+	    }
+
+	    private string RemoveVsDocIfPresent(string path)
 		{
 			return _vsDocRegex.Replace(path, String.Empty);
 		}

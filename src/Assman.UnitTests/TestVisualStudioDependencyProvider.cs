@@ -75,6 +75,16 @@ namespace Assman
 			dependencies[0].ShouldEqual("~/scripts/jquery-1.4.4.js");
 		}
 
-		//TODO: Handle relative paths
+	    [Test]
+	    public void WhenReferencePathIsRelative_ItIsResolvedRelativeToTheResource()
+	    {
+	        var resource = StubResource.WithContent(@"///<reference path=""../Shared/MyComponent.js"" />");
+	        resource.VirtualPath = "~/Views/MyController/MyView.js";
+
+	        var dependencies = _provider.GetDependencies(resource).ToList();
+
+            dependencies.CountShouldEqual(1);
+            dependencies[0].ShouldEqual("~/Views/Shared/MyComponent.js");
+	    }
 	}
 }

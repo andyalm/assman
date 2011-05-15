@@ -1,3 +1,4 @@
+using System;
 using System.Web;
 
 namespace Assman
@@ -19,6 +20,24 @@ namespace Assman
 				return path.Substring(0, path.IndexOf("?"));
 
 			return path;
+		}
+
+		public static string ToAppPath(this string path, IResource context)
+		{
+			if (IsAppPath(path))
+				return path;
+			
+			var relativeUri = new Uri(path, UriKind.Relative);
+			var contextUri = new Uri("http://www.website.com" + context.VirtualPath.Substring(1));
+
+			var resolvedUri = new Uri(contextUri, relativeUri);
+
+			return "~" + resolvedUri.AbsolutePath;
+		}
+
+		private static bool IsAppPath(string path)
+		{
+			return path.StartsWith("~");
 		}
 	}
 }

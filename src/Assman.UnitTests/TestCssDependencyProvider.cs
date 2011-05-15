@@ -62,5 +62,17 @@ namespace Assman
 			dependencies[0].ShouldEqual("~/styles/mystylesheet.css");
 			dependencies[1].ShouldEqual("~/styles/myotherstylesheet.css");
 		}
+
+		[Test]
+		public void WhenReferencePathIsRelative_ItIsResolvedRelativeToTheResource()
+		{
+			var resource = StubResource.WithContent(@"/* dependency:url(../styles/mystylesheet.css); */");
+			resource.VirtualPath = "~/Content/MyStylsheet.css";
+
+			var dependencies = _provider.GetDependencies(resource).ToList();
+
+			dependencies.CountShouldEqual(1);
+			dependencies[0].ShouldEqual("~/styles/mystylesheet.css");
+		}
 	}
 }
