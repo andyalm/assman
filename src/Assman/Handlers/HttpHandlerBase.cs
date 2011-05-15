@@ -1,6 +1,7 @@
+using System;
 using System.Web;
 
-namespace Assman
+namespace Assman.Handlers
 {
     public abstract class HttpHandlerBase : IHttpHandler
     {

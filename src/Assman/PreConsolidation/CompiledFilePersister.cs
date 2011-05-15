@@ -14,20 +14,23 @@ namespace Assman.PreConsolidation
 	{
 		public static CompiledFilePersister ForWebDirectory(string rootWebDirectory)
 		{
-			var fileAccess = new FileAccessWrapper(Path.Combine(rootWebDirectory, "bin\\Assman.compiled"));
-			return new CompiledFilePersister(fileAccess);
+		    var filePath = Path.Combine(rootWebDirectory, "bin\\Assman.compiled");
+		    var fileAccess = new FileAccessWrapper();
+			return new CompiledFilePersister(fileAccess, filePath);
 		}
 		
 		private readonly IFileAccess _fileAccess;
+	    private readonly string _filePath;
 
-		internal CompiledFilePersister(IFileAccess fileAccess)
+	    internal CompiledFilePersister(IFileAccess fileAccess, string filePath)
 		{
-			_fileAccess = fileAccess;
+		    _fileAccess = fileAccess;
+		    _filePath = filePath;
 		}
 
-		public bool TryGetPreConsolidationInfo(out PreConsolidationReport preConsolidationReport)
+	    public bool TryGetPreConsolidationInfo(out PreConsolidationReport preConsolidationReport)
 		{
-			if (!_fileAccess.Exists())
+			if (!_fileAccess.Exists(_filePath))
 			{
 				preConsolidationReport = null;
 				return false;
@@ -35,7 +38,7 @@ namespace Assman.PreConsolidation
 
 			preConsolidationReport = new PreConsolidationReport();
 			XDocument document;
-			using (var reader = _fileAccess.OpenReader())
+			using (var reader = _fileAccess.OpenReader(_filePath))
 			{
 				document = XDocument.Load(reader);
 			}
@@ -56,7 +59,7 @@ namespace Assman.PreConsolidation
 				CloseOutput = true,
 				Indent = true
 			};
-			using(var writer = XmlWriter.Create(_fileAccess.OpenWriter(), xmlWriterSettings))
+			using(var writer = XmlWriter.Create(_fileAccess.OpenWriter(_filePath), xmlWriterSettings))
 			{
 				using(writer.Document())
 				{

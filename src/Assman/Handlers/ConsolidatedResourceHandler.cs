@@ -1,30 +1,37 @@
 using System;
-using System.Web.Configuration;
+using System.Web;
 
 using Assman.Configuration;
 
-namespace Assman
+namespace Assman.Handlers
 {
-	internal class ResourceHandler : IResourceHandler
+	internal class ConsolidatedResourceHandler : HttpHandlerBase
 	{
 		private readonly string _path;
 		private readonly ResourceConsolidator _consolidator;
 		private readonly GroupTemplateContext _groupTemplateContext;
-		private DateTime _minLastModified = DateTime.MinValue;
+	    private readonly ResourceMode _resourceMode;
+	    private DateTime _minLastModified = DateTime.MinValue;
 		private ConsolidatedResource _cachedConsolidatedResource;
 		internal Func<IConfigLoader> GetConfigurationLoader = () => new DefaultConfigLoader();
 
-		public ResourceHandler(string path, ResourceConsolidator consolidator, GroupTemplateContext groupTemplateContext)
+		public ConsolidatedResourceHandler(string path, ResourceConsolidator consolidator, GroupTemplateContext groupTemplateContext, ResourceMode resourceMode)
 		{
 			_path = path;
 			_consolidator = consolidator;
 			_groupTemplateContext = groupTemplateContext;
+		    _resourceMode = resourceMode;
 		}
 
 		public DateTime MinLastModified
 		{
 			get { return _minLastModified; }
 			set { _minLastModified = value.ToUniversalTime(); }
+		}
+
+		public override void ProcessRequest(HttpContextBase context)
+		{
+			HandleRequest(new HttpRequestContext(context));   
 		}
 
 		public void HandleRequest(IRequestContext context)
@@ -47,12 +54,12 @@ namespace Assman
 				context.SetLastModified(lastModified);
 				context.ContentType = _groupTemplateContext.ResourceType.ContentType;
 				
-                if(IsDebugMode)
-                {
-                    resource.WriteSummaryHeader(context.OutputStream);
-                }
-                
-                resource.WriteTo(context.OutputStream);
+				if(IsDebugMode)
+				{
+					resource.WriteSummaryHeader(context.OutputStream);
+				}
+				
+				resource.WriteTo(context.OutputStream);
 			}
 		}
 
@@ -68,7 +75,7 @@ namespace Assman
 				return _cachedConsolidatedResource;
 			}
 
-			var consolidatedResource = _consolidator.ConsolidateGroup(_path, _groupTemplateContext, IsDebugMode ? ResourceMode.Debug : ResourceMode.Release);
+			var consolidatedResource = _consolidator.ConsolidateGroup(_path, _groupTemplateContext, _resourceMode);
 			if(CachingEnabled)
 			{
 				_cachedConsolidatedResource = consolidatedResource;
@@ -84,11 +91,7 @@ namespace Assman
 
 		private bool IsDebugMode
 		{
-			get
-			{
-				var compilationSection = GetConfigurationLoader().GetSection<CompilationSection>("system.web/compilation");
-				return compilationSection.Debug;
-			}
+			get { return _resourceMode == ResourceMode.Debug; }
 		}
 	}
 }

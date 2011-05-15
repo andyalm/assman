@@ -2,6 +2,7 @@ using System;
 using System.Web.Configuration;
 
 using Assman.Configuration;
+using Assman.Handlers;
 using Assman.TestSupport;
 using Assman.TestObjects;
 
@@ -15,7 +16,7 @@ namespace Assman
 	public class TestResourceHandler
 	{
 		private DateTime _lastModified;
-		private ResourceHandler _instance;
+		private ConsolidatedResourceHandler _instance;
 		private Mock<IResourceFinder> _finder;
 		private CompilationSection _compilationSection;
 		private static readonly ResourceType _resourceType = ResourceType.Script;
@@ -45,7 +46,7 @@ namespace Assman
 			var configContext = AssmanContext.Create();
 			configContext.AddFinder(_finder.Object);
 			
-			_instance = new ResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext());
+			_instance = new ConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext());
 			_instance.GetConfigurationLoader = () => configLoader.Object;
 		}
 

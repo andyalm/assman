@@ -4,33 +4,31 @@ namespace Assman.IO
 {
 	internal interface IFileAccess
 	{
-		TextWriter OpenWriter();
-		bool Exists();
-		TextReader OpenReader();
+		TextWriter OpenWriter(string filePath);
+		bool Exists(string filePath);
+		TextReader OpenReader(string filePath);
 	}
 
 	internal class FileAccessWrapper : IFileAccess
 	{
-		private readonly string _filePath;
-
-		public FileAccessWrapper(string filePath)
+		public FileAccessWrapper()
 		{
-			_filePath = filePath;
+			
 		}
 
-		public TextWriter OpenWriter()
+		public TextWriter OpenWriter(string filePath)
 		{
-			return new StreamWriter(_filePath);
+			return new StreamWriter(filePath);
 		}
 
-		public bool Exists()
+		public bool Exists(string filePath)
 		{
-			return File.Exists(_filePath);
+			return File.Exists(filePath);
 		}
 
-		public TextReader OpenReader()
+		public TextReader OpenReader(string filePath)
 		{
-			return new StreamReader(File.OpenRead(_filePath));
+			return new StreamReader(File.OpenRead(filePath));
 		}
 	}
 }

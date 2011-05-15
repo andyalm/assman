@@ -31,10 +31,10 @@ namespace Assman
 
 		public static ResourceType FromPath(string path)
 		{
-			var extension = Path.GetExtension(path).ToLowerInvariant();
-			if (Script.DefaultFileExtension == extension)
+			var extension = Path.GetExtension(path);
+			if (Script.FileExtensions.Contains(extension, Comparers.VirtualPath))
 				return Script;
-			if (Stylesheet.DefaultFileExtension == extension)
+			if (Stylesheet.FileExtensions.Contains(extension, Comparers.VirtualPath))
 				return Stylesheet;
 
 			throw new ArgumentException("The path with extension '" + extension + "' does not map to a known ResourceType.");
@@ -67,6 +67,11 @@ namespace Assman
 
 		public abstract string ContentType { get; }
 		public abstract string DefaultFileExtension { get; }
+
+	    public bool IsDefaultExtension(string fileExtension)
+	    {
+	        return DefaultFileExtension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase);
+	    }
 	}
 
 	internal class ScriptResourceType : ResourceType
