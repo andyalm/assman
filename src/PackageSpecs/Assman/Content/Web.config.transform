@@ -4,14 +4,14 @@
 	</configSections>
 	<system.web>
 		<httpHandlers>
-			<add verb="GET,HEAD" path="*.js" validate="false" type="Assman.ResourceHttpHandler, Assman, Version=1.0.0.0, Culture=neutral"/>
-			<add verb="GET,HEAD" path="*.css" validate="false" type="Assman.ResourceHttpHandler, Assman, Version=1.0.0.0, Culture=neutral"/>
+			<add verb="GET,HEAD" path="*.js" validate="false" type="Assman.Handlers.ResourceHttpHandlerFactory, Assman, Version=1.0.0.0, Culture=neutral"/>
+			<add verb="GET,HEAD" path="*.css" validate="false" type="Assman.Handlers.ResourceHttpHandlerFactory, Assman, Version=1.0.0.0, Culture=neutral"/>
 		</httpHandlers>
 	</system.web>
 	<system.webServer>
 		<handlers>
-			<add name="ConsolidatedJavascriptHandler" preCondition="integratedMode" verb="GET,HEAD" path="*.js" type="Assman.ResourceHttpHandler, Assman, Version=1.0.0.0, Culture=neutral"/>
-			<add name="ConsolidatedCssHandler" preCondition="integratedMode" verb="GET,HEAD" path="*.css" type="Assman.ResourceHttpHandler, Assman, Version=1.0.0.0, Culture=neutral"/>
+			<add name="ConsolidatedJavascriptHandler" preCondition="integratedMode" verb="GET,HEAD" path="*.js" type="Assman.Handlers.ResourceHttpHandlerFactory, Assman, Version=1.0.0.0, Culture=neutral"/>
+			<add name="ConsolidatedCssHandler" preCondition="integratedMode" verb="GET,HEAD" path="*.css" type="Assman.Handlers.ResourceHttpHandlerFactory, Assman, Version=1.0.0.0, Culture=neutral"/>
 		</handlers>
 	</system.webServer>
 	<assman configSource="Assman.config" />

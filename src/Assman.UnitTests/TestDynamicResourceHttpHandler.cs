@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Web;
 
 using Assman.Configuration;
+using Assman.Handlers;
 using Assman.TestSupport;
 
 using Moq;
@@ -15,7 +16,7 @@ namespace Assman
 	[TestFixture]
 	public class TestDynamicResourceHttpHandler
 	{
-		private DynamicResourceHttpHandler _httpHandler;
+		private ConsolidatedResourceHandler _httpHandler;
 		private AssmanContext _context;
 		private FakeHandlerFactory _handlerFactory;
 		private Mock<HttpContextBase> _httpContext;
@@ -32,7 +33,7 @@ namespace Assman
 
 			_handlerFactory = new FakeHandlerFactory();
 
-			_httpHandler = new DynamicResourceHttpHandler(_context, _handlerFactory);
+			_httpHandler = new ConsolidatedResourceHandler(_context, _handlerFactory);
 			_httpHandler.ToAppRelativePath = ToAppRelative;
 		}
 
@@ -85,29 +86,6 @@ namespace Assman
 			httpContext.SetupProperty(c => c.Response.StatusCode);
 
 			return httpContext;
-		}
-
-		private class FakeHandlerFactory : IResourceHandlerFactory
-		{
-			private readonly List<Mock<IResourceHandler>> _handlersCreated = new List<Mock<IResourceHandler>>();
-
-			public List<Mock<IResourceHandler>> HandlersCreated
-			{
-				get { return _handlersCreated; }
-			}
-
-			public int NumberOfCreateCalls
-			{
-				get { return _handlersCreated.Count; }
-			}
-
-			public IResourceHandler CreateHandler(string path, ResourceConsolidator consolidator, GroupTemplateContext groupTemplateContext)
-			{
-				var handler = new Mock<IResourceHandler>();
-				_handlersCreated.Add(handler);
-
-				return handler.Object;
-			}
 		}
 	}
 }
