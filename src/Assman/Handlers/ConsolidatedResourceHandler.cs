@@ -1,8 +1,6 @@
 using System;
 using System.Web;
 
-using Assman.Configuration;
-
 namespace Assman.Handlers
 {
 	internal class ConsolidatedResourceHandler : HttpHandlerBase
@@ -10,23 +8,28 @@ namespace Assman.Handlers
 		private readonly string _path;
 		private readonly ResourceConsolidator _consolidator;
 		private readonly GroupTemplateContext _groupTemplateContext;
-	    private readonly ResourceMode _resourceMode;
-	    private DateTime _minLastModified = DateTime.MinValue;
+		private ResourceMode _resourceMode;
+		private DateTime _minLastModified = DateTime.MinValue;
 		private ConsolidatedResource _cachedConsolidatedResource;
-		internal Func<IConfigLoader> GetConfigurationLoader = () => new DefaultConfigLoader();
 
 		public ConsolidatedResourceHandler(string path, ResourceConsolidator consolidator, GroupTemplateContext groupTemplateContext, ResourceMode resourceMode)
 		{
 			_path = path;
 			_consolidator = consolidator;
 			_groupTemplateContext = groupTemplateContext;
-		    _resourceMode = resourceMode;
+			_resourceMode = resourceMode;
 		}
 
 		public DateTime MinLastModified
 		{
 			get { return _minLastModified; }
 			set { _minLastModified = value.ToUniversalTime(); }
+		}
+
+		public ResourceMode ResourceMode
+		{
+			get { return _resourceMode; }
+			set { _resourceMode = value; }
 		}
 
 		public override void ProcessRequest(HttpContextBase context)

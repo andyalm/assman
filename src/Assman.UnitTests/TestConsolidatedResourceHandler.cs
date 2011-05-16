@@ -1,10 +1,8 @@
 using System;
-using System.Web.Configuration;
 
 using Assman.Configuration;
 using Assman.Handlers;
 using Assman.TestSupport;
-using Assman.TestObjects;
 
 using Moq;
 
@@ -13,12 +11,11 @@ using NUnit.Framework;
 namespace Assman
 {
 	[TestFixture]
-	public class TestResourceHandler
+	public class TestConsolidatedResourceHandler
 	{
 		private DateTime _lastModified;
 		private ConsolidatedResourceHandler _instance;
 		private Mock<IResourceFinder> _finder;
-		private CompilationSection _compilationSection;
 		private static readonly ResourceType _resourceType = ResourceType.Script;
 		private const string VirtualPath = "~/myfile.js";
 
@@ -37,17 +34,11 @@ namespace Assman
 			
 			var groupTemplate = new StubResourceGroupTemplate(new ResourceGroup(VirtualPath, resources));
 			groupTemplate.ResourceType = _resourceType;
-			
-			_compilationSection = new CompilationSection();
-			_compilationSection.Debug = true;
-			var configLoader = new Mock<IConfigLoader>();
-			configLoader.Setup(l => l.GetSection<CompilationSection>(It.IsAny<string>())).Returns(_compilationSection);
 
 			var configContext = AssmanContext.Create();
 			configContext.AddFinder(_finder.Object);
 			
-			_instance = new ConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext());
-			_instance.GetConfigurationLoader = () => configLoader.Object;
+			_instance = new ConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext(), ResourceMode.Debug);
 		}
 
 		[Test]
@@ -109,7 +100,7 @@ namespace Assman
 		[Test]
 		public void WhenDebugIsTrue_ConolidatatedResourceIsNotCached()
 		{
-			_compilationSection.Debug = true;
+			_instance.ResourceMode = ResourceMode.Debug;
 			var firstRequest = new StubRequestContext();
 			_instance.HandleRequest(firstRequest);
 			var secondRequest = new StubRequestContext();
@@ -124,7 +115,7 @@ namespace Assman
 		[Test]
 		public void WhenDebugIsFalse_ConolidatatedResourceIsCached()
 		{
-			_compilationSection.Debug = false;
+			_instance.ResourceMode = ResourceMode.Release;
 			var firstRequest = new StubRequestContext();
 			_instance.HandleRequest(firstRequest);
 			var secondRequest = new StubRequestContext();
@@ -147,16 +138,16 @@ namespace Assman
 
 		private static void AssertContentReturned(StubRequestContext context)
 		{
-			Assert.AreEqual(200, context.StatusCode);
-			Assert.AreEqual(1, context.SetLastModifiedCalled);
-			Assert.AreNotEqual(0L, context.OutputStream.Length);
+			context.StatusCode.ShouldEqual(200);
+			context.SetLastModifiedCalled.ShouldEqual(1);
+			context.OutputStream.Length.ShouldNotEqual(0L);
 		}
 
 		private static void AssertNoContentReturned(StubRequestContext context)
 		{
-			Assert.AreEqual(304, context.StatusCode);
-			Assert.AreEqual(0L, context.OutputStream.Length);
-			Assert.AreEqual(0, context.SetLastModifiedCalled);
+			context.StatusCode.ShouldEqual(304);
+			context.OutputStream.Length.ShouldEqual(0L);
+			context.SetLastModifiedCalled.ShouldEqual(0);
 		}
 
 		private void AssertConsolidatedResourceWasCached()

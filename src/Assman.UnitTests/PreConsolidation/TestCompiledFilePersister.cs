@@ -18,7 +18,7 @@ namespace Assman.PreConsolidation
 		{
 			_fileAccess = new StubFileAccess();
 			
-			_persister = new CompiledFilePersister(_fileAccess);
+			_persister = new CompiledFilePersister(_fileAccess, "assman.compiled");
 		}
 
 		[Test]

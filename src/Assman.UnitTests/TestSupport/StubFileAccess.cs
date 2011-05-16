@@ -8,19 +8,19 @@ namespace Assman.TestSupport
 	{
 		private StringWriter _writer;
 		
-		public TextWriter OpenWriter()
+		public TextWriter OpenWriter(string filePath)
 		{
 			_writer = new StringWriter();
 
 			return _writer;
 		}
 
-		public bool Exists()
+		public bool Exists(string filePath)
 		{
 			return true;
 		}
 
-		public TextReader OpenReader()
+		public TextReader OpenReader(string filePath)
 		{
 			return new StringReader(_writer.ToString());
 		}

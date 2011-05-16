@@ -5,6 +5,7 @@ relre:obj/(Debug|Release)/.+
 glob:*.user
 glob:*.suo
 glob:*.cache
+glob:*.docstates
 relre:samples/LessIntegration/bin/.+
 relre:Website/[Bb]in/.+
 relre:^output/.+
