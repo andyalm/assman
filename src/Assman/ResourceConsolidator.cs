@@ -23,7 +23,6 @@ namespace Assman
 			_scriptGroups = scriptGroups;
 			_styleGroups = styleGroups;
 			_finder = finder;
-			//TODO: Move ResourceMode here
 		}
 
 		public ConsolidatedResource ConsolidateGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext, ResourceMode mode)

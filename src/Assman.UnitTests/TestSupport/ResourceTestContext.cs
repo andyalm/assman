@@ -27,6 +27,11 @@ namespace Assman.TestSupport
 			_dependencyManager.MapProvider(".css", _dependencyProvider);
 		}
 
+		public StubDependencyProvider DependencyProvider
+		{
+			get { return _dependencyProvider; }
+		}
+
 		public ResourceConsolidator GetConsolidator()
 		{
 			return new ResourceConsolidator(_contentFilterMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);

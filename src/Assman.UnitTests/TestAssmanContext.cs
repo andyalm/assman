@@ -11,70 +11,18 @@ namespace Assman
 	[TestFixture]
 	public class TestAssmanContext
 	{
-	    private StubResourceFinder _finder;
-	    private AssmanContext _context;
+		private StubResourceFinder _finder;
+		private AssmanContext _context;
 
-	    [SetUp]
-	    public void SetupContext()
-	    {
-	        DependencyManagerFactory.ClearDependencyCache();
-            _finder = new StubResourceFinder();
-            _context = new AssmanContext();
-            _context.AddFinder(_finder);
-	    }
-        
-        [Test]
-		public void ConsolidateGroupExcludesResourcesMatchingGivenExcludeFilter()
+		[SetUp]
+		public void SetupContext()
 		{
-			var stubFinder = new StubResourceFinder();
-			stubFinder.AddResource("~/file1.js", "");
-			stubFinder.AddResource("~/file2.js", "");
-			stubFinder.AddResource("~/file3.js", "");
-			
-			var group = new ResourceGroup("~/consolidated.js", stubFinder.Resources);
-			var groupTemplate = new StubResourceGroupTemplate(group);
-			groupTemplate.ResourceType = ResourceType.Script;
-
-            _context.AddFinder(stubFinder);
-			var excludeFilter = ToFilter(r => r.VirtualPath.Contains("file2"));
-			var consolidator = _context.GetConsolidator();
-			var consolidatedResource = consolidator.ConsolidateGroup(group.ConsolidatedUrl, groupTemplate.WithContext(excludeFilter), ResourceMode.Debug);
-			
-			consolidatedResource.ShouldNotBeNull();
-			consolidatedResource.Resources.Count().ShouldEqual(2);
+			DependencyManagerFactory.ClearDependencyCache();
+			_finder = new StubResourceFinder();
+			_context = new AssmanContext();
+			_context.AddFinder(_finder);
 		}
-
-		[Test]
-		public void ConsolidateGroupSortsResourcesByDependencies()
-		{
-		    var dependencyLeaf = _finder.CreateResource("~/dependency-leaf.js");
-            var dependencyRoot = _finder.CreateResource("~/dependency-root.js");
-            var dependencyMiddle = _finder.CreateResource("~/dependency-middle.js");
-            
-            var group = new ResourceGroup("~/consolidated.js", new IResource[]
-			{
-				dependencyLeaf,
-				dependencyRoot,
-				dependencyMiddle
-			});
-            
-			var groupTemplate = new StubResourceGroupTemplate(group);
-			groupTemplate.ResourceType = ResourceType.Script;
-
-			var dependencyProvider = new StubDependencyProvider();
-			dependencyProvider.SetDependencies(dependencyLeaf, "~/dependency-middle.js");
-			dependencyProvider.SetDependencies(dependencyMiddle, "~/dependency-root.js");
-			
-			_context.MapExtensionToDependencyProvider(".js", dependencyProvider);
-
-			var consolidator = _context.GetConsolidator();
-			var consolidatedResource = consolidator.ConsolidateGroup(group, ResourceMode.Debug);
-			var resources = consolidatedResource.Resources.ToList();
-			resources[0].VirtualPath.ShouldEqual("~/dependency-root.js");
-			resources[1].VirtualPath.ShouldEqual("~/dependency-middle.js");
-			resources[2].VirtualPath.ShouldEqual("~/dependency-leaf.js");
-		}
-
+		
 		[Test]
 		public void WhenConsolidatedUrlMatchesPatternOfAGroup_ItIsNotIncludedInTheConsolidatedResource()
 		{
@@ -97,7 +45,7 @@ namespace Assman
 				otherscript
 			});
 
-		    _context.AddFinder(finder);
+			_context.AddFinder(finder);
 			var group1Template = new StubResourceGroupTemplate(group1) { ResourceType = ResourceType.Script };
 			var group2Template = new StubResourceGroupTemplate(group2) { ResourceType = ResourceType.Script };
 			_context.ScriptGroups.Add(group1Template);
@@ -109,11 +57,6 @@ namespace Assman
 
 			group2Consolidated.Resources.CountShouldEqual(1);
 			group2Consolidated.Resources[0].ShouldEqual("~/scripts/otherscript.js");
-		}
-
-		private IResourceFilter ToFilter(Predicate<IResource> predicate)
-		{
-			return ResourceFilters.Predicate(predicate);
 		}
 	}
 }
