@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace Assman.IO
@@ -7,15 +8,11 @@ namespace Assman.IO
 		TextWriter OpenWriter(string filePath);
 		bool Exists(string filePath);
 		TextReader OpenReader(string filePath);
+		DateTime LastModified(string filePath);
 	}
 
 	internal class FileAccessWrapper : IFileAccess
 	{
-		public FileAccessWrapper()
-		{
-			
-		}
-
 		public TextWriter OpenWriter(string filePath)
 		{
 			return new StreamWriter(filePath);
@@ -29,6 +26,11 @@ namespace Assman.IO
 		public TextReader OpenReader(string filePath)
 		{
 			return new StreamReader(File.OpenRead(filePath));
+		}
+
+		public DateTime LastModified(string filePath)
+		{
+			return new FileInfo(filePath).LastWriteTime;
 		}
 	}
 }

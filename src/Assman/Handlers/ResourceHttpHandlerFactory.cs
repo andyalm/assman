@@ -57,7 +57,8 @@ namespace Assman.Handlers
                 if (!resourceType.IsDefaultExtension(fileExtension))
                 {
                     var contentFilterFactory = _assmanContext.GetFilterFactoryForExtension(fileExtension);
-                    contentFilter = contentFilterFactory.CreateFilter(null, resourceMode);
+                    var settings = new ResourceContentSettings {Minify = resourceMode == ResourceMode.Release};
+                    contentFilter = contentFilterFactory.CreateFilter(settings);
                 }
 
                 return new UnconsolidatedResourceHandler(physicalPathToResource, resourceType, contentFilter);

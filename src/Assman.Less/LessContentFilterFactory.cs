@@ -4,9 +4,9 @@ namespace Assman.Less
 {
 	public class LessContentFilterFactory : IContentFilterFactory
 	{
-		public IContentFilter CreateFilter(IResourceGroup group, ResourceMode mode)
+		public IContentFilter CreateFilter(ResourceContentSettings settings)
 		{
-			return new LessContentFilter(group, mode);
+			return new LessContentFilter(settings);
 		}
 	}
 }

@@ -1,9 +1,14 @@
 <content name="main">
-	<RequireStylesheet src="~/Content/Consolidated/Shared.css" />
+	<RequireStylesheet path="~/Content/Consolidated/Shared.css" />
 	<ScriptBlock>
 		function IsScriptIncluded(path)
 		{
 			return $('script[src*="' + path + '"]').length == 1;
+		}
+		
+		function IsStylesheetIncluded(path)
+		{
+			return $('link[href*="' + path + '"]').length == 1;
 		}
 		
 		function IsIncludedAtIndex(path, expectedIndex)
@@ -29,7 +34,7 @@
 		
 		<dt>&lt;RequireScript&gt; binding</dt>
 		<dd id="script-include-binding" class="test">running...</dd>
-		<RequireScript src="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
+		<RequireScript path="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
 		
 		<dt>RequireScript is consolidated</dt>
 		<dd id="script-include-consolidated" class="test">running...</dd>
@@ -43,7 +48,7 @@
 		
 		<dt>Dependencies are automatically included</dt>
 		<dd id="script-include-dependencies" class="test">running...</dd>
-		<RequireScript src="~/scripts/DependencyLeaf.js" />
+		<RequireScript path="~/scripts/DependencyLeaf.js" />
 
 		<dt>Scripts included in two script registries only renders once</dt>
 		<dd id="script-include-two-registries" class="test">running...</dd>
@@ -54,7 +59,7 @@
 			}
 		</ScriptBlock>
 
-		<RequireScript src="~/Scripts/Consolidated/Disabled.js" />
+		<RequireScript path="~/Scripts/Consolidated/Disabled.js" />
 		<dt>Group with consolidation disabled that is included by ConsolidatedUrl includes all children</dt>
 		<dd id="include-unconsolidated-group" class="test">running...</dd>
 		<ScriptBlock>
@@ -70,6 +75,17 @@
 			if(IsIncludedAtIndex("Global-Dependency.js", 0))
 			{
 				$("#global-dependency-first").addClass("pass");
+			}
+		</ScriptBlock>
+
+		<RequireStylesheet path="~/Content/Unconsolidated/TestHelper.less" />
+		<dt>Less file can be included without being consolidated</dt>
+		<dd id="less-unconsolidated" class="test">running...</dd>
+		<dd class="hidden-by-less" style="color:red">YOU SHOULD NOT SEE THIS</dd>
+		<ScriptBlock>
+			if(IsStylesheetIncluded("TestHelper.less"))
+			{
+				$("#less-unconsolidated").addClass("pass");
 			}
 		</ScriptBlock>
 	</dl>

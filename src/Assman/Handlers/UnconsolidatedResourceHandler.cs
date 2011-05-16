@@ -1,12 +1,12 @@
 using System;
-using System.Web;
+using System.IO;
 
 using Assman.ContentFiltering;
 using Assman.IO;
 
 namespace Assman.Handlers
 {
-    public class UnconsolidatedResourceHandler : HttpHandlerBase
+    public class UnconsolidatedResourceHandler : ResourceHandlerBase
     {
         private readonly string _physicalPathToResource;
         private readonly IFileAccess _fileAccess;
@@ -28,18 +28,50 @@ namespace Assman.Handlers
             _fileAccess = fileAccess;
         }
 
-        public override void ProcessRequest(HttpContextBase context)
+        protected override IHandlerResource GetResource()
         {
-            using(var reader = _fileAccess.OpenReader(_physicalPathToResource))
-            {
-                var fileContents = reader.ReadToEnd();
-                var filteredContent = _contentFilter.FilterContent(fileContents);
+            return new UnconsolidatedHandlerResource(_fileAccess, _resourceType, _physicalPathToResource, _contentFilter);
+        }
 
-                context.Response.ContentType = _resourceType.ContentType;
-                context.Response.Write(fileContents);
-                //TODO: Add Last-Modified and 304 handling
+        private class UnconsolidatedHandlerResource : IHandlerResource
+        {
+            private readonly IFileAccess _fileAccess;
+            private readonly ResourceType _resourceType;
+            private readonly string _physicalFilePath;
+            private readonly IContentFilter _contentFilter;
+
+            public UnconsolidatedHandlerResource(IFileAccess fileAccess, ResourceType resourceType,
+                                                 string physicalFilePath, IContentFilter contentFilter)
+            {
+                _fileAccess = fileAccess;
+                _resourceType = resourceType;
+                _physicalFilePath = physicalFilePath;
+                _contentFilter = contentFilter;
             }
 
+            public DateTime GetLastModified()
+            {
+                return _fileAccess.LastModified(_physicalFilePath);
+            }
+
+            public ResourceType ResourceType
+            {
+                get { return _resourceType; }
+            }
+
+            public void WriteContent(Stream outputStream)
+            {
+                string contentToWrite;
+                using(var reader = _fileAccess.OpenReader(_physicalFilePath))
+                {
+                    var fileContents = reader.ReadToEnd();
+                    contentToWrite = _contentFilter.FilterContent(fileContents);
+                }
+
+                var writer = new StreamWriter(outputStream);
+                writer.Write(contentToWrite);
+                writer.Flush();
+            }
         }
     }
 }

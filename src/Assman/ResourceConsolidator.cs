@@ -23,7 +23,7 @@ namespace Assman
 			_scriptGroups = scriptGroups;
 			_styleGroups = styleGroups;
 			_finder = finder;
-            //TODO: Move ResourceMode here
+			//TODO: Move ResourceMode here
 		}
 
 		public ConsolidatedResource ConsolidateGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext, ResourceMode mode)
@@ -43,7 +43,8 @@ namespace Assman
 			Func<IResource, IContentFilter> createContentFilter = resource =>
 			{
 				var contentFilterFactory = _contentFilterMap.GetFilterFactoryForExtension(resource.FileExtension);
-				return contentFilterFactory.CreateFilter(group, mode);
+				var settings = new ResourceContentSettings {Minify = group.ShouldMinify(mode)};
+				return contentFilterFactory.CreateFilter(settings);
 			};
 
 			return group.GetResources()

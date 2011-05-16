@@ -11,7 +11,7 @@ namespace Assman.ContentFiltering
 
 		private NullContentFilterFactory() {}
 		
-		public IContentFilter CreateFilter(IResourceGroup group, ResourceMode mode)
+		public IContentFilter CreateFilter(ResourceContentSettings settings)
 		{
 			return NullContentFilter.Instance;
 		}

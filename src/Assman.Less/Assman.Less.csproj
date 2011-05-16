@@ -10,7 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assman.Less</RootNamespace>
     <AssemblyName>Assman.Less</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetClrVersion Condition="$(TargetClrVersion)==''">4.0</TargetClrVersion>
+    <TargetFrameworkVersion Condition="$(TargetClrVersion)!='4.0'">v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="$(TargetClrVersion)=='4.0'">v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -26,16 +28,18 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin\Debug\.NetFramework $(TargetClrVersion)</OutputPath>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0'">DEBUG;TRACE;NET_40</DefineConstants>
+    <DefineConstants Condition="$(TargetClrVersion)!='4.0'">DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\Release\.NetFramework $(TargetClrVersion)</OutputPath>
+    <DefineConstants Condition="$(TargetClrVersion)=='4.0'">TRACE;NET_40</DefineConstants>
+    <DefineConstants Condition="$(TargetClrVersion)!='4.0'">TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -48,12 +52,15 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IgnoreRoutesForLessUrls.cs" />
     <Compile Include="LessContentFilter.cs" />
     <Compile Include="LessContentFilterFactory.cs" />
     <Compile Include="dotLessAssmanPlugin.cs" />

@@ -9,9 +9,9 @@ namespace Assman.ContentFiltering
 
 		internal JSMinContentFilterFactory() { }
 
-		public IContentFilter CreateFilter(IResourceGroup group, ResourceMode mode)
+		public IContentFilter CreateFilter(ResourceContentSettings settings)
 		{
-			if (group.ShouldMinify(mode))
+			if (settings.Minify)
 			{
 				return new JSMinFilter();
 			}

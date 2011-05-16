@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 using Assman.IO;
@@ -24,5 +25,10 @@ namespace Assman.TestSupport
 		{
 			return new StringReader(_writer.ToString());
 		}
+
+	    public DateTime LastModified(string filePath)
+	    {
+	        return DateTime.Now;
+	    }
 	}
 }

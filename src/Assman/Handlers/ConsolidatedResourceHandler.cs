@@ -1,9 +1,9 @@
 using System;
-using System.Web;
+using System.IO;
 
 namespace Assman.Handlers
 {
-	internal class ConsolidatedResourceHandler : HttpHandlerBase
+	internal class ConsolidatedResourceHandler : ResourceHandlerBase
 	{
 		private readonly string _path;
 		private readonly ResourceConsolidator _consolidator;
@@ -32,43 +32,11 @@ namespace Assman.Handlers
 			set { _resourceMode = value; }
 		}
 
-		public override void ProcessRequest(HttpContextBase context)
+		protected override IHandlerResource GetResource()
 		{
-			HandleRequest(new HttpRequestContext(context));   
-		}
+			var consolidatedResource = GetConsolidatedResource();
 
-		public void HandleRequest(IRequestContext context)
-		{
-			var resource = GetConsolidatedResource();
-			DateTime lastModified = resource.LastModified.ToUniversalTime();
-			if (lastModified < _minLastModified)
-				lastModified = _minLastModified;
-			DateTime ifModifiedSince = (context.IfModifiedSince ?? DateTime.MinValue).ToUniversalTime();
-			lastModified = RoundToSeconds(lastModified);
-			ifModifiedSince = RoundToSeconds(ifModifiedSince);
-			if (lastModified <= ifModifiedSince)
-			{
-				context.StatusCode = 304;
-				context.StatusDescription = "Not Modified";
-				return;
-			}
-			else
-			{
-				context.SetLastModified(lastModified);
-				context.ContentType = _groupTemplateContext.ResourceType.ContentType;
-				
-				if(IsDebugMode)
-				{
-					resource.WriteSummaryHeader(context.OutputStream);
-				}
-				
-				resource.WriteTo(context.OutputStream);
-			}
-		}
-
-		private static DateTime RoundToSeconds(DateTime dateTime)
-		{
-			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
+			return new ConsolidatedHandlerResource(consolidatedResource, ResourceMode, MinLastModified, _groupTemplateContext.ResourceType);
 		}
 
 		private ConsolidatedResource GetConsolidatedResource()
@@ -95,6 +63,47 @@ namespace Assman.Handlers
 		private bool IsDebugMode
 		{
 			get { return _resourceMode == ResourceMode.Debug; }
+		}
+
+		private class ConsolidatedHandlerResource : IHandlerResource
+		{
+			private readonly ConsolidatedResource _resource;
+			private readonly ResourceMode _resourceMode;
+			private readonly DateTime _minLastModified;
+			private readonly ResourceType _resourceType;
+
+			public ConsolidatedHandlerResource(ConsolidatedResource resource, ResourceMode resourceMode,
+											   DateTime minLastModified, ResourceType resourceType)
+			{
+				_resource = resource;
+				_resourceMode = resourceMode;
+				_minLastModified = minLastModified;
+				_resourceType = resourceType;
+			}
+
+			public DateTime GetLastModified()
+			{
+				var lastModified = _resource.LastModified;
+				if (lastModified < _minLastModified)
+					lastModified = _minLastModified;
+
+				return lastModified;
+			}
+
+			public ResourceType ResourceType
+			{
+				get { return _resourceType; }
+			}
+
+			public void WriteContent(Stream outputStream)
+			{
+				if (_resourceMode == ResourceMode.Debug)
+				{
+					_resource.WriteSummaryHeader(outputStream);
+				}
+
+				_resource.WriteTo(outputStream);
+			}
 		}
 	}
 }

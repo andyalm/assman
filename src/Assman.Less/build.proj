@@ -4,6 +4,17 @@
   <Import Project="$(MSBuildProjectDirectory)\..\..\packages\Build1.0.0\head.targets"/>
 
   <ItemGroup>
+    <BuildProfile Include="NET40">
+      <Properties>TargetClrVersion=4.0</Properties>
+      <OutputPath>.NetFramework 4.0</OutputPath>
+    </BuildProfile>
+    <BuildProfile Include="NET35">
+      <Properties>TargetClrVersion=2.0</Properties>
+      <OutputPath>.NetFramework 2.0</OutputPath>
+    </BuildProfile>
+  </ItemGroup>
+  
+  <ItemGroup>
     <Project Include="Assman.Less.csproj"/>
   </ItemGroup>
   <ItemGroup>

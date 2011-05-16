@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 
 using Assman.Mvc;
+using Assman.Less;
 
 namespace Website
 {
@@ -15,6 +16,7 @@ namespace Website
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 			routes.IgnoreWebResourceRoutes();
+			routes.IgnoreLessRoutes();
 
 			routes.MapRoute(
 				"Default", // Route name

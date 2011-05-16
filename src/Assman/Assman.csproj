@@ -97,10 +97,12 @@
     <Compile Include="Configuration\ResourceConfigurationElement.cs" />
     <Compile Include="Configuration\ScriptsConfigurationElement.cs" />
     <Compile Include="Configuration\StylesheetsConfigurationElement.cs" />
+    <Compile Include="ContentFiltering\ResourceContentSettings.cs" />
     <Compile Include="CssDependencyProvider.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="GroupTemplateContext.cs" />
     <Compile Include="Handlers\HttpHandlerBase.cs" />
+    <Compile Include="Handlers\ResourceHandlerBase.cs" />
     <Compile Include="IO\IFileAccess.cs" />
     <Compile Include="IResourceCache.cs" />
     <Compile Include="IResourceGroupManager.cs" />
@@ -140,7 +142,7 @@
     <Compile Include="DependencyManagerFactory.cs" />
     <Compile Include="IDependencyCache.cs" />
     <Compile Include="IDependencyProvider.cs" />
-    <Compile Include="IContentFilterFactory.cs" />
+    <Compile Include="ContentFiltering\IContentFilterFactory.cs" />
     <Compile Include="InMemoryDependencyCache.cs" />
     <Compile Include="IO\IFileFinder.cs" />
     <Compile Include="IResourceFinderFactory.cs" />
@@ -156,7 +158,7 @@
     <Compile Include="Registration\IReadableResourceRegistry.cs" />
     <Compile Include="Registration\IResourceRegistryAccessor.cs" />
     <Compile Include="IResourceMatch.cs" />
-    <Compile Include="NullContentFilterFactory.cs" />
+    <Compile Include="ContentFiltering\NullContentFilterFactory.cs" />
     <Compile Include="RegexResourceMatch.cs" />
     <Compile Include="Registration\IResourceWriter.cs" />
     <Compile Include="Registration\NullResourceRegistry.cs" />

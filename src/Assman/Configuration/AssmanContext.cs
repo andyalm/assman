@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using Assman.ContentFiltering;
 using Assman.PreConsolidation;
 
 namespace Assman.Configuration

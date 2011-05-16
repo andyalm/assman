@@ -8,20 +8,18 @@ namespace Assman.Less
 {
 	public class LessContentFilter : IContentFilter
 	{
-		private readonly IResourceGroup _resourceGroup;
-		private readonly ResourceMode _mode;
+	    private readonly ResourceContentSettings _settings;
 
-		public LessContentFilter(IResourceGroup resourceGroup, ResourceMode mode)
-		{
-			_resourceGroup = resourceGroup;
-			_mode = mode;
-		}
+	    public LessContentFilter(ResourceContentSettings settings)
+	    {
+	        _settings = settings;
+	    }
 
-		public string FilterContent(string content)
+	    public string FilterContent(string content)
 		{
 			var config = new DotlessConfiguration
 			{
-				MinifyOutput = _resourceGroup.ShouldMinify(_mode),
+				MinifyOutput = _settings.Minify,
 				Web = HttpContext.Current != null,
 				LessSource = typeof(VirtualPathFileReader),
 				CacheEnabled = false /* no need to cache as we let the Assman framework manage its own cache */
