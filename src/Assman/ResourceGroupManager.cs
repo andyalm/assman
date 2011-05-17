@@ -117,9 +117,9 @@ namespace Assman
 			});
 		}
 
-		public bool IsPartOfGroup(IResource resource)
+		public bool IsPartOfGroup(string virtualPath)
 		{
-			return _templates.Any(t => t.IsMatch(resource));
+			return _templates.Any(t => t.IsMatch(virtualPath));
 		}
 
 		public IEnumerable<string> GetGlobalDependencies()
@@ -240,9 +240,9 @@ namespace Assman
 				_inner.EachGroup(allResources, mode, handler);
 			}
 
-			public bool IsPartOfGroup(IResource resource)
+			public bool IsPartOfGroup(string virtualPath)
 			{
-				return _inner.IsPartOfGroup(resource);
+				return _inner.IsPartOfGroup(virtualPath);
 			}
 
 			public IEnumerable<string> GetGlobalDependencies()

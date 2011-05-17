@@ -156,8 +156,8 @@ namespace Assman.Configuration
 
 		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
 		{
-			_scriptGroups = new PreConsolidatedGroupManager(preConsolidationReport.Scripts.Groups);
-			_styleGroups = new PreConsolidatedGroupManager(preConsolidationReport.Stylesheets.Groups);
+			_scriptGroups = new PreConsolidatedGroupManager(preConsolidationReport.Scripts);
+			_styleGroups = new PreConsolidatedGroupManager(preConsolidationReport.Stylesheets);
 			_dependencyManager.SetCache(new PreConsolidatedDependencyCache(preConsolidationReport.Dependencies));
 			Version = preConsolidationReport.Version;
 			PreConsolidated = true;

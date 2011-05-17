@@ -67,7 +67,7 @@ namespace Assman
 			var groupManager = GroupManagerFor(resourceType);
 
 			var unconsolidatedResources = (from resource in resources
-										  where !groupManager.IsPartOfGroup(resource)
+										  where !groupManager.IsPartOfGroup(resource.VirtualPath)
 											&& CanCompileIndividually(resource)
 										  select resource).ToList();
 

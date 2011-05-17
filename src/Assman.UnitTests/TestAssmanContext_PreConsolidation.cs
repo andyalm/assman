@@ -111,6 +111,29 @@ namespace Assman
 		}
 
 		[Test]
+		public void WhenPreConsolidatedReportIsLoaded_ResourceUrlCacheIsPrepopulatedWithIndividuallyCompiledResources()
+		{
+			var preConsolidationReport = new PreConsolidationReport
+			{
+				Scripts = new PreConsolidatedResourceReport
+				{
+					SingleResources = new List<PreCompiledSingleResource>
+					{
+						new PreCompiledSingleResource
+						{
+							OriginalPath = "~/myfile.js",
+							CompiledPath = "~/myfile.min.js"
+						}
+					}
+				}
+			};
+			_context.LoadPreCompilationReport(preConsolidationReport);
+
+			var resolvedUrl = _context.GetScriptUrls("~/myfile.js").Single();
+			resolvedUrl.ShouldEqual("~/myfile.min.js");
+		}
+
+		[Test]
 		public void WhenPreConsolidatedReportIsLoaded_ConsolidatedUrlsAreCachedAsThemselvesSoGroupsCanBeIncludedDirectly()
 		{
 			var groupTemplate = new Mock<IResourceGroupTemplate>();

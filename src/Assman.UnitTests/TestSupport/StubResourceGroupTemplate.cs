@@ -24,6 +24,11 @@ namespace Assman.TestSupport
 			return Groups.Any(group => group.Contains(resource));
 		}
 
+		public bool IsMatch(string virtualPath)
+		{
+			return Groups.Any(group => group.GetResources().Any(r => r.VirtualPath.Equals(virtualPath, StringComparison.OrdinalIgnoreCase)));
+		}
+
 		public bool MatchesConsolidatedUrl(string consolidatedUrl)
 		{
 			return Groups.Any(group => group.ConsolidatedUrl.Equals(consolidatedUrl, StringComparison.OrdinalIgnoreCase));
@@ -33,7 +38,7 @@ namespace Assman.TestSupport
 
 		public bool Minify { get; set; }
 
-	    public bool Consolidate { get; set; }
+		public bool Consolidate { get; set; }
 
 		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{

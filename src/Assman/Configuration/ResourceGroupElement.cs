@@ -144,17 +144,12 @@ namespace Assman.Configuration
 			};
 		}
 
-		bool IResourceFilter.IsMatch(IResource resource)
-		{
-			return IsMatch(resource);
-		}
-
-		internal bool IsMatch(IResource resource)
+		public bool IsMatch(IResource resource)
 		{
 			return IsMatch(resource.VirtualPath);
 		}
 
-		internal bool IsMatch(string resourceUrl)
+		public bool IsMatch(string resourceUrl)
 		{
 			return (Include.Count == 0 || Include.IsMatch(resourceUrl))
 				&& !Exclude.IsMatch(resourceUrl);

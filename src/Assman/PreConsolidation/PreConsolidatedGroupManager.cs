@@ -9,9 +9,9 @@ namespace Assman.PreConsolidation
 		private readonly IDictionary<string,string> _resourceUrlMap = new Dictionary<string, string>(Comparers.VirtualPath);
 		private readonly IDictionary<string, IEnumerable<string>> _consolidatedUrlMap = new Dictionary<string,IEnumerable<string>>(Comparers.VirtualPath);
 
-		public PreConsolidatedGroupManager(IEnumerable<PreConsolidatedResourceGroup> preConsolidatedGroups)
+		public PreConsolidatedGroupManager(PreConsolidatedResourceReport resourceReport)
 		{
-			PopulateResourceUrlMap(preConsolidatedGroups);
+			PopulateResourceUrlMap(resourceReport);
 			Consolidate = true;
 		}
 
@@ -67,9 +67,9 @@ namespace Assman.PreConsolidation
 			throw NotSupported();
 		}
 
-		public bool IsPartOfGroup(IResource resource)
+		public bool IsPartOfGroup(string virtualPath)
 		{
-			throw NotSupported();
+			throw new NotImplementedException();
 		}
 
 		public IEnumerable<string> GetGlobalDependencies()
@@ -87,18 +87,23 @@ namespace Assman.PreConsolidation
 			return new NotSupportedException("This method is not supported when resources have been pre-consolidated");
 		}
 
-		private void PopulateResourceUrlMap(IEnumerable<PreConsolidatedResourceGroup> groups)
+		private void PopulateResourceUrlMap(PreConsolidatedResourceReport resourceReport)
 		{
-			var resourceUrlMap = from @group in groups
+			var resourceUrlMap = from @group in resourceReport.Groups
 								 from resourcePath in @group.Resources
 								 select new KeyValuePair<string, string>(resourcePath, @group.ConsolidatedUrl);
 
 			_resourceUrlMap.AddRange(resourceUrlMap);
 
-			foreach (var @group in groups)
+			foreach (var @group in resourceReport.Groups)
 			{
 				_resourceUrlMap.Add(@group.ConsolidatedUrl, @group.ConsolidatedUrl);
 				_consolidatedUrlMap.Add(@group.ConsolidatedUrl, @group.Resources);
+			}
+
+			foreach (var individuallyCompiledResource in resourceReport.SingleResources)
+			{
+				_resourceUrlMap.Add(individuallyCompiledResource.OriginalPath, individuallyCompiledResource.CompiledPath);
 			}
 		}
 	}

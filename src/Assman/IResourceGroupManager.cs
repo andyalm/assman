@@ -27,7 +27,7 @@ namespace Assman
 
 		void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler);
 
-		bool IsPartOfGroup(IResource resource);
+		bool IsPartOfGroup(string virtualPath);
 		
 		IEnumerable<string> GetGlobalDependencies();
 
