@@ -72,25 +72,25 @@ namespace Assman
 			}
 		}
 
-        public void WriteSummaryHeader(Stream outputStream)
-        {
-            var writer = new StreamWriter(outputStream);
-            try
-            {
-                writer.Write("/*");
-                writer.WriteLine("This file consists of content from: ");
-                foreach (var resource in Resources)
-                {
-                    writer.WriteLine("\t" + resource.VirtualPath);
-                }
-            }
-            finally
-            {
-                writer.WriteLine("*/");
-                writer.WriteLine();
-                writer.Flush();
-            }
-        }
+		public void WriteSummaryHeader(Stream outputStream)
+		{
+			var writer = new StreamWriter(outputStream);
+			try
+			{
+				writer.Write("/*");
+				writer.WriteLine("This file consists of content from: ");
+				foreach (var resource in Resources)
+				{
+					writer.WriteLine("\t" + resource.VirtualPath);
+				}
+			}
+			finally
+			{
+				writer.WriteLine("*/");
+				writer.WriteLine();
+				writer.Flush();
+			}
+		}
 
 		#region Equals and HashCode
 

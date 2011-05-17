@@ -4,16 +4,16 @@ namespace Assman.PreConsolidation
 {
 	public class PreConsolidationReport
 	{
-		public List<PreConsolidatedResourceGroup> ScriptGroups { get; set; }
-		public List<PreConsolidatedResourceGroup> StyleGroups { get; set; }
+		public PreConsolidatedResourceReport Scripts { get; set; }
+		public PreConsolidatedResourceReport Stylesheets { get; set; }
 		public List<PreConsolidatedResourceDependencies> Dependencies { get; set; }
 		public string Version { get; set; }
 
 		public PreConsolidationReport()
 		{
 			Version = "";
-			ScriptGroups = new List<PreConsolidatedResourceGroup>();
-			StyleGroups = new List<PreConsolidatedResourceGroup>();
+			Scripts = new PreConsolidatedResourceReport();
+			Stylesheets = new PreConsolidatedResourceReport();
 			Dependencies = new List<PreConsolidatedResourceDependencies>();
 		}
 	}

@@ -98,7 +98,7 @@ namespace Assman
 					 "~/scripts/myscript.js"
 				}
 			};
-			preConsolidationReport.ScriptGroups.Add(scriptGroup);
+			preConsolidationReport.Scripts.Groups.Add(scriptGroup);
 
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
@@ -125,7 +125,7 @@ namespace Assman
 					 "~/scripts/myscript.js"
 				}
 			};
-			preConsolidationReport.ScriptGroups.Add(scriptGroup);
+			preConsolidationReport.Scripts.Groups.Add(scriptGroup);
 
 			_context.LoadPreCompilationReport(preConsolidationReport);
 

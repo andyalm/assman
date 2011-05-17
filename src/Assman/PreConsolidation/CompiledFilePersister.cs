@@ -14,21 +14,21 @@ namespace Assman.PreConsolidation
 	{
 		public static CompiledFilePersister ForWebDirectory(string rootWebDirectory)
 		{
-		    var filePath = Path.Combine(rootWebDirectory, "bin\\Assman.compiled");
-		    var fileAccess = new FileAccessWrapper();
+			var filePath = Path.Combine(rootWebDirectory, "bin\\Assman.compiled");
+			var fileAccess = new FileAccessWrapper();
 			return new CompiledFilePersister(fileAccess, filePath);
 		}
 		
 		private readonly IFileAccess _fileAccess;
-	    private readonly string _filePath;
+		private readonly string _filePath;
 
-	    internal CompiledFilePersister(IFileAccess fileAccess, string filePath)
+		internal CompiledFilePersister(IFileAccess fileAccess, string filePath)
 		{
-		    _fileAccess = fileAccess;
-		    _filePath = filePath;
+			_fileAccess = fileAccess;
+			_filePath = filePath;
 		}
 
-	    public bool TryGetPreConsolidationInfo(out PreConsolidationReport preConsolidationReport)
+		public bool TryGetPreConsolidationInfo(out PreConsolidationReport preConsolidationReport)
 		{
 			if (!_fileAccess.Exists(_filePath))
 			{
@@ -44,8 +44,8 @@ namespace Assman.PreConsolidation
 			}
 			
 			preConsolidationReport.Version = (string) document.Root.Attribute("version");
-			preConsolidationReport.ScriptGroups = CollectResourceGroups(document.Root.Element("scriptGroups")).ToList();
-			preConsolidationReport.StyleGroups = CollectResourceGroups(document.Root.Element("styleGroups")).ToList();
+			preConsolidationReport.Scripts = CollectResourceReport(document.Root.Element("scripts"));
+			preConsolidationReport.Stylesheets = CollectResourceReport(document.Root.Element("stylesheets"));
 			preConsolidationReport.Dependencies = CollectDependencies(document.Root.Element("dependencies")).ToList();
 
 			return true;
@@ -65,8 +65,8 @@ namespace Assman.PreConsolidation
 				{
 					using (writer.Element("preConsolidationReport", version => preConsolidationReport.Version))
 					{
-						WriteResourceGroups(writer, "scriptGroups", preConsolidationReport.ScriptGroups);
-						WriteResourceGroups(writer, "styleGroups", preConsolidationReport.StyleGroups);
+						WriteResourceReport(writer, "scripts", preConsolidationReport.Scripts);
+						WriteResourceReport(writer, "stylesheets", preConsolidationReport.Stylesheets);
 						using(writer.Element("dependencies"))
 						{
 							foreach (var resourceWithDependency in preConsolidationReport.Dependencies)
@@ -85,30 +85,46 @@ namespace Assman.PreConsolidation
 			}
 		}
 
+		private PreConsolidatedResourceReport CollectResourceReport(XElement containerElement)
+		{
+			return new PreConsolidatedResourceReport
+			{
+				Groups = CollectResourceGroups(containerElement.Element("groups")).ToList()
+			};
+		}
+
 		private IEnumerable<PreConsolidatedResourceGroup> CollectResourceGroups(XElement containerElement)
 		{
 			return from groupElement in containerElement.Elements("group")
-			       select new PreConsolidatedResourceGroup
-			       {
-			       	ConsolidatedUrl = (string) groupElement.Attribute("consolidatedUrl"),
+				   select new PreConsolidatedResourceGroup
+				   {
+					ConsolidatedUrl = (string) groupElement.Attribute("consolidatedUrl"),
 					Resources = groupElement.Elements("resource").Select(r => (string)r.Attribute("path")).ToList()
-			       };
+				   };
 		}
 
 		private IEnumerable<PreConsolidatedResourceDependencies> CollectDependencies(XElement containerElement)
 		{
 			return from dependencyElement in containerElement.Elements("resource")
-			       select new PreConsolidatedResourceDependencies
-			       {
-			       	ResourcePath = (string) dependencyElement.Attribute("path"),
-			       	Dependencies = dependencyElement.Elements("dependency").Select(d => (string) d.Attribute("path")).ToList()
-			       };
+				   select new PreConsolidatedResourceDependencies
+				   {
+					ResourcePath = (string) dependencyElement.Attribute("path"),
+					Dependencies = dependencyElement.Elements("dependency").Select(d => (string) d.Attribute("path")).ToList()
+				   };
 		}
 
-		private void WriteResourceGroups(XmlWriter writer, string collectionElementName,
-		                                 IEnumerable<PreConsolidatedResourceGroup> groups)
+		private void WriteResourceReport(XmlWriter writer, string elementName, PreConsolidatedResourceReport resourceReport)
 		{
-			using (writer.Element(collectionElementName))
+			using(writer.Element(elementName))
+			{
+				WriteResourceGroups(writer, resourceReport.Groups);    
+			}
+			
+		}
+
+		private void WriteResourceGroups(XmlWriter writer, IEnumerable<PreConsolidatedResourceGroup> groups)
+		{
+			using (writer.Element("groups"))
 			{
 				foreach (var @group in groups)
 				{

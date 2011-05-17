@@ -51,9 +51,9 @@ namespace Assman
 			_context.ScriptGroups.Add(group1Template);
 			_context.ScriptGroups.Add(group2Template);
 			var consolidator = _context.GetConsolidator();
-			var preConsolidationReport = consolidator.ConsolidateAll((resource, @group) => { }, ResourceMode.Release);
+			var preConsolidationReport = consolidator.ConsolidateAll((resource, @group) => { }, r => {}, ResourceMode.Release);
 
-			var group2Consolidated = preConsolidationReport.ScriptGroups.Where(g => g.ConsolidatedUrl == "~/scripts/everything-else.js").Single();
+			var group2Consolidated = preConsolidationReport.Scripts.Groups.Where(g => g.ConsolidatedUrl == "~/scripts/everything-else.js").Single();
 
 			group2Consolidated.Resources.CountShouldEqual(1);
 			group2Consolidated.Resources[0].ShouldEqual("~/scripts/otherscript.js");

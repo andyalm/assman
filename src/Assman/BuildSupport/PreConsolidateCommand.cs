@@ -4,39 +4,39 @@ using Assman.Configuration;
 
 namespace Assman.BuildSupport
 {
-    /// <summary>
-    /// Consolidates javascript and css resources into fewer files according to the
-    /// resource management configuration in the web.config.
-    /// </summary>
-    public class PreConsolidateCommand
-    {
-        /// <summary>
-        /// Gets an instance of a <see cref="PreConsolidateCommand"/>.
-        /// </summary>
-        /// <param name="webRoot">The full physical path to the the root of the website.</param>
-        /// <returns></returns>
-        public static PreConsolidateCommand GetInstance(string webRoot)
-        {
-            return new PreConsolidateCommand(webRoot);
-        }
+	/// <summary>
+	/// Consolidates javascript and css resources into fewer files according to the
+	/// resource management configuration in the web.config.
+	/// </summary>
+	public class PreConsolidateCommand
+	{
+		/// <summary>
+		/// Gets an instance of a <see cref="PreConsolidateCommand"/>.
+		/// </summary>
+		/// <param name="webRoot">The full physical path to the the root of the website.</param>
+		/// <returns></returns>
+		public static PreConsolidateCommand GetInstance(string webRoot)
+		{
+			return new PreConsolidateCommand(webRoot);
+		}
 
-        private readonly string _websiteRootDirectory;
-        private VirtualPathResolver _resolver;
-        private ILogger _logger = NullLogger.Instance;
-    	
-        private PreConsolidateCommand(string websiteRootDirectory)
-        {
-            _websiteRootDirectory = websiteRootDirectory;
+		private readonly string _websiteRootDirectory;
+		private VirtualPathResolver _resolver;
+		private ILogger _logger = NullLogger.Instance;
+		
+		private PreConsolidateCommand(string websiteRootDirectory)
+		{
+			_websiteRootDirectory = websiteRootDirectory;
 			Mode = ResourceMode.Release;
-        }
+		}
 
-        /// <summary>
-        /// Gets the physical path the the root of the website.
-        /// </summary>
-        public string WebsiteRootDirectory
-        {
-            get { return _websiteRootDirectory; }
-        }
+		/// <summary>
+		/// Gets the physical path the the root of the website.
+		/// </summary>
+		public string WebsiteRootDirectory
+		{
+			get { return _websiteRootDirectory; }
+		}
 
 		/// <summary>
 		/// Indicates whether to consolidate the scripts in Debug or Release mode.
@@ -49,35 +49,35 @@ namespace Assman.BuildSupport
 		/// </summary>
 		public string Version { get; set; }
 
-    	/// <summary>
-        /// Gets or sets the build logger used to log the progress of the command.
-        /// </summary>
-        public ILogger Logger
-        {
-            get { return _logger; }
-            set { _logger = value; }
-        }
+		/// <summary>
+		/// Gets or sets the build logger used to log the progress of the command.
+		/// </summary>
+		public ILogger Logger
+		{
+			get { return _logger; }
+			set { _logger = value; }
+		}
 
-        /// <summary>
-        /// Executes the task.
-        /// </summary>
-        /// <returns></returns>
-        public void Execute()
-        {
-            LogMessage("Begin consolidating resources...");
-            AssmanConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
-            _resolver = GetResolver(configSection.RootFilePath);
+		/// <summary>
+		/// Executes the task.
+		/// </summary>
+		/// <returns></returns>
+		public void Execute()
+		{
+			LogMessage("Begin consolidating resources...");
+			AssmanConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
+			_resolver = GetResolver(configSection.RootFilePath);
 			
 			ConsolidateAll(configSection);
 			
 			LogMessage("End consolidating resources.");
-        }
+		}
 
 		private void ConsolidateAll(AssmanConfiguration configSection)
 		{
 			var context = configSection.BuildContext(usePreConsolidationReportIfPresent: false);
 			var consolidator = context.GetConsolidator();
-			var report = consolidator.ConsolidateAll(WriteConsolidatedResource, Mode);
+			var report = consolidator.ConsolidateAll(WriteConsolidatedResource, WriteCompiledIndividualResource, Mode);
 			report.Version = this.Version ?? DateTime.Now.ToString("yyMMddHHmm");
 			configSection.SavePreConsolidationReport(report);
 		}
@@ -89,33 +89,40 @@ namespace Assman.BuildSupport
 			LogConsolidation(consolidatedResource, group.ConsolidatedUrl);
 		}
 
-        private void LogConsolidation(ConsolidatedResource consolidatedResource, string consolidatedUrl)
-        {
-            LogMessage(String.Format("Consolidating '{0}'...", consolidatedUrl));
-            foreach (IResource resource in consolidatedResource.Resources)
-            {
-                LogMessage(String.Format("\t...from '{0}'", resource.VirtualPath));
-            }
-        }
+		private void WriteCompiledIndividualResource(CompiledResource compiledResource)
+		{
+			string compiledPhysicalPath = _resolver.MapPath(compiledResource.CompiledPath);
+			compiledResource.WriteToFile(compiledPhysicalPath);
+			LogMessage(String.Format("Compiled '{0}'", compiledResource.Resource.VirtualPath));
+		}
 
-        private void LogMessage(string message)
-        {
-            _logger.LogMessage(message);
-        }
+		private void LogConsolidation(ConsolidatedResource consolidatedResource, string consolidatedUrl)
+		{
+			LogMessage(String.Format("Consolidating '{0}'...", consolidatedUrl));
+			foreach (IResource resource in consolidatedResource.Resources)
+			{
+				LogMessage(String.Format("\t...from '{0}'", resource.VirtualPath));
+			}
+		}
 
-        private AssmanConfiguration GetConfigSection(string webRoot)
-        {
-            AssmanConfiguration.ConfigLoader = new MappedConfigLoader(webRoot);
+		private void LogMessage(string message)
+		{
+			_logger.LogMessage(message);
+		}
 
-        	var configSection = AssmanConfiguration.Current;
-            configSection.RootFilePath = webRoot;
+		private AssmanConfiguration GetConfigSection(string webRoot)
+		{
+			AssmanConfiguration.ConfigLoader = new MappedConfigLoader(webRoot);
 
-            return configSection;
-        }
+			var configSection = AssmanConfiguration.Current;
+			configSection.RootFilePath = webRoot;
 
-        private VirtualPathResolver GetResolver(string webRoot)
-        {
-            return VirtualPathResolver.GetInstance(webRoot);
-        }
-    }
+			return configSection;
+		}
+
+		private VirtualPathResolver GetResolver(string webRoot)
+		{
+			return VirtualPathResolver.GetInstance(webRoot);
+		}
+	}
 }

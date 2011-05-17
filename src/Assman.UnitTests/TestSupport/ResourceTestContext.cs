@@ -56,6 +56,17 @@ namespace Assman.TestSupport
 			return group;
 		}
 
+        public StubResourceGroup CreateGroup(string consolidatedUrl, params string[] resourcesInGroup)
+        {
+            var group = CreateGroup(consolidatedUrl);
+            foreach (var resource in resourcesInGroup)
+            {
+                CreateResource(resource).InGroup(group);
+            }
+
+            return group;
+        }
+
 		public bool DependencyProviderWasCalled
 		{
 			get { return _dependencyProvider.GetDependenciesWasCalled; }

@@ -11,25 +11,27 @@ namespace Assman
 
 		bool Any();
 
-        bool Consolidate { get; set; }
+		bool Consolidate { get; set; }
 
-	    string ResolveResourceUrl(string resourceUrl);
+		string ResolveResourceUrl(string resourceUrl);
 
-	    IEnumerable<string> GetResourceUrlsInGroup(string groupUrl, ResourceMode mode, IResourceFinder finder);
-	    
-        bool IsGroupUrlWithConsolidationDisabled(string resourceUrl);
+		IEnumerable<string> GetResourceUrlsInGroup(string groupUrl, ResourceMode mode, IResourceFinder finder);
+		
+		bool IsGroupUrlWithConsolidationDisabled(string resourceUrl);
 
-	    bool IsConsolidatedUrl(string virtualPath);
+		bool IsConsolidatedUrl(string virtualPath);
 
-	    GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl);
+		GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl);
 
-	    IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder);
+		IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder);
 
-	    void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler);
-	    
-        IEnumerable<string> GetGlobalDependencies();
-	    
-        void AddGlobalDependencies(IEnumerable<string> paths);
+		void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler);
+
+		bool IsPartOfGroup(IResource resource);
+		
+		IEnumerable<string> GetGlobalDependencies();
+
+		void AddGlobalDependencies(IEnumerable<string> paths);
 	}
 
 	public static class ResourceGroupManagerExtensions

@@ -12,7 +12,7 @@ namespace Assman.PreConsolidation
 		public PreConsolidatedGroupManager(IEnumerable<PreConsolidatedResourceGroup> preConsolidatedGroups)
 		{
 			PopulateResourceUrlMap(preConsolidatedGroups);
-		    Consolidate = true;
+			Consolidate = true;
 		}
 
 		public void Add(IResourceGroupTemplate template) {}
@@ -22,32 +22,32 @@ namespace Assman.PreConsolidation
 			return true;
 		}
 
-        public bool Consolidate { get; set; }
+		public bool Consolidate { get; set; }
 
-	    public string ResolveResourceUrl(string resourceUrl)
-	    {
-            string resolvedPath;
-            if (_resourceUrlMap.TryGetValue(resourceUrl, out resolvedPath))
-                return resolvedPath;
-            else
-                return resourceUrl;
-	    }
+		public string ResolveResourceUrl(string resourceUrl)
+		{
+			string resolvedPath;
+			if (_resourceUrlMap.TryGetValue(resourceUrl, out resolvedPath))
+				return resolvedPath;
+			else
+				return resourceUrl;
+		}
 
-	    public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
-	    {
-	        return !Consolidate && IsConsolidatedUrl(resourceUrl);
-	    }
+		public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
+		{
+			return !Consolidate && IsConsolidatedUrl(resourceUrl);
+		}
 
-	    public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
-	    {
-	        IEnumerable<string> resourceUrls;
-            if (_consolidatedUrlMap.TryGetValue(consolidatedUrl, out resourceUrls))
-                return resourceUrls;
-            else
-                return Enumerable.Empty<string>();
-	    }
+		public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+		{
+			IEnumerable<string> resourceUrls;
+			if (_consolidatedUrlMap.TryGetValue(consolidatedUrl, out resourceUrls))
+				return resourceUrls;
+			else
+				return Enumerable.Empty<string>();
+		}
 
-	    public bool IsConsolidatedUrl(string virtualPath)
+		public bool IsConsolidatedUrl(string virtualPath)
 		{
 			return _consolidatedUrlMap.ContainsKey(virtualPath);
 		}
@@ -67,17 +67,22 @@ namespace Assman.PreConsolidation
 			throw NotSupported();
 		}
 
-        public IEnumerable<string> GetGlobalDependencies()
-        {
-            throw NotSupported();
-        }
+		public bool IsPartOfGroup(IResource resource)
+		{
+			throw NotSupported();
+		}
 
-	    public void AddGlobalDependencies(IEnumerable<string> paths)
-	    {
-	        //no implementation needed as the global dependencies should have been included for each resource in the pre-consolidation report
-	    }
+		public IEnumerable<string> GetGlobalDependencies()
+		{
+			throw NotSupported();
+		}
 
-	    private Exception NotSupported()
+		public void AddGlobalDependencies(IEnumerable<string> paths)
+		{
+			//no implementation needed as the global dependencies should have been included for each resource in the pre-consolidation report
+		}
+
+		private Exception NotSupported()
 		{
 			return new NotSupportedException("This method is not supported when resources have been pre-consolidated");
 		}
@@ -90,11 +95,11 @@ namespace Assman.PreConsolidation
 
 			_resourceUrlMap.AddRange(resourceUrlMap);
 
-		    foreach (var @group in groups)
-		    {
-		        _resourceUrlMap.Add(@group.ConsolidatedUrl, @group.ConsolidatedUrl);
-                _consolidatedUrlMap.Add(@group.ConsolidatedUrl, @group.Resources);
-		    }
+			foreach (var @group in groups)
+			{
+				_resourceUrlMap.Add(@group.ConsolidatedUrl, @group.ConsolidatedUrl);
+				_consolidatedUrlMap.Add(@group.ConsolidatedUrl, @group.Resources);
+			}
 		}
 	}
 }

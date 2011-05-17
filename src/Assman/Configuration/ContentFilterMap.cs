@@ -26,6 +26,13 @@ namespace Assman.Configuration
 				return NullContentFilterFactory.Instance;
 		}
 
+		public IContentFilter GetFilterForExtension(string fileExtension, ResourceMode resourceMode)
+		{
+			var settings = new ResourceContentSettings { Minify = resourceMode == ResourceMode.Release };
+			var contentFilterFactory = GetFilterFactoryForExtension(fileExtension);
+			return contentFilterFactory.CreateFilter(settings);
+		}
+
 		private void ValidateFileExtensionArgument(string fileExtension)
 		{
 			if(!fileExtension.StartsWith("."))

@@ -85,6 +85,7 @@
     <Compile Include="BuildSupport\MSBuild\PreConsolidateResources.cs" />
     <Compile Include="BuildSupport\NullLogger.cs" />
     <Compile Include="Comparers.cs" />
+    <Compile Include="CompiledResource.cs" />
     <Compile Include="CompositeResourceFilter.cs" />
     <Compile Include="CompositeResourceFinder.cs" />
     <Compile Include="Configuration\AssemblyElement.cs" />
@@ -117,9 +118,11 @@
     <Compile Include="Configuration\MappedConfigLoader.cs" />
     <Compile Include="Configuration\PluginElement.cs" />
     <Compile Include="Configuration\PluginElementCollection.cs" />
+    <Compile Include="PreConsolidation\PreCompiledSingleResource.cs" />
     <Compile Include="PreConsolidation\PreConsolidatedDependencyCache.cs" />
     <Compile Include="PreConsolidation\PreConsolidatedGroupManager.cs" />
     <Compile Include="PreConsolidation\PreConsolidatedResourceDependencies.cs" />
+    <Compile Include="PreConsolidation\PreConsolidatedResourceReport.cs" />
     <Compile Include="PreConsolidation\PreConsolidationReport.cs" />
     <Compile Include="Configuration\PropertyNames.cs" />
     <Compile Include="Configuration\ResourceGroupElement.cs" />

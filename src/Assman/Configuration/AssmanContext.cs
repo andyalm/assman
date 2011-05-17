@@ -37,7 +37,7 @@ namespace Assman.Configuration
 		private IResourceGroupManager _styleGroups;
 		private readonly List<Assembly> _assemblies;
 		private readonly DependencyManager _dependencyManager;
-	    private readonly IResourceModeProvider _resourceModeProvider;
+		private readonly IResourceModeProvider _resourceModeProvider;
 
 		internal AssmanContext()
 		{
@@ -47,22 +47,22 @@ namespace Assman.Configuration
 			_styleGroups = ResourceGroupManager.GetInstance();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
-		    _resourceModeProvider = ConfigDrivenResourceModeProvider.GetInstance();
+			_resourceModeProvider = ConfigDrivenResourceModeProvider.GetInstance();
 		}
 
 		public DateTime ConfigurationLastModified { get; set; }
 		public bool PreConsolidated { get; private set; }
-	    public bool ConsolidateClientScripts
-	    {
-            get { return _scriptGroups.Consolidate; }
-            set { _scriptGroups.Consolidate = value; }
-	    }
+		public bool ConsolidateClientScripts
+		{
+			get { return _scriptGroups.Consolidate; }
+			set { _scriptGroups.Consolidate = value; }
+		}
 
-	    public bool ConsolidateCssFiles
-	    {
-            get { return _styleGroups.Consolidate; }
-            set { _styleGroups.Consolidate = value; }
-	    }
+		public bool ConsolidateCssFiles
+		{
+			get { return _styleGroups.Consolidate; }
+			set { _styleGroups.Consolidate = value; }
+		}
 
 		public bool ManageDependencies { get; set; }
 
@@ -86,6 +86,11 @@ namespace Assman.Configuration
 		public IContentFilterFactory GetFilterFactoryForExtension(string fileExtension)
 		{
 			return _filterMap.GetFilterFactoryForExtension(fileExtension);
+		}
+
+		public IContentFilter GetFilterForExtension(string fileExtension, ResourceMode resourceMode)
+		{
+			return _filterMap.GetFilterForExtension(fileExtension, resourceMode);
 		}
 
 		public void AddFinder(IResourceFinder finder)
@@ -151,8 +156,8 @@ namespace Assman.Configuration
 
 		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
 		{
-			_scriptGroups = new PreConsolidatedGroupManager(preConsolidationReport.ScriptGroups);
-			_styleGroups = new PreConsolidatedGroupManager(preConsolidationReport.StyleGroups);
+			_scriptGroups = new PreConsolidatedGroupManager(preConsolidationReport.Scripts.Groups);
+			_styleGroups = new PreConsolidatedGroupManager(preConsolidationReport.Stylesheets.Groups);
 			_dependencyManager.SetCache(new PreConsolidatedDependencyCache(preConsolidationReport.Dependencies));
 			Version = preConsolidationReport.Version;
 			PreConsolidated = true;
@@ -165,25 +170,25 @@ namespace Assman.Configuration
 
 		private IEnumerable<string> GetResourceUrls(IResourceGroupManager groupManager, string resourceUrl)
 		{
-		    IEnumerable<string> resolvedResourceUrls;
-		    if (groupManager.IsGroupUrlWithConsolidationDisabled(resourceUrl))
-		    {
-		        var resourceMode = _resourceModeProvider.GetCurrentResourceMode();
-		        resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, resourceMode, _finder)
-		            .SortByDependencies(_dependencyManager);
-		    }
-		    else
-		    {
-		        resolvedResourceUrls = new[] {groupManager.ResolveResourceUrl(resourceUrl)};
-		    }
+			IEnumerable<string> resolvedResourceUrls;
+			if (groupManager.IsGroupUrlWithConsolidationDisabled(resourceUrl))
+			{
+				var resourceMode = _resourceModeProvider.GetCurrentResourceMode();
+				resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, resourceMode, _finder)
+					.SortByDependencies(_dependencyManager);
+			}
+			else
+			{
+				resolvedResourceUrls = new[] {groupManager.ResolveResourceUrl(resourceUrl)};
+			}
 
-		    if (!String.IsNullOrEmpty(Version))
-                return resolvedResourceUrls.Select(u => u.AddQueryParam("v", Version));
-            else
-                return resolvedResourceUrls;
+			if (!String.IsNullOrEmpty(Version))
+				return resolvedResourceUrls.Select(u => u.AddQueryParam("v", Version));
+			else
+				return resolvedResourceUrls;
 		}
 
-	    private IResourceGroupManager GroupManagerOfType(ResourceType resourceType)
+		private IResourceGroupManager GroupManagerOfType(ResourceType resourceType)
 		{
 			if (resourceType == ResourceType.Script)
 				return _scriptGroups;

@@ -51,17 +51,78 @@ namespace Assman
 				.Consolidate(createContentFilter, group.ResourceType.Separator);
 		}
 
-		public PreConsolidationReport ConsolidateAll(Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource, ResourceMode mode)
+		public PreConsolidationReport ConsolidateAll(Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource, Action<CompiledResource> handleCompiledIndividualResource, ResourceMode mode)
 		{
 			return new PreConsolidationReport
 			{
-				ScriptGroups = ConsolidateAllInternal(ResourceType.Script, _scriptGroups, mode, handleConsolidatedResource).ToList(),
-				StyleGroups = ConsolidateAllInternal(ResourceType.Stylesheet, _styleGroups, mode, handleConsolidatedResource).ToList(),
+				Scripts = ConsolidateAllResources(ResourceType.Script, mode, handleConsolidatedResource, handleCompiledIndividualResource),
+				Stylesheets = ConsolidateAllResources(ResourceType.Stylesheet, mode, handleConsolidatedResource, handleCompiledIndividualResource),
 				Dependencies = GetAllDependencies(mode).ToList()
 			};
 		}
 
-		private IEnumerable<PreConsolidatedResourceGroup> ConsolidateAllInternal(ResourceType resourceType, IResourceGroupManager groupTemplates, ResourceMode mode, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)
+		public IEnumerable<CompiledResource> CompileUnconsolidatedResources(ResourceType resourceType, ResourceMode resourceMode, Action<CompiledResource> handleCompiledResource)
+		{
+			var resources = _finder.FindResources(resourceType);
+			var groupManager = GroupManagerFor(resourceType);
+
+			var unconsolidatedResources = (from resource in resources
+										  where !groupManager.IsPartOfGroup(resource)
+											&& CanCompileIndividually(resource)
+										  select resource).ToList();
+
+			var compiledResources = new List<CompiledResource>();
+			foreach (var unconsolidatedResource in unconsolidatedResources)
+			{
+				var compiledResource = CompileResource(unconsolidatedResource, resourceMode);
+				handleCompiledResource(compiledResource);
+				compiledResources.Add(compiledResource);
+			}
+
+			return compiledResources;
+		}
+
+		public CompiledResource CompileResource(IResource resource, ResourceMode resourceMode)
+		{
+			var contentFilter = _contentFilterMap.GetFilterForExtension(resource.FileExtension, resourceMode);
+			var compiledContent = contentFilter.FilterContent(resource.GetContent());
+
+			return new CompiledResource
+			{
+				Resource = resource,
+				Mode = resourceMode,
+				CompiledContent = compiledContent
+			};
+		}
+
+		private bool CanCompileIndividually(IResource resource)
+		{
+			//currently we only know how to compile file resources.  In order to compile other resources (e.g. embedded resources)
+			//we would need to figure out how to generate a unique file path to compile it to
+			//this seems like low priority, but will reconsider later
+			return resource.VirtualPath.StartsWith("~/");
+		}
+
+		private PreConsolidatedResourceReport ConsolidateAllResources(ResourceType resourceType, ResourceMode mode, Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource, Action<CompiledResource> handleCompiledIndividualResource)
+		{
+			var groupManager = GroupManagerFor(resourceType);
+
+			return new PreConsolidatedResourceReport
+			{
+				Groups = ConsolidateGroupsInternal(resourceType, groupManager, mode, handleConsolidatedResource).ToList(),
+				SingleResources = CompileUnconsolidatedResources(resourceType, mode, handleCompiledIndividualResource)
+					.Select(r => new PreCompiledSingleResource
+					{
+						OriginalPath = r.Resource.VirtualPath,
+						CompiledPath = r.CompiledPath
+					}).ToList()
+			};
+		}
+
+		private IEnumerable<PreConsolidatedResourceGroup> ConsolidateGroupsInternal(ResourceType resourceType,
+																				 IResourceGroupManager groupTemplates,
+																				 ResourceMode mode,
+																				 Action<ConsolidatedResource, IResourceGroup> handleConsolidatedResource)
 		{
 			if (!groupTemplates.Any())
 				return Enumerable.Empty<PreConsolidatedResourceGroup>();
@@ -106,10 +167,21 @@ namespace Assman
 												   Dependencies = dependencies.ToList()
 											   };
 
-			return scriptDependenciesByConsolidatedUrl.Union(styleDependenciesByConsolidatedUrl).Union(specificResourceDependencies);
+			return
+				scriptDependenciesByConsolidatedUrl.Union(styleDependenciesByConsolidatedUrl).Union(
+					specificResourceDependencies);
 		}
 
-		private IEnumerable<PreConsolidatedResourceDependencies> GetDependenciesForConsolidatedUrls(IResourceGroupManager groupTemplates, IEnumerable<IResource> allResources, ResourceMode mode)
+		private IResourceGroupManager GroupManagerFor(ResourceType resourceType)
+		{
+			if (resourceType == ResourceType.Stylesheet)
+				return _styleGroups;
+			else
+				return _scriptGroups;
+		}
+
+		private IEnumerable<PreConsolidatedResourceDependencies> GetDependenciesForConsolidatedUrls(
+			IResourceGroupManager groupTemplates, IEnumerable<IResource> allResources, ResourceMode mode)
 		{
 			var preConsolidatedDependencies = new List<PreConsolidatedResourceDependencies>();
 

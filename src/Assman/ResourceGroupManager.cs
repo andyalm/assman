@@ -12,12 +12,12 @@ namespace Assman
 		}
 		
 		private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
-        private readonly List<string> _globalDependencies = new List<string>();
+		private readonly List<string> _globalDependencies = new List<string>();
 
-	    public ResourceGroupManager()
-	    {
-	        Consolidate = true;
-	    }
+		public ResourceGroupManager()
+		{
+			Consolidate = true;
+		}
 
 		public void Add(IResourceGroupTemplate template)
 		{
@@ -34,42 +34,42 @@ namespace Assman
 			return _templates.Any();
 		}
 
-        public bool Consolidate { get; set; }
+		public bool Consolidate { get; set; }
 
-	    public string ResolveResourceUrl(string resourceUrl)
-	    {
-            if (!Consolidate)
-                return resourceUrl;
-            
-            foreach (var groupTemplate in _templates)
-            {
-                string consolidatedUrl;
-                if (groupTemplate.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
-                {
-                    return consolidatedUrl;
-                }
-            }
+		public string ResolveResourceUrl(string resourceUrl)
+		{
+			if (!Consolidate)
+				return resourceUrl;
+			
+			foreach (var groupTemplate in _templates)
+			{
+				string consolidatedUrl;
+				if (groupTemplate.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
+				{
+					return consolidatedUrl;
+				}
+			}
 
-            return resourceUrl;
-	    }
+			return resourceUrl;
+		}
 
-	    public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
-	    {
-	        var groupTemplate = GetGroupTemplateOrDefault(resourceUrl);
+		public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
+		{
+			var groupTemplate = GetGroupTemplateOrDefault(resourceUrl);
 
-	        return groupTemplate != null && (!Consolidate || !groupTemplate.GroupTemplate.Consolidate);
-	    }
+			return groupTemplate != null && (!Consolidate || !groupTemplate.GroupTemplate.Consolidate);
+		}
 
-	    public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
-	    {
-            var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
-            if (group == null)
-                return Enumerable.Empty<string>();
-            else
-                return group.GetResources().Select(r => r.VirtualPath);
-	    }
+		public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+		{
+			var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
+			if (group == null)
+				return Enumerable.Empty<string>();
+			else
+				return group.GetResources().Select(r => r.VirtualPath);
+		}
 
-	    public bool IsConsolidatedUrl(string virtualPath)
+		public bool IsConsolidatedUrl(string virtualPath)
 		{
 			return _templates.Any(t => t.MatchesConsolidatedUrl(virtualPath));
 		}
@@ -117,17 +117,22 @@ namespace Assman
 			});
 		}
 
-	    public IEnumerable<string> GetGlobalDependencies()
-	    {
-	        return _globalDependencies;
-	    }
+		public bool IsPartOfGroup(IResource resource)
+		{
+			return _templates.Any(t => t.IsMatch(resource));
+		}
 
-	    public void AddGlobalDependencies(IEnumerable<string> paths)
-	    {
-	        _globalDependencies.AddRange(paths);
-	    }
+		public IEnumerable<string> GetGlobalDependencies()
+		{
+			return _globalDependencies;
+		}
 
-	    private void EachTemplate(Func<GroupTemplateContext,bool> handler)
+		public void AddGlobalDependencies(IEnumerable<string> paths)
+		{
+			_globalDependencies.AddRange(paths);
+		}
+
+		private void EachTemplate(Func<GroupTemplateContext,bool> handler)
 		{
 			var excludeFilter = new CompositeResourceFilter();
 			//add a filter to exclude all resources that match the consolidated url of a group
@@ -184,45 +189,45 @@ namespace Assman
 				return _inner.Any();
 			}
 
-		    public bool Consolidate
-		    {
-                get { return _inner.Consolidate; }
-                set { _inner.Consolidate = value; }
-		    }
+			public bool Consolidate
+			{
+				get { return _inner.Consolidate; }
+				set { _inner.Consolidate = value; }
+			}
 
-		    public string ResolveResourceUrl(string resourceUrl)
-		    {
-                var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl, () => _inner.ResolveResourceUrl(resourceUrl));
-                return AppendCacheKey(resolvedUrl);
-		    }
+			public string ResolveResourceUrl(string resourceUrl)
+			{
+				var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl, () => _inner.ResolveResourceUrl(resourceUrl));
+				return AppendCacheKey(resolvedUrl);
+			}
 
-		    public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
-		    {
-		        return _inner.IsGroupUrlWithConsolidationDisabled(resourceUrl);
-		    }
+			public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
+			{
+				return _inner.IsGroupUrlWithConsolidationDisabled(resourceUrl);
+			}
 
-		    public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
-		    {
-		        //NOTE: This is basically a duplication of the implementation in _inner.GetResourceUrlsInGroup, but we don't delegate
-                //to it because then it would bypass the _resourceCache
-                var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
-                if (group == null)
-                    return Enumerable.Empty<string>();
-                else
-                    return group.GetResources().Select(r => AppendCacheKey(r.VirtualPath));
-		    }
+			public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+			{
+				//NOTE: This is basically a duplication of the implementation in _inner.GetResourceUrlsInGroup, but we don't delegate
+				//to it because then it would bypass the _resourceCache
+				var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
+				if (group == null)
+					return Enumerable.Empty<string>();
+				else
+					return group.GetResources().Select(r => AppendCacheKey(r.VirtualPath));
+			}
 
-		    public bool IsConsolidatedUrl(string virtualPath)
+			public bool IsConsolidatedUrl(string virtualPath)
 			{
 				return _inner.IsConsolidatedUrl(virtualPath);
 			}
 
-		    public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
+			public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
 			{
 				return _inner.GetGroupTemplateOrDefault(consolidatedUrl);
 			}
 
-		    public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+			public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
 			{
 				return _resourceCache.GetOrAddGroup(consolidatedUrl, mode, () =>
 				{
@@ -230,30 +235,35 @@ namespace Assman
 				});
 			}
 
-		    public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
+			public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
 			{
 				_inner.EachGroup(allResources, mode, handler);
 			}
 
-		    public IEnumerable<string> GetGlobalDependencies()
-		    {
-		        return _inner.GetGlobalDependencies();
-		    }
+			public bool IsPartOfGroup(IResource resource)
+			{
+				return _inner.IsPartOfGroup(resource);
+			}
 
-		    public void AddGlobalDependencies(IEnumerable<string> paths)
-		    {
-		        _inner.AddGlobalDependencies(paths);
-		    }
+			public IEnumerable<string> GetGlobalDependencies()
+			{
+				return _inner.GetGlobalDependencies();
+			}
 
-		    private string AppendCacheKey(string resourceUrl)
-            {
-		        var resourceCacheKey = _resourceCache.CurrentCacheKey;
+			public void AddGlobalDependencies(IEnumerable<string> paths)
+			{
+				_inner.AddGlobalDependencies(paths);
+			}
 
-		        if (!String.IsNullOrEmpty(resourceCacheKey))
-		            return resourceUrl.AddQueryParam(AspNetShortLivedResourceCache.QueryStringKey, resourceCacheKey);
-		        else
-		            return resourceUrl;
-		    }
+			private string AppendCacheKey(string resourceUrl)
+			{
+				var resourceCacheKey = _resourceCache.CurrentCacheKey;
+
+				if (!String.IsNullOrEmpty(resourceCacheKey))
+					return resourceUrl.AddQueryParam(AspNetShortLivedResourceCache.QueryStringKey, resourceCacheKey);
+				else
+					return resourceUrl;
+			}
 		}
 	}
 }

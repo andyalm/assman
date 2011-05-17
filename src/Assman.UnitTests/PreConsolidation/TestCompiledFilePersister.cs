@@ -26,35 +26,41 @@ namespace Assman.PreConsolidation
 		{
 			var report = new PreConsolidationReport
 			{
-				ScriptGroups = new List<PreConsolidatedResourceGroup>
+				Scripts = new PreConsolidatedResourceReport
 				{
-					new PreConsolidatedResourceGroup
+					Groups = new List<PreConsolidatedResourceGroup>
 					{
-						ConsolidatedUrl = "~/scripts/consolidated/common.js",
-						Resources = new List<string>
+						new PreConsolidatedResourceGroup
 						{
-							"~/scripts/jquery.js",
-							"~/scripts/myscript1.js"
-						}
-					},
-					new PreConsolidatedResourceGroup
-					{
-						ConsolidatedUrl = "~/scripts/consolidated/search.js",
-						Resources = new List<string>
+							ConsolidatedUrl = "~/scripts/consolidated/common.js",
+							Resources = new List<string>
+							{
+								"~/scripts/jquery.js",
+								"~/scripts/myscript1.js"
+							}
+						},
+						new PreConsolidatedResourceGroup
 						{
-							"~/Views/Search/Index.js"
+							ConsolidatedUrl = "~/scripts/consolidated/search.js",
+							Resources = new List<string>
+							{
+								"~/Views/Search/Index.js"
+							}
 						}
 					}
 				},
-				StyleGroups = new List<PreConsolidatedResourceGroup>
+				Stylesheets = new PreConsolidatedResourceReport
 				{
-					new PreConsolidatedResourceGroup
+					Groups = new List<PreConsolidatedResourceGroup>
 					{
-						ConsolidatedUrl = "~/Content/consolidated.css",
-						Resources = new List<string>
+						new PreConsolidatedResourceGroup
 						{
-							"~/Content/Site.css",
-							"~/Views/Search/Search.css"
+							ConsolidatedUrl = "~/Content/consolidated.css",
+							Resources = new List<string>
+							{
+								"~/Content/Site.css",
+								"~/Views/Search/Search.css"
+							}
 						}
 					}
 				},
@@ -86,8 +92,8 @@ namespace Assman.PreConsolidation
 			PreConsolidationReport deserializedReport;
 			_persister.TryGetPreConsolidationInfo(out deserializedReport).ShouldBeTrue();
 
-			ResourceGroupsShouldBeEqual(report.ScriptGroups, deserializedReport.ScriptGroups);
-			ResourceGroupsShouldBeEqual(report.StyleGroups, deserializedReport.StyleGroups);
+			ResourceGroupsShouldBeEqual(report.Scripts.Groups, deserializedReport.Scripts.Groups);
+			ResourceGroupsShouldBeEqual(report.Stylesheets.Groups, deserializedReport.Stylesheets.Groups);
 			ResourceDependenciesShouldBeEqual(report.Dependencies, deserializedReport.Dependencies);
 			report.Version.ShouldEqual(deserializedReport.Version);
 		}

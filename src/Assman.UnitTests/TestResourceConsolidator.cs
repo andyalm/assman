@@ -47,13 +47,31 @@ namespace Assman
 			var accountIndex = _context.CreateResource("~/Views/Account/Index.js")
 				.WithDependencies(myothercomponent).Resource;
 
-			var preConsolidatedReport = _consolidator.ConsolidateAll((resource, @group) => { }, ResourceMode.Release);
+			var preConsolidatedReport = _consolidator.ConsolidateAll((resource, @group) => { }, r => {}, ResourceMode.Release);
 			var homeGroupDepends = preConsolidatedReport.Dependencies.ShouldContain(d => d.ResourcePath == homeGroup.ConsolidatedUrl);
 			
 			homeGroupDepends.Dependencies.CountShouldEqual(3);
 			homeGroupDepends.Dependencies[0].ShouldEqual(jquery.VirtualPath);
 			homeGroupDepends.Dependencies[1].ShouldEqual(site.VirtualPath);
 			homeGroupDepends.Dependencies[2].ShouldEqual(mycomponent.VirtualPath);
+		}
+
+		[Test]
+		public void WhenPreConsolidatedReportIsGenerated_UnconsolidatedResourcesAreIncluded()
+		{
+			_context.CreateGroup("~/group1.js", "~/file1.js", "~/file2.js");
+			_context.CreateGroup("~/group2.js", "~/file3.js", "~/file4.js");
+
+			_context.CreateResource("~/file5.js");
+			_context.CreateResource("~/file6.js");
+
+			var report = _consolidator.ConsolidateAll((r, g) => { }, r => {}, ResourceMode.Release);
+
+			report.Scripts.SingleResources.CountShouldEqual(2);
+			report.Scripts.SingleResources[0].OriginalPath.ShouldEqual("~/file5.js");
+			report.Scripts.SingleResources[0].CompiledPath.ShouldEqual("~/file5.min.js");
+			report.Scripts.SingleResources[1].OriginalPath.ShouldEqual("~/file6.js");
+			report.Scripts.SingleResources[1].CompiledPath.ShouldEqual("~/file6.min.js");
 		}
 
 		[Test]
@@ -103,6 +121,28 @@ namespace Assman
 			resources[0].VirtualPath.ShouldEqual("~/dependency-root.js");
 			resources[1].VirtualPath.ShouldEqual("~/dependency-middle.js");
 			resources[2].VirtualPath.ShouldEqual("~/dependency-leaf.js");
+		}
+
+		[Test]
+		public void CompileUnconsolidatedResourcesOnlyCompilesUnconsolidatedResources()
+		{
+			var group = _context.CreateGroup("~/consolidated.js");
+
+			_context.CreateResource("~/file1.js")
+				.InGroup(group);
+			_context.CreateResource("~/file2.js")
+				.InGroup(group);
+			_context.CreateResource("~/file3.js")
+				.InGroup(group);
+
+			var unconsolidatedResource1 = _context.CreateResource("~/unconsolidated1.js").Resource;
+			var unconsolidatedResource2 = _context.CreateResource("~/unconsolidated2.js").Resource;
+
+			var unconsolidatedResourceCompilations = _consolidator.CompileUnconsolidatedResources(ResourceType.Script, ResourceMode.Debug, r => {}).ToList();
+
+			unconsolidatedResourceCompilations.CountShouldEqual(2);
+			unconsolidatedResourceCompilations[0].Resource.VirtualPath.ShouldEqual(unconsolidatedResource1.VirtualPath);
+			unconsolidatedResourceCompilations[1].Resource.VirtualPath.ShouldEqual(unconsolidatedResource2.VirtualPath);
 		}
 
 		private IResourceFilter ToFilter(Predicate<IResource> predicate)
