@@ -47,7 +47,20 @@ namespace Assman.PreConsolidation
 								"~/Views/Search/Index.js"
 							}
 						}
-					}
+					},
+                    SingleResources = new List<PreCompiledSingleResource>
+                    {
+                        new PreCompiledSingleResource
+                        {
+                            OriginalPath = "~/unconsolidatedfile1.js",
+                            CompiledPath = "~/unconsolidatedfile1.min.js"
+                        },
+                        new PreCompiledSingleResource
+                        {
+                            OriginalPath = "~/unconsolidatedfile2.js",
+                            CompiledPath = "~/unconsolidatedfile2.min.js"
+                        }
+                    }
 				},
 				Stylesheets = new PreConsolidatedResourceReport
 				{
@@ -92,13 +105,24 @@ namespace Assman.PreConsolidation
 			PreConsolidationReport deserializedReport;
 			_persister.TryGetPreConsolidationInfo(out deserializedReport).ShouldBeTrue();
 
-			ResourceGroupsShouldBeEqual(report.Scripts.Groups, deserializedReport.Scripts.Groups);
-			ResourceGroupsShouldBeEqual(report.Stylesheets.Groups, deserializedReport.Stylesheets.Groups);
+		    ResourceReportShouldBeEqual(report.Scripts, deserializedReport.Scripts);
+		    ResourceReportShouldBeEqual(report.Stylesheets, deserializedReport.Stylesheets);
 			ResourceDependenciesShouldBeEqual(report.Dependencies, deserializedReport.Dependencies);
 			report.Version.ShouldEqual(deserializedReport.Version);
 		}
 
-		private void ResourceGroupsShouldBeEqual(List<PreConsolidatedResourceGroup> groups1, List<PreConsolidatedResourceGroup> groups2)
+	    private void ResourceReportShouldBeEqual(PreConsolidatedResourceReport resourceReport1, PreConsolidatedResourceReport resourceReport2)
+	    {
+	        ResourceGroupsShouldBeEqual(resourceReport1.Groups, resourceReport2.Groups);
+            resourceReport1.SingleResources.CountShouldEqual(resourceReport2.SingleResources.Count);
+	        for (int i = 0; i < resourceReport1.SingleResources.Count; i++)
+	        {
+	            resourceReport1.SingleResources[i].OriginalPath.ShouldEqual(resourceReport2.SingleResources[i].OriginalPath);
+	            resourceReport1.SingleResources[i].CompiledPath.ShouldEqual(resourceReport2.SingleResources[i].CompiledPath);
+	        }
+	    }
+
+	    private void ResourceGroupsShouldBeEqual(List<PreConsolidatedResourceGroup> groups1, List<PreConsolidatedResourceGroup> groups2)
 		{
 			groups1.CountShouldEqual(groups2.Count);
 			for (int i = 0; i < groups1.Count; i++)
