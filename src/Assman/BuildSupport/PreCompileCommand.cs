@@ -8,23 +8,23 @@ namespace Assman.BuildSupport
 	/// Consolidates javascript and css resources into fewer files according to the
 	/// resource management configuration in the web.config.
 	/// </summary>
-	public class PreConsolidateCommand
+	public class PreCompileCommand
 	{
 		/// <summary>
-		/// Gets an instance of a <see cref="PreConsolidateCommand"/>.
+		/// Gets an instance of a <see cref="PreCompileCommand"/>.
 		/// </summary>
 		/// <param name="webRoot">The full physical path to the the root of the website.</param>
 		/// <returns></returns>
-		public static PreConsolidateCommand GetInstance(string webRoot)
+		public static PreCompileCommand GetInstance(string webRoot)
 		{
-			return new PreConsolidateCommand(webRoot);
+			return new PreCompileCommand(webRoot);
 		}
 
 		private readonly string _websiteRootDirectory;
 		private VirtualPathResolver _resolver;
 		private ILogger _logger = NullLogger.Instance;
 		
-		private PreConsolidateCommand(string websiteRootDirectory)
+		private PreCompileCommand(string websiteRootDirectory)
 		{
 			_websiteRootDirectory = websiteRootDirectory;
 			Mode = ResourceMode.Release;

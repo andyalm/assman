@@ -27,7 +27,7 @@ namespace Assman
 
         public DateTime LastModified
         {
-            get { return new DateTime(); }
+            get { return Resource.LastModified; }
         }
 
         public IEnumerable<IResource> Resources
@@ -35,7 +35,12 @@ namespace Assman
             get { yield return Resource; }
         }
 
-        public void WriteTo(Stream outputStream) {}
+        public void WriteTo(Stream outputStream)
+        {
+            var writer = new StreamWriter(outputStream);
+            writer.Write(CompiledContent);
+            writer.Flush();
+        }
 
         private string CalculateCompiledPath()
         {
@@ -44,7 +49,7 @@ namespace Assman
             var lastDotIndex = Resource.VirtualPath.LastIndexOf(".");
             var baseName = Resource.VirtualPath.Substring(0, lastDotIndex);
 
-            return baseName + ".min" + resourceType.DefaultFileExtension;
+            return baseName + ".compiled" + resourceType.DefaultFileExtension;
         }
     }
 }

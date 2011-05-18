@@ -147,10 +147,12 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target> -->
-  <UsingTask TaskName="PreConsolidateResources" AssemblyFile="bin\Assman.dll" />
   <Target Name="AfterBuild">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)" Condition="'$(MvcBuildViews)'=='true'" />
-    <PreConsolidateResources WebRoot="$(MSBuildProjectDirectory)" Condition="$(Configuration)=='Release'" />
+  </Target>
+  <UsingTask TaskName="PreCompileResources" AssemblyFile="bin\Assman.dll" />
+  <Target Name="PreCompileResources" AfterTargets="AfterBuild">
+	<PreCompileResources WebRoot="$(MSBuildProjectDirectory)" Condition="$(Configuration)=='Release'" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>

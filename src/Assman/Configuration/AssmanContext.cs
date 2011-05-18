@@ -41,11 +41,14 @@ namespace Assman.Configuration
 
 		internal AssmanContext()
 		{
-			_finder = new CompositeResourceFinder();
-			_filterMap = new ContentFilterMap();
-			_scriptGroups = ResourceGroupManager.GetInstance();
-			_styleGroups = ResourceGroupManager.GetInstance();
-			_assemblies = new List<Assembly>();
+		    _scriptGroups = ResourceGroupManager.GetInstance();
+		    _styleGroups = ResourceGroupManager.GetInstance();
+		    _finder = new CompositeResourceFinder();
+		    _finder.Exclude(new ConsolidatedResourceExcluder(_scriptGroups));
+		    _finder.Exclude(new ConsolidatedResourceExcluder(_styleGroups));
+		    _finder.Exclude(new PreCompiledResourceExcluder());
+		    _filterMap = new ContentFilterMap();
+		    _assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
 			_resourceModeProvider = ConfigDrivenResourceModeProvider.GetInstance();
 		}

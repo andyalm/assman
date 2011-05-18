@@ -82,9 +82,11 @@
     <Compile Include="AspNetShortLivedResourceCache.cs" />
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="BuildSupport\ILogger.cs" />
-    <Compile Include="BuildSupport\MSBuild\PreConsolidateResources.cs" />
+    <Compile Include="BuildSupport\MSBuild\PreCompileResources.cs" />
     <Compile Include="BuildSupport\NullLogger.cs" />
     <Compile Include="Comparers.cs" />
+    <Compile Include="ConsolidatedResourceExcluder.cs" />
+    <Compile Include="IFinderExcluder.cs" />
     <Compile Include="IndividuallyCompiledResource.cs" />
     <Compile Include="CompositeResourceFilter.cs" />
     <Compile Include="CompositeResourceFinder.cs" />
@@ -131,7 +133,7 @@
     <Compile Include="Configuration\AssmanContext.cs" />
     <Compile Include="Configuration\ResourceMatchElement.cs" />
     <Compile Include="Configuration\ResourceMatchElementCollection.cs" />
-    <Compile Include="BuildSupport\PreConsolidateCommand.cs" />
+    <Compile Include="BuildSupport\PreCompileCommand.cs" />
     <Compile Include="ConsolidatedResource.cs" />
     <Compile Include="ContentFiltering\JSMinContentFilterFactory.cs" />
     <Compile Include="ContentFiltering\JSMin\JavaScriptMinifier.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="IResourceGroupTemplate.cs" />
     <Compile Include="PathResourceMatch.cs" />
     <Compile Include="PreCompilation\PreCompiledResourceGroup.cs" />
+    <Compile Include="PreCompiledResourceExcluder.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistryAccessor.cs" />
     <Compile Include="Registration\DependencyResolvingResourceRegistry.cs" />

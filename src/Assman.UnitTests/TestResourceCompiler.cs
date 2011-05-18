@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Assman
 {
 	[TestFixture]
-	public class TestResourceConsolidator
+	public class TestResourceCompiler
 	{
 		private ResourceTestContext _context;
 		private ResourceCompiler _compiler;
@@ -73,6 +73,12 @@ namespace Assman
 			report.Scripts.SingleResources[1].OriginalPath.ShouldEqual("~/file6.js");
 			report.Scripts.SingleResources[1].CompiledPath.ShouldEqual("~/file6.min.js");
 		}
+
+	    [Test]
+	    public void WhenPreConsolidetedReportIsGenerated_CompiledFilesAreNot()
+	    {
+	        
+	    }
 
 		[Test]
 		public void ConsolidateGroupExcludesResourcesMatchingGivenExcludeFilter()

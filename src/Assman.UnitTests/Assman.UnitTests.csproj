@@ -100,7 +100,7 @@
     <Compile Include="TestEmbeddedResource.cs" />
     <Compile Include="TestEmbeddedResourceFinder.cs" />
     <Compile Include="TestPluginElement.cs" />
-    <Compile Include="TestResourceConsolidator.cs" />
+    <Compile Include="TestResourceCompiler.cs" />
     <Compile Include="TestResourceHttpHandlerFactory.cs" />
     <Compile Include="TestAssmanContext.cs" />
     <Compile Include="TestAssmanContext_GetResourceUrl.cs" />
