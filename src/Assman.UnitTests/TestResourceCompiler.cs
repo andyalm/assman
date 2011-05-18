@@ -69,9 +69,9 @@ namespace Assman
 
 			report.Scripts.SingleResources.CountShouldEqual(2);
 			report.Scripts.SingleResources[0].OriginalPath.ShouldEqual("~/file5.js");
-			report.Scripts.SingleResources[0].CompiledPath.ShouldEqual("~/file5.min.js");
+			report.Scripts.SingleResources[0].CompiledPath.ShouldEqual("~/file5.compiled.js");
 			report.Scripts.SingleResources[1].OriginalPath.ShouldEqual("~/file6.js");
-			report.Scripts.SingleResources[1].CompiledPath.ShouldEqual("~/file6.min.js");
+			report.Scripts.SingleResources[1].CompiledPath.ShouldEqual("~/file6.compiled.js");
 		}
 
 	    [Test]
