@@ -1,6 +1,6 @@
 using System;
 
-namespace Assman.PreConsolidation
+namespace Assman.PreCompilation
 {
     public class PreCompiledSingleResource
     {

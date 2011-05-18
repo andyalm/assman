@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assman.Configuration;
+using Assman.PreCompilation;
 using Assman.PreConsolidation;
 
 using Moq;
@@ -39,7 +40,7 @@ namespace Assman
 		[Test]
 		public void WhenPreConsolidationReportIsLoaded_PreConsolidatedFlagIsSetToTrue()
 		{
-			var preConsolidationReport = new PreConsolidationReport();
+			var preConsolidationReport = new PreCompilationReport();
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
 			_context.PreConsolidated.ShouldBeTrue();
@@ -48,7 +49,7 @@ namespace Assman
 		[Test]
 		public void WhenPreConsolidationReportIsLoaded_VersionIsSet()
 		{
-			var preConsolidationReport = new PreConsolidationReport
+			var preConsolidationReport = new PreCompilationReport
 			{
 				Version = "311"
 			};
@@ -60,11 +61,11 @@ namespace Assman
 		[Test]
 		public void WhenPreConsolidatedReportIsLoaded_DependenciesAreCachedSoThatDependencyProviderIsNotCalled()
 		{
-			var preConsolidationReport = new PreConsolidationReport
+			var preConsolidationReport = new PreCompilationReport
 			{
-				Dependencies = new List<PreConsolidatedResourceDependencies>
+				Dependencies = new List<PreCompiledResourceDependencies>
 				{
-					new PreConsolidatedResourceDependencies
+					new PreCompiledResourceDependencies
 					{
 						ResourcePath = "~/scripts/myscript.js",
 						Dependencies = new List<string>
@@ -89,8 +90,8 @@ namespace Assman
 			var groupTemplate = new Mock<IResourceGroupTemplate>();
 			_context.ScriptGroups.Add(groupTemplate.Object);
 
-			var preConsolidationReport = new PreConsolidationReport();
-			var scriptGroup = new PreConsolidatedResourceGroup
+			var preConsolidationReport = new PreCompilationReport();
+			var scriptGroup = new PreCompiledResourceGroup
 			{
 				ConsolidatedUrl = "~/scripts/consolidated/common.js",
 				Resources = new List<string>
@@ -113,9 +114,9 @@ namespace Assman
 		[Test]
 		public void WhenPreConsolidatedReportIsLoaded_ResourceUrlCacheIsPrepopulatedWithIndividuallyCompiledResources()
 		{
-			var preConsolidationReport = new PreConsolidationReport
+			var preConsolidationReport = new PreCompilationReport
 			{
-				Scripts = new PreConsolidatedResourceReport
+				Scripts = new PreCompiledResourceReport
 				{
 					SingleResources = new List<PreCompiledSingleResource>
 					{
@@ -139,8 +140,8 @@ namespace Assman
 			var groupTemplate = new Mock<IResourceGroupTemplate>();
 			_context.ScriptGroups.Add(groupTemplate.Object);
 
-			var preConsolidationReport = new PreConsolidationReport();
-			var scriptGroup = new PreConsolidatedResourceGroup
+			var preConsolidationReport = new PreCompilationReport();
+			var scriptGroup = new PreCompiledResourceGroup
 			{
 				ConsolidatedUrl = "~/scripts/consolidated/common.js",
 				Resources = new List<string>

@@ -6,16 +6,16 @@ namespace Assman.Handlers
 	internal class ConsolidatedResourceHandler : ResourceHandlerBase
 	{
 		private readonly string _path;
-		private readonly ResourceConsolidator _consolidator;
+		private readonly ResourceCompiler _compiler;
 		private readonly GroupTemplateContext _groupTemplateContext;
 		private ResourceMode _resourceMode;
 		private DateTime _minLastModified = DateTime.MinValue;
-		private ConsolidatedResource _cachedConsolidatedResource;
+		private ICompiledResource _cachedConsolidatedResource;
 
-		public ConsolidatedResourceHandler(string path, ResourceConsolidator consolidator, GroupTemplateContext groupTemplateContext, ResourceMode resourceMode)
+		public ConsolidatedResourceHandler(string path, ResourceCompiler compiler, GroupTemplateContext groupTemplateContext, ResourceMode resourceMode)
 		{
 			_path = path;
-			_consolidator = consolidator;
+			_compiler = compiler;
 			_groupTemplateContext = groupTemplateContext;
 			_resourceMode = resourceMode;
 		}
@@ -39,14 +39,14 @@ namespace Assman.Handlers
 			return new ConsolidatedHandlerResource(consolidatedResource, ResourceMode, MinLastModified, _groupTemplateContext.ResourceType);
 		}
 
-		private ConsolidatedResource GetConsolidatedResource()
+		private ICompiledResource GetConsolidatedResource()
 		{
 			if(_cachedConsolidatedResource != null)
 			{
 				return _cachedConsolidatedResource;
 			}
 
-			var consolidatedResource = _consolidator.ConsolidateGroup(_path, _groupTemplateContext, _resourceMode);
+			var consolidatedResource = _compiler.CompileGroup(_path, _groupTemplateContext, _resourceMode);
 			if(CachingEnabled)
 			{
 				_cachedConsolidatedResource = consolidatedResource;
@@ -67,15 +67,15 @@ namespace Assman.Handlers
 
 		private class ConsolidatedHandlerResource : IHandlerResource
 		{
-			private readonly ConsolidatedResource _resource;
+			private readonly ICompiledResource _compiledResource;
 			private readonly ResourceMode _resourceMode;
 			private readonly DateTime _minLastModified;
 			private readonly ResourceType _resourceType;
 
-			public ConsolidatedHandlerResource(ConsolidatedResource resource, ResourceMode resourceMode,
+			public ConsolidatedHandlerResource(ICompiledResource compiledResource, ResourceMode resourceMode,
 											   DateTime minLastModified, ResourceType resourceType)
 			{
-				_resource = resource;
+				_compiledResource = compiledResource;
 				_resourceMode = resourceMode;
 				_minLastModified = minLastModified;
 				_resourceType = resourceType;
@@ -83,7 +83,7 @@ namespace Assman.Handlers
 
 			public DateTime GetLastModified()
 			{
-				var lastModified = _resource.LastModified;
+				var lastModified = _compiledResource.LastModified;
 				if (lastModified < _minLastModified)
 					lastModified = _minLastModified;
 
@@ -99,11 +99,31 @@ namespace Assman.Handlers
 			{
 				if (_resourceMode == ResourceMode.Debug)
 				{
-					_resource.WriteSummaryHeader(outputStream);
+					WriteSummaryHeader(outputStream);
 				}
 
-				_resource.WriteTo(outputStream);
+				_compiledResource.WriteTo(outputStream);
 			}
+
+            private void WriteSummaryHeader(Stream outputStream)
+            {
+                var writer = new StreamWriter(outputStream);
+                try
+                {
+                    writer.Write("/*");
+                    writer.WriteLine("This file consists of content from: ");
+                    foreach (var resource in _compiledResource.Resources)
+                    {
+                        writer.WriteLine("\t" + resource.VirtualPath);
+                    }
+                }
+                finally
+                {
+                    writer.WriteLine("*/");
+                    writer.WriteLine();
+                    writer.Flush();
+                }
+            }
 		}
 	}
 }

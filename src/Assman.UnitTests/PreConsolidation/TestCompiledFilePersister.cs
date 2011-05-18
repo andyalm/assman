@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 
+using Assman.PreCompilation;
 using Assman.TestSupport;
 
 using NUnit.Framework;
@@ -24,13 +25,13 @@ namespace Assman.PreConsolidation
 		[Test]
 		public void WhenReportIsSaved_ItCanBeRetrievedWithIdenticalData()
 		{
-			var report = new PreConsolidationReport
+			var report = new PreCompilationReport
 			{
-				Scripts = new PreConsolidatedResourceReport
+				Scripts = new PreCompiledResourceReport
 				{
-					Groups = new List<PreConsolidatedResourceGroup>
+					Groups = new List<PreCompiledResourceGroup>
 					{
-						new PreConsolidatedResourceGroup
+						new PreCompiledResourceGroup
 						{
 							ConsolidatedUrl = "~/scripts/consolidated/common.js",
 							Resources = new List<string>
@@ -39,7 +40,7 @@ namespace Assman.PreConsolidation
 								"~/scripts/myscript1.js"
 							}
 						},
-						new PreConsolidatedResourceGroup
+						new PreCompiledResourceGroup
 						{
 							ConsolidatedUrl = "~/scripts/consolidated/search.js",
 							Resources = new List<string>
@@ -62,11 +63,11 @@ namespace Assman.PreConsolidation
                         }
                     }
 				},
-				Stylesheets = new PreConsolidatedResourceReport
+				Stylesheets = new PreCompiledResourceReport
 				{
-					Groups = new List<PreConsolidatedResourceGroup>
+					Groups = new List<PreCompiledResourceGroup>
 					{
-						new PreConsolidatedResourceGroup
+						new PreCompiledResourceGroup
 						{
 							ConsolidatedUrl = "~/Content/consolidated.css",
 							Resources = new List<string>
@@ -77,9 +78,9 @@ namespace Assman.PreConsolidation
 						}
 					}
 				},
-				Dependencies = new List<PreConsolidatedResourceDependencies>
+				Dependencies = new List<PreCompiledResourceDependencies>
 				{
-					new PreConsolidatedResourceDependencies
+					new PreCompiledResourceDependencies
 					{
 						ResourcePath = "~/scripts/myscript1.js",
 						Dependencies = new List<string>
@@ -87,7 +88,7 @@ namespace Assman.PreConsolidation
 							"~/scripts/jquery.js"
 						}
 					},
-					new PreConsolidatedResourceDependencies
+					new PreCompiledResourceDependencies
 					{
 						ResourcePath = "~/Views/Search/Index.js",
 						Dependencies = new List<string>
@@ -102,7 +103,7 @@ namespace Assman.PreConsolidation
 
 			_persister.SavePreConsolidationInfo(report);
 
-			PreConsolidationReport deserializedReport;
+			PreCompilationReport deserializedReport;
 			_persister.TryGetPreConsolidationInfo(out deserializedReport).ShouldBeTrue();
 
 		    ResourceReportShouldBeEqual(report.Scripts, deserializedReport.Scripts);
@@ -111,7 +112,7 @@ namespace Assman.PreConsolidation
 			report.Version.ShouldEqual(deserializedReport.Version);
 		}
 
-	    private void ResourceReportShouldBeEqual(PreConsolidatedResourceReport resourceReport1, PreConsolidatedResourceReport resourceReport2)
+	    private void ResourceReportShouldBeEqual(PreCompiledResourceReport resourceReport1, PreCompiledResourceReport resourceReport2)
 	    {
 	        ResourceGroupsShouldBeEqual(resourceReport1.Groups, resourceReport2.Groups);
             resourceReport1.SingleResources.CountShouldEqual(resourceReport2.SingleResources.Count);
@@ -122,7 +123,7 @@ namespace Assman.PreConsolidation
 	        }
 	    }
 
-	    private void ResourceGroupsShouldBeEqual(List<PreConsolidatedResourceGroup> groups1, List<PreConsolidatedResourceGroup> groups2)
+	    private void ResourceGroupsShouldBeEqual(List<PreCompiledResourceGroup> groups1, List<PreCompiledResourceGroup> groups2)
 		{
 			groups1.CountShouldEqual(groups2.Count);
 			for (int i = 0; i < groups1.Count; i++)
@@ -133,7 +134,7 @@ namespace Assman.PreConsolidation
 			}
 		}
 
-		private void ResourceDependenciesShouldBeEqual(List<PreConsolidatedResourceDependencies> dependencies1, List<PreConsolidatedResourceDependencies> dependencies2)
+		private void ResourceDependenciesShouldBeEqual(List<PreCompiledResourceDependencies> dependencies1, List<PreCompiledResourceDependencies> dependencies2)
 		{
 			dependencies1.CountShouldEqual(dependencies2.Count);
 			for (int i = 0; i < dependencies1.Count; i++)

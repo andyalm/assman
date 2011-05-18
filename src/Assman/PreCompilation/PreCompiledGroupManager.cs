@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Assman.PreConsolidation
+namespace Assman.PreCompilation
 {
-	public class PreConsolidatedGroupManager : IResourceGroupManager
+	public class PreCompiledGroupManager : IResourceGroupManager
 	{
 		private readonly IDictionary<string,string> _resourceUrlMap = new Dictionary<string, string>(Comparers.VirtualPath);
 		private readonly IDictionary<string, IEnumerable<string>> _consolidatedUrlMap = new Dictionary<string,IEnumerable<string>>(Comparers.VirtualPath);
 
-		public PreConsolidatedGroupManager(PreConsolidatedResourceReport resourceReport)
+		public PreCompiledGroupManager(PreCompiledResourceReport resourceReport)
 		{
 			PopulateResourceUrlMap(resourceReport);
 			Consolidate = true;
@@ -87,7 +87,7 @@ namespace Assman.PreConsolidation
 			return new NotSupportedException("This method is not supported when resources have been pre-consolidated");
 		}
 
-		private void PopulateResourceUrlMap(PreConsolidatedResourceReport resourceReport)
+		private void PopulateResourceUrlMap(PreCompiledResourceReport resourceReport)
 		{
 			var resourceUrlMap = from @group in resourceReport.Groups
 								 from resourcePath in @group.Resources

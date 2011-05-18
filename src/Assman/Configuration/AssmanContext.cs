@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 using Assman.ContentFiltering;
-using Assman.PreConsolidation;
+using Assman.PreCompilation;
 
 namespace Assman.Configuration
 {
@@ -129,9 +129,9 @@ namespace Assman.Configuration
 			return GroupManagerOfType(resourceType).GetGroupTemplateOrDefault(consolidatedUrl);
 		}
 
-		public ResourceConsolidator GetConsolidator()
+		public ResourceCompiler GetConsolidator()
 		{
-			return new ResourceConsolidator(_filterMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
+			return new ResourceCompiler(_filterMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
 		}
 
 		public IEnumerable<string> GetResourceDependencies(string virtualPath)
@@ -154,12 +154,12 @@ namespace Assman.Configuration
 			return GetResourceUrls(StyleGroups, stylesheetUrl);
 		}
 
-		public void LoadPreCompilationReport(PreConsolidationReport preConsolidationReport)
+		public void LoadPreCompilationReport(PreCompilationReport preCompilationReport)
 		{
-			_scriptGroups = new PreConsolidatedGroupManager(preConsolidationReport.Scripts);
-			_styleGroups = new PreConsolidatedGroupManager(preConsolidationReport.Stylesheets);
-			_dependencyManager.SetCache(new PreConsolidatedDependencyCache(preConsolidationReport.Dependencies));
-			Version = preConsolidationReport.Version;
+			_scriptGroups = new PreCompiledGroupManager(preCompilationReport.Scripts);
+			_styleGroups = new PreCompiledGroupManager(preCompilationReport.Stylesheets);
+			_dependencyManager.SetCache(new PreCompiledDependencyCache(preCompilationReport.Dependencies));
+			Version = preCompilationReport.Version;
 			PreConsolidated = true;
 		}
 

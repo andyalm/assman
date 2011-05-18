@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
 
-namespace Assman.PreConsolidation
+namespace Assman.PreCompilation
 {
-	public class PreConsolidatedResourceDependencies
+	public class PreCompiledResourceDependencies
 	{
 		public string ResourcePath { get; set; }
 
 		public List<string> Dependencies { get; set; }
 
-		public PreConsolidatedResourceDependencies()
+		public PreCompiledResourceDependencies()
 		{
 			Dependencies = new List<string>();
 		}

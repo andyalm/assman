@@ -11,13 +11,13 @@ namespace Assman
 	public class TestResourceConsolidator
 	{
 		private ResourceTestContext _context;
-		private ResourceConsolidator _consolidator;
+		private ResourceCompiler _compiler;
 		
 		[SetUp]
 		public void SetupContext()
 		{
 			_context = new ResourceTestContext();
-			_consolidator = _context.GetConsolidator();
+			_compiler = _context.GetConsolidator();
 		}
 		
 		[Test]
@@ -47,7 +47,7 @@ namespace Assman
 			var accountIndex = _context.CreateResource("~/Views/Account/Index.js")
 				.WithDependencies(myothercomponent).Resource;
 
-			var preConsolidatedReport = _consolidator.ConsolidateAll((resource, @group) => { }, r => {}, ResourceMode.Release);
+			var preConsolidatedReport = _compiler.CompileAll(resource => { }, ResourceMode.Release);
 			var homeGroupDepends = preConsolidatedReport.Dependencies.ShouldContain(d => d.ResourcePath == homeGroup.ConsolidatedUrl);
 			
 			homeGroupDepends.Dependencies.CountShouldEqual(3);
@@ -65,7 +65,7 @@ namespace Assman
 			_context.CreateResource("~/file5.js");
 			_context.CreateResource("~/file6.js");
 
-			var report = _consolidator.ConsolidateAll((r, g) => { }, r => {}, ResourceMode.Release);
+			var report = _compiler.CompileAll(r => {}, ResourceMode.Release);
 
 			report.Scripts.SingleResources.CountShouldEqual(2);
 			report.Scripts.SingleResources[0].OriginalPath.ShouldEqual("~/file5.js");
@@ -90,7 +90,7 @@ namespace Assman
 			groupTemplate.ResourceType = ResourceType.Script;
 
 			var excludeFilter = ToFilter(r => r.VirtualPath.Contains("file2"));
-			var consolidatedResource = _consolidator.ConsolidateGroup(group.ConsolidatedUrl, groupTemplate.WithContext(excludeFilter), ResourceMode.Debug);
+			var consolidatedResource = _compiler.CompileGroup(group.ConsolidatedUrl, groupTemplate.WithContext(excludeFilter), ResourceMode.Debug);
 
 			consolidatedResource.ShouldNotBeNull();
 			consolidatedResource.Resources.Count().ShouldEqual(2);
@@ -116,7 +116,7 @@ namespace Assman
 			_context.DependencyProvider.SetDependencies(dependencyLeaf, "~/dependency-middle.js");
 			_context.DependencyProvider.SetDependencies(dependencyMiddle, "~/dependency-root.js");
 
-			var consolidatedResource = _consolidator.ConsolidateGroup(group, ResourceMode.Debug);
+			var consolidatedResource = _compiler.CompileGroup(group, ResourceMode.Debug);
 			var resources = consolidatedResource.Resources.ToList();
 			resources[0].VirtualPath.ShouldEqual("~/dependency-root.js");
 			resources[1].VirtualPath.ShouldEqual("~/dependency-middle.js");
@@ -138,11 +138,11 @@ namespace Assman
 			var unconsolidatedResource1 = _context.CreateResource("~/unconsolidated1.js").Resource;
 			var unconsolidatedResource2 = _context.CreateResource("~/unconsolidated2.js").Resource;
 
-			var unconsolidatedResourceCompilations = _consolidator.CompileUnconsolidatedResources(ResourceType.Script, ResourceMode.Debug, r => {}).ToList();
+			var unconsolidatedResourceCompilations = _compiler.CompileUnconsolidatedResources(ResourceType.Script, ResourceMode.Debug, r => {}).ToList();
 
 			unconsolidatedResourceCompilations.CountShouldEqual(2);
-			unconsolidatedResourceCompilations[0].Resource.VirtualPath.ShouldEqual(unconsolidatedResource1.VirtualPath);
-			unconsolidatedResourceCompilations[1].Resource.VirtualPath.ShouldEqual(unconsolidatedResource2.VirtualPath);
+			unconsolidatedResourceCompilations[0].Resources.Single().VirtualPath.ShouldEqual(unconsolidatedResource1.VirtualPath);
+			unconsolidatedResourceCompilations[1].Resources.Single().VirtualPath.ShouldEqual(unconsolidatedResource2.VirtualPath);
 		}
 
 		private IResourceFilter ToFilter(Predicate<IResource> predicate)

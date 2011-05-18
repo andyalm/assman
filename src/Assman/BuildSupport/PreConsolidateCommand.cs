@@ -77,29 +77,22 @@ namespace Assman.BuildSupport
 		{
 			var context = configSection.BuildContext(usePreConsolidationReportIfPresent: false);
 			var consolidator = context.GetConsolidator();
-			var report = consolidator.ConsolidateAll(WriteConsolidatedResource, WriteCompiledIndividualResource, Mode);
+			var report = consolidator.CompileAll(WriteCompiledResource, Mode);
 			report.Version = this.Version ?? DateTime.Now.ToString("yyMMddHHmm");
 			configSection.SavePreConsolidationReport(report);
 		}
 
-		private void WriteConsolidatedResource(ConsolidatedResource consolidatedResource, IResourceGroup group)
+		private void WriteCompiledResource(ICompiledResource compiledResource)
 		{
-			string consolidatedPath = _resolver.MapPath(group.ConsolidatedUrl);
-			consolidatedResource.WriteToFile(consolidatedPath);
-			LogConsolidation(consolidatedResource, group.ConsolidatedUrl);
+			string consolidatedPath = _resolver.MapPath(compiledResource.CompiledPath);
+			compiledResource.WriteToFile(consolidatedPath);
+			LogCompilation(compiledResource);
 		}
 
-		private void WriteCompiledIndividualResource(CompiledResource compiledResource)
+		private void LogCompilation(ICompiledResource compiledResource)
 		{
-			string compiledPhysicalPath = _resolver.MapPath(compiledResource.CompiledPath);
-			compiledResource.WriteToFile(compiledPhysicalPath);
-			LogMessage(String.Format("Compiled '{0}'", compiledResource.Resource.VirtualPath));
-		}
-
-		private void LogConsolidation(ConsolidatedResource consolidatedResource, string consolidatedUrl)
-		{
-			LogMessage(String.Format("Consolidating '{0}'...", consolidatedUrl));
-			foreach (IResource resource in consolidatedResource.Resources)
+			LogMessage(String.Format("Compiling '{0}'...", compiledResource.CompiledPath));
+			foreach (IResource resource in compiledResource.Resources)
 			{
 				LogMessage(String.Format("\t...from '{0}'", resource.VirtualPath));
 			}

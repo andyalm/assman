@@ -50,7 +50,7 @@ namespace Assman.Registration
 			resourcePath = ToCanonicalUrl(resourcePath);
 			foreach(var pathToInclude in _getResourceUrls(resourcePath))
 			{
-                _inner.Require(pathToInclude);
+				_inner.Require(pathToInclude);
 			}
 		}
 

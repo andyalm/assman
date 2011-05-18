@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assman.Configuration;
+using Assman.PreCompilation;
 using Assman.PreConsolidation;
 using Assman.TestSupport;
 
@@ -33,7 +34,7 @@ namespace Assman
 		{
 			_instance.Assemblies.Add(this.GetType().Assembly.GetName().Name);
 			var fileFinder = ResourceFinderFactory.Null;
-			var context = _instance.BuildContext(fileFinder, NullPreConsolidationPersister.Instance);
+			var context = _instance.BuildContext(fileFinder, NullPreCompiledPersister.Instance);
 			var resources = context.Finder.FindResources(ResourceType.Stylesheet).ToList();
 			Assert.IsNotNull(resources);
 			Assert.IsTrue(resources.Count > 0, "Resource count should be greater than zero.");
@@ -45,7 +46,7 @@ namespace Assman
 			var lastModified = DateTime.Now;
 			_instance.LastModified(lastModified);
 
-			var context = _instance.BuildContext(ResourceFinderFactory.Null, NullPreConsolidationPersister.Instance);
+			var context = _instance.BuildContext(ResourceFinderFactory.Null, NullPreCompiledPersister.Instance);
 
 			context.ConfigurationLastModified.ShouldEqual(lastModified);
 		}
@@ -56,7 +57,7 @@ namespace Assman
 	        _instance.Scripts.GlobalDependencies.Add("~/scripts/shared.js");
 	        _instance.Scripts.GlobalDependencies.Add("~/scripts/otherglobal.js");
 
-	        var context = _instance.BuildContext(ResourceFinderFactory.Null, NullPreConsolidationPersister.Instance);
+	        var context = _instance.BuildContext(ResourceFinderFactory.Null, NullPreCompiledPersister.Instance);
 
 	        List<string> globalDependencies = context.ScriptGroups.GetGlobalDependencies().ToList();
 	        globalDependencies.CountShouldEqual(2);

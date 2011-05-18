@@ -32,9 +32,9 @@ namespace Assman.TestSupport
 			get { return _dependencyProvider; }
 		}
 
-		public ResourceConsolidator GetConsolidator()
+		public ResourceCompiler GetConsolidator()
 		{
-			return new ResourceConsolidator(_contentFilterMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
+			return new ResourceCompiler(_contentFilterMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
 		}
 
 		public StubResourceBuilder CreateResource(string virtualPath)

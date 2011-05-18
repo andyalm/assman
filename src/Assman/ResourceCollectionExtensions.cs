@@ -109,20 +109,21 @@ namespace Assman
 			}
 		}
 
-		/// <summary>
-		/// Consolidated all of the resources in the collection into a <see cref="ConsolidatedResource"/>.
-		/// </summary>
-		/// <param name="resources"></param>
-		/// <param name="createContentFilter"></param>
-		/// <param name="separator"></param>
-		public static ConsolidatedResource Consolidate(this IEnumerable<IResource> resources, Func<IResource, IContentFilter> createContentFilter, string separator)
+	    /// <summary>
+	    /// Consolidated all of the resources in the collection into a <see cref="ConsolidatedResource"/>.
+	    /// </summary>
+	    /// <param name="resources"></param>
+	    /// <param name="group"></param>
+	    /// <param name="createContentFilter"></param>
+	    /// <param name="separator"></param>
+	    public static ICompiledResource Consolidate(this IEnumerable<IResource> resources, IResourceGroup group, Func<IResource, IContentFilter> createContentFilter, string separator)
 		{
 			var contentStream = new MemoryStream();
 			var writer = new StreamWriter(contentStream);
 			resources.ConsolidateContentTo(writer, createContentFilter, separator);
 			writer.Flush();
 
-			return new ConsolidatedResource(resources.ToResourceCollection(), contentStream);
+			return new ConsolidatedResource(group, resources.ToResourceCollection(), contentStream);
 		}
 	}
 }

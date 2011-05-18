@@ -17,7 +17,7 @@ namespace Assman
 			resources.Add(CreateResource(DateTime.Now));
 			resources.Add(CreateResource(DateTime.Now.AddDays(-1)));
 
-			ConsolidatedResource consolidated = new ConsolidatedResource(resources, new MemoryStream());
+			ConsolidatedResource consolidated = new ConsolidatedResource(null, resources, new MemoryStream());
 			Assert.That(consolidated.LastModified, Is.EqualTo(resources.LastModified()));
 		}
 

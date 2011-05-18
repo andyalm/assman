@@ -8,20 +8,28 @@ namespace Assman
 	/// Represents a collection of resources that have been consolidated
 	/// into one resource.
 	/// </summary>
-	public class ConsolidatedResource
+	internal class ConsolidatedResource : ICompiledResource
 	{
-		private readonly ResourceCollection _resources;
+		private readonly IResourceGroup _group;
+	    private readonly ResourceCollection _resources;
 		private readonly DateTime _lastModified;
 		private readonly MemoryStream _contentStream;
 
-		internal ConsolidatedResource(ResourceCollection resources, MemoryStream consolidatedContent)
+		internal ConsolidatedResource(IResourceGroup group, ResourceCollection resources, MemoryStream consolidatedContent)
 		{
-			_resources = resources;
+		    _group = group;
+		    _resources = resources;
 			_lastModified = resources.LastModified();
 			_contentStream = consolidatedContent;
 		}
 
-		/// <summary>
+
+	    public string CompiledPath
+	    {
+	        get { return _group.ConsolidatedUrl; }
+	    }
+
+	    /// <summary>
 		/// Gets the most recent last modified date of the resources the consolidated resources.
 		/// </summary>
 		public DateTime LastModified
@@ -37,58 +45,11 @@ namespace Assman
 			get { return _resources; }
 		}
 
-		/// <summary>
-		/// Gets a stream to the consolidated content.
-		/// </summary>
-		public MemoryStream ContentStream
-		{
-			get
-			{
-				return _contentStream;
-			}
-		}
-
-		/// <summary>
-		/// Writes the contents of the consolidated resource to a file.
-		/// </summary>
-		/// <param name="path">The full path of the file to be written to.</param>
-		public void WriteToFile(string path)
-		{
-			//ensure the destination directory exists
-			string directory = Path.GetDirectoryName(path);
-			Directory.CreateDirectory(directory);
-			
-			using(Stream outputStream = new FileStream(path, FileMode.Create))
-			{
-				WriteTo(outputStream);
-			}
-		}
-
 		public void WriteTo(Stream outputStream)
 		{
-			if(ContentStream.Length > 0)
+			if(_contentStream.Length > 0)
 			{
-				ContentStream.WriteTo(outputStream);	
-			}
-		}
-
-		public void WriteSummaryHeader(Stream outputStream)
-		{
-			var writer = new StreamWriter(outputStream);
-			try
-			{
-				writer.Write("/*");
-				writer.WriteLine("This file consists of content from: ");
-				foreach (var resource in Resources)
-				{
-					writer.WriteLine("\t" + resource.VirtualPath);
-				}
-			}
-			finally
-			{
-				writer.WriteLine("*/");
-				writer.WriteLine();
-				writer.Flush();
+				_contentStream.WriteTo(outputStream);	
 			}
 		}
 

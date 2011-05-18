@@ -8,9 +8,9 @@ using System.Xml.Linq;
 using Assman.IO;
 using Assman.Xml;
 
-namespace Assman.PreConsolidation
+namespace Assman.PreCompilation
 {
-	public class CompiledFilePersister : IPreConsolidationReportPersister
+	public class CompiledFilePersister : IPreCompiledReportPersister
 	{
 		public static CompiledFilePersister ForWebDirectory(string rootWebDirectory)
 		{
@@ -28,31 +28,31 @@ namespace Assman.PreConsolidation
 			_filePath = filePath;
 		}
 
-		public bool TryGetPreConsolidationInfo(out PreConsolidationReport preConsolidationReport)
+		public bool TryGetPreConsolidationInfo(out PreCompilationReport preCompilationReport)
 		{
 			if (!_fileAccess.Exists(_filePath))
 			{
-				preConsolidationReport = null;
+				preCompilationReport = null;
 				return false;
 			}
 
-			preConsolidationReport = new PreConsolidationReport();
+			preCompilationReport = new PreCompilationReport();
 			XDocument document;
 			using (var reader = _fileAccess.OpenReader(_filePath))
 			{
 				document = XDocument.Load(reader);
 			}
 			
-			preConsolidationReport.Version = (string) document.Root.Attribute("version");
-			preConsolidationReport.Scripts = CollectResourceReport(document.Root.Element("scripts"));
-			preConsolidationReport.Stylesheets = CollectResourceReport(document.Root.Element("stylesheets"));
-			preConsolidationReport.Dependencies = CollectDependencies(document.Root.Element("dependencies")).ToList();
+			preCompilationReport.Version = (string) document.Root.Attribute("version");
+			preCompilationReport.Scripts = CollectResourceReport(document.Root.Element("scripts"));
+			preCompilationReport.Stylesheets = CollectResourceReport(document.Root.Element("stylesheets"));
+			preCompilationReport.Dependencies = CollectDependencies(document.Root.Element("dependencies")).ToList();
 
 			return true;
 		}
 
 
-		public void SavePreConsolidationInfo(PreConsolidationReport preConsolidationReport)
+		public void SavePreConsolidationInfo(PreCompilationReport preCompilationReport)
 		{
 			var xmlWriterSettings = new XmlWriterSettings
 			{
@@ -63,13 +63,13 @@ namespace Assman.PreConsolidation
 			{
 				using(writer.Document())
 				{
-					using (writer.Element("preConsolidationReport", version => preConsolidationReport.Version))
+					using (writer.Element("PreCompilationReport", version => preCompilationReport.Version))
 					{
-						WriteResourceReport(writer, "scripts", preConsolidationReport.Scripts);
-						WriteResourceReport(writer, "stylesheets", preConsolidationReport.Stylesheets);
+						WriteResourceReport(writer, "scripts", preCompilationReport.Scripts);
+						WriteResourceReport(writer, "stylesheets", preCompilationReport.Stylesheets);
 						using(writer.Element("dependencies"))
 						{
-							foreach (var resourceWithDependency in preConsolidationReport.Dependencies)
+							foreach (var resourceWithDependency in preCompilationReport.Dependencies)
 							{
 								using (writer.Element("resource", path => resourceWithDependency.ResourcePath))
 								{
@@ -85,9 +85,9 @@ namespace Assman.PreConsolidation
 			}
 		}
 
-		private PreConsolidatedResourceReport CollectResourceReport(XElement containerElement)
+		private PreCompiledResourceReport CollectResourceReport(XElement containerElement)
 		{
-			return new PreConsolidatedResourceReport
+			return new PreCompiledResourceReport
 			{
 				Groups = CollectResourceGroups(containerElement.Element("groups")).ToList(),
 				SingleResources = CollectSingleResources(containerElement.Element("singleResources")).ToList()
@@ -104,20 +104,20 @@ namespace Assman.PreConsolidation
 				   };
 		}
 
-		private IEnumerable<PreConsolidatedResourceGroup> CollectResourceGroups(XElement containerElement)
+		private IEnumerable<PreCompiledResourceGroup> CollectResourceGroups(XElement containerElement)
 		{
 			return from groupElement in containerElement.Elements("group")
-				   select new PreConsolidatedResourceGroup
+				   select new PreCompiledResourceGroup
 				   {
 					   ConsolidatedUrl = (string) groupElement.Attribute("consolidatedUrl"),
 					   Resources = groupElement.Elements("resource").Select(r => (string) r.Attribute("path")).ToList()
 				   };
 		}
 
-		private IEnumerable<PreConsolidatedResourceDependencies> CollectDependencies(XElement containerElement)
+		private IEnumerable<PreCompiledResourceDependencies> CollectDependencies(XElement containerElement)
 		{
 			return from dependencyElement in containerElement.Elements("resource")
-				   select new PreConsolidatedResourceDependencies
+				   select new PreCompiledResourceDependencies
 				   {
 					   ResourcePath = (string) dependencyElement.Attribute("path"),
 					   Dependencies =
@@ -125,7 +125,7 @@ namespace Assman.PreConsolidation
 				   };
 		}
 
-		private void WriteResourceReport(XmlWriter writer, string elementName, PreConsolidatedResourceReport resourceReport)
+		private void WriteResourceReport(XmlWriter writer, string elementName, PreCompiledResourceReport resourceReport)
 		{
 			using (writer.Element(elementName))
 			{
@@ -146,7 +146,7 @@ namespace Assman.PreConsolidation
 	        }
 	    }
 
-	    private void WriteResourceGroups(XmlWriter writer, IEnumerable<PreConsolidatedResourceGroup> groups)
+	    private void WriteResourceGroups(XmlWriter writer, IEnumerable<PreCompiledResourceGroup> groups)
 		{
 			using (writer.Element("groups"))
 			{

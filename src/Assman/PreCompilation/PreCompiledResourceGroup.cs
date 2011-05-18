@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace Assman.PreConsolidation
+namespace Assman.PreCompilation
 {
-	public class PreConsolidatedResourceGroup
+	public class PreCompiledResourceGroup
 	{
 		public string ConsolidatedUrl { get; set; }
 
 		public List<string> Resources { get; set; }
 
-		public PreConsolidatedResourceGroup()
+		public PreCompiledResourceGroup()
 		{
 			Resources = new List<string>();
 		}

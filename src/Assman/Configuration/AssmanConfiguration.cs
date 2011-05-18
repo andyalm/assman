@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 
 using Assman.ContentFiltering;
-using Assman.PreConsolidation;
+using Assman.PreCompilation;
 
 namespace Assman.Configuration
 {
@@ -211,19 +211,19 @@ namespace Assman.Configuration
 		public AssmanContext BuildContext(bool usePreConsolidationReportIfPresent = true)
 		{
 			IResourceFinder fileFinder = ResourceFinderFactory.Null;
-			IPreConsolidationReportPersister preConsolidationPersister = NullPreConsolidationPersister.Instance;
+			IPreCompiledReportPersister preCompiledPersister = NullPreCompiledPersister.Instance;
 			
 			if(!String.IsNullOrEmpty(RootFilePath))
 			{
 				fileFinder = ResourceFinderFactory.GetInstance(RootFilePath);
 				if(usePreConsolidationReportIfPresent)
-					preConsolidationPersister = CompiledFilePersister.ForWebDirectory(RootFilePath);
+					preCompiledPersister = CompiledFilePersister.ForWebDirectory(RootFilePath);
 			}
 
-			return BuildContext(fileFinder, preConsolidationPersister);
+			return BuildContext(fileFinder, preCompiledPersister);
 		}
 
-		public AssmanContext BuildContext(IResourceFinder fileFinder, IPreConsolidationReportPersister preConsolidationPersister)
+		public AssmanContext BuildContext(IResourceFinder fileFinder, IPreCompiledReportPersister preCompiledPersister)
 		{
 			var context = AssmanContext.Create();
 
@@ -241,10 +241,10 @@ namespace Assman.Configuration
 			context.MapExtensionToDependencyProvider(".js", VisualStudioScriptDependencyProvider.GetInstance());
 			context.MapExtensionToDependencyProvider(".css", CssDependencyProvider.GetInstance());
 
-			PreConsolidationReport preConsolidationReport;
-			if (preConsolidationPersister.TryGetPreConsolidationInfo(out preConsolidationReport))
+			PreCompilationReport preCompilationReport;
+			if (preCompiledPersister.TryGetPreConsolidationInfo(out preCompilationReport))
 			{
-				context.LoadPreCompilationReport(preConsolidationReport);
+				context.LoadPreCompilationReport(preCompilationReport);
 			}
 
 			foreach (var plugin in Plugins.GetPlugins())
@@ -255,7 +255,7 @@ namespace Assman.Configuration
 			return context;
 		}
 
-		public void SavePreConsolidationReport(PreConsolidationReport report)
+		public void SavePreConsolidationReport(PreCompilationReport report)
 		{
 			var preConsolidationPersister = CompiledFilePersister.ForWebDirectory(RootFilePath);
 			preConsolidationPersister.SavePreConsolidationInfo(report);

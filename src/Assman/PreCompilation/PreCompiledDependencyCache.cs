@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Assman.PreConsolidation
+namespace Assman.PreCompilation
 {
-	public class PreConsolidatedDependencyCache : IDependencyCache
+	public class PreCompiledDependencyCache : IDependencyCache
 	{
 		private readonly IDictionary<string,IEnumerable<string>> _dependencyMap = new Dictionary<string, IEnumerable<string>>(Comparers.VirtualPath);
 
-		public PreConsolidatedDependencyCache(IEnumerable<PreConsolidatedResourceDependencies> dependencies)
+		public PreCompiledDependencyCache(IEnumerable<PreCompiledResourceDependencies> dependencies)
 		{
 			PopulateDependencyCache(dependencies);
 		}
@@ -37,7 +37,7 @@ namespace Assman.PreConsolidation
 	        throw new NotSupportedException("You should not clear the dependency cache when in preconsolidation mode");
 	    }
 
-	    private void PopulateDependencyCache(IEnumerable<PreConsolidatedResourceDependencies> dependencies)
+	    private void PopulateDependencyCache(IEnumerable<PreCompiledResourceDependencies> dependencies)
 		{
 			foreach (var resourceWithDependency in dependencies)
 			{
