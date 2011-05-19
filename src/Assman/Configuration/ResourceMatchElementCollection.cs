@@ -21,7 +21,7 @@ namespace Assman.Configuration
 		public void AddPattern(string pattern)
 		{
 			var element = new ResourceMatchElement();
-			element.Pattern = pattern;
+			element.Regex = pattern;
 			BaseAdd(element);
 		}
 

@@ -94,7 +94,7 @@ namespace Assman
 
 			_element.Include.Add(new ResourceMatchElement
 			{
-				Pattern = "neutralscript.js"
+				Regex = "neutralscript.js"
 			});
 			_element.Include.Add(new ResourceMatchElement
 			{

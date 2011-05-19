@@ -8,15 +8,12 @@ namespace Assman.Configuration
 		public const string Minify = "minify";
 		public const string ConsolidatedUrl = "consolidatedUrl";
 		public const string Groups = "groups";
-		public const string InclusionRedirects = "inclusionRedirects";
-		public const string Pattern = "pattern";
+		public const string Regex = "regex";
 		public const string Name = "name";
-		public const string Factory = "factory";
 		public const string Type = "type";
 		public const string ManageDependencies = "manageDependencies";
 		public const string Scripts = "scripts";
 		public const string Stylesheets = "stylesheets";
-		public const string PreConsolidated = "preConsolidated";
 		public const string Version = "version";
 		public const string Assemblies = "assemblies";
 		public const string Plugins = "plugins";

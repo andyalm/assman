@@ -32,7 +32,7 @@ namespace Assman.Registration
 				{
 					new ResourceMatchElement
 					{
-						Pattern = "~/configured/location/.+"
+						Regex = "~/configured/location/.+"
 					}
 				}
 			});

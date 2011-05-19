@@ -14,11 +14,11 @@ namespace Assman.Configuration
 		/// <summary>
 		/// Gets or sets the regex pattern used to match.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.Pattern, IsRequired = false, IsKey = false)]
-		public string Pattern
+		[ConfigurationProperty(PropertyNames.Regex, IsRequired = false, IsKey = false)]
+		public string Regex
 		{
-			get { return this[PropertyNames.Pattern] as string;}
-			set { this[PropertyNames.Pattern] = value; }
+			get { return this[PropertyNames.Regex] as string;}
+			set { this[PropertyNames.Regex] = value; }
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace Assman.Configuration
 			get
 			{
 				if (IsRegexMode)
-					return Pattern;
+					return Regex;
 				else
 					return Path;
 			}
@@ -72,7 +72,7 @@ namespace Assman.Configuration
 			get
 			{
 				if(_rx == null)
-					_rx = new Regex(Pattern, RegexOptions.IgnoreCase);
+					_rx = new Regex(Regex, RegexOptions.IgnoreCase);
 				return _rx;
 			}
 		}
