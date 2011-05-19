@@ -76,17 +76,21 @@ namespace Assman
 		}
 
 		[Test]
-		public void WhenPreConsolidetedReportIsGenerated_FilesThatAlreadyHaveMinifiedEquivilentsAreNotCompiled()
+		public void WhenPreConsolidatedReportIsGenerated_FilesThatAlreadyHaveMinifiedEquivilentsAreNotCompiled()
 		{
 			_context.CreateResource("~/file.js");
 			_context.CreateResource("~/file.min.js");
+		    _context.CreateResource("~/ms-file.debug.js");
+		    _context.CreateResource("~/ms-file.js");
 
 			var compiledResources = new List<ICompiledResource>();
 			var report = _compiler.CompileAll(r => compiledResources.Add(r), ResourceMode.Release);
 
-			report.Scripts.SingleResources.CountShouldEqual(1);
+			report.Scripts.SingleResources.CountShouldEqual(2);
 			report.Scripts.SingleResources[0].OriginalPath.ShouldEqual("~/file.js");
 			report.Scripts.SingleResources[0].CompiledPath.ShouldEqual("~/file.min.js");
+			report.Scripts.SingleResources[1].OriginalPath.ShouldEqual("~/ms-file.debug.js");
+			report.Scripts.SingleResources[1].CompiledPath.ShouldEqual("~/ms-file.js");
 			compiledResources.CountShouldEqual(0);
 		}
 

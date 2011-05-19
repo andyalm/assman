@@ -74,7 +74,7 @@ namespace Assman
 
 			var manuallyMinifiedResources = (from resource1 in resources
 											from resource2 in resources
-											where resource1.VirtualPath == resource2.VirtualPath.ChangeExtension(".min" + resource2.FileExtension)
+											where ManuallyMinifiedResource.IsPair(resource1, resource2)
 											select new ManuallyMinifiedResource { DebugResource = resource2, ReleaseResource = resource1 }).ToList();
 
 			var compiledResources = new List<ICompiledResource>();
@@ -238,6 +238,12 @@ namespace Assman
 			public bool WasMinifiedFrom(IResource resource)
 			{
 				return resource.VirtualPath.Equals(DebugResource.VirtualPath, StringComparison.OrdinalIgnoreCase);
+			}
+
+			public static bool IsPair(IResource potentialReleaseResource, IResource potentialDebugResource)
+			{
+				return potentialReleaseResource.VirtualPath == potentialDebugResource.VirtualPath.ChangeExtension(".min" + potentialDebugResource.FileExtension)
+					|| potentialDebugResource.VirtualPath == potentialReleaseResource.VirtualPath.ChangeExtension(".debug" + potentialReleaseResource.FileExtension);
 			}
 		}
 	}
