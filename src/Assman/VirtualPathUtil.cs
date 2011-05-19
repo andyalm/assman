@@ -35,6 +35,14 @@ namespace Assman
 			return "~" + resolvedUri.AbsolutePath;
 		}
 
+		public static string ChangeExtension(this string path, string newExtension)
+		{
+			var lastDotIndex = path.LastIndexOf(".");
+			var baseName = path.Substring(0, lastDotIndex);
+
+			return baseName + newExtension;
+		}
+
 		private static bool IsAppPath(string path)
 		{
 			return path.StartsWith("~");

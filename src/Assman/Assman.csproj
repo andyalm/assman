@@ -216,6 +216,7 @@
     <Compile Include="Registration\WebForms\WebFormsClientScriptRegistry.cs" />
     <Compile Include="VirtualPathUtil.cs" />
     <Compile Include="VisualStudioScriptDependencyProvider.cs" />
+    <Compile Include="VsDocResourceExcluder.cs" />
     <Compile Include="Xml\XmlWriterExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

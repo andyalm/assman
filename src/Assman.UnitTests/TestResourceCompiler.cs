@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Assman.TestSupport;
@@ -74,11 +75,20 @@ namespace Assman
 			report.Scripts.SingleResources[1].CompiledPath.ShouldEqual("~/file6.compiled.js");
 		}
 
-	    [Test]
-	    public void WhenPreConsolidetedReportIsGenerated_CompiledFilesAreNot()
-	    {
-	        
-	    }
+		[Test]
+		public void WhenPreConsolidetedReportIsGenerated_FilesThatAlreadyHaveMinifiedEquivilentsAreNotCompiled()
+		{
+			_context.CreateResource("~/file.js");
+			_context.CreateResource("~/file.min.js");
+
+			var compiledResources = new List<ICompiledResource>();
+			var report = _compiler.CompileAll(r => compiledResources.Add(r), ResourceMode.Release);
+
+			report.Scripts.SingleResources.CountShouldEqual(1);
+			report.Scripts.SingleResources[0].OriginalPath.ShouldEqual("~/file.js");
+			report.Scripts.SingleResources[0].CompiledPath.ShouldEqual("~/file.min.js");
+			compiledResources.CountShouldEqual(0);
+		}
 
 		[Test]
 		public void ConsolidateGroupExcludesResourcesMatchingGivenExcludeFilter()

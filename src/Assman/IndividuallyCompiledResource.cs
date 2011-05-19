@@ -45,11 +45,8 @@ namespace Assman
         private string CalculateCompiledPath()
         {
             var resourceType = ResourceType.FromPath(Resource.VirtualPath);
-            
-            var lastDotIndex = Resource.VirtualPath.LastIndexOf(".");
-            var baseName = Resource.VirtualPath.Substring(0, lastDotIndex);
 
-            return baseName + ".compiled" + resourceType.DefaultFileExtension;
+            return Resource.VirtualPath.ChangeExtension(".compiled" + resourceType.DefaultFileExtension);
         }
     }
 }

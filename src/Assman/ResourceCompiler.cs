@@ -63,20 +63,42 @@ namespace Assman
 
 		public IEnumerable<ICompiledResource> CompileUnconsolidatedResources(ResourceType resourceType, ResourceMode resourceMode, Action<ICompiledResource> handleCompiledResource)
 		{
-			var resources = _finder.FindResources(resourceType);
+			var resources = _finder.FindResources(resourceType).ToList();
+			
 			var groupManager = GroupManagerFor(resourceType);
 
 			var unconsolidatedResources = (from resource in resources
-										  where !groupManager.IsPartOfGroup(resource.VirtualPath)
-											&& CanCompileIndividually(resource)
-										  select resource).ToList();
+										   where !groupManager.IsPartOfGroup(resource.VirtualPath)
+												 && CanCompileIndividually(resource)
+										   select resource).ToList();
+
+			var manuallyMinifiedResources = (from resource1 in resources
+											from resource2 in resources
+											where resource1.VirtualPath == resource2.VirtualPath.ChangeExtension(".min" + resource2.FileExtension)
+											select new ManuallyMinifiedResource { DebugResource = resource2, ReleaseResource = resource1 }).ToList();
 
 			var compiledResources = new List<ICompiledResource>();
 			foreach (var unconsolidatedResource in unconsolidatedResources)
 			{
-				var compiledResource = CompileResource(unconsolidatedResource, resourceMode);
-				handleCompiledResource(compiledResource);
-				compiledResources.Add(compiledResource);
+				var manuallyMinifiedResource = manuallyMinifiedResources.SingleOrDefault(r => r.Matches(unconsolidatedResource));
+				if(manuallyMinifiedResource == null)
+				{
+					var compiledResource = CompileResource(unconsolidatedResource, resourceMode);
+					handleCompiledResource(compiledResource);
+					compiledResources.Add(compiledResource);
+				}
+				else if(manuallyMinifiedResource.WasMinifiedFrom(unconsolidatedResource))
+				{
+					var compiledResource = new IndividuallyCompiledResource
+					{
+						Resource = unconsolidatedResource,
+						Mode = resourceMode,
+						CompiledContent = manuallyMinifiedResource.ReleaseResource.GetContent(),
+						CompiledPath = manuallyMinifiedResource.ReleaseResource.VirtualPath
+					};
+					compiledResources.Add(compiledResource);
+				}
+					
 			}
 
 			return compiledResources;
@@ -103,7 +125,8 @@ namespace Assman
 			return resource.VirtualPath.StartsWith("~/");
 		}
 
-		private PreCompiledResourceReport CompileAllResourcesOfType(ResourceType resourceType, ResourceMode mode, Action<ICompiledResource> onCompiled)
+		private PreCompiledResourceReport CompileAllResourcesOfType(ResourceType resourceType, ResourceMode mode,
+																	Action<ICompiledResource> onCompiled)
 		{
 			var groupManager = GroupManagerFor(resourceType);
 
@@ -120,9 +143,9 @@ namespace Assman
 		}
 
 		private IEnumerable<PreCompiledResourceGroup> ConsolidateGroupsInternal(ResourceType resourceType,
-																				 IResourceGroupManager groupTemplates,
-																				 ResourceMode mode,
-																				 Action<ICompiledResource> onCompiled)
+																				IResourceGroupManager groupTemplates,
+																				ResourceMode mode,
+																				Action<ICompiledResource> onCompiled)
 		{
 			if (!groupTemplates.Any())
 				return Enumerable.Empty<PreCompiledResourceGroup>();
@@ -199,6 +222,23 @@ namespace Assman
 			});
 
 			return preConsolidatedDependencies;
+		}
+
+		private class ManuallyMinifiedResource
+		{
+			public IResource DebugResource { get; set; }
+			public IResource ReleaseResource { get; set; }
+
+			public bool Matches(IResource resource)
+			{
+				return DebugResource.VirtualPath.Equals(resource.VirtualPath, StringComparison.OrdinalIgnoreCase)
+					   || ReleaseResource.VirtualPath.Equals(resource.VirtualPath, StringComparison.OrdinalIgnoreCase);
+			}
+
+			public bool WasMinifiedFrom(IResource resource)
+			{
+				return resource.VirtualPath.Equals(DebugResource.VirtualPath, StringComparison.OrdinalIgnoreCase);
+			}
 		}
 	}
 }
