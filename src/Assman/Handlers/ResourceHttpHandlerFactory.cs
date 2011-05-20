@@ -53,13 +53,15 @@ namespace Assman.Handlers
                 {
                     return null;
                 }
-                IContentFilter contentFilter = NullContentFilter.Instance;
-                if (!resourceType.IsDefaultExtension(fileExtension))
+                var contentFilterPipeline = _assmanContext.GetFilterPipelineForExtension(fileExtension);
+                var contentFilterContext = new ContentFilterContext
                 {
-                    contentFilter = _assmanContext.GetFilterForExtension(fileExtension, resourceMode);
-                }
-
-                return new UnconsolidatedResourceHandler(physicalPathToResource, resourceType, contentFilter);
+                    Minify = resourceMode == ResourceMode.Release,
+                    Mode = resourceMode,
+                    ResourceVirtualPath = appRelativePathToResource
+                };
+                
+                return new UnconsolidatedResourceHandler(physicalPathToResource, resourceType, contentFilterPipeline, contentFilterContext);
             }
         }
 

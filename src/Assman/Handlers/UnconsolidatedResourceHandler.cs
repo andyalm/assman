@@ -11,26 +11,31 @@ namespace Assman.Handlers
         private readonly string _physicalPathToResource;
         private readonly IFileAccess _fileAccess;
         private readonly ResourceType _resourceType;
-        private readonly IContentFilter _contentFilter;
+        private readonly ContentFilterPipeline _contentFilterPipeline;
+        private readonly ContentFilterContext _contentFilterContext;
 
         public UnconsolidatedResourceHandler(string physicalPathToResource,
             ResourceType resourceType,
-            IContentFilter contentFilter) : this(physicalPathToResource, resourceType, contentFilter, new FileAccessWrapper()) {}
+            ContentFilterPipeline contentFilterPipeline,
+            ContentFilterContext contentFilterContext)
+            : this(physicalPathToResource, resourceType, contentFilterPipeline, contentFilterContext, new FileAccessWrapper()) { }
         
         internal UnconsolidatedResourceHandler(string physicalPathToResource,
-                                                        ResourceType resourceType,
-                                                        IContentFilter contentFilter,
-                                                        IFileAccess fileAccess)
+                                               ResourceType resourceType,
+                                               ContentFilterPipeline contentFilterPipeline,
+                                               ContentFilterContext contentFilterContext,
+                                               IFileAccess fileAccess)
         {
             _physicalPathToResource = physicalPathToResource;
             _resourceType = resourceType;
-            _contentFilter = contentFilter;
+            _contentFilterPipeline = contentFilterPipeline;
+            _contentFilterContext = contentFilterContext;
             _fileAccess = fileAccess;
         }
 
         protected override IHandlerResource GetResource()
         {
-            return new UnconsolidatedHandlerResource(_fileAccess, _resourceType, _physicalPathToResource, _contentFilter);
+            return new UnconsolidatedHandlerResource(_fileAccess, _resourceType, _physicalPathToResource, _contentFilterPipeline, _contentFilterContext);
         }
 
         private class UnconsolidatedHandlerResource : IHandlerResource
@@ -38,15 +43,18 @@ namespace Assman.Handlers
             private readonly IFileAccess _fileAccess;
             private readonly ResourceType _resourceType;
             private readonly string _physicalFilePath;
-            private readonly IContentFilter _contentFilter;
+            private readonly ContentFilterPipeline _contentFilterPipeline;
+            private readonly ContentFilterContext _contentFilterContext;
 
             public UnconsolidatedHandlerResource(IFileAccess fileAccess, ResourceType resourceType,
-                                                 string physicalFilePath, IContentFilter contentFilter)
+                                                 string physicalFilePath, ContentFilterPipeline contentFilterPipeline,
+                                                 ContentFilterContext contentFilterContext)
             {
                 _fileAccess = fileAccess;
                 _resourceType = resourceType;
                 _physicalFilePath = physicalFilePath;
-                _contentFilter = contentFilter;
+                _contentFilterPipeline = contentFilterPipeline;
+                _contentFilterContext = contentFilterContext;
             }
 
             public DateTime GetLastModified()
@@ -65,7 +73,7 @@ namespace Assman.Handlers
                 using(var reader = _fileAccess.OpenReader(_physicalFilePath))
                 {
                     var fileContents = reader.ReadToEnd();
-                    contentToWrite = _contentFilter.FilterContent(fileContents);
+                    contentToWrite = _contentFilterPipeline.FilterContent(fileContents, _contentFilterContext);
                 }
 
                 var writer = new StreamWriter(outputStream);

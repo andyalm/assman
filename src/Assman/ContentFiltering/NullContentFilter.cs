@@ -14,7 +14,7 @@ namespace Assman.ContentFiltering
 
 		private NullContentFilter() {}
 
-		public string FilterContent(string content)
+		public string FilterContent(string content, ContentFilterContext context)
 		{
 			return content;
 		}

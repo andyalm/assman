@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 
-using Assman.ContentFiltering;
 using Assman.TestSupport;
 
 using NUnit.Framework;
@@ -67,7 +66,7 @@ namespace Assman
             resources.Add(new StubResource(contentB));
 
             StringWriter actualWriter = new StringWriter();
-            resources.ConsolidateContentTo(actualWriter, g => new RemoveSpacesFilter(), separator);
+            resources.ConsolidateContentTo(actualWriter, r => r.GetContent().Replace(" ", ""), separator);
 
             Assert.That(actualWriter.ToString(), Is.EqualTo(String.Format("aaa{0}bbb", Environment.NewLine)));
         }
@@ -84,14 +83,6 @@ namespace Assman
             resource.LastModified = lastModified;
 
             return resource;
-        }
-
-        private class RemoveSpacesFilter : IContentFilter
-        {
-            public string FilterContent(string content)
-            {
-                return content.Replace(" ", "");
-            }
         }
     }
 }

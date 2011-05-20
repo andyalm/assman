@@ -32,7 +32,7 @@ namespace Assman.Configuration
 		}
 
 		private readonly CompositeResourceFinder _finder;
-		private readonly ContentFilterMap _filterMap;
+		private readonly ContentFilterPipelineMap _filterPipelineMap;
 		private IResourceGroupManager _scriptGroups;
 		private IResourceGroupManager _styleGroups;
 		private readonly List<Assembly> _assemblies;
@@ -48,7 +48,7 @@ namespace Assman.Configuration
 			_finder.Exclude(new ConsolidatedResourceExcluder(_styleGroups));
 			_finder.Exclude(new PreCompiledResourceExcluder());
 			_finder.Exclude(new VsDocResourceExcluder());
-			_filterMap = new ContentFilterMap();
+			_filterPipelineMap = new ContentFilterPipelineMap();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
 			_resourceModeProvider = ConfigDrivenResourceModeProvider.GetInstance();
@@ -72,9 +72,9 @@ namespace Assman.Configuration
 
 		public string Version { get; set; }
 
-		public void MapExtensionToFilter(string fileExtension, IContentFilterFactory filterFactory)
+		public void MapExtensionToFilterPipeline(string fileExtension, ContentFilterPipeline filterPipeline)
 		{
-			_filterMap.MapExtension(fileExtension, filterFactory);
+			_filterPipelineMap.MapExtension(fileExtension, filterPipeline);
 		}
 
 		public IResourceGroupManager ScriptGroups
@@ -87,14 +87,9 @@ namespace Assman.Configuration
 			get { return _styleGroups; }
 		}
 
-		public IContentFilterFactory GetFilterFactoryForExtension(string fileExtension)
+		public ContentFilterPipeline GetFilterPipelineForExtension(string fileExtension)
 		{
-			return _filterMap.GetFilterFactoryForExtension(fileExtension);
-		}
-
-		public IContentFilter GetFilterForExtension(string fileExtension, ResourceMode resourceMode)
-		{
-			return _filterMap.GetFilterForExtension(fileExtension, resourceMode);
+			return _filterPipelineMap.GetPipelineForExtension(fileExtension);
 		}
 
 		public void AddFinder(IResourceFinder finder)
@@ -135,7 +130,7 @@ namespace Assman.Configuration
 
 		public ResourceCompiler GetConsolidator()
 		{
-			return new ResourceCompiler(_filterMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
+			return new ResourceCompiler(_filterPipelineMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
 		}
 
 		public IEnumerable<string> GetResourceDependencies(string virtualPath)

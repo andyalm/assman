@@ -10,15 +10,15 @@ namespace Assman
 {
 	public class ResourceCompiler
 	{
-		private readonly ContentFilterMap _contentFilterMap;
+		private readonly ContentFilterPipelineMap _contentFilterPipelineMap;
 		private readonly DependencyManager _dependencyManager;
 		private readonly IResourceGroupManager _scriptGroups;
 		private readonly IResourceGroupManager _styleGroups;
 		private readonly IResourceFinder _finder;
 
-		public ResourceCompiler(ContentFilterMap contentFilterMap, DependencyManager dependencyManager, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups, IResourceFinder finder)
+		public ResourceCompiler(ContentFilterPipelineMap contentFilterPipelineMap, DependencyManager dependencyManager, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups, IResourceFinder finder)
 		{
-			_contentFilterMap = contentFilterMap;
+			_contentFilterPipelineMap = contentFilterPipelineMap;
 			_dependencyManager = dependencyManager;
 			_scriptGroups = scriptGroups;
 			_styleGroups = styleGroups;
@@ -39,16 +39,22 @@ namespace Assman
 
 		public ICompiledResource CompileGroup(IResourceGroup group, ResourceMode mode)
 		{
-			Func<IResource, IContentFilter> createContentFilter = resource =>
+			Func<IResource, string> getResourceContent = resource =>
 			{
-				var contentFilterFactory = _contentFilterMap.GetFilterFactoryForExtension(resource.FileExtension);
-				var settings = new ResourceContentSettings {Minify = group.ShouldMinify(mode)};
-				return contentFilterFactory.CreateFilter(settings);
+				var contentFilterPipeline = _contentFilterPipelineMap.GetPipelineForExtension(resource.FileExtension);
+			    var contentFilterContext = new ContentFilterContext
+			    {
+			        Group = group,
+			        Minify = group.ShouldMinify(mode),
+			        Mode = mode,
+			        ResourceVirtualPath = resource.VirtualPath
+			    };
+			    return contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
 			};
 
 			return group.GetResources()
 				.SortByDependencies(_dependencyManager)
-				.Consolidate(group, createContentFilter, group.ResourceType.Separator);
+				.Consolidate(group, getResourceContent, group.ResourceType.Separator);
 		}
 
 		public PreCompilationReport CompileAll(Action<ICompiledResource> handleConsolidatedResource, ResourceMode mode)
@@ -106,8 +112,14 @@ namespace Assman
 
 		public ICompiledResource CompileResource(IResource resource, ResourceMode resourceMode)
 		{
-			var contentFilter = _contentFilterMap.GetFilterForExtension(resource.FileExtension, resourceMode);
-			var compiledContent = contentFilter.FilterContent(resource.GetContent());
+		    var contentFilterPipeline = _contentFilterPipelineMap.GetPipelineForExtension(resource.FileExtension);
+		    var contentFilterContext = new ContentFilterContext
+		    {
+		        Minify = resourceMode == ResourceMode.Release,
+		        Mode = resourceMode,
+		        ResourceVirtualPath = resource.VirtualPath
+		    };
+		    var compiledContent = contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
 
 			return new IndividuallyCompiledResource
 			{

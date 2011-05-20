@@ -49,7 +49,7 @@
 		</Reference>
 		<Reference Include="Assman.Spark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
 			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\..\..\src\Assman.Mvc\bin\$(Configuration)\Assman.Spark.dll</HintPath>
+			<HintPath>..\..\..\src\Assman.Spark\bin\$(Configuration)\Assman.Spark.dll</HintPath>
 		</Reference>
 		<Reference Include="Spark, Version=1.5.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
 			<SpecificVersion>False</SpecificVersion>

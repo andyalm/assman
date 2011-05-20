@@ -237,7 +237,7 @@ namespace Assman.Configuration
 			context.ScriptGroups.AddRange(Scripts.Groups.Cast<IResourceGroupTemplate>());
 			context.StyleGroups.AddGlobalDependencies(Stylesheets.GlobalDependencies.Cast<GlobalDependenciesElement>().Select(e => e.Path));
 			context.StyleGroups.AddRange(Stylesheets.Groups.Cast<IResourceGroupTemplate>());
-			context.MapExtensionToFilter(".js", JSMinContentFilterFactory.GetInstance());
+			context.MapExtensionToFilterPipeline(".js", DefaultJavascriptPipeline.Create());
 			context.MapExtensionToDependencyProvider(".js", VisualStudioScriptDependencyProvider.GetInstance());
 			context.MapExtensionToDependencyProvider(".css", CssDependencyProvider.GetInstance());
 

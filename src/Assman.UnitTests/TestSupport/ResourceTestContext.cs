@@ -7,7 +7,7 @@ namespace Assman.TestSupport
 	public class ResourceTestContext
 	{
 		private readonly StubResourceFinder _finder;
-		private readonly ContentFilterMap _contentFilterMap;
+		private readonly ContentFilterPipelineMap _contentFilterPipelineMap;
 		private readonly InMemoryDependencyCache _dependencyCache;
 		private readonly StubDependencyProvider _dependencyProvider;
 		private readonly DependencyManager _dependencyManager;
@@ -17,7 +17,7 @@ namespace Assman.TestSupport
 		public ResourceTestContext()
 		{
 			_finder = new StubResourceFinder();
-			_contentFilterMap = new ContentFilterMap();
+			_contentFilterPipelineMap = new ContentFilterPipelineMap();
 			_scriptGroups = new ResourceGroupManager();
 			_styleGroups = new ResourceGroupManager();
 			_dependencyCache = new InMemoryDependencyCache();
@@ -34,7 +34,7 @@ namespace Assman.TestSupport
 
 		public ResourceCompiler GetConsolidator()
 		{
-			return new ResourceCompiler(_contentFilterMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
+			return new ResourceCompiler(_contentFilterPipelineMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
 		}
 
 		public StubResourceBuilder CreateResource(string virtualPath)

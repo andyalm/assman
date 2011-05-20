@@ -74,9 +74,9 @@ namespace Assman
 		/// <param name="resources"></param>
 		/// <param name="writer"></param>
 		/// <param name="createContentFilter"></param>
-		public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, Func<IResource, IContentFilter> createContentFilter)
+		public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, Func<IResource, string> getResourceContent)
 		{
-			resources.ConsolidateContentTo(writer, createContentFilter, null);
+			resources.ConsolidateContentTo(writer, getResourceContent, null);
 		}
 
 		/// <summary>
@@ -86,12 +86,12 @@ namespace Assman
 		/// <param name="writer"></param>
 		/// <param name="createContentFilter"></param>
 		/// <param name="separator">A string that will be between each resource.</param>
-		public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, Func<IResource, IContentFilter> createContentFilter, string separator)
+		public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, Func<IResource, string> getResourceContent, string separator)
 		{
 			if (writer == null)
 				throw new ArgumentNullException("writer");
-			if (createContentFilter == null)
-				createContentFilter = r => NullContentFilter.Instance;
+			if (getResourceContent == null)
+				getResourceContent = r => r.GetContent();
 			if (separator == null)
 				separator = String.Empty;
 
@@ -102,9 +102,7 @@ namespace Assman
 					first = false;
 				else
 					writer.Write(separator);
-				string content = resource.GetContent();
-				var contentFilter = createContentFilter(resource) ?? NullContentFilter.Instance;
-				content = contentFilter.FilterContent(content);
+				var content = getResourceContent(resource);
 				writer.Write(content);
 			}
 		}
@@ -116,11 +114,11 @@ namespace Assman
 	    /// <param name="group"></param>
 	    /// <param name="createContentFilter"></param>
 	    /// <param name="separator"></param>
-	    public static ICompiledResource Consolidate(this IEnumerable<IResource> resources, IResourceGroup group, Func<IResource, IContentFilter> createContentFilter, string separator)
+	    public static ICompiledResource Consolidate(this IEnumerable<IResource> resources, IResourceGroup group, Func<IResource, string> getResourceContent, string separator)
 		{
 			var contentStream = new MemoryStream();
 			var writer = new StreamWriter(contentStream);
-			resources.ConsolidateContentTo(writer, createContentFilter, separator);
+			resources.ConsolidateContentTo(writer, getResourceContent, separator);
 			writer.Flush();
 
 			return new ConsolidatedResource(group, resources.ToResourceCollection(), contentStream);

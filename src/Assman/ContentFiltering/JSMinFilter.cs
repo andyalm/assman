@@ -12,15 +12,16 @@ namespace Assman.ContentFiltering
     {
         private readonly JavaScriptMinifier _minifier = new JavaScriptMinifier();
 
-        #region IContentFilter Members
-
         /// <summary>
         /// Minifies javascript content using the JSMin library.
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        public string FilterContent(string content)
+        public string FilterContent(string content, ContentFilterContext context)
         {
+            if (!context.Minify)
+                return content;
+            
             using (var input = new StringReader(content))
             {
                 using (var output = new StringWriter())
@@ -30,7 +31,5 @@ namespace Assman.ContentFiltering
                 }
             }
         }
-
-        #endregion
     }
 }

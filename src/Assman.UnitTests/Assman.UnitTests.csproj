@@ -95,7 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCompositeResourceFilter.cs" />
     <Compile Include="TestConsolidatedResource.cs" />
-    <Compile Include="TestContentFilterMap.cs" />
+    <Compile Include="TestContentFilterPipelineMap.cs" />
     <Compile Include="TestDependencyManager.cs" />
     <Compile Include="TestEmbeddedResource.cs" />
     <Compile Include="TestEmbeddedResourceFinder.cs" />

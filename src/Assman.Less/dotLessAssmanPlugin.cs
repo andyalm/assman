@@ -1,4 +1,5 @@
 using Assman.Configuration;
+using Assman.ContentFiltering;
 
 namespace Assman.Less
 {
@@ -9,7 +10,9 @@ namespace Assman.Less
 		public void Initialize(AssmanContext context)
 		{
 			ResourceType.Stylesheet.AddFileExtension(LessFileExtension);
-			context.MapExtensionToFilter(LessFileExtension, new LessContentFilterFactory());
+			var lessPipeline = new ContentFilterPipeline();
+			lessPipeline.Add(new LessContentFilter());
+			context.MapExtensionToFilterPipeline(LessFileExtension, lessPipeline);
 			context.MapExtensionToDependencyProvider(LessFileExtension, CssDependencyProvider.GetInstance());
 		}
 	}

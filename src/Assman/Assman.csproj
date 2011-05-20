@@ -86,6 +86,9 @@
     <Compile Include="BuildSupport\NullLogger.cs" />
     <Compile Include="Comparers.cs" />
     <Compile Include="ConsolidatedResourceExcluder.cs" />
+    <Compile Include="ContentFiltering\ContentFilterContext.cs" />
+    <Compile Include="ContentFiltering\ContentFilterPipeline.cs" />
+    <Compile Include="ContentFiltering\DefaultJavascriptPipeline.cs" />
     <Compile Include="IFinderExcluder.cs" />
     <Compile Include="IndividuallyCompiledResource.cs" />
     <Compile Include="CompositeResourceFilter.cs" />
@@ -100,7 +103,6 @@
     <Compile Include="Configuration\ResourceConfigurationElement.cs" />
     <Compile Include="Configuration\ScriptsConfigurationElement.cs" />
     <Compile Include="Configuration\StylesheetsConfigurationElement.cs" />
-    <Compile Include="ContentFiltering\ResourceContentSettings.cs" />
     <Compile Include="CssDependencyProvider.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="GroupTemplateContext.cs" />
@@ -113,7 +115,7 @@
     <Compile Include="PreCompilation\CompiledFilePersister.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="Configuration\ConsolidatedUrlTemplate.cs" />
-    <Compile Include="Configuration\ContentFilterMap.cs" />
+    <Compile Include="Configuration\ContentFilterPipelineMap.cs" />
     <Compile Include="Configuration\StylesheetGroupElement.cs" />
     <Compile Include="Configuration\StylesheetGroupElementCollection.cs" />
     <Compile Include="PreCompilation\IPreCompiledReportPersister.cs" />
@@ -135,7 +137,6 @@
     <Compile Include="Configuration\ResourceMatchElementCollection.cs" />
     <Compile Include="BuildSupport\PreCompileCommand.cs" />
     <Compile Include="ConsolidatedResource.cs" />
-    <Compile Include="ContentFiltering\JSMinContentFilterFactory.cs" />
     <Compile Include="ContentFiltering\JSMin\JavaScriptMinifier.cs" />
     <Compile Include="ContentFiltering\IContentFilter.cs" />
     <Compile Include="ContentFiltering\JSMinFilter.cs" />
@@ -148,7 +149,6 @@
     <Compile Include="DependencyManagerFactory.cs" />
     <Compile Include="IDependencyCache.cs" />
     <Compile Include="IDependencyProvider.cs" />
-    <Compile Include="ContentFiltering\IContentFilterFactory.cs" />
     <Compile Include="InMemoryDependencyCache.cs" />
     <Compile Include="IO\IFileFinder.cs" />
     <Compile Include="IResourceFinderFactory.cs" />
@@ -165,7 +165,6 @@
     <Compile Include="Registration\IReadableResourceRegistry.cs" />
     <Compile Include="Registration\IResourceRegistryAccessor.cs" />
     <Compile Include="IResourceMatch.cs" />
-    <Compile Include="ContentFiltering\NullContentFilterFactory.cs" />
     <Compile Include="RegexResourceMatch.cs" />
     <Compile Include="Registration\IResourceWriter.cs" />
     <Compile Include="Registration\NullResourceRegistry.cs" />
