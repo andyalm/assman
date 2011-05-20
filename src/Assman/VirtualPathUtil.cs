@@ -24,16 +24,21 @@ namespace Assman
 
 		public static string ToAppPath(this string path, IResource context)
 		{
-			if (IsAppPath(path))
-				return path;
-			
-			var relativeUri = new Uri(path, UriKind.Relative);
-			var contextUri = new Uri("http://www.website.com" + context.VirtualPath.Substring(1));
-
-			var resolvedUri = new Uri(contextUri, relativeUri);
-
-			return "~" + resolvedUri.AbsolutePath;
+		    return path.ToAppPath(context.VirtualPath);
 		}
+
+        public static string ToAppPath(this string path, string contextVirtualPath)
+        {
+            if (IsAppPath(path))
+                return path;
+
+            var relativeUri = new Uri(path, UriKind.Relative);
+            var contextUri = new Uri("http://www.website.com" + contextVirtualPath.Substring(1));
+
+            var resolvedUri = new Uri(contextUri, relativeUri);
+
+            return "~" + resolvedUri.AbsolutePath;
+        }
 
 		public static string ChangeExtension(this string path, string newExtension)
 		{

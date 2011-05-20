@@ -88,7 +88,8 @@
     <Compile Include="ConsolidatedResourceExcluder.cs" />
     <Compile Include="ContentFiltering\ContentFilterContext.cs" />
     <Compile Include="ContentFiltering\ContentFilterPipeline.cs" />
-    <Compile Include="ContentFiltering\DefaultJavascriptPipeline.cs" />
+    <Compile Include="ContentFiltering\CssRelativePathFilter.cs" />
+    <Compile Include="ContentFiltering\DefaultPipelines.cs" />
     <Compile Include="IFinderExcluder.cs" />
     <Compile Include="IndividuallyCompiledResource.cs" />
     <Compile Include="CompositeResourceFilter.cs" />

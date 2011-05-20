@@ -16,7 +16,7 @@ namespace Assman.ContentFiltering
         /// Minifies javascript content using the JSMin library.
         /// </summary>
         /// <param name="content"></param>
-        /// <returns></returns>
+        /// <param name="context"></param>
         public string FilterContent(string content, ContentFilterContext context)
         {
             if (!context.Minify)

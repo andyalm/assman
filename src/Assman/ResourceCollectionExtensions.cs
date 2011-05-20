@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Assman.ContentFiltering;
-
 namespace Assman
 {
 	public static class ResourceCollectionExtensions
@@ -68,25 +66,25 @@ namespace Assman
 			resources.ConsolidateContentTo(writer, null, separator);
 		}
 
-		/// <summary>
-		/// Writes the contents of all of the contained resources to the given <see cref="TextWriter"/>.
-		/// </summary>
-		/// <param name="resources"></param>
-		/// <param name="writer"></param>
-		/// <param name="createContentFilter"></param>
-		public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, Func<IResource, string> getResourceContent)
+	    /// <summary>
+	    /// Writes the contents of all of the contained resources to the given <see cref="TextWriter"/>.
+	    /// </summary>
+	    /// <param name="resources"></param>
+	    /// <param name="writer"></param>
+	    /// <param name="getResourceContent"></param>
+	    public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, Func<IResource, string> getResourceContent)
 		{
 			resources.ConsolidateContentTo(writer, getResourceContent, null);
 		}
 
-		/// <summary>
-		/// Writes the contents of all of the contained resources to the given <see cref="TextWriter"/>.
-		/// </summary>
-		/// <param name="resources"></param>
-		/// <param name="writer"></param>
-		/// <param name="createContentFilter"></param>
-		/// <param name="separator">A string that will be between each resource.</param>
-		public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, Func<IResource, string> getResourceContent, string separator)
+	    /// <summary>
+	    /// Writes the contents of all of the contained resources to the given <see cref="TextWriter"/>.
+	    /// </summary>
+	    /// <param name="resources"></param>
+	    /// <param name="writer"></param>
+	    /// <param name="getResourceContent"></param>
+	    /// <param name="separator">A string that will be between each resource.</param>
+	    public static void ConsolidateContentTo(this IEnumerable<IResource> resources, TextWriter writer, Func<IResource, string> getResourceContent, string separator)
 		{
 			if (writer == null)
 				throw new ArgumentNullException("writer");
@@ -112,7 +110,7 @@ namespace Assman
 	    /// </summary>
 	    /// <param name="resources"></param>
 	    /// <param name="group"></param>
-	    /// <param name="createContentFilter"></param>
+	    /// <param name="getResourceContent"></param>
 	    /// <param name="separator"></param>
 	    public static ICompiledResource Consolidate(this IEnumerable<IResource> resources, IResourceGroup group, Func<IResource, string> getResourceContent, string separator)
 		{
