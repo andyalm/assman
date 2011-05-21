@@ -6,13 +6,11 @@ namespace Assman
 	{
 		private readonly string _pathToMatch;
 		private readonly string _actualValue;
-		private readonly ResourceMode? _mode;
 
-		public PathResourceMatch(string pathToMatch, string actualValue, ResourceMode? mode)
+	    public PathResourceMatch(string pathToMatch, string actualValue)
 		{
 			_pathToMatch = pathToMatch;
 			_actualValue = actualValue;
-			_mode = mode;
 		}
 
 		public bool IsMatch()
@@ -20,12 +18,7 @@ namespace Assman
 			return _pathToMatch.Equals(_actualValue, StringComparison.OrdinalIgnoreCase);
 		}
 
-		public bool IsMatch(ResourceMode mode)
-		{
-			return IsMatch() && (_mode == null || _mode == mode);
-		}
-
-		public string GetSubValue(string name)
+	    public string GetSubValue(string name)
 		{
 			return null;
 		}

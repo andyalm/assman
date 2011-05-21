@@ -3,9 +3,8 @@ namespace Assman
 	public interface IResourceMatch
 	{
 		bool IsMatch();
-		bool IsMatch(ResourceMode mode);
 
-		string GetSubValue(string name);
+	    string GetSubValue(string name);
 
 		string Value { get; }
 	}
@@ -36,12 +35,7 @@ namespace Assman
 				return false;
 			}
 
-			public bool IsMatch(ResourceMode mode)
-			{
-				return false;
-			}
-
-			public string GetSubValue(string name)
+		    public string GetSubValue(string name)
 			{
 				return null;
 			}
@@ -66,12 +60,7 @@ namespace Assman
 				return !_inner.IsMatch();
 			}
 
-			public bool IsMatch(ResourceMode mode)
-			{
-				return !_inner.IsMatch(mode);
-			}
-
-			public string GetSubValue(string name)
+		    public string GetSubValue(string name)
 			{
 				return _inner.GetSubValue(name);
 			}

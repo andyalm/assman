@@ -90,6 +90,8 @@
     <Compile Include="ContentFiltering\ContentFilterPipeline.cs" />
     <Compile Include="ContentFiltering\CssRelativePathFilter.cs" />
     <Compile Include="ContentFiltering\DefaultPipelines.cs" />
+    <Compile Include="ExternallyCompiledResource.cs" />
+    <Compile Include="ExternallyCompiledResourceExtensions.cs" />
     <Compile Include="IFinderExcluder.cs" />
     <Compile Include="IndividuallyCompiledResource.cs" />
     <Compile Include="CompositeResourceFilter.cs" />

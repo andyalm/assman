@@ -5,12 +5,10 @@ namespace Assman
 	public class RegexResourceMatch : IResourceMatch
 	{
 		private readonly Match _match;
-		private readonly ResourceMode? _mode;
 
-		public RegexResourceMatch(Match match, ResourceMode? mode)
+	    public RegexResourceMatch(Match match)
 		{
 			_match = match;
-			_mode = mode;
 		}
 
 		public bool IsMatch()
@@ -18,12 +16,7 @@ namespace Assman
 			return _match.Success;
 		}
 
-		public bool IsMatch(ResourceMode mode)
-		{
-			return IsMatch() && (_mode == null || _mode == mode);
-		}
-
-		public string GetSubValue(string name)
+	    public string GetSubValue(string name)
 		{
 			var group = _match.Groups[name];
 			if (group.Success)

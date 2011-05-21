@@ -88,7 +88,7 @@ namespace Assman
 		}
 
 		[Test]
-		public void WhenGroupContainsPatternForDebugAndReleaseVersionsOfScript_DebugVersionIsExcludedFromReleaseGroupAndReleaseIsExcludedFromDebugGroup()
+		public void WhenGroupContainsPatternThatMatchesOnlyOneVersionOfExternallyCompiledResource_DebugVersionIsExcludedFromReleaseAndViceVersa()
 		{
 			CreateResources("neutralscript.js", "MicrosoftAjax.debug.js", "MicrosoftAjax.js");
 
@@ -98,13 +98,32 @@ namespace Assman
 			});
 			_element.Include.Add(new ResourceMatchElement
 			{
-				Path = "~/MicrosoftAjax.debug.js",
-				Mode = ResourceMode.Debug
+				Path = "~/MicrosoftAjax.js"
+			});
+
+			var debugResources = _element.GetGroups(_allResources, ResourceMode.Debug).Single().GetResources().ToList();
+			debugResources.CountShouldEqual(2);
+			debugResources[0].VirtualPath.ShouldEqual("~/neutralscript.js");
+			debugResources[1].VirtualPath.ShouldEqual("~/MicrosoftAjax.debug.js");
+
+			var releaseResources = _element.GetGroups(_allResources, ResourceMode.Release).Single().GetResources().ToList();
+			releaseResources.CountShouldEqual(2);
+			releaseResources[0].VirtualPath.ShouldEqual("~/neutralscript.js");
+			releaseResources[1].VirtualPath.ShouldEqual("~/MicrosoftAjax.js");
+		}
+
+		[Test]
+		public void WhenGroupContainsPatternThatMatchesBothVersionsOfExternallyCompiledResource_DebugVersionIsExcludedFromReleaseAndViceVersa()
+		{
+			CreateResources("neutralscript.js", "MicrosoftAjax.debug.js", "MicrosoftAjax.js");
+
+			_element.Include.Add(new ResourceMatchElement
+			{
+				Regex = "neutralscript.js"
 			});
 			_element.Include.Add(new ResourceMatchElement
 			{
-				Path = "~/MicrosoftAjax.js",
-				Mode = ResourceMode.Release
+				Regex = "MicrosoftAjax"
 			});
 
 			var debugResources = _element.GetGroups(_allResources, ResourceMode.Debug).Single().GetResources().ToList();

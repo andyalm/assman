@@ -31,13 +31,6 @@ namespace Assman.Configuration
 			set { this[PropertyNames.Path] = value; }
 		}
 
-		[ConfigurationProperty(PropertyNames.Mode, DefaultValue = null)]
-		public ResourceMode? Mode
-		{
-			get { return (ResourceMode?) this[PropertyNames.Mode]; }
-			set { this[PropertyNames.Mode] = value; }
-		}
-
 		public string Key
 		{
 			get
@@ -62,9 +55,9 @@ namespace Assman.Configuration
 		public IResourceMatch GetMatch(string resourcePath)
 		{
 			if (IsRegexMode)
-				return new RegexResourceMatch(Rx.Match(resourcePath), Mode);
+				return new RegexResourceMatch(Rx.Match(resourcePath));
 			else
-				return new PathResourceMatch(Path, resourcePath, Mode);
+				return new PathResourceMatch(Path, resourcePath);
 		}
 
 		private Regex Rx

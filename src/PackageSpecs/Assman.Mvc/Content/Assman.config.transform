@@ -3,19 +3,18 @@
 		<groups>
 			<group consolidatedUrl="~/Scripts/Consolidated/Shared.js">
 				<include>
-					<add pattern="~/Scripts/jquery-1\.\d\.\d\.min\.js" mode="Release" />
-					<add pattern="~/Scripts/jquery-1\.\d\.\d\.js" mode="Debug" />
-					<add pattern="~/Views/Shared/.+" />
+					<add regex="~/Scripts/jquery-1\.\d\.\d\.js" />
+					<add regex="~/Views/Shared/.+" />
 				</include>
 			</group>
 			<group consolidatedUrl="~/Content/Consolidated/Mvc/{area}/{controller}.js">
 				<include>
-					<add pattern="~/Areas/(?'area'\w+)/Views/(?'controller'\w+)/.+" />
+					<add regex="~/Areas/(?'area'\w+)/Views/(?'controller'\w+)/.+" />
 				</include>
 			</group>
 			<group consolidatedUrl="~/Content/Consolidated/Mvc/{controller}.js">
 				<include>
-					<add pattern="~/Views/(?'controller'\w+)/.+" />
+					<add regex="~/Views/(?'controller'\w+)/.+" />
 				</include>
 			</group>
 		</groups>
@@ -24,18 +23,18 @@
 		<groups>
 			<group consolidatedUrl="~/Content/Consolidated/Shared.css">
 				<include>
-					<add pattern="~/Content/.+" />
-					<add pattern="~/Views/Shared/.+" />
+					<add regex="~/Content/.+" />
+					<add regex="~/Views/Shared/.+" />
 				</include>
 			</group>
 			<group consolidatedUrl="~/Content/Consolidated/Mvc/{area}/{controller}.css">
 				<include>
-					<add pattern="~/Areas/(?'area'\w+)/Views/(?'controller'\w+)/.+" />
+					<add regex="~/Areas/(?'area'\w+)/Views/(?'controller'\w+)/.+" />
 				</include>
 			</group>
 			<group consolidatedUrl="~/Content/Consolidated/Mvc/{controller}.css">
 				<include>
-					<add pattern="~/Views/(?'controller'\w+)/.+" />
+					<add regex="~/Views/(?'controller'\w+)/.+" />
 				</include>
 			</group>
 		</groups>

@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<default Title="'Resource Management Sample Mvc Site'" type="string" />
+<default Title="'Assman Sample Mvc Site'" type="string" />
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>${Title}</title>
-	<RequireScript path="~/Scripts/jquery-1.4.1.min.js" target="head" />
+	<title>${Title}</title>
+	<RequireScript path="~/Scripts/jquery-1.4.1.js" target="head" />
 	#Html.RenderStyles();
 	#Html.RenderScripts("head");
 </head>

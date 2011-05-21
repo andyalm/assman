@@ -78,10 +78,7 @@ namespace Assman
 												 && CanCompileIndividually(resource)
 										   select resource).ToList();
 
-			var manuallyMinifiedResources = (from resource1 in resources
-											from resource2 in resources
-											where ManuallyMinifiedResource.IsPair(resource1, resource2)
-											select new ManuallyMinifiedResource { DebugResource = resource2, ReleaseResource = resource1 }).ToList();
+			var manuallyMinifiedResources = resources.ExternallyCompiled().ToList();
 
 			var compiledResources = new List<ICompiledResource>();
 			foreach (var unconsolidatedResource in unconsolidatedResources)
@@ -234,29 +231,6 @@ namespace Assman
 			});
 
 			return preConsolidatedDependencies;
-		}
-
-		private class ManuallyMinifiedResource
-		{
-			public IResource DebugResource { get; set; }
-			public IResource ReleaseResource { get; set; }
-
-			public bool Matches(IResource resource)
-			{
-				return DebugResource.VirtualPath.Equals(resource.VirtualPath, StringComparison.OrdinalIgnoreCase)
-					   || ReleaseResource.VirtualPath.Equals(resource.VirtualPath, StringComparison.OrdinalIgnoreCase);
-			}
-
-			public bool WasMinifiedFrom(IResource resource)
-			{
-				return resource.VirtualPath.Equals(DebugResource.VirtualPath, StringComparison.OrdinalIgnoreCase);
-			}
-
-			public static bool IsPair(IResource potentialReleaseResource, IResource potentialDebugResource)
-			{
-				return potentialReleaseResource.VirtualPath == potentialDebugResource.VirtualPath.ChangeExtension(".min" + potentialDebugResource.FileExtension)
-					|| potentialDebugResource.VirtualPath == potentialReleaseResource.VirtualPath.ChangeExtension(".debug" + potentialReleaseResource.FileExtension);
-			}
 		}
 	}
 }

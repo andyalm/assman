@@ -106,13 +106,44 @@ namespace Assman.Configuration
 
 		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{
+			//prevent multiple enumerations of potentially expensive IEnumerable
+			allResources = allResources.ToList();
+
+			var externallyCompiledResources = allResources.ExternallyCompiled();
+			
 			return  from resource in allResources
 					let match = GetMatch(resource.VirtualPath)
-					where match.IsMatch(mode)
-					let resourceWithUrl = new { Resource = resource, ConsolidatedUrl = GetConsolidatedUrl(match) }
+					let resourceOfCorrectMode = resource.WithMode(mode, externallyCompiledResources)
+					let relatedMatch = GetMatch(resourceOfCorrectMode.VirtualPath)
+					let isMatch = match.IsMatch()
+					let isRelatedMatch = relatedMatch.IsMatch()
+					where isMatch || isRelatedMatch
+					let resourceWithUrl = new ResourceWithMatchingPath
+					{
+						Resource = resourceOfCorrectMode,
+						ConsolidatedUrl = GetConsolidatedUrl(match),
+						MatchingPath = isMatch ? resource.VirtualPath : resourceOfCorrectMode.VirtualPath
+					}
 					group resourceWithUrl by resourceWithUrl.ConsolidatedUrl into @group
 					select CreateGroup(@group.Key,
-						@group.Select(g => g.Resource).Sort(IncludePatternOrder()));
+						@group.Distinct().Sort(IncludePatternOrder()).Select(r => r.Resource));
+		}
+
+		private class ResourceWithMatchingPath
+		{
+			public IResource Resource { get; set; }
+			public string ConsolidatedUrl { get; set; }
+			public string MatchingPath { get; set; }
+
+			public override bool Equals(object obj)
+			{
+				return Resource.VirtualPath.Equals(((ResourceWithMatchingPath)obj).Resource.VirtualPath);
+			}
+
+			public override int GetHashCode()
+			{
+				return Resource.VirtualPath.GetHashCode();
+			}
 		}
 
 		public bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl)
@@ -170,12 +201,12 @@ namespace Assman.Configuration
 			return ResourceMatches.False(resourceUrl);
 		}
 
-		private Comparison<IResource> IncludePatternOrder()
+		private Comparison<ResourceWithMatchingPath> IncludePatternOrder()
 		{
-			return (IResource x, IResource y) =>
+			return (ResourceWithMatchingPath x, ResourceWithMatchingPath y) =>
 			{
-				int xIndex = Include.GetMatchIndex(x.VirtualPath);
-				int yIndex = Include.GetMatchIndex(y.VirtualPath);
+				int xIndex = Include.GetMatchIndex(x.MatchingPath);
+				int yIndex = Include.GetMatchIndex(y.MatchingPath);
 
 				return xIndex - yIndex;
 			};
