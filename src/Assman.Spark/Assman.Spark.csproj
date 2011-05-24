@@ -98,7 +98,7 @@
     <Compile Include="SparkResource.cs" />
     <Compile Include="SparkResourceContentFetcher.cs" />
     <Compile Include="SparkResourceFinder.cs" />
-    <Compile Include="SparkResourceFinderFactory.cs" />
+    <Compile Include="SparkJavascriptAssmanPlugin.cs" />
     <Compile Include="StaticMethodActionFinder.cs" />
   </ItemGroup>
   <ItemGroup>

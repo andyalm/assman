@@ -105,7 +105,7 @@ namespace Assman.Configuration
 		/// <summary>
 		/// Gets or sets whether dependencies provided by the <see cref="IDependencyProvider"/>'s will be included automatically.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.ManageDependencies, DefaultValue = false)]
+		[ConfigurationProperty(PropertyNames.ManageDependencies, DefaultValue = true)]
 		public bool ManageDependencies
 		{
 			get { return (bool)this[PropertyNames.ManageDependencies]; }
@@ -208,7 +208,7 @@ namespace Assman.Configuration
 			_lastModified = value;
 		}
 
-		public AssmanContext BuildContext(bool usePreConsolidationReportIfPresent = true)
+		public AssmanContext BuildContext(bool usePreCompilationReportIfPresent = true)
 		{
 			IResourceFinder fileFinder = ResourceFinderFactory.Null;
 			IPreCompiledReportPersister preCompiledPersister = NullPreCompiledPersister.Instance;
@@ -216,7 +216,7 @@ namespace Assman.Configuration
 			if(!String.IsNullOrEmpty(RootFilePath))
 			{
 				fileFinder = ResourceFinderFactory.GetInstance(RootFilePath);
-				if(usePreConsolidationReportIfPresent)
+				if(usePreCompilationReportIfPresent)
 					preCompiledPersister = CompiledFilePersister.ForWebDirectory(RootFilePath);
 			}
 

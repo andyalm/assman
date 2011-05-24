@@ -114,7 +114,6 @@
     <Compile Include="TestSupport\StubPlugin.cs" />
     <Compile Include="TestSupport\StubRequestContext.cs" />
     <Compile Include="TestSupport\StubResourceFinder.cs" />
-    <Compile Include="TestSupport\StubResourceFinderFactory.cs" />
     <Compile Include="TestSupport\StubResourceGroup.cs" />
     <Compile Include="TestSupport\StubResourceGroupTemplate.cs" />
     <Compile Include="TestSupport\StubResourceType.cs" />

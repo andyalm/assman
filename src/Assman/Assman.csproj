@@ -154,7 +154,6 @@
     <Compile Include="IDependencyProvider.cs" />
     <Compile Include="InMemoryDependencyCache.cs" />
     <Compile Include="IO\IFileFinder.cs" />
-    <Compile Include="IResourceFinderFactory.cs" />
     <Compile Include="IResourceGroup.cs" />
     <Compile Include="IResourceGroupTemplate.cs" />
     <Compile Include="PathResourceMatch.cs" />
