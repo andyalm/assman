@@ -46,7 +46,6 @@ namespace Assman
 			    {
 			        Group = group,
 			        Minify = group.ShouldMinify(mode),
-			        Mode = mode,
 			        ResourceVirtualPath = resource.VirtualPath
 			    };
 			    return contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
@@ -78,30 +77,18 @@ namespace Assman
 												 && CanCompileIndividually(resource)
 										   select resource).ToList();
 
-			var manuallyMinifiedResources = resources.ExternallyCompiled().ToList();
+			var externallyCompiledResources = resources.ExternallyCompiled().ToList();
 
 			var compiledResources = new List<ICompiledResource>();
 			foreach (var unconsolidatedResource in unconsolidatedResources)
 			{
-				var manuallyMinifiedResource = manuallyMinifiedResources.SingleOrDefault(r => r.Matches(unconsolidatedResource));
-				if(manuallyMinifiedResource == null)
+				var externallyCompiledResource = externallyCompiledResources.SingleOrDefault(r => r.Matches(unconsolidatedResource));
+				if(externallyCompiledResource == null)
 				{
 					var compiledResource = CompileResource(unconsolidatedResource, resourceMode);
 					handleCompiledResource(compiledResource);
 					compiledResources.Add(compiledResource);
-				}
-				else if(manuallyMinifiedResource.WasMinifiedFrom(unconsolidatedResource))
-				{
-					var compiledResource = new IndividuallyCompiledResource
-					{
-						Resource = unconsolidatedResource,
-						Mode = resourceMode,
-						CompiledContent = manuallyMinifiedResource.ReleaseResource.GetContent(),
-						CompiledPath = manuallyMinifiedResource.ReleaseResource.VirtualPath
-					};
-					compiledResources.Add(compiledResource);
-				}
-					
+				}	
 			}
 
 			return compiledResources;
@@ -113,7 +100,6 @@ namespace Assman
 		    var contentFilterContext = new ContentFilterContext
 		    {
 		        Minify = resourceMode == ResourceMode.Release,
-		        Mode = resourceMode,
 		        ResourceVirtualPath = resource.VirtualPath
 		    };
 		    var compiledContent = contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);

@@ -35,7 +35,6 @@ namespace Assman.Handlers
             {
                 context.LastModified = lastModified;
                 context.ContentType = resource.ResourceType.ContentType;
-                string version;
                 if(context.IsRequestVersioned())
                 {
                     context.Expires = Now().AddYears(1);
@@ -71,10 +70,40 @@ namespace Assman.Handlers
             var resource = GetResource();
             if (CachingEnabled)
             {
-                _cachedResource = resource;
+                _cachedResource = new CachedHandlerResource(resource);
             }
 
             return resource;
+        }
+
+        private class CachedHandlerResource : IHandlerResource
+        {
+            private readonly DateTime _lastModified;
+            private readonly ResourceType _resourceType;
+            private readonly MemoryStream _content;
+
+            public CachedHandlerResource(IHandlerResource inner)
+            {
+                _lastModified = inner.GetLastModified();
+                _resourceType = inner.ResourceType;
+                _content = new MemoryStream();
+                inner.WriteContent(_content);
+            }
+
+            public DateTime GetLastModified()
+            {
+                return _lastModified;
+            }
+
+            public ResourceType ResourceType
+            {
+                get { return _resourceType; }
+            }
+
+            public void WriteContent(Stream outputStream)
+            {
+                _content.WriteTo(outputStream);
+            }
         }
     }
 

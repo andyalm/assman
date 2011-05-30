@@ -10,7 +10,6 @@ namespace Assman.Handlers
 {
     public class ResourceHttpHandlerFactory : IHttpHandlerFactory
     {
-        private static readonly IHttpHandler _staticHandler = CreateStaticFileHandler();
         private readonly IThreadSafeInMemoryCache<string, IHttpHandler> _pathToHandlerCache = CreateHandlerCache();
         private readonly AssmanContext _assmanContext;
         private readonly IConfigLoader _configLoader;
@@ -25,21 +24,27 @@ namespace Assman.Handlers
 
         public IHttpHandler GetHandler(HttpContext context, string requestType, string url, string pathTranslated)
         {
-            if (_assmanContext.PreConsolidated)
-                return _staticHandler;
-
             var appRelativePath = "~" + url;
 
-            return _pathToHandlerCache.GetOrAdd(pathTranslated, () => GetHandlerUncached(pathTranslated, appRelativePath));
+            return _pathToHandlerCache.GetOrAdd(appRelativePath, () => GetHandlerUncached(pathTranslated, appRelativePath));
         }
 
         public IHttpHandler GetHandlerUncached(string physicalPathToResource, string appRelativePathToResource)
         {
+            var resourceType = ResourceType.FromPath(physicalPathToResource);
+            if (resourceType == null)
+            {
+                return null;
+            }
             var resourceMode = GetResourceMode();
+            
+            if (_assmanContext.PreCompiled)
+                return new PreCompiledResourceHandler(physicalPathToResource, resourceType, resourceMode);
+            
             var groupTemplate = _assmanContext.FindGroupTemplate(appRelativePathToResource);
             if (groupTemplate != null)
             {
-                return new ConsolidatedResourceHandler(appRelativePathToResource, _assmanContext.GetConsolidator(),
+                return new DynamicallyConsolidatedResourceHandler(appRelativePathToResource, _assmanContext.GetConsolidator(),
                                                        groupTemplate)
                 {
                     MinLastModified = _assmanContext.ConfigurationLastModified,
@@ -49,37 +54,24 @@ namespace Assman.Handlers
             else
             {
                 var fileExtension = Path.GetExtension(physicalPathToResource);
-                var resourceType = ResourceType.FromPath(physicalPathToResource);
-                if (resourceType == null)
-                {
-                    return null;
-                }
+                
                 var contentFilterPipeline = _assmanContext.GetContentPipelineForExtension(fileExtension);
                 var contentFilterContext = new ContentFilterContext
                 {
                     Minify = resourceMode == ResourceMode.Release,
-                    Mode = resourceMode,
                     ResourceVirtualPath = appRelativePathToResource
                 };
 
-                return new UnconsolidatedResourceHandler(physicalPathToResource, resourceType, contentFilterPipeline, contentFilterContext)
+                return new DynamicallyCompiledIndividualResourceHandler(physicalPathToResource, resourceType, contentFilterPipeline, contentFilterContext)
                 {
                     Mode = resourceMode
                 };
             }
         }
 
-
         private static IThreadSafeInMemoryCache<string, IHttpHandler> CreateHandlerCache()
         {
-            return new ThreadSafeInMemoryCache<string, IHttpHandler>(Comparers.FileSystemPath);
-        }
-
-        private static IHttpHandler CreateStaticFileHandler()
-        {
-            var webAssembly = typeof (IHttpHandler).Assembly;
-            var staticHandlerType = webAssembly.GetType("System.Web.StaticFileHandler", true);
-            return (IHttpHandler) Activator.CreateInstance(staticHandlerType, nonPublic : true);
+            return new ThreadSafeInMemoryCache<string, IHttpHandler>(Comparers.VirtualPath);
         }
 
         private ResourceMode GetResourceMode()

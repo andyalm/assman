@@ -34,7 +34,7 @@ namespace Assman
 		[Test]
 		public void DefaultStateOfPreConsolidationFlagIsFalse()
 		{
-			_context.PreConsolidated.ShouldBeFalse();
+			_context.PreCompiled.ShouldBeFalse();
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace Assman
 			var preConsolidationReport = new PreCompilationReport();
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
-			_context.PreConsolidated.ShouldBeTrue();
+			_context.PreCompiled.ShouldBeTrue();
 		}
 
 		[Test]
@@ -109,29 +109,6 @@ namespace Assman
 			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)
 			string consolidatedUrl;
 			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), out consolidatedUrl), Times.Never());
-		}
-
-		[Test]
-		public void WhenPreConsolidatedReportIsLoaded_ResourceUrlCacheIsPrepopulatedWithIndividuallyCompiledResources()
-		{
-			var preConsolidationReport = new PreCompilationReport
-			{
-				Scripts = new PreCompiledResourceReport
-				{
-					SingleResources = new List<PreCompiledSingleResource>
-					{
-						new PreCompiledSingleResource
-						{
-							OriginalPath = "~/myfile.js",
-							CompiledPath = "~/myfile.min.js"
-						}
-					}
-				}
-			};
-			_context.LoadPreCompilationReport(preConsolidationReport);
-
-			var resolvedUrl = _context.GetScriptUrls("~/myfile.js").Single();
-			resolvedUrl.ShouldEqual("~/myfile.min.js");
 		}
 
 		[Test]

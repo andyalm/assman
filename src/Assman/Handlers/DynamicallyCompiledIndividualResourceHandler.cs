@@ -6,7 +6,7 @@ using Assman.IO;
 
 namespace Assman.Handlers
 {
-    internal class UnconsolidatedResourceHandler : ResourceHandlerBase
+    internal class DynamicallyCompiledIndividualResourceHandler : ResourceHandlerBase
     {
         private readonly string _physicalPathToResource;
         private readonly IFileAccess _fileAccess;
@@ -14,13 +14,13 @@ namespace Assman.Handlers
         private readonly ContentFilterPipeline _contentFilterPipeline;
         private readonly ContentFilterContext _contentFilterContext;
 
-        public UnconsolidatedResourceHandler(string physicalPathToResource,
+        public DynamicallyCompiledIndividualResourceHandler(string physicalPathToResource,
             ResourceType resourceType,
             ContentFilterPipeline contentFilterPipeline,
             ContentFilterContext contentFilterContext)
             : this(physicalPathToResource, resourceType, contentFilterPipeline, contentFilterContext, new FileAccessWrapper()) { }
         
-        internal UnconsolidatedResourceHandler(string physicalPathToResource,
+        internal DynamicallyCompiledIndividualResourceHandler(string physicalPathToResource,
                                                ResourceType resourceType,
                                                ContentFilterPipeline contentFilterPipeline,
                                                ContentFilterContext contentFilterContext,
@@ -35,10 +35,10 @@ namespace Assman.Handlers
 
         protected override IHandlerResource GetResource()
         {
-            return new UnconsolidatedHandlerResource(_fileAccess, _resourceType, _physicalPathToResource, _contentFilterPipeline, _contentFilterContext);
+            return new DynamicallyCompiledIndividualResource(_fileAccess, _resourceType, _physicalPathToResource, _contentFilterPipeline, _contentFilterContext);
         }
 
-        private class UnconsolidatedHandlerResource : IHandlerResource
+        private class DynamicallyCompiledIndividualResource : IHandlerResource
         {
             private readonly IFileAccess _fileAccess;
             private readonly ResourceType _resourceType;
@@ -46,7 +46,7 @@ namespace Assman.Handlers
             private readonly ContentFilterPipeline _contentFilterPipeline;
             private readonly ContentFilterContext _contentFilterContext;
 
-            public UnconsolidatedHandlerResource(IFileAccess fileAccess, ResourceType resourceType,
+            public DynamicallyCompiledIndividualResource(IFileAccess fileAccess, ResourceType resourceType,
                                                  string physicalFilePath, ContentFilterPipeline contentFilterPipeline,
                                                  ContentFilterContext contentFilterContext)
             {

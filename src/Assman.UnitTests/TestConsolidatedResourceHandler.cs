@@ -15,7 +15,7 @@ namespace Assman
 	public class TestConsolidatedResourceHandler
 	{
 		private DateTime _lastModified;
-		private ConsolidatedResourceHandler _instance;
+		private DynamicallyConsolidatedResourceHandler _instance;
 		private Mock<IResourceFinder> _finder;
 		private static readonly ResourceType _resourceType = ResourceType.Script;
 		private DateTime _now;
@@ -41,7 +41,7 @@ namespace Assman
 			var configContext = AssmanContext.Create();
 			configContext.AddFinder(_finder.Object);
 
-			_instance = new ConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext())
+			_instance = new DynamicallyConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext())
 			{
 				Now = () => _now
 			};

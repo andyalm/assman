@@ -90,8 +90,9 @@
     <Compile Include="ContentFiltering\ContentFilterPipeline.cs" />
     <Compile Include="ContentFiltering\CssRelativePathFilter.cs" />
     <Compile Include="ContentFiltering\DefaultPipelines.cs" />
-    <Compile Include="ExternallyCompiledResource.cs" />
-    <Compile Include="ExternallyCompiledResourceExtensions.cs" />
+    <Compile Include="CompiledResourcePair.cs" />
+    <Compile Include="CompiledResourcePairExtensions.cs" />
+    <Compile Include="Handlers\PreCompiledResourceHandler.cs" />
     <Compile Include="Handlers\RequestContextExtensions.cs" />
     <Compile Include="IFinderExcluder.cs" />
     <Compile Include="IndividuallyCompiledResource.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Handlers\ResourceHandlerBase.cs" />
     <Compile Include="ICompiledResource.cs" />
     <Compile Include="IO\IFileAccess.cs" />
+    <Compile Include="IO\StreamExtensions.cs" />
     <Compile Include="IResourceCache.cs" />
     <Compile Include="IResourceGroupManager.cs" />
     <Compile Include="PreCompilation\CompiledFilePersister.cs" />
@@ -207,10 +209,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileResource.cs" />
     <Compile Include="ResourceCollection.cs" />
-    <Compile Include="Handlers\ConsolidatedResourceHandler.cs" />
+    <Compile Include="Handlers\DynamicallyConsolidatedResourceHandler.cs" />
     <Compile Include="ResourceFinderFactory.cs" />
     <Compile Include="ResourceType.cs" />
-    <Compile Include="Handlers\UnconsolidatedResourceHandler.cs" />
+    <Compile Include="Handlers\DynamicallyCompiledIndividualResourceHandler.cs" />
     <Compile Include="VirtualPathResolver.cs">
       <SubType>Code</SubType>
     </Compile>

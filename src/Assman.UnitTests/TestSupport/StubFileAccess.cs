@@ -26,6 +26,11 @@ namespace Assman.TestSupport
 			return new StringReader(_writer.ToString());
 		}
 
+	    public Stream OpenStream(string filePath)
+	    {
+	        throw new NotImplementedException();
+	    }
+
 	    public DateTime LastModified(string filePath)
 	    {
 	        return DateTime.Now;

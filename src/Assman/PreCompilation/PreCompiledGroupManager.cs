@@ -100,11 +100,6 @@ namespace Assman.PreCompilation
 				_resourceUrlMap.Add(@group.ConsolidatedUrl, @group.ConsolidatedUrl);
 				_consolidatedUrlMap.Add(@group.ConsolidatedUrl, @group.Resources);
 			}
-
-			foreach (var individuallyCompiledResource in resourceReport.SingleResources)
-			{
-				_resourceUrlMap.Add(individuallyCompiledResource.OriginalPath, individuallyCompiledResource.CompiledPath);
-			}
 		}
 	}
 }

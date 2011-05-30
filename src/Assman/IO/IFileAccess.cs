@@ -9,6 +9,7 @@ namespace Assman.IO
 		bool Exists(string filePath);
 		TextReader OpenReader(string filePath);
 		DateTime LastModified(string filePath);
+		Stream OpenStream(string filePath);
 	}
 
 	internal class FileAccessWrapper : IFileAccess
@@ -26,6 +27,11 @@ namespace Assman.IO
 		public TextReader OpenReader(string filePath)
 		{
 			return new StreamReader(File.OpenRead(filePath));
+		}
+		
+		public Stream OpenStream(string filePath)
+		{
+			return File.OpenRead(filePath);
 		}
 
 		public DateTime LastModified(string filePath)

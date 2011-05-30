@@ -80,17 +80,13 @@ namespace Assman
 		{
 			_context.CreateResource("~/file.js");
 			_context.CreateResource("~/file.min.js");
-		    _context.CreateResource("~/ms-file.debug.js");
-		    _context.CreateResource("~/ms-file.js");
+			_context.CreateResource("~/ms-file.debug.js");
+			_context.CreateResource("~/ms-file.js");
 
 			var compiledResources = new List<ICompiledResource>();
 			var report = _compiler.CompileAll(r => compiledResources.Add(r), ResourceMode.Release);
 
-			report.Scripts.SingleResources.CountShouldEqual(2);
-			report.Scripts.SingleResources[0].OriginalPath.ShouldEqual("~/file.js");
-			report.Scripts.SingleResources[0].CompiledPath.ShouldEqual("~/file.min.js");
-			report.Scripts.SingleResources[1].OriginalPath.ShouldEqual("~/ms-file.debug.js");
-			report.Scripts.SingleResources[1].CompiledPath.ShouldEqual("~/ms-file.js");
+			report.Scripts.SingleResources.CountShouldEqual(0);
 			compiledResources.CountShouldEqual(0);
 		}
 
@@ -163,6 +159,28 @@ namespace Assman
 			unconsolidatedResourceCompilations.CountShouldEqual(2);
 			unconsolidatedResourceCompilations[0].Resources.Single().VirtualPath.ShouldEqual(unconsolidatedResource1.VirtualPath);
 			unconsolidatedResourceCompilations[1].Resources.Single().VirtualPath.ShouldEqual(unconsolidatedResource2.VirtualPath);
+		}
+
+		[Test]
+		public void CompileUnconsolidatedResourcesSkipsResourcesThatWereCompiledByAnExternalProcess()
+		{
+			var group = _context.CreateGroup("~/consolidated.js");
+
+			_context.CreateResource("~/file1.js")
+				.InGroup(group);
+			_context.CreateResource("~/file2.js")
+				.InGroup(group);
+			_context.CreateResource("~/file3.js")
+				.InGroup(group);
+
+			var unconsolidatedResource1 = _context.CreateResource("~/unconsolidated1.js").Resource;
+			var unconsolidatedResource2 = _context.CreateResource("~/unconsolidated2.js").Resource;
+			var unconsolidatedMinifiedResource1 = _context.CreateResource("~/unconsolidated1.min.js").Resource;
+
+			var unconsolidatedResourceCompilations = _compiler.CompileUnconsolidatedResources(ResourceType.Script, ResourceMode.Debug, r => { }).ToList();
+
+			unconsolidatedResourceCompilations.CountShouldEqual(1);
+			unconsolidatedResourceCompilations[0].Resources.Single().VirtualPath.ShouldEqual(unconsolidatedResource2.VirtualPath);
 		}
 
 		private IResourceFilter ToFilter(Predicate<IResource> predicate)

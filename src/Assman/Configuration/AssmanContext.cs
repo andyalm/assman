@@ -55,7 +55,7 @@ namespace Assman.Configuration
 		}
 
 		public DateTime ConfigurationLastModified { get; set; }
-		public bool PreConsolidated { get; private set; }
+		public bool PreCompiled { get; private set; }
 		public bool ConsolidateScripts
 		{
 			get { return _scriptGroups.Consolidate; }
@@ -159,7 +159,7 @@ namespace Assman.Configuration
 			_styleGroups = new PreCompiledGroupManager(preCompilationReport.Stylesheets);
 			_dependencyManager.SetCache(new PreCompiledDependencyCache(preCompilationReport.Dependencies));
 			Version = preCompilationReport.Version;
-			PreConsolidated = true;
+			PreCompiled = true;
 		}
 
 		internal IResourceFinder Finder

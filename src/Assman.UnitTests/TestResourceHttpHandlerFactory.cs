@@ -50,7 +50,7 @@ namespace Assman
 		{
 			var handler = GetHandler("/bogus.js");
 
-			handler.ShouldBeInstanceOf<UnconsolidatedResourceHandler>();
+			handler.ShouldBeInstanceOf<DynamicallyCompiledIndividualResourceHandler>();
 		}
 
 		[Test]
@@ -58,7 +58,7 @@ namespace Assman
 		{
 			var handler = GetHandler(ConsolidatedPath);
 
-			handler.ShouldBeInstanceOf<ConsolidatedResourceHandler>();
+			handler.ShouldBeInstanceOf<DynamicallyConsolidatedResourceHandler>();
 		}
 
 		private IHttpHandler GetHandler(string url)
