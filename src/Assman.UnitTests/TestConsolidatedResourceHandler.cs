@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 
 using Assman.Configuration;
 using Assman.Handlers;
@@ -17,12 +18,14 @@ namespace Assman
 		private ConsolidatedResourceHandler _instance;
 		private Mock<IResourceFinder> _finder;
 		private static readonly ResourceType _resourceType = ResourceType.Script;
+		private DateTime _now;
 		private const string VirtualPath = "~/myfile.js";
 
 		[SetUp]
 		public void Init()
 		{
-			_lastModified = DateTime.Now.AddYears(-1);
+			_now = DateTime.Now;
+			_lastModified = _now.AddYears(-1);
 			var resources = new ResourceCollection
 			{
 				CreateResource("Content1", _lastModified.AddDays(-3)),
@@ -37,8 +40,11 @@ namespace Assman
 
 			var configContext = AssmanContext.Create();
 			configContext.AddFinder(_finder.Object);
-			
-			_instance = new ConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext());
+
+			_instance = new ConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext())
+			{
+				Now = () => _now
+			};
 		}
 
 		[Test]
@@ -127,6 +133,27 @@ namespace Assman
 			AssertConsolidatedResourceWasCached();
 		}
 
+		[Test]
+		public void WhenVersionIsSpecifiedInRequest_ExpiresHeaderIsSetToOneYearFromNow()
+		{
+			var request = new StubRequestContext();
+			request.QueryString["v"] = "123";
+			_instance.HandleRequest(request);
+
+			request.Expires.ShouldEqual(_now.AddYears(1));
+			request.Cacheability.ShouldEqual(HttpCacheability.Public);
+		}
+
+		[Test]
+		public void WhenVersionIsNotSpecifiedInRequest_ExpiresHeaderIsNotSet()
+		{
+			var request = new StubRequestContext();
+			_instance.HandleRequest(request);
+
+			request.Expires.ShouldEqual(DateTime.MinValue);
+			((int)request.Cacheability).ShouldEqual(0);
+		}
+
 		private static IResource CreateResource(string content, DateTime lastModified)
 		{
 			StubResource resource1 = new StubResource(content);
@@ -139,7 +166,6 @@ namespace Assman
 		private static void AssertContentReturned(StubRequestContext context)
 		{
 			context.StatusCode.ShouldEqual(200);
-			context.SetLastModifiedCalled.ShouldEqual(1);
 			context.OutputStream.Length.ShouldNotEqual(0L);
 		}
 
@@ -147,7 +173,6 @@ namespace Assman
 		{
 			context.StatusCode.ShouldEqual(304);
 			context.OutputStream.Length.ShouldEqual(0L);
-			context.SetLastModifiedCalled.ShouldEqual(0);
 		}
 
 		private void AssertConsolidatedResourceWasCached()

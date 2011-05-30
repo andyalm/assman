@@ -33,8 +33,14 @@ namespace Assman.Handlers
             }
             else
             {
-                context.SetLastModified(lastModified);
+                context.LastModified = lastModified;
                 context.ContentType = resource.ResourceType.ContentType;
+                string version;
+                if(context.IsRequestVersioned())
+                {
+                    context.Expires = Now().AddYears(1);
+                    context.Cacheability = HttpCacheability.Public;
+                }
                 resource.WriteContent(context.OutputStream);
             }
         }
@@ -50,6 +56,8 @@ namespace Assman.Handlers
         {
             get { return Mode == ResourceMode.Release; }
         }
+
+        internal Func<DateTime> Now = () => DateTime.Now; 
 
         protected abstract IHandlerResource GetResource();
 

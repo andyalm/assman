@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Specialized;
 using System.IO;
+using System.Web;
 
 namespace Assman
 {
@@ -9,12 +11,18 @@ namespace Assman
 
 		int StatusCode { get; set; }
 
+		NameValueCollection QueryString { get; }
+
 		string ContentType { get; set; }
 
 		Stream OutputStream { get; }
 
 		string StatusDescription { get; set; }
 
-		void SetLastModified(DateTime lastModified);
+	    DateTime LastModified { set; }
+
+	    DateTime Expires { set; }
+
+	    HttpCacheability Cacheability { set; }
 	}
 }

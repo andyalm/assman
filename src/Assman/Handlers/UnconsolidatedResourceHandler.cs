@@ -6,7 +6,7 @@ using Assman.IO;
 
 namespace Assman.Handlers
 {
-    public class UnconsolidatedResourceHandler : ResourceHandlerBase
+    internal class UnconsolidatedResourceHandler : ResourceHandlerBase
     {
         private readonly string _physicalPathToResource;
         private readonly IFileAccess _fileAccess;

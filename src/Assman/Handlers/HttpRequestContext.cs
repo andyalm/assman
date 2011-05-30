@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Web;
 
@@ -34,7 +35,12 @@ namespace Assman.Handlers
 			set { _httpContext.Response.StatusCode = value; }
 		}
 
-		public string ContentType
+	    public NameValueCollection QueryString
+	    {
+	        get { return _httpContext.Request.QueryString; }
+	    }
+
+	    public string ContentType
 		{
 			get { return _httpContext.Response.ContentType; }
 			set { _httpContext.Response.ContentType = value; }
@@ -51,9 +57,19 @@ namespace Assman.Handlers
 			set { _httpContext.Response.StatusDescription = value; }
 		}
 
-		public void SetLastModified(DateTime lastModified)
-		{
-			_httpContext.Response.AddHeader("Last-Modified", lastModified.ToString("r"));
-		}
+	    public DateTime LastModified
+	    {
+	        set { _httpContext.Response.Cache.SetLastModified(value); }
+	    }
+
+	    public DateTime Expires
+	    {
+	        set { _httpContext.Response.Cache.SetExpires(value); }
+	    }
+
+	    public HttpCacheability Cacheability
+	    {
+	        set { _httpContext.Response.Cache.SetCacheability(value); }
+	    }
 	}
 }

@@ -92,6 +92,7 @@
     <Compile Include="ContentFiltering\DefaultPipelines.cs" />
     <Compile Include="ExternallyCompiledResource.cs" />
     <Compile Include="ExternallyCompiledResourceExtensions.cs" />
+    <Compile Include="Handlers\RequestContextExtensions.cs" />
     <Compile Include="IFinderExcluder.cs" />
     <Compile Include="IndividuallyCompiledResource.cs" />
     <Compile Include="CompositeResourceFilter.cs" />
