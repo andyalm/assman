@@ -38,7 +38,7 @@ namespace Assman
 			var configContext = AssmanContext.Create();
 			configContext.AddFinder(_finder.Object);
 			
-			_instance = new ConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext(), ResourceMode.Debug);
+			_instance = new ConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext());
 		}
 
 		[Test]
@@ -100,7 +100,7 @@ namespace Assman
 		[Test]
 		public void WhenDebugIsTrue_ConolidatatedResourceIsNotCached()
 		{
-			_instance.ResourceMode = ResourceMode.Debug;
+			_instance.Mode = ResourceMode.Debug;
 			var firstRequest = new StubRequestContext();
 			_instance.HandleRequest(firstRequest);
 			var secondRequest = new StubRequestContext();
@@ -115,7 +115,7 @@ namespace Assman
 		[Test]
 		public void WhenDebugIsFalse_ConolidatatedResourceIsCached()
 		{
-			_instance.ResourceMode = ResourceMode.Release;
+			_instance.Mode = ResourceMode.Release;
 			var firstRequest = new StubRequestContext();
 			_instance.HandleRequest(firstRequest);
 			var secondRequest = new StubRequestContext();

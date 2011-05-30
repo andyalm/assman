@@ -33,7 +33,7 @@ namespace Assman.Registration
 		public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
 		{
 			var resolvedPaths = _getResourceUrls(resourcePath);
-			if(resolvedPaths.HasAtLeast(2) || !resolvedPaths.Single().Equals(resourcePath,  StringComparison.OrdinalIgnoreCase))
+			if(resolvedPaths.HasAtLeast(2) || !resolvedPaths.Single().EqualsVirtualPath(resourcePath))
 			{
 				resolvedResourcePaths = resolvedPaths;
 				return true;

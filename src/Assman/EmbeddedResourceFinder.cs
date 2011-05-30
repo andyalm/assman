@@ -30,7 +30,7 @@ namespace Assman
 			}
 
 			var uri = new Uri(virtualPath);
-			if(!uri.Host.Equals(_assembly.FullName.ToShortAssemblyName(), StringComparison.OrdinalIgnoreCase))
+			if(!uri.Host.EqualsVirtualPath(_assembly.FullName.ToShortAssemblyName()))
 			{
 				return null;
 			}

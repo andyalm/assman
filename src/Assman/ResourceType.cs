@@ -44,7 +44,7 @@ namespace Assman
 
 		public void AddFileExtension(string fileExtension)
 		{
-			if (!_fileExtensions.Any(extension => extension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)))
+			if (!_fileExtensions.Any(extension => extension.EqualsVirtualPath(fileExtension)))
 				_fileExtensions.Add(fileExtension);
 		}
 
@@ -70,7 +70,7 @@ namespace Assman
 
 	    public bool IsDefaultExtension(string fileExtension)
 	    {
-	        return DefaultFileExtension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase);
+	        return DefaultFileExtension.EqualsVirtualPath(fileExtension);
 	    }
 	}
 

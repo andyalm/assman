@@ -29,7 +29,7 @@ namespace Assman.Registration.WebForms
 		{
 			foreach (ScriptReference reference in _scriptManager.Scripts)
 			{
-				if (url.Equals(reference.Path, StringComparison.OrdinalIgnoreCase))
+				if (url.EqualsVirtualPath(reference.Path))
 					return true;
 			}
 

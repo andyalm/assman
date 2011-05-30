@@ -26,12 +26,12 @@ namespace Assman.TestSupport
 
 		public bool IsMatch(string virtualPath)
 		{
-			return Groups.Any(group => group.GetResources().Any(r => r.VirtualPath.Equals(virtualPath, StringComparison.OrdinalIgnoreCase)));
+			return Groups.Any(group => group.GetResources().Any(r => r.VirtualPath.EqualsVirtualPath(virtualPath)));
 		}
 
 		public bool MatchesConsolidatedUrl(string consolidatedUrl)
 		{
-			return Groups.Any(group => group.ConsolidatedUrl.Equals(consolidatedUrl, StringComparison.OrdinalIgnoreCase));
+			return Groups.Any(group => group.ConsolidatedUrl.EqualsVirtualPath(consolidatedUrl));
 		}
 
 		public ResourceType ResourceType { get; set; }

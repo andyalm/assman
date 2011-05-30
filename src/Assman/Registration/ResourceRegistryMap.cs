@@ -37,7 +37,7 @@ namespace Assman.Registration
 		{
 			var includes = from include in GetRegistryWithName(registryName).AsReadable().GetIncludes()
 						   where !_includeOwnerMap.ContainsKey(include) 
-								 || _includeOwnerMap[include].Equals(registryName, StringComparison.OrdinalIgnoreCase)
+								 || _includeOwnerMap[include].EqualsVirtualPath(registryName)
 						   select include;
 
 			foreach (var include in includes)

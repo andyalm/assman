@@ -42,7 +42,7 @@ namespace Assman
 
 				//filter out dependencies within the group
 				return CollapseDependencies(dependencyList)
-					.Where(d => !resourcesInGroup.Any(r => r.VirtualPath.Equals(d, StringComparison.OrdinalIgnoreCase)));
+					.Where(d => !resourcesInGroup.Any(r => r.VirtualPath.EqualsVirtualPath(d)));
 			}
 			else
 			{

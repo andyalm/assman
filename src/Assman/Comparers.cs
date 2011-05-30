@@ -40,4 +40,17 @@ namespace Assman
             }
         }
     }
+
+    public static class Comparisons
+    {
+        public static bool EqualsVirtualPath(this string virtualPath1, string virtualPath2)
+        {
+            return virtualPath1.Equals(virtualPath2, VirtualPath);
+        }
+        
+        public static StringComparison VirtualPath
+        {
+            get { return StringComparison.OrdinalIgnoreCase; }
+        }
+    }
 }

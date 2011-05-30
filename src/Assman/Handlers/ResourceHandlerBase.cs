@@ -6,6 +6,13 @@ namespace Assman.Handlers
 {
     public abstract class ResourceHandlerBase : HttpHandlerBase
     {
+        private IHandlerResource _cachedResource;
+        
+        protected ResourceHandlerBase()
+        {
+            Mode = ResourceMode.Debug;
+        }
+        
         public override void ProcessRequest(HttpContextBase context)
         {
             HandleRequest(new HttpRequestContext(context));
@@ -13,7 +20,7 @@ namespace Assman.Handlers
 
         internal void HandleRequest(IRequestContext context)
         {
-            var resource = GetResource();
+            var resource = GetResourceInternal();
             DateTime lastModified = resource.GetLastModified().ToUniversalTime();
             DateTime ifModifiedSince = (context.IfModifiedSince ?? DateTime.MinValue).ToUniversalTime();
             lastModified = RoundToSeconds(lastModified);
@@ -32,12 +39,35 @@ namespace Assman.Handlers
             }
         }
 
+        public ResourceMode Mode { get; set; }
+
         private static DateTime RoundToSeconds(DateTime dateTime)
         {
             return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
         }
 
+        private bool CachingEnabled
+        {
+            get { return Mode == ResourceMode.Release; }
+        }
+
         protected abstract IHandlerResource GetResource();
+
+        private IHandlerResource GetResourceInternal()
+        {
+            if (_cachedResource != null)
+            {
+                return _cachedResource;
+            }
+
+            var resource = GetResource();
+            if (CachingEnabled)
+            {
+                _cachedResource = resource;
+            }
+
+            return resource;
+        }
     }
 
     public interface IHandlerResource

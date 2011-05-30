@@ -33,7 +33,7 @@ namespace Assman
 		public IResourceGroup FindGroupOrDefault(IEnumerable<IResource> allResources, string consolidatedUrl, ResourceMode mode)
 		{
 			return (from @group in GetGroups(allResources, mode)
-			        where @group.ConsolidatedUrl.Equals(consolidatedUrl, StringComparison.OrdinalIgnoreCase)
+			        where @group.ConsolidatedUrl.EqualsVirtualPath(consolidatedUrl)
 			        select @group).SingleOrDefault();
 		}
 

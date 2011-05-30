@@ -15,7 +15,7 @@ namespace Assman
 
 		public bool IsMatch()
 		{
-			return _pathToMatch.Equals(_actualValue, StringComparison.OrdinalIgnoreCase);
+			return _pathToMatch.EqualsVirtualPath(_actualValue);
 		}
 
 	    public string GetSubValue(string name)

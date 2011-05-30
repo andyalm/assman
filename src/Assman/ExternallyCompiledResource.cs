@@ -9,13 +9,13 @@ namespace Assman
 
         public bool Matches(IResource resource)
         {
-            return DebugResource.VirtualPath.Equals(resource.VirtualPath, StringComparison.OrdinalIgnoreCase)
-                   || ReleaseResource.VirtualPath.Equals(resource.VirtualPath, StringComparison.OrdinalIgnoreCase);
+            return DebugResource.VirtualPath.EqualsVirtualPath(resource.VirtualPath)
+                   || ReleaseResource.VirtualPath.EqualsVirtualPath(resource.VirtualPath);
         }
 
         public bool WasMinifiedFrom(IResource resource)
         {
-            return resource.VirtualPath.Equals(DebugResource.VirtualPath, StringComparison.OrdinalIgnoreCase);
+            return resource.VirtualPath.EqualsVirtualPath(DebugResource.VirtualPath);
         }
 
         public static bool IsPair(IResource potentialReleaseResource, IResource potentialDebugResource)

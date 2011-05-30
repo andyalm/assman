@@ -38,7 +38,7 @@ namespace Assman
 		{
 			get
 			{
-				var virtualPath = _filePath.Replace(_basePath, "~/", StringComparison.OrdinalIgnoreCase);
+				var virtualPath = _filePath.Replace(_basePath, "~/", Comparisons.VirtualPath);
 				virtualPath = virtualPath.Replace(@"\", "/");
 				return virtualPath;
 			}

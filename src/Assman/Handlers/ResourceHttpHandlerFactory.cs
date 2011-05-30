@@ -40,9 +40,10 @@ namespace Assman.Handlers
             if (groupTemplate != null)
             {
                 return new ConsolidatedResourceHandler(appRelativePathToResource, _assmanContext.GetConsolidator(),
-                                                       groupTemplate, resourceMode)
+                                                       groupTemplate)
                 {
-                    MinLastModified = _assmanContext.ConfigurationLastModified
+                    MinLastModified = _assmanContext.ConfigurationLastModified,
+                    Mode = resourceMode
                 };
             }
             else
@@ -60,8 +61,11 @@ namespace Assman.Handlers
                     Mode = resourceMode,
                     ResourceVirtualPath = appRelativePathToResource
                 };
-                
-                return new UnconsolidatedResourceHandler(physicalPathToResource, resourceType, contentFilterPipeline, contentFilterContext);
+
+                return new UnconsolidatedResourceHandler(physicalPathToResource, resourceType, contentFilterPipeline, contentFilterContext)
+                {
+                    Mode = resourceMode
+                };
             }
         }
 

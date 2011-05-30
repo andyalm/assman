@@ -6,8 +6,8 @@ namespace Assman
     {
         public bool ShouldExclude(IResource resource)
         {
-            return resource.VirtualPath.EndsWith(".compiled.js", StringComparison.OrdinalIgnoreCase)
-                || resource.VirtualPath.EndsWith(".compiled.css", StringComparison.OrdinalIgnoreCase);
+            return resource.VirtualPath.EndsWith(".compiled.js", Comparisons.VirtualPath)
+                || resource.VirtualPath.EndsWith(".compiled.css", Comparisons.VirtualPath);
         }
     }
 }

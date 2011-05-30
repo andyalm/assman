@@ -19,7 +19,7 @@ namespace Assman.TestSupport
 		public ResourceType ResourceType { get; private set; }
 		public bool Contains(IResource resource)
 		{
-			return _resources.Any(r => r.VirtualPath.Equals(resource.VirtualPath, StringComparison.OrdinalIgnoreCase));
+			return _resources.Any(r => r.VirtualPath.EqualsVirtualPath(resource.VirtualPath));
 		}
 
 		public void AddResource(IResource resource)

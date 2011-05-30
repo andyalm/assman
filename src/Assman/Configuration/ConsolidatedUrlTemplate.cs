@@ -45,7 +45,7 @@ namespace Assman.Configuration
 		public bool Matches(string consolidatedUrl)
 		{
 			if (!HasParameters)
-				return _consolidatedUrlString.Equals(consolidatedUrl, StringComparison.OrdinalIgnoreCase);
+				return _consolidatedUrlString.EqualsVirtualPath(consolidatedUrl);
 
 			return MatchRegex.IsMatch(consolidatedUrl);
 		}

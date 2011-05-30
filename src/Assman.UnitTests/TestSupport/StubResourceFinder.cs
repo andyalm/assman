@@ -42,7 +42,7 @@ namespace Assman.TestSupport
 
     	public IResource FindResource(string virtualPath)
     	{
-    		return _resources.Where(r => r.VirtualPath != null && r.VirtualPath.Equals(virtualPath, StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
+    		return _resources.Where(r => r.VirtualPath != null && r.VirtualPath.EqualsVirtualPath(virtualPath)).SingleOrDefault();
     	}
     }
 }
