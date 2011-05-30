@@ -53,7 +53,7 @@ namespace Assman.Handlers
                 {
                     return null;
                 }
-                var contentFilterPipeline = _assmanContext.GetFilterPipelineForExtension(fileExtension);
+                var contentFilterPipeline = _assmanContext.GetContentPipelineForExtension(fileExtension);
                 var contentFilterContext = new ContentFilterContext
                 {
                     Minify = resourceMode == ResourceMode.Release,

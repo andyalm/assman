@@ -228,8 +228,8 @@ namespace Assman.Configuration
 			var context = AssmanContext.Create();
 
 			context.ConfigurationLastModified = LastModified(PathResolver);
-			context.ConsolidateClientScripts = Consolidate && Scripts.Groups.Consolidate;
-			context.ConsolidateCssFiles = Consolidate && Stylesheets.Groups.Consolidate;
+			context.ConsolidateScripts = Consolidate && Scripts.Groups.Consolidate;
+			context.ConsolidateStylesheets = Consolidate && Stylesheets.Groups.Consolidate;
 			context.ManageDependencies = ManageDependencies;
 			context.AddFinder(fileFinder);
 			context.AddAssemblies(Assemblies.GetAssemblies());
@@ -237,8 +237,8 @@ namespace Assman.Configuration
 			context.ScriptGroups.AddRange(Scripts.Groups.Cast<IResourceGroupTemplate>());
 			context.StyleGroups.AddGlobalDependencies(Stylesheets.GlobalDependencies.Cast<GlobalDependenciesElement>().Select(e => e.Path));
 			context.StyleGroups.AddRange(Stylesheets.Groups.Cast<IResourceGroupTemplate>());
-			context.MapExtensionToFilterPipeline(".js", DefaultPipelines.Javascript());
-			context.MapExtensionToFilterPipeline(".css", DefaultPipelines.Css());
+			context.MapExtensionToContentPipeline(".js", DefaultPipelines.Javascript());
+			context.MapExtensionToContentPipeline(".css", DefaultPipelines.Css());
 			context.MapExtensionToDependencyProvider(".js", VisualStudioScriptDependencyProvider.GetInstance());
 			context.MapExtensionToDependencyProvider(".css", CssDependencyProvider.GetInstance());
 

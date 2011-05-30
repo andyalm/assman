@@ -12,7 +12,7 @@ namespace Assman.Less
 			ResourceType.Stylesheet.AddFileExtension(LessFileExtension);
 			var lessPipeline = new ContentFilterPipeline();
 			lessPipeline.Add(new LessContentFilter());
-			context.MapExtensionToFilterPipeline(LessFileExtension, lessPipeline);
+			context.MapExtensionToContentPipeline(LessFileExtension, lessPipeline);
 			context.MapExtensionToDependencyProvider(LessFileExtension, CssDependencyProvider.GetInstance());
 		}
 	}

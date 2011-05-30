@@ -56,13 +56,13 @@ namespace Assman.Configuration
 
 		public DateTime ConfigurationLastModified { get; set; }
 		public bool PreConsolidated { get; private set; }
-		public bool ConsolidateClientScripts
+		public bool ConsolidateScripts
 		{
 			get { return _scriptGroups.Consolidate; }
 			set { _scriptGroups.Consolidate = value; }
 		}
 
-		public bool ConsolidateCssFiles
+		public bool ConsolidateStylesheets
 		{
 			get { return _styleGroups.Consolidate; }
 			set { _styleGroups.Consolidate = value; }
@@ -72,7 +72,7 @@ namespace Assman.Configuration
 
 		public string Version { get; set; }
 
-		public void MapExtensionToFilterPipeline(string fileExtension, ContentFilterPipeline filterPipeline)
+		public void MapExtensionToContentPipeline(string fileExtension, ContentFilterPipeline filterPipeline)
 		{
 			_filterPipelineMap.MapExtension(fileExtension, filterPipeline);
 		}
@@ -87,7 +87,7 @@ namespace Assman.Configuration
 			get { return _styleGroups; }
 		}
 
-		public ContentFilterPipeline GetFilterPipelineForExtension(string fileExtension)
+		public ContentFilterPipeline GetContentPipelineForExtension(string fileExtension)
 		{
 			return _filterPipelineMap.GetPipelineForExtension(fileExtension);
 		}

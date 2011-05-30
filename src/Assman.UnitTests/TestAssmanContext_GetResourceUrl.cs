@@ -32,7 +32,7 @@ namespace Assman
             DependencyManagerFactory.ClearDependencyCache();
 
             _instance = new AssmanContext();
-			_instance.ConsolidateClientScripts = true;
+			_instance.ConsolidateScripts = true;
 			_instance.ConfigurationLastModified = DateTime.MinValue;
 		    _instance.AddFinder(_finder);
 		    _instance.MapExtensionToDependencyProvider(".js", _dependencyProvider);
@@ -45,7 +45,7 @@ namespace Assman
 		[Test]
 		public void ReturnsConsolidatedScriptFileWhenScriptConsolidationEnabled()
 		{
-			_instance.ConsolidateClientScripts = true;
+			_instance.ConsolidateScripts = true;
 
 			var scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
@@ -55,7 +55,7 @@ namespace Assman
 		[Test]
 		public void ReturnsSelfWhenScriptConsolidationDisabled()
 		{
-			_instance.ConsolidateClientScripts = false;
+			_instance.ConsolidateScripts = false;
 			string scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
 			Assert.That(scriptToInclude, Is.EqualTo(myScript));
@@ -65,7 +65,7 @@ namespace Assman
 		public void AppendsVersionNumberToConsolidatedUrl()
 		{
 			const string version = "2";
-			_instance.ConsolidateClientScripts = true;
+			_instance.ConsolidateScripts = true;
 			_instance.Version = version;
 			string scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
@@ -76,7 +76,7 @@ namespace Assman
 		public void AppendsVersionNumberToUnConsolidatedUrl()
 		{
 			const string version = "2";
-			_instance.ConsolidateClientScripts = false;
+			_instance.ConsolidateScripts = false;
 			_instance.Version = version;
 			string scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
@@ -87,7 +87,7 @@ namespace Assman
 		public void VersionParameterIsUrlEncoded()
 		{
 			const string version = "2 2";
-			_instance.ConsolidateClientScripts = true;
+			_instance.ConsolidateScripts = true;
 			_instance.Version = version;
 			string scriptToInclude = _instance.GetScriptUrls(myScript).Single();
 
@@ -98,7 +98,7 @@ namespace Assman
 		[Test]
 		public void NeverReturnsConsolidatedScriptFileWhenScriptIsExcluded()
 		{
-			_instance.ConsolidateClientScripts = true;
+			_instance.ConsolidateScripts = true;
 			string scriptToInclude = _instance.GetScriptUrls(excludedScript).Single();
 
 			Assert.That(scriptToInclude, Is.EqualTo(excludedScript));
@@ -107,7 +107,7 @@ namespace Assman
 		[Test]
 		public void ExclusionsAreCaseInsensitive()
 		{
-			_instance.ConsolidateClientScripts = true;
+			_instance.ConsolidateScripts = true;
 			string scriptToInclude = _instance.GetScriptUrls(excludedScript.ToUpperInvariant()).Single();
 
 			Assert.That(scriptToInclude, Is.EqualTo(excludedScript).IgnoreCase);
@@ -117,7 +117,7 @@ namespace Assman
 		public void FilesInSecondGroupAndNotInFirstReturnSecondGroupUrl()
 		{
 			const string secondGroupUrl = "~/mysecondconsolidation.js";
-			_instance.ConsolidateClientScripts = true;
+			_instance.ConsolidateScripts = true;
 			_groupElement.Exclude.AddPattern(mySecondScript);
 			var secondGroupElement = new ScriptGroupElement();
 			_instance.ScriptGroups.Add(secondGroupElement);
