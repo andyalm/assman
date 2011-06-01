@@ -35,12 +35,12 @@ namespace Assman.Handlers
 			set { _httpContext.Response.StatusCode = value; }
 		}
 
-	    public NameValueCollection QueryString
-	    {
-	        get { return _httpContext.Request.QueryString; }
-	    }
+		public NameValueCollection QueryString
+		{
+			get { return _httpContext.Request.QueryString; }
+		}
 
-	    public string ContentType
+		public string ContentType
 		{
 			get { return _httpContext.Response.ContentType; }
 			set { _httpContext.Response.ContentType = value; }
@@ -57,19 +57,28 @@ namespace Assman.Handlers
 			set { _httpContext.Response.StatusDescription = value; }
 		}
 
-	    public DateTime LastModified
-	    {
-	        set { _httpContext.Response.Cache.SetLastModified(value); }
-	    }
+		public DateTime LastModified
+		{
+			set
+			{
+				//not sure why, but it appears that if you pass a very recent UTC date into SetLastModified,
+				//it can throw on you.  Converting back to local time and ensuring its not in the future
+				//should safeguard this from happening.
+				DateTime valueLocalTime = value.ToLocalTime();
+				if (valueLocalTime > DateTime.Now)
+					valueLocalTime = DateTime.Now;
+				_httpContext.Response.Cache.SetLastModified(valueLocalTime);
+			}
+		}
 
-	    public DateTime Expires
-	    {
-	        set { _httpContext.Response.Cache.SetExpires(value); }
-	    }
+		public DateTime Expires
+		{
+			set { _httpContext.Response.Cache.SetExpires(value); }
+		}
 
-	    public HttpCacheability Cacheability
-	    {
-	        set { _httpContext.Response.Cache.SetCacheability(value); }
-	    }
+		public HttpCacheability Cacheability
+		{
+			set { _httpContext.Response.Cache.SetCacheability(value); }
+		}
 	}
 }
