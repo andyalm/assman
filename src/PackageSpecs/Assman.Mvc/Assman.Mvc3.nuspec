@@ -12,6 +12,7 @@
     <tags>javascript css mash consolidation mvc</tags>
     <dependencies>
       <dependency id="Assman" version="1.9" />
+      <dependency id="NuGetPowerTools" version="0.26" />
     </dependencies>
   </metadata>
   <files>
@@ -19,5 +20,6 @@
     <file src="..\..\..\output\lib\Mvc3\**\Assman.Mvc.xml" target="lib" />
     <file src="Content\**\*.*" target="Content" />
     <file src="Mvc3\Content\**\*.*" target="Content" />
+    <file src="Tools\*.*" target="Tools" />
   </files>
 </package>

@@ -14,5 +14,6 @@
     <file src="..\..\..\output\lib\**\Assman.dll" target="lib" />
     <file src="..\..\..\output\lib\**\Assman.xml" target="lib" />
     <file src="Content\**\*.*" target="Content" />
+    <file src="Tools\*.*" target="Tools" />
   </files>
 </package>
