@@ -18,13 +18,13 @@ function Install
 	$assmanPackageDir = Get-InstalledPackagePath "Assman"
 	$assmanPackageDir = Resolve-Path $assmanPackageDir -Relative
 
-	Write-Host "Adding the PreCompileResources target to the project..."
-
-	# Add <Import> for Assman.MSBuild.tasks
+		# Add <Import> for Assman.MSBuild.tasks
+	Write-Host "Adding the Assman.MSBuild.tasks import to the project..."
 	$msbProject = Get-MSBuildProject
 	$msbProject.Xml.AddImport("$assmanPackageDir\Tools\Assman.MSBuild.tasks") | Out-Null
 
 	# Add PreCompileResources target
+	Write-Host "Adding the PreCompileResources target to the project..."
 	$target = $msbProject.Xml.AddTarget("PreCompileResources")
 	$target.AfterTargets = "Build"
 	$target.Condition = "`$(PreCompileResources)=='true'"
@@ -32,6 +32,7 @@ function Install
 	$task.SetParameter("WebRoot", '$(WebProjectOutputDir)')
 
 	# Add CleanPreCompiledResources target
+	Write-Host "Adding the CleanPreCompileResources target to the project..."
 	$target = $msbProject.Xml.AddTarget("CleanPreCompiledResources")
 	$target.AfterTargets = "Clean"
 	$task = $target.AddTask("Delete")
