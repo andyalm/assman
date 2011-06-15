@@ -16,7 +16,7 @@ namespace Assman.Configuration
 		private const string SectionName = "assman";
 		private string _rootFilePath;
 		private static readonly AssmanConfiguration _defaultSection = new AssmanConfiguration();
-		private static AssmanConfiguration _config = null;
+		private static AssmanConfiguration _config;
 		private static IConfigLoader _configLoader = new DefaultConfigLoader();
 
 		/// <summary>

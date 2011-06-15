@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Assman.Configuration;
-
 namespace Assman
 {
 	public class GroupTemplateContext

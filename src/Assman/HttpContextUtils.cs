@@ -8,7 +8,7 @@ namespace Assman
 		public static T GetOrCreate<T>(this IDictionary httpItems, object key)
 			where T : class, new()
 		{
-			return httpItems.GetOrCreate<T>(key, () => new T());
+			return httpItems.GetOrCreate(key, () => new T());
 		}
 
 		public static T GetOrCreate<T>(this IDictionary httpItems, object key, Func<T> create)
