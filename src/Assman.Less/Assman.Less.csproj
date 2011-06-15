@@ -28,7 +28,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\.NetFramework $(TargetClrVersion)</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)=='4.0'">bin\Debug\net40</OutputPath>
+	<OutputPath Condition="$(TargetClrVersion)!='4.0'">bin\Debug\net35</OutputPath>
     <DefineConstants Condition="$(TargetClrVersion)=='4.0'">DEBUG;TRACE;NET_40</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -38,7 +39,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\.NetFramework $(TargetClrVersion)</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)=='4.0'">bin\Release\net40</OutputPath>
+	<OutputPath Condition="$(TargetClrVersion)!='4.0'">bin\Release\net35</OutputPath>
     <DefineConstants Condition="$(TargetClrVersion)=='4.0'">TRACE;NET_40</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>

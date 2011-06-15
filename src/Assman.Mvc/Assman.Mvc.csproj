@@ -20,8 +20,9 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath Condition="$(MvcVersion)!='3.0'">bin\Debug\Mvc2\.NetFramework $(TargetClrVersion)</OutputPath>
-    <OutputPath Condition="$(MvcVersion)=='3.0'">bin\Debug\Mvc3\.NetFramework $(TargetClrVersion)</OutputPath>
+	<OutputPath Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">bin\Debug\Mvc2\net40</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">bin\Debug\Mvc3\net40</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)!='4.0' and $(MvcVersion)!='3.0'">bin\Debug\Mvc2\net35</OutputPath>
     <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">DEBUG;TRACE;NET_40;MVC3</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">DEBUG;TRACE;NET_40</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">DEBUG;TRACE;</DefineConstants>
@@ -32,8 +33,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath Condition="$(MvcVersion)!='3.0'">bin\Release\Mvc2\.NetFramework $(TargetClrVersion)</OutputPath>
-    <OutputPath Condition="$(MvcVersion)=='3.0'">bin\Release\Mvc3\.NetFramework $(TargetClrVersion)</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">bin\Release\Mvc2\net40</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">bin\Release\Mvc3\net40</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)!='4.0' and $(MvcVersion)!='3.0'">bin\Release\Mvc2\net35</OutputPath>
     <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">TRACE;NET_40;MVC3</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">TRACE;NET_40</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">TRACE;</DefineConstants>

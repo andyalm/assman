@@ -6,15 +6,15 @@
   <ItemGroup>
     <BuildProfile Include="Mvc3">
       <Properties>TargetClrVersion=4.0;MvcVersion=3.0</Properties>
-      <OutputPath>Mvc3\.NetFramework 4.0</OutputPath>
+      <OutputPath>Mvc3\net40</OutputPath>
     </BuildProfile>
     <BuildProfile Include="Mvc2_40">
       <Properties>TargetClrVersion=4.0;MvcVersion=2.0</Properties>
-      <OutputPath>Mvc2\.NetFramework 4.0</OutputPath>
+      <OutputPath>Mvc2\net40</OutputPath>
     </BuildProfile>
     <BuildProfile Include="Mvc2_35">
       <Properties>TargetClrVersion=2.0;MvcVersion=2.0</Properties>
-      <OutputPath>Mvc2\.NetFramework 2.0</OutputPath>
+      <OutputPath>Mvc2\net35</OutputPath>
     </BuildProfile>
   </ItemGroup>
   <ItemGroup>

@@ -6,11 +6,11 @@
   <ItemGroup>
     <BuildProfile Include="NET40">
       <Properties>TargetClrVersion=4.0</Properties>
-      <OutputPath>.NetFramework 4.0</OutputPath>
+      <OutputPath>net40</OutputPath>
     </BuildProfile>
     <BuildProfile Include="NET35">
       <Properties>TargetClrVersion=2.0</Properties>
-      <OutputPath>.NetFramework 2.0</OutputPath>
+      <OutputPath>net35</OutputPath>
     </BuildProfile>
   </ItemGroup>
   
