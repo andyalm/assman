@@ -2,7 +2,7 @@
   <system.web.webPages.razor>
     <pages>
       <namespaces>
-        <add namespace="Assman.Mvc.Html" />
+        <add namespace="Assman.Mvc.Registration" />
       </namespaces>
     </pages>
   </system.web.webPages.razor>

@@ -41,6 +41,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc", "Mvc", "{8B1CBBE5-99F3-470B-AE9D-420EF2B7B7F6}"
 	ProjectSection(SolutionItems) = preProject
 		src\PackageSpecs\Assman.Mvc\Content\Assman.config.transform = src\PackageSpecs\Assman.Mvc\Content\Assman.config.transform
+		src\PackageSpecs\Assman.Mvc\Tools\Install.ps1 = src\PackageSpecs\Assman.Mvc\Tools\Install.ps1
+		src\PackageSpecs\Assman.Mvc\Tools\Uninstall.ps1 = src\PackageSpecs\Assman.Mvc\Tools\Uninstall.ps1
 		src\PackageSpecs\Assman.Mvc\Content\Web.config.transform = src\PackageSpecs\Assman.Mvc\Content\Web.config.transform
 	EndProjectSection
 EndProject

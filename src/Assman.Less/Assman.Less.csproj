@@ -33,6 +33,7 @@
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+	<NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,6 +43,7 @@
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+	<NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="dotless.Core, Version=1.1.0.4, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">

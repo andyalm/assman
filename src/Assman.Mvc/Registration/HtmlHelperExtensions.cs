@@ -3,7 +3,7 @@ using System.Web.Mvc;
 
 using Assman.Registration;
 
-namespace Assman.Mvc.Html
+namespace Assman.Mvc.Registration
 {
 	//NOTE: Many of these helper methods should have a void return value.  However, I have made them return a DummyStringResult
 	//because some ViewEngines (*cough* Razor *cough*) have a very ugly one line statement syntax.  Making them return a dummy

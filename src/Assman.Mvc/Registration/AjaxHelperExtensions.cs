@@ -1,8 +1,9 @@
+using System;
 using System.Web.Mvc;
 
 using Assman.Registration;
 
-namespace Assman.Mvc.Html
+namespace Assman.Mvc.Registration
 {
 	public static class AjaxHelperExtensions
 	{

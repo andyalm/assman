@@ -1,5 +1,7 @@
 param($installPath, $toolsPath, $package, $project)
 
+$project = Get-MSBuildProject
+
 function Get-InstalledPackagePath($Name)
 {
 	$package = Get-Package $Name -First 1
@@ -11,21 +13,19 @@ function Get-InstalledPackagePath($Name)
 
 function Install
 {
-	$project = Get-Project
-	$projectDir = Split-Path $project.FullName -Parent
+	$projectDir = Split-Path $project.FullPath -Parent
 	pushd $projectDir
 
 	$assmanPackageDir = Get-InstalledPackagePath "Assman"
 	$assmanPackageDir = Resolve-Path $assmanPackageDir -Relative
 
-		# Add <Import> for Assman.MSBuild.tasks
+	# Add <Import> for Assman.MSBuild.tasks
 	Write-Host "Adding the Assman.MSBuild.tasks import to the project..."
-	$msbProject = Get-MSBuildProject
-	$msbProject.Xml.AddImport("$assmanPackageDir\Tools\Assman.MSBuild.tasks") | Out-Null
+	$project.Xml.AddImport("$assmanPackageDir\Tools\Assman.MSBuild.tasks") | Out-Null
 
 	# Add PreCompileResources target
 	Write-Host "Adding the PreCompileResources target to the project..."
-	$target = $msbProject.Xml.AddTarget("PreCompileResources")
+	$target = $project.Xml.AddTarget("PreCompileResources")
 	$target.AfterTargets = "Build"
 	$target.Condition = "`$(PreCompileResources)=='true'"
 	$task = $target.AddTask("PreCompileResources")
@@ -33,13 +33,14 @@ function Install
 
 	# Add CleanPreCompiledResources target
 	Write-Host "Adding the CleanPreCompileResources target to the project..."
-	$target = $msbProject.Xml.AddTarget("CleanPreCompiledResources")
+	$target = $project.Xml.AddTarget("CleanPreCompiledResources")
 	$target.AfterTargets = "Clean"
 	$task = $target.AddTask("Delete")
 	$task.SetParameter("Files", '$(WebProjectOutputDir)\bin\Assman.compiled')
 
-	# Save the changes
-	$project.Save()
+	# Call save against Get-Project instead of the Get-MSBuildProject
+	# because then VS won't prompt you to reload the project
+	$(Get-Project).Save()
 
 	popd
 }

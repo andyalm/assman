@@ -1,4 +1,6 @@
-namespace Assman.Mvc
+using System;
+
+namespace Assman.Mvc.Registration
 {
 	public class DummyStringResult
 	{
