@@ -4,6 +4,7 @@
 <head>
 	<title>${Title}</title>
 	<RequireScript path="~/Scripts/jquery-1.4.1.js" target="head" />
+	<RequireStylesheet path="~/Content/Site.css" />
 	#Html.RenderStyles();
 	#Html.RenderScripts("head");
 </head>

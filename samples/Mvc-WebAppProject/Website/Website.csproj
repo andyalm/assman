@@ -1,176 +1,180 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<PropertyGroup>
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<ProductVersion>
-		</ProductVersion>
-		<SchemaVersion>2.0</SchemaVersion>
-		<ProjectGuid>{8BC40064-631E-491F-A3E3-C56494A81977}</ProjectGuid>
-		<ProjectTypeGuids>{F85E285D-A4E0-4152-9332-AB1D724D3325};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
-		<OutputType>Library</OutputType>
-		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<RootNamespace>Website</RootNamespace>
-		<AssemblyName>Website</AssemblyName>
-		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-		<MvcBuildViews>false</MvcBuildViews>
-		<TargetFrameworkProfile />
-		<UseIISExpress>false</UseIISExpress>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>full</DebugType>
-		<Optimize>false</Optimize>
-		<OutputPath>bin\</OutputPath>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>pdbonly</DebugType>
-		<Optimize>true</Optimize>
-		<OutputPath>bin\</OutputPath>
-		<DefineConstants>TRACE</DefineConstants>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-	</PropertyGroup>
-	<ItemGroup>
-		<Reference Include="Assman, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\..\..\src\Assman\bin\$(Configuration)\Assman.dll</HintPath>
-		</Reference>
-		<Reference Include="Assman.Less, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\..\..\src\Assman.Less\bin\$(Configuration)\.NetFramework 2.0\Assman.Less.dll</HintPath>
-		</Reference>
-		<Reference Include="Assman.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\..\..\src\Assman.Mvc\bin\$(Configuration)\Mvc2\.NetFramework 2.0\Assman.Mvc.dll</HintPath>
-		</Reference>
-		<Reference Include="Assman.Spark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\..\..\src\Assman.Spark\bin\$(Configuration)\Assman.Spark.dll</HintPath>
-		</Reference>
-		<Reference Include="Spark, Version=1.5.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\..\..\packages\Spark.1.5\lib\.NetFramework 2.0\Spark.dll</HintPath>
-		</Reference>
-		<Reference Include="Spark.Web.Mvc, Version=1.5.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\..\..\packages\Spark.Web.Mvc2.1.5\lib\.NetFramework 2.0\Spark.Web.Mvc.dll</HintPath>
-		</Reference>
-		<Reference Include="System" />
-		<Reference Include="System.Data" />
-		<Reference Include="System.Data.DataSetExtensions" />
-		<Reference Include="System.Drawing" />
-		<Reference Include="System.ComponentModel.DataAnnotations">
-			<RequiredTargetFramework>3.5</RequiredTargetFramework>
-		</Reference>
-		<Reference Include="System.Web.DynamicData" />
-		<Reference Include="System.Web.Entity" />
-		<Reference Include="System.Web.Extensions" />
-		<Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-		<Reference Include="System.Web" />
-		<Reference Include="System.Web.Abstractions" />
-		<Reference Include="System.Web.Routing" />
-		<Reference Include="System.Xml" />
-		<Reference Include="System.Configuration" />
-		<Reference Include="System.Web.Services" />
-		<Reference Include="System.EnterpriseServices" />
-		<Reference Include="System.Web.Mobile" />
-		<Reference Include="System.Xml.Linq" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Include="AppStart_SparkWebMvc.cs" />
-		<Compile Include="Controllers\HomeController.cs" />
-		<Compile Include="Controllers\IntegrationTestsController.cs" />
-		<Compile Include="Global.asax.cs">
-			<DependentUpon>Global.asax</DependentUpon>
-		</Compile>
-		<Compile Include="Properties\AssemblyInfo.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="Global.asax" />
-		<Content Include="Content\Site.css" />
-		<None Include="Content\Unconsolidated\TestHelper.less" />
-		<None Include="Views\Home\Index.spark" />
-		<None Include="Views\IntegrationTests\Index.spark">
-			<SubType>Designer</SubType>
-		</None>
-		<Content Include="Scripts\Assman-TestBootstrapper.js" />
-		<Content Include="Scripts\Global-Dependency.js" />
-		<Content Include="Scripts\Unconsolidated\MyScript1.js" />
-		<Content Include="Scripts\Unconsolidated\MyScript2.js" />
-		<Content Include="Views\bindings.xml" />
-		<Content Include="Scripts\Dependency.js" />
-		<Content Include="Scripts\DependencyLeaf.js" />
-		<Content Include="Views\IntegrationTests\ScriptIncludeBinding.js" />
-		<Content Include="Web.config">
-			<SubType>Designer</SubType>
-		</Content>
-		<Content Include="Web.Debug.config">
-			<DependentUpon>Web.config</DependentUpon>
-		</Content>
-		<Content Include="Web.Release.config">
-			<DependentUpon>Web.config</DependentUpon>
-		</Content>
-		<Content Include="Scripts\jquery-1.4.1.js" />
-		<Content Include="Scripts\jquery-1.4.1.min.js" />
-		<Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
-		<Content Include="Scripts\jquery.validate.js" />
-		<Content Include="Scripts\jquery.validate.min.js" />
-		<Content Include="Scripts\jquery.validate-vsdoc.js" />
-		<Content Include="Scripts\MicrosoftAjax.js" />
-		<Content Include="Scripts\MicrosoftAjax.debug.js" />
-		<Content Include="Scripts\MicrosoftMvcAjax.js" />
-		<Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
-		<Content Include="Scripts\MicrosoftMvcValidation.js" />
-		<Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
-		<Content Include="Views\Web.config" />
-		<None Include="Views\Layouts\Application.spark" />
-	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Models\" />
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="packages.config" />
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="Assman.config">
-			<SubType>Designer</SubType>
-		</Content>
-		<None Include="Views\Shared\_global.spark" />
-	</ItemGroup>
-	<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-	<Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
-	<!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-			 Other similar extension points exist, see Microsoft.Common.targets.
-	<Target Name="BeforeBuild">
-	</Target> -->
-	<Target Name="AfterBuild">
-		<AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)" Condition="'$(MvcBuildViews)'=='true'" />
-	</Target>
-	<UsingTask TaskName="PreCompileResources" AssemblyFile="bin\Assman.dll" />
-	<Target Name="PreCompileResources" AfterTargets="AfterBuild">
-	<PreCompileResources WebRoot="$(MSBuildProjectDirectory)" Condition="$(Configuration)=='Release'" />
-	</Target>
-	<ProjectExtensions>
-		<VisualStudio>
-			<FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-				<WebProjectProperties>
-					<UseIIS>False</UseIIS>
-					<AutoAssignPort>True</AutoAssignPort>
-					<DevelopmentServerPort>1511</DevelopmentServerPort>
-					<DevelopmentServerVPath>/</DevelopmentServerVPath>
-					<IISUrl>
-					</IISUrl>
-					<NTLMAuthentication>False</NTLMAuthentication>
-					<UseCustomServer>False</UseCustomServer>
-					<CustomServerUrl>
-					</CustomServerUrl>
-					<SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-				</WebProjectProperties>
-			</FlavorProperties>
-		</VisualStudio>
-	</ProjectExtensions>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8BC40064-631E-491F-A3E3-C56494A81977}</ProjectGuid>
+    <ProjectTypeGuids>{F85E285D-A4E0-4152-9332-AB1D724D3325};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Website</RootNamespace>
+    <AssemblyName>Website</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assman, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\src\Assman\bin\$(Configuration)\Assman.dll</HintPath>
+    </Reference>
+    <Reference Include="Assman.Less, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\src\Assman.Less\bin\$(Configuration)\net35\Assman.Less.dll</HintPath>
+    </Reference>
+    <Reference Include="Assman.YuiCompressor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\src\Assman.YuiCompressor\bin\$(Configuration)\Assman.YuiCompressor.dll</HintPath>
+    </Reference>
+    <Reference Include="Assman.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\src\Assman.Mvc\bin\$(Configuration)\Mvc2\net35\Assman.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Assman.Spark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\src\Assman.Spark\bin\$(Configuration)\Assman.Spark.dll</HintPath>
+    </Reference>
+    <Reference Include="Spark, Version=1.5.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Spark.1.5\lib\.NetFramework 2.0\Spark.dll</HintPath>
+    </Reference>
+    <Reference Include="Spark.Web.Mvc, Version=1.5.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Spark.Web.Mvc2.1.5\lib\.NetFramework 2.0\Spark.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppStart_SparkWebMvc.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IntegrationTestsController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <None Include="Content\Unconsolidated\TestHelper.less" />
+    <None Include="Views\Home\Index.spark" />
+    <None Include="Views\IntegrationTests\Index.spark">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Scripts\Assman-TestBootstrapper.js" />
+    <Content Include="Scripts\Global-Dependency.js" />
+    <Content Include="Scripts\Unconsolidated\MyScript1.js" />
+    <Content Include="Scripts\Unconsolidated\MyScript2.js" />
+    <Content Include="Views\bindings.xml" />
+    <Content Include="Scripts\Dependency.js" />
+    <Content Include="Scripts\DependencyLeaf.js" />
+    <Content Include="Views\IntegrationTests\ScriptIncludeBinding.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.4.1.js" />
+    <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <None Include="Views\Layouts\Application.spark" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assman.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Views\Shared\_global.spark" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target> -->
+  <Target Name="AfterBuild">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)" Condition="'$(MvcBuildViews)'=='true'" />
+  </Target>
+  <UsingTask TaskName="PreCompileResources" AssemblyFile="bin\Assman.dll" />
+  <Target Name="PreCompileResources" AfterTargets="AfterBuild">
+  <PreCompileResources WebRoot="$(MSBuildProjectDirectory)" Condition="$(Configuration)=='Release'" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1511</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

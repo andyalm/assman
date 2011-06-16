@@ -3,7 +3,7 @@
 <use namespace="System.Linq"/>
 <use namespace="System.Web.Mvc"/>
 <use namespace="System.Web.Mvc.Html"/>
-<use namespace="Assman.Mvc.Html" />
+<use namespace="Assman.Mvc.Registration" />
 <use namespace="Assman.Spark.Registration" />
 
 <use assembly="Spark.Web.Mvc"/>

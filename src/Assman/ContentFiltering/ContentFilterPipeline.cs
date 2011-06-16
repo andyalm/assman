@@ -23,9 +23,14 @@ namespace Assman.ContentFiltering
             _filters.Clear();
         }
 
+        public void Remove<TFilter>() where TFilter : IContentFilter
+        {
+            this.Remove<TFilter>(f => true);
+        }
+
         public void Remove<TFilter>(Predicate<TFilter> predicate) where TFilter : IContentFilter
         {
-            var filtersToRemove = _filters.Where(f => f is TFilter && predicate((TFilter)f));
+            var filtersToRemove = _filters.Where(f => f is TFilter && predicate((TFilter)f)).ToArray();
 
             foreach (var filterToRemove in filtersToRemove)
             {

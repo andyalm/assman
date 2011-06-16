@@ -70,6 +70,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotLess", "dotLess", "{EE76
 		src\PackageSpecs\Assman.dotLess\Assman.dotLess.nuspec = src\PackageSpecs\Assman.dotLess\Assman.dotLess.nuspec
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YuiCompressor", "YuiCompressor", "{3387B24B-3C7D-4266-8173-AF5F7A682B08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assman.YuiCompressor", "src\Assman.YuiCompressor\Assman.YuiCompressor.csproj", "{AD91F81D-90A7-4C57-B427-E39A8902BF57}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YuiCompressor", "YuiCompressor", "{0636DE7E-471F-4790-822C-B5E4712F414D}"
+	ProjectSection(SolutionItems) = preProject
+		src\PackageSpecs\Assman.YuiCompressor\Assman.YuiCompressor.nuspec = src\PackageSpecs\Assman.YuiCompressor\Assman.YuiCompressor.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{BE4FF3A7-0A26-4E62-A841-C2695E2C0A2B}"
+	ProjectSection(SolutionItems) = preProject
+		src\PackageSpecs\Assman.YuiCompressor\Content\Assman.config.transform = src\PackageSpecs\Assman.YuiCompressor\Content\Assman.config.transform
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +118,10 @@ Global
 		{DF604504-959B-464A-92C5-4C279FCD8846}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF604504-959B-464A-92C5-4C279FCD8846}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF604504-959B-464A-92C5-4C279FCD8846}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD91F81D-90A7-4C57-B427-E39A8902BF57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD91F81D-90A7-4C57-B427-E39A8902BF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD91F81D-90A7-4C57-B427-E39A8902BF57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD91F81D-90A7-4C57-B427-E39A8902BF57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,7 +136,10 @@ Global
 		{8B1CBBE5-99F3-470B-AE9D-420EF2B7B7F6} = {21684AF8-44DD-4C74-9AC6-3F27704DC85C}
 		{1CE32C29-EAA4-42DE-94B7-D39A8BBFEB11} = {21684AF8-44DD-4C74-9AC6-3F27704DC85C}
 		{EE768CAE-B266-44AB-B293-6068AFD6765A} = {21684AF8-44DD-4C74-9AC6-3F27704DC85C}
+		{0636DE7E-471F-4790-822C-B5E4712F414D} = {21684AF8-44DD-4C74-9AC6-3F27704DC85C}
 		{163023D3-18F7-4B0C-970C-A2021E0A01E0} = {8B1CBBE5-99F3-470B-AE9D-420EF2B7B7F6}
 		{CF340040-2A39-417F-9A00-A5316604E7C4} = {8B1CBBE5-99F3-470B-AE9D-420EF2B7B7F6}
+		{AD91F81D-90A7-4C57-B427-E39A8902BF57} = {3387B24B-3C7D-4266-8173-AF5F7A682B08}
+		{BE4FF3A7-0A26-4E62-A841-C2695E2C0A2B} = {0636DE7E-471F-4790-822C-B5E4712F414D}
 	EndGlobalSection
 EndGlobal

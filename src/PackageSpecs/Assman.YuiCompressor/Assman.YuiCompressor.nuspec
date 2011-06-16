@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Assman.YuiCompressor</id>
+    <version>1.9</version>
+    <title>Assman YUI Compressor Integration</title>
+    <authors>Andy Alm, Greg Musick</authors>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://assman.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Integrates the YUI Css and Javascript Compressor with Assman.  This tells Assman to use the YUI libraries to minify both javascript and css</description>
+    <tags>javascript css mash minify consolidation yui yuicompressor</tags>
+    <dependencies>
+      <dependency id="Assman" version="1.9" />
+      <dependency id="YUICompressor.NET" version="1.5.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\..\output\lib\Assman.YuiCompressor.dll" target="lib" />
+    <file src="Content\**\*.*" target="Content" />
+  </files>
+</package>
