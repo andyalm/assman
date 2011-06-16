@@ -56,6 +56,7 @@ namespace Assman.Configuration
 
 		public DateTime ConfigurationLastModified { get; set; }
 		public bool PreCompiled { get; private set; }
+		public bool GZip { get; set; }
 		public bool ConsolidateScripts
 		{
 			get { return _scriptGroups.Consolidate; }

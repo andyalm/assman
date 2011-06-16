@@ -116,6 +116,7 @@
       <Abbreviation Text="UI" />
       <Abbreviation Text="VCD" />
       <Abbreviation Text="DTO" />
+      <Abbreviation Text="MS" />
     </Naming2>
   </CodeStyleSettings>
 </Configuration>

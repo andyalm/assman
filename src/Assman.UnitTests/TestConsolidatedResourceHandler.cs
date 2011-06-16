@@ -9,6 +9,8 @@ using Moq;
 
 using NUnit.Framework;
 
+using Assman.IO;
+
 namespace Assman
 {
 	[TestFixture]
@@ -152,6 +154,22 @@ namespace Assman
 
 			request.Expires.ShouldEqual(DateTime.MinValue);
 			((int)request.Cacheability).ShouldEqual(0);
+		}
+
+		[Test]
+		public void WhenGZipEncodingIsAcceptedAndItIsEnabledAndItIsReleaseMode_ContentIsReturnedGZipped()
+		{
+			var request = new StubRequestContext();
+			request.AcceptsGZip = true;
+			_instance.EnableGZip = true;
+			_instance.Mode = ResourceMode.Release;
+			_instance.HandleRequest(request);
+
+			request.Vary.ShouldEqual("Accept-Encoding");
+			request.ContentEncoding.ShouldEqual("gzip");
+			request.OutputStream.Position = 0;
+			var content = request.OutputStream.Decompress().ReadToEnd();
+			content.ShouldEqual("Content1\r\nContent2\r\nContent3");
 		}
 
 		private static IResource CreateResource(string content, DateTime lastModified)

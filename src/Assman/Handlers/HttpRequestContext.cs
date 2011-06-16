@@ -2,6 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Web;
+using System.Linq;
 
 namespace Assman.Handlers
 {
@@ -79,6 +80,25 @@ namespace Assman.Handlers
 		public HttpCacheability Cacheability
 		{
 			set { _httpContext.Response.Cache.SetCacheability(value); }
+		}
+
+		public bool AcceptsGZip
+		{
+			get
+			{
+				var acceptEncoding = _httpContext.Request.Headers["Accept-Encoding"];
+				return acceptEncoding != null && acceptEncoding.Contains("gzip");
+			}
+		}
+
+		public string Vary
+		{
+			set { _httpContext.Response.Cache.SetVaryByCustom(value); }
+		}
+
+		public string ContentEncoding
+		{
+			set { _httpContext.Response.AddHeader("Content-Encoding", value); }
 		}
 	}
 }

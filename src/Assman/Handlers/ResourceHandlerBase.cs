@@ -2,11 +2,14 @@
 using System.IO;
 using System.Web;
 
+using Assman.IO;
+
 namespace Assman.Handlers
 {
     public abstract class ResourceHandlerBase : HttpHandlerBase
     {
         private IHandlerResource _cachedResource;
+        private IHandlerResource _cachedGZippedResource;
         
         protected ResourceHandlerBase()
         {
@@ -20,7 +23,8 @@ namespace Assman.Handlers
 
         internal void HandleRequest(IRequestContext context)
         {
-            var resource = GetResourceInternal();
+            var gzip = ShouldGZip(context);
+            var resource = GetResourceInternal(gzip);
             DateTime lastModified = resource.GetLastModified().ToUniversalTime();
             DateTime ifModifiedSince = (context.IfModifiedSince ?? DateTime.MinValue).ToUniversalTime();
             lastModified = RoundToSeconds(lastModified);
@@ -40,11 +44,23 @@ namespace Assman.Handlers
                     context.Expires = Now().AddYears(1);
                     context.Cacheability = HttpCacheability.Public;
                 }
+                if(gzip)
+                {
+                    context.ContentEncoding = "gzip";
+                    context.Vary = "Accept-Encoding";
+                }
                 resource.WriteContent(context.OutputStream);
             }
         }
 
         public ResourceMode Mode { get; set; }
+
+        public bool EnableGZip { get; set; }
+
+        private bool ShouldGZip(IRequestContext context)
+        {
+            return EnableGZip && Mode == ResourceMode.Release && context.AcceptsGZip;
+        }
 
         private static DateTime RoundToSeconds(DateTime dateTime)
         {
@@ -60,20 +76,47 @@ namespace Assman.Handlers
 
         protected abstract IHandlerResource GetResource();
 
-        private IHandlerResource GetResourceInternal()
+        private IHandlerResource GetResourceInternal(bool gzip)
         {
-            if (_cachedResource != null)
+            if (gzip)
             {
-                return _cachedResource;
+                return GetResourceInternal(ref _cachedGZippedResource, r => new CachedGZippedHandlerResource(r));
+            }
+            else
+            {
+                return GetResourceInternal(ref _cachedResource, r => new CachedHandlerResource(r));
+            }
+        }
+
+        private IHandlerResource GetResourceInternal(ref IHandlerResource cachedResource, Func<IHandlerResource,IHandlerResource> createCachedResource)
+        {
+            if (cachedResource != null)
+            {
+                return cachedResource;
             }
 
             var resource = GetResource();
             if (CachingEnabled)
             {
-                _cachedResource = new CachedHandlerResource(resource);
+                resource = createCachedResource(resource);
+                cachedResource = resource;
             }
 
             return resource;
+        }
+
+        private class CachedGZippedHandlerResource : CachedHandlerResource
+        {
+            public CachedGZippedHandlerResource(IHandlerResource inner) : base(inner, CompressContent) {}
+            
+            private static void CompressContent(IHandlerResource inner, MemoryStream outputStream)
+            {
+                var compressingStream = outputStream.Compress(leaveOpen : true);
+                inner.WriteContent(compressingStream);
+                //for some stupid reason, Flush() doesn't work here, so you have to call Close or your content
+                //can end up truncated
+                compressingStream.Close();
+            }
         }
 
         private class CachedHandlerResource : IHandlerResource
@@ -82,12 +125,14 @@ namespace Assman.Handlers
             private readonly ResourceType _resourceType;
             private readonly MemoryStream _content;
 
-            public CachedHandlerResource(IHandlerResource inner)
+            public CachedHandlerResource(IHandlerResource inner) : this(inner, (r,s) => r.WriteContent(s)) {}
+
+            protected CachedHandlerResource(IHandlerResource inner, Action<IHandlerResource,MemoryStream> writeContent)
             {
                 _lastModified = inner.GetLastModified();
                 _resourceType = inner.ResourceType;
                 _content = new MemoryStream();
-                inner.WriteContent(_content);
+                writeContent(inner, _content);
             }
 
             public DateTime GetLastModified()

@@ -3,6 +3,7 @@ namespace Assman.Configuration
 	internal static class PropertyNames
 	{
 		public const string Consolidate = "consolidate";
+		public const string GZip = "gzip";
 		public const string Exclude = "exclude";
 		public const string Include = "include";
 		public const string Minify = "minify";

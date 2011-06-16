@@ -103,6 +103,16 @@ namespace Assman.Configuration
 		}
 
 		/// <summary>
+		/// Gets or sets whether consolidation should be enabled.
+		/// </summary>
+		[ConfigurationProperty(PropertyNames.GZip, DefaultValue = false)]
+		public bool GZip
+		{
+			get { return (bool)this[PropertyNames.GZip]; }
+			set { this[PropertyNames.GZip] = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets whether dependencies provided by the <see cref="IDependencyProvider"/>'s will be included automatically.
 		/// </summary>
 		[ConfigurationProperty(PropertyNames.ManageDependencies, DefaultValue = true)]
@@ -230,6 +240,7 @@ namespace Assman.Configuration
 			context.ConfigurationLastModified = LastModified(PathResolver);
 			context.ConsolidateScripts = Consolidate && Scripts.Groups.Consolidate;
 			context.ConsolidateStylesheets = Consolidate && Stylesheets.Groups.Consolidate;
+			context.GZip = GZip;
 			context.ManageDependencies = ManageDependencies;
 			context.AddFinder(fileFinder);
 			context.AddAssemblies(Assemblies.GetAssemblies());

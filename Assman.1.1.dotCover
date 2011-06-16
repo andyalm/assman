@@ -1,0 +1,21 @@
+<Configuration>
+  <SnapshotDialog>
+    <InitialDirectory>C:\src\3rdParty\assman</InitialDirectory>
+  </SnapshotDialog>
+  <CoverageFilters>
+    <AllowFilters>
+      <Filter>
+        <ClassFilter>*</ClassFilter>
+        <FunctionFilter>*</FunctionFilter>
+        <ModuleFilter>*</ModuleFilter>
+      </Filter>
+    </AllowFilters>
+    <DenyFilters>
+      <Filter>
+        <ClassFilter>*</ClassFilter>
+        <FunctionFilter>*</FunctionFilter>
+        <ModuleFilter>*.UnitTests</ModuleFilter>
+      </Filter>
+    </DenyFilters>
+  </CoverageFilters>
+</Configuration>

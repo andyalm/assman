@@ -37,9 +37,14 @@ namespace Assman.Handlers
                 return null;
             }
             var resourceMode = GetResourceMode();
-            
+
             if (_assmanContext.PreCompiled)
-                return new PreCompiledResourceHandler(physicalPathToResource, resourceType, resourceMode);
+            {
+                return new PreCompiledResourceHandler(physicalPathToResource, resourceType, resourceMode)
+                {
+                    EnableGZip = _assmanContext.GZip
+                };
+            }
             
             var groupTemplate = _assmanContext.FindGroupTemplate(appRelativePathToResource);
             if (groupTemplate != null)
@@ -48,7 +53,8 @@ namespace Assman.Handlers
                                                        groupTemplate)
                 {
                     MinLastModified = _assmanContext.ConfigurationLastModified,
-                    Mode = resourceMode
+                    Mode = resourceMode,
+                    EnableGZip = _assmanContext.GZip
                 };
             }
             else
@@ -64,7 +70,8 @@ namespace Assman.Handlers
 
                 return new DynamicallyCompiledIndividualResourceHandler(physicalPathToResource, resourceType, contentFilterPipeline, contentFilterContext)
                 {
-                    Mode = resourceMode
+                    Mode = resourceMode,
+                    EnableGZip = _assmanContext.GZip
                 };
             }
         }

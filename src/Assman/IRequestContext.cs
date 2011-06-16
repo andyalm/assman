@@ -15,14 +15,20 @@ namespace Assman
 
 		string ContentType { get; set; }
 
+		bool AcceptsGZip { get; }
+		
+		string Vary { set; }
+		
+		string ContentEncoding { set; }
+
 		Stream OutputStream { get; }
 
 		string StatusDescription { get; set; }
 
-	    DateTime LastModified { set; }
+		DateTime LastModified { set; }
 
-	    DateTime Expires { set; }
+		DateTime Expires { set; }
 
-	    HttpCacheability Cacheability { set; }
+		HttpCacheability Cacheability { set; }
 	}
 }

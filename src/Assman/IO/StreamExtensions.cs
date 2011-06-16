@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.IO.Compression;
 
 namespace Assman.IO
 {
@@ -12,5 +13,20 @@ namespace Assman.IO
              while ((count = source.Read(buffer, 0, buffer.Length)) != 0)
                  destination.Write(buffer, 0, count);
          }
+
+        public static Stream Decompress(this Stream stream)
+        {
+            return new GZipStream(stream, CompressionMode.Decompress);
+        }
+
+        public static Stream Compress(this Stream stream, bool leaveOpen)
+        {
+            return new GZipStream(stream, CompressionMode.Compress, leaveOpen);
+        }
+
+        public static string ReadToEnd(this Stream stream)
+        {
+            return new StreamReader(stream).ReadToEnd();
+        }
     }
 }

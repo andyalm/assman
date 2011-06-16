@@ -25,14 +25,20 @@ namespace Assman.TestSupport
 
 		public string ContentType { get; set; }
 
-		public Stream OutputStream { get; private set; }
+	    public bool AcceptsGZip { get; set; }
 
-		public string StatusDescription { get; set; }
+	    public string Vary { get; set; }
 
-		public DateTime LastModified { get; set; }
+	    public string ContentEncoding { get; set; }
 
-		public DateTime Expires { get; set; }
+	    public Stream OutputStream { get; private set; }
 
-		public HttpCacheability Cacheability { get; set; }
+	    public string StatusDescription { get; set; }
+
+	    public DateTime LastModified { get; set; }
+
+	    public DateTime Expires { get; set; }
+
+	    public HttpCacheability Cacheability { get; set; }
 	}
 }
