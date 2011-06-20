@@ -10,6 +10,8 @@ namespace Assman
         TValue Get(TKey key);
         TValue GetOrAdd(TKey key, Func<TValue> getValue);
         void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> pairs);
+        bool TryGetValue(TKey key, out TValue value);
+        void Set(TKey key, TValue value);
     }
 
     /// <summary>
@@ -54,6 +56,14 @@ namespace Assman
             }
         }
 
+        public bool TryGetValue(TKey key, out TValue value)
+        {
+            using(_lock.ReadLock())
+            {
+                return _dictionary.TryGetValue(key, out value);
+            }
+        }
+
         public TValue GetOrAdd(TKey key, Func<TValue> getValue)
         {
             //this double locking pattern was adapted from a blog post by Ayende
@@ -85,6 +95,14 @@ namespace Assman
                 {
                     _dictionary.Add(pair);
                 }
+            }
+        }
+
+        public void Set(TKey key, TValue value)
+        {
+            using(_lock.WriteLock())
+            {
+                _dictionary[key] = value;
             }
         }
     }
@@ -138,6 +156,14 @@ namespace Assman
             return getValue();
         }
 
+        public bool TryGetValue(TKey key, out TValue value)
+        {
+            value = default(TValue);
+            return false;
+        }
+
         public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> pairs) {}
+
+        public void Set(TKey key, TValue value) {}
     }
 }

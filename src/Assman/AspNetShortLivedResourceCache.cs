@@ -7,9 +7,9 @@ namespace Assman
 {
 	public class AspNetShortLivedResourceCache : IResourceCache
 	{
-	    public const string QueryStringKey = "rid";
-        
-        private readonly Func<HttpContextBase> _getHttpContext;
+		public const string QueryStringKey = "rid";
+		private static readonly object _resourceCacheMutex = new object();
+		private readonly Func<HttpContextBase> _getHttpContext;
 
 		public AspNetShortLivedResourceCache(Func<HttpContextBase> getHttpContext)
 		{
@@ -59,17 +59,25 @@ namespace Assman
 			var innerCache = httpContext.Cache.Get(aspNetCacheKey) as IResourceCache;
 			if(innerCache == null)
 			{
-				innerCache = new InMemoryResourceCache();
-				httpContext.Cache.Insert(aspNetCacheKey, innerCache, null, DateTime.Now.AddMinutes(2), Cache.NoSlidingExpiration);
+				lock(_resourceCacheMutex)
+				{
+					innerCache = httpContext.Cache.Get(aspNetCacheKey) as IResourceCache;
+					if (innerCache == null)
+					{
+						innerCache = new InMemoryThreadSafeResourceCache();
+						httpContext.Cache.Insert(aspNetCacheKey, innerCache, null, DateTime.Now.AddMinutes(2),
+												 Cache.NoSlidingExpiration);
+					}
+				}
 			}
 
 			return innerCache;
 		}
 
-		private class InMemoryResourceCache : IResourceCache
+		private class InMemoryThreadSafeResourceCache : IResourceCache
 		{
-			private readonly IDictionary<ResourceType,IEnumerable<IResource>> _resources = new Dictionary<ResourceType, IEnumerable<IResource>>();
-			private readonly IDictionary<GroupKey, IResourceGroup> _groups = new Dictionary<GroupKey, IResourceGroup>();
+			private readonly IThreadSafeInMemoryCache<ResourceType, IEnumerable<IResource>> _resources = new ThreadSafeInMemoryCache<ResourceType, IEnumerable<IResource>>();
+			private readonly IThreadSafeInMemoryCache<GroupKey, IResourceGroup> _groups = new ThreadSafeInMemoryCache<GroupKey, IResourceGroup>();
 
 			public string CurrentCacheKey
 			{
@@ -88,12 +96,12 @@ namespace Assman
 
 			public void StoreResources(ResourceType resourceType, IEnumerable<IResource> resources)
 			{
-				_resources[resourceType] = resources;
+				_resources.Set(resourceType, resources);
 			}
 
 			public void StoreGroup(string consolidatedUrl, ResourceMode mode, IResourceGroup group)
 			{
-				_groups[new GroupKey {ConsolidatedUrl = consolidatedUrl, Mode = mode}] = group;
+				_groups.Set(new GroupKey {ConsolidatedUrl = consolidatedUrl, Mode = mode}, group);
 			}
 
 			private class GroupKey
