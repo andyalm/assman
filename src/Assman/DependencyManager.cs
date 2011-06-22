@@ -129,7 +129,11 @@ namespace Assman
 			
 			var resource = _resourceFinder.FindResource(virtualPath);
 			if(resource == null)
+			{
+				var globalDependencies = GlobalDependenciesFor(virtualPath);
+				dependencyList.Insert(0, globalDependencies);
 				return;
+			}
 
 			AccumulateDependencies(dependencyList, resource);
 		}

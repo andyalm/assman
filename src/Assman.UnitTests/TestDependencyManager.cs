@@ -84,6 +84,16 @@ namespace Assman
             dependencies[1].ShouldEqual(jquerypluginA.VirtualPath);
 	    }
 
+	    [Test]
+	    public void GlobalDependenciesAreReturnedEvenIfResourceDoesNotExist()
+	    {
+	        _scriptGroups.AddGlobalDependencies(new[] { "~/Scripts/GlobalScript.js" });
+
+	        var dependencies = _dependencyManager.GetDependencies("~/BogusScript.js").ToList();
+            dependencies.CountShouldEqual(1);
+            dependencies[0].ShouldEqual("~/Scripts/GlobalScript.js");
+	    }
+
 		[Test]
 		public void GetDependenciesReturnsEmptyWhenNoDependencyProviderExistsForFileExtension()
 		{
