@@ -48,7 +48,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YuiCompressorCssContentFilter.cs" />
     <Compile Include="YuiCompressorJavascriptContentFilter.cs" />
-    <Compile Include="YuiCompressorPlugin.cs" />
+    <Compile Include="YuiCssCompressorPlugin.cs" />
+    <Compile Include="YuiJavascriptCompressorPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

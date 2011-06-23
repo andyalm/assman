@@ -1,5 +1,6 @@
 <assman>
 	<plugins>
-		<add type="Assman.YuiCompressor.YuiCompressorPlugin, Assman.YuiCompressor, Version=1.0.0.0, Culture=neutral" />
+		<add type="Assman.YuiCompressor.YuiJavascriptCompressorPlugin, Assman.YuiCompressor, Version=1.0.0.0, Culture=neutral" />
+		<add type="Assman.YuiCompressor.YuiCssCompressorPlugin, Assman.YuiCompressor, Version=1.0.0.0, Culture=neutral" />
 	</plugins>
 </assman>
