@@ -165,7 +165,6 @@
     <Compile Include="PreCompiledResourceExcluder.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistryAccessor.cs" />
-    <Compile Include="Registration\DependencyResolvingResourceRegistry.cs" />
     <Compile Include="Registration\GenericResourceRegistry.cs" />
     <Compile Include="Registration\GenericResourceRegistryAccessor.cs" />
     <Compile Include="Registration\IReadableResourceRegistry.cs" />

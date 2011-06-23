@@ -66,13 +66,5 @@ namespace Assman.Registration
 			var scriptRegistry = _consolidatingAccessor.NamedScriptRegistry(name);
 			_consolidatingAccessor.NamedScriptRegistry(name).ShouldBeSameAs(scriptRegistry);
 		}
-
-		[Test]
-		public void WhenManageDependenciesIsTrue_ScriptRegistryIsWrappedInDependencyResolvingDecorator()
-		{
-			_context.ManageDependencies = true;
-			var consolidatedAccessor = _innerAccessor.UseConsolidation();
-			consolidatedAccessor.ScriptRegistry.ShouldBeInstanceOf<DependencyResolvingResourceRegistry>();
-		}
 	}
 }

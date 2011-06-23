@@ -84,7 +84,6 @@
     <Compile Include="TestCssDependencyProvider.cs" />
     <Compile Include="TestCssRelativePathFilter.cs" />
     <Compile Include="TestHttpDependencyCache.cs" />
-    <Compile Include="Registration\TestDependencyResolvingResourceRegistry.cs" />
     <Compile Include="Registration\TestConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\TestConsolidatingResourceRegistryAccessor.cs" />
     <Compile Include="Registration\TestGenericResourceRegistryAccessor.cs" />
