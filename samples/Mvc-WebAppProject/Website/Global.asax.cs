@@ -3,7 +3,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 
 using Assman.Mvc;
-using Assman.Less;
+using Assman.dotLess;
 
 namespace Website
 {

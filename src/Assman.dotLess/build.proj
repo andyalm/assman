@@ -15,10 +15,10 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Project Include="Assman.Less.csproj"/>
+    <Project Include="Assman.dotLess.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <ExportAssembly Include="Assman.Less" />
+    <ExportAssembly Include="Assman.dotLess" />
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\..\packages\Build1.0.0\project.targets"/>

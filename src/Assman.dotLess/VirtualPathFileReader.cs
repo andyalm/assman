@@ -1,10 +1,11 @@
+using System;
 using System.IO;
 
 using Assman.Configuration;
 
 using dotless.Core.Input;
 
-namespace Assman.Less
+namespace Assman.dotLess
 {
 	public class VirtualPathFileReader : IFileReader
 	{

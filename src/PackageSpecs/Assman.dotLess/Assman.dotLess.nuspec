@@ -16,8 +16,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\output\lib\**\Assman.Less.dll" target="lib" />
-    <file src="..\..\..\output\lib\**\Assman.Less.xml" target="lib" />
+    <file src="..\..\..\output\lib\**\Assman.dotLess.dll" target="lib" />
+    <file src="..\..\..\output\lib\**\Assman.dotLess.xml" target="lib" />
     <file src="Content\**\*.*" target="Content" />
   </files>
 </package>

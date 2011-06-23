@@ -1,10 +1,11 @@
+using System;
 using System.Web;
 
 using Assman.ContentFiltering;
 
 using dotless.Core.configuration;
 
-namespace Assman.Less
+namespace Assman.dotLess
 {
 	public class LessContentFilter : IContentFilter
 	{

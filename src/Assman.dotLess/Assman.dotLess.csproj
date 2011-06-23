@@ -8,8 +8,8 @@
     <ProjectGuid>{31F16E4E-7DAA-410B-970A-D26C270C3012}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Assman.Less</RootNamespace>
-    <AssemblyName>Assman.Less</AssemblyName>
+    <RootNamespace>Assman.dotLess</RootNamespace>
+    <AssemblyName>Assman.dotLess</AssemblyName>
     <TargetClrVersion Condition="$(TargetClrVersion)==''">4.0</TargetClrVersion>
     <TargetFrameworkVersion Condition="$(TargetClrVersion)!='4.0'">v3.5</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="$(TargetClrVersion)=='4.0'">v4.0</TargetFrameworkVersion>
@@ -29,23 +29,23 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath Condition="$(TargetClrVersion)=='4.0'">bin\Debug\net40</OutputPath>
-	<OutputPath Condition="$(TargetClrVersion)!='4.0'">bin\Debug\net35</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)!='4.0'">bin\Debug\net35</OutputPath>
     <DefineConstants Condition="$(TargetClrVersion)=='4.0'">DEBUG;TRACE;NET_40</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-	<NoWarn>1591</NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath Condition="$(TargetClrVersion)=='4.0'">bin\Release\net40</OutputPath>
-	<OutputPath Condition="$(TargetClrVersion)!='4.0'">bin\Release\net35</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)!='4.0'">bin\Release\net35</OutputPath>
     <DefineConstants Condition="$(TargetClrVersion)=='4.0'">TRACE;NET_40</DefineConstants>
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-	<NoWarn>1591</NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="dotless.Core, Version=1.1.0.4, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">

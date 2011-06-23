@@ -1,5 +1,5 @@
 <assman>
 	<plugins>
-		<add type="Assman.Less.dotLessAssmanPlugin, Assman.Less, Version=1.0.0.0, Culture=neutral" />
+		<add type="Assman.dotLess.dotLessAssmanPlugin, Assman.dotLess, Version=1.0.0.0, Culture=neutral" />
 	</plugins>
 </assman>

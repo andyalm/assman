@@ -39,9 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\src\Assman\bin\$(Configuration)\Assman.dll</HintPath>
     </Reference>
-    <Reference Include="Assman.Less, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Assman.dotLess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\src\Assman.Less\bin\$(Configuration)\net35\Assman.Less.dll</HintPath>
+      <HintPath>..\..\..\src\Assman.dotLess\bin\$(Configuration)\net35\Assman.dotLess.dll</HintPath>
     </Reference>
     <Reference Include="Assman.YuiCompressor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

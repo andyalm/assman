@@ -1,7 +1,9 @@
+using System;
+
 using Assman.Configuration;
 using Assman.ContentFiltering;
 
-namespace Assman.Less
+namespace Assman.dotLess
 {
 	public class dotLessAssmanPlugin : IAssmanPlugin
 	{

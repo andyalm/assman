@@ -1,12 +1,13 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Routing;
 
-using Assman.Less;
+using Assman.dotLess;
 
 #if NET_40
 [assembly: PreApplicationStartMethod(typeof(IgnoreRoutesForLessUrls), "IgnoreLessRoutes")]
 #endif
-namespace Assman.Less
+namespace Assman.dotLess
 {
     public static class IgnoreRoutesForLessUrls
     {

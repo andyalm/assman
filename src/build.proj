@@ -7,8 +7,8 @@
     <Projects Include="Assman\Build.proj"/>
     <Projects Include="Assman.Mvc\Build.proj"/>
     <Projects Include="Assman.Spark\Build.proj"/>
-    <Projects Include="Assman.Less\Build.proj"/>
-	<Projects Include="Assman.YuiCompressor\Build.proj"/>
+    <Projects Include="Assman.dotLess\Build.proj"/>
+    <Projects Include="Assman.YuiCompressor\Build.proj"/>
     <Projects Include="Assman.UnitTests\Build.proj"/>
     <Projects Include="Assman.Spark.UnitTests\Build.proj"/>
     <Projects Include="PackageSpecs\Build.proj"/>

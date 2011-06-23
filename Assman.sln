@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assman.UnitTests", "src\Ass
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assman.Spark.UnitTests", "src\Assman.Spark.UnitTests\Assman.Spark.UnitTests.csproj", "{32437E2C-1E8B-4ADF-8070-A99AD5A0274D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Less", "Less", "{093F6888-5FEE-4D44-BDE4-E8DBECFDC598}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotLess", "dotLess", "{093F6888-5FEE-4D44-BDE4-E8DBECFDC598}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assman.Less", "src\Assman.Less\Assman.Less.csproj", "{31F16E4E-7DAA-410B-970A-D26C270C3012}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assman.dotLess", "src\Assman.dotLess\Assman.dotLess.csproj", "{31F16E4E-7DAA-410B-970A-D26C270C3012}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assman.Spark", "src\Assman.Spark\Assman.Spark.csproj", "{FE4C215A-9FFC-4475-9DCC-ACAAA80C2F1F}"
 EndProject
@@ -68,6 +68,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotLess", "dotLess", "{EE76
 	ProjectSection(SolutionItems) = preProject
 		src\PackageSpecs\Assman.dotLess\Content\Assman.config.transform = src\PackageSpecs\Assman.dotLess\Content\Assman.config.transform
 		src\PackageSpecs\Assman.dotLess\Assman.dotLess.nuspec = src\PackageSpecs\Assman.dotLess\Assman.dotLess.nuspec
+		src\PackageSpecs\Assman.dotLess\Content\Web.config.transform = src\PackageSpecs\Assman.dotLess\Content\Web.config.transform
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YuiCompressor", "YuiCompressor", "{3387B24B-3C7D-4266-8173-AF5F7A682B08}"
