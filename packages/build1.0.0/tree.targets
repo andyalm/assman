@@ -23,12 +23,12 @@
     <MSBuild Projects="%(Projects.FullPath)" Targets="UnitTest" Properties="$(Properties)" />
   </Target>
 
-  <Target Name="AcceptanceTest" DependsOnTargets="$(AcceptanceTestDependsOn)">
-    <MSBuild Projects="%(Projects.FullPath)" Targets="AcceptanceTest" Properties="$(Properties)" />
-  </Target>
-
   <Target Name="Package" DependsOnTargets="$(PackageDependsOn)">
     <MSBuild Projects="%(Projects.FullPath)" Targets="Package" Properties="$(Properties)" />
+  </Target>
+
+  <Target Name="Export" DependsOnTargets="$(ExportDependsOn)">
+    <MSBuild Projects="%(Projects.FullPath)" Targets="Export" Properties="$(Properties)" />
   </Target>
   
 </Project>

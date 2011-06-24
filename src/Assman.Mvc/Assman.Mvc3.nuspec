@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Assman.Mvc3</id>
+    <version>1.9</version>
+    <title>Assman Mvc3 Integration</title>
+    <authors>Andy Alm</authors>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://jscssconsolidate.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A full featured web resource/asset management framework for ASP.NET Mvc.  This edition of the package is targeted at Mvc 3.0</description>
+    <tags>javascript css mash consolidation mvc</tags>
+    <dependencies>
+      <dependency id="Assman" version="1.9" />
+      <dependency id="NuGetPowerTools" version="0.26" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="NuGet\lib\Mvc3\**\Assman.Mvc.dll" target="lib" />
+    <file src="NuGet\lib\Mvc3\**\Assman.Mvc.xml" target="lib" />
+    <file src="NuGet\Content\**\*.*" target="Content" />
+    <file src="NuGet\Mvc3\Content\**\*.*" target="Content" />
+    <file src="NuGet\Tools\*.*" target="Tools" />
+  </files>
+</package>

@@ -52,6 +52,8 @@
     <Compile Include="YuiJavascriptCompressorPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assman.YuiCompressor.nuspec" />
+    <None Include="NuGet\Content\Assman.config.transform" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

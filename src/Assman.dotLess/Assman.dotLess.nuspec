@@ -1,25 +1,23 @@
 <?xml version="1.0"?>
 <package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <id>Assman.Mvc3</id>
+    <id>Assman.dotLess</id>
     <version>1.9</version>
-    <title>Assman Mvc3 Integration</title>
+    <title>Assman dotLess Integration</title>
     <authors>Andy Alm</authors>
     <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
     <projectUrl>http://jscssconsolidate.codeplex.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A full featured web resource/asset management framework for ASP.NET Mvc.  This edition of the package is targeted at Mvc 3.0</description>
+    <description>Integrates dotLess with Assman.  This allows you to automatically consolidate your .less files in with other .less or .css files</description>
     <tags>javascript css mash consolidation mvc</tags>
     <dependencies>
       <dependency id="Assman" version="1.9" />
-      <dependency id="NuGetPowerTools" version="0.26" />
+      <dependency id="dotLess" version="[1.1.0,)" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\output\lib\Mvc3\**\Assman.Mvc.dll" target="lib" />
-    <file src="..\..\..\output\lib\Mvc3\**\Assman.Mvc.xml" target="lib" />
-    <file src="Content\**\*.*" target="Content" />
-    <file src="Mvc3\Content\**\*.*" target="Content" />
-    <file src="Tools\*.*" target="Tools" />
+    <file src="NuGet\lib\**\Assman.dotLess.dll" target="lib" />
+    <file src="NuGet\lib\**\Assman.dotLess.xml" target="lib" />
+    <file src="NuGet\Content\**\*.*" target="Content" />
   </files>
 </package>

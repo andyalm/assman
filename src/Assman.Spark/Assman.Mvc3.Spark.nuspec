@@ -16,8 +16,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\output\lib\**\Assman.Spark.dll" target="lib" />
-    <file src="..\..\..\output\lib\**\Assman.Spark.xml" target="lib" />
-    <file src="Content\**\*.*" target="Content" />
+    <file src="NuGet\lib\**\Assman.Spark.dll" target="lib" />
+    <file src="NuGet\lib\**\Assman.Spark.xml" target="lib" />
+    <file src="NuGet\Content\**\*.*" target="Content" />
   </files>
 </package>

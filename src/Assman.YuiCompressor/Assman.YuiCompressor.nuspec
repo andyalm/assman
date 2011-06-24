@@ -16,7 +16,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\output\lib\Assman.YuiCompressor.dll" target="lib" />
-    <file src="Content\**\*.*" target="Content" />
+    <file src="NuGet\lib\Assman.YuiCompressor.dll" target="lib" />
+    <file src="NuGet\Content\**\*.*" target="Content" />
   </files>
 </package>

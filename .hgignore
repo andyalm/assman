@@ -9,3 +9,7 @@ glob:*.docstates
 relre:samples/LessIntegration/bin/.+
 relre:Website/[Bb]in/.+
 relre:^output/.+
+syntax: glob
+*.nupkg
+syntax: regexp
+NuGet/lib/.+

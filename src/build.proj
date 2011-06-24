@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Package">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Export">
 
   <Import Project="$(MSBuildProjectDirectory)\..\packages\Build1.0.0\head.targets"/>
 
@@ -11,7 +11,6 @@
     <Projects Include="Assman.YuiCompressor\Build.proj"/>
     <Projects Include="Assman.UnitTests\Build.proj"/>
     <Projects Include="Assman.Spark.UnitTests\Build.proj"/>
-    <Projects Include="PackageSpecs\Build.proj"/>
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\packages\Build1.0.0\tree.targets"/>

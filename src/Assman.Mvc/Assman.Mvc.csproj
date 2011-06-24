@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-	<OutputPath Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">bin\Debug\Mvc2\net40</OutputPath>
+    <OutputPath Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)!='3.0'">bin\Debug\Mvc2\net40</OutputPath>
     <OutputPath Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">bin\Debug\Mvc3\net40</OutputPath>
     <OutputPath Condition="$(TargetClrVersion)!='4.0' and $(MvcVersion)!='3.0'">bin\Debug\Mvc2\net35</OutputPath>
     <DefineConstants Condition="$(TargetClrVersion)=='4.0' and $(MvcVersion)=='3.0'">DEBUG;TRACE;NET_40;MVC3</DefineConstants>
@@ -28,7 +28,7 @@
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">DEBUG;TRACE;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-	<NoWarn>1591</NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,7 +41,7 @@
     <DefineConstants Condition="$(TargetClrVersion)!='4.0'">TRACE;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-	<NoWarn>1591</NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -76,6 +76,23 @@
       <Project>{3A84EC12-7997-417E-AE49-CB7ADFB06B8A}</Project>
       <Name>Assman</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assman.Mvc2.nuspec" />
+    <None Include="Assman.Mvc3.nuspec" />
+    <None Include="NuGet\Content\Assman.config.transform" />
+    <None Include="NuGet\Content\Web.config.transform" />
+    <None Include="NuGet\Mvc3\Content\Views\Web.config.transform" />
+    <None Include="NuGet\Tools\Install.ps1" />
+    <None Include="NuGet\Tools\Uninstall.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NuGet\lib\Mvc2\net35\Assman.Mvc.dll" />
+    <Content Include="NuGet\lib\Mvc2\net35\Assman.Mvc.pdb" />
+    <Content Include="NuGet\lib\Mvc2\net40\Assman.Mvc.dll" />
+    <Content Include="NuGet\lib\Mvc2\net40\Assman.Mvc.pdb" />
+    <Content Include="NuGet\lib\Mvc3\net40\Assman.Mvc.dll" />
+    <Content Include="NuGet\lib\Mvc3\net40\Assman.Mvc.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

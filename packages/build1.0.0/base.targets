@@ -2,20 +2,20 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
   <PropertyGroup>
-  	<DefaultTarget>Package</DefaultTarget>
+  	<DefaultTarget>Export</DefaultTarget>
     <CleanDependsOn></CleanDependsOn>
     <BuildDependsOn>Clean</BuildDependsOn>
     <RebuildDependsOn>Clean;Build</RebuildDependsOn>
     <UnitTestDependsOn>Build</UnitTestDependsOn>
-    <ExportDependsOn>UnitTest</ExportDependsOn>
-    <PackageDependsOn>Export</PackageDependsOn>
+    <PackageDependsOn>UnitTest</PackageDependsOn>
+    <ExportDependsOn>Package</ExportDependsOn>
   </PropertyGroup>
 
   <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)"></Target>
   <Target Name="Build" DependsOnTargets="$(BuildDependsOn)"></Target>
   <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)"></Target>
   <Target Name="UnitTest" DependsOnTargets="$(UnitTestDependsOn)"></Target>
-  <Target Name="Export" DependsOnTargets="$(ExportDependsOn)"></Target>
   <Target Name="Package" DependsOnTargets="$(PackageDependsOn)"></Target>
+  <Target Name="Export" DependsOnTargets="$(ExportDependsOn)"></Target>
   
 </Project>

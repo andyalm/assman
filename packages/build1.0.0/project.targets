@@ -3,6 +3,10 @@
 
   <Import Project="base.targets"/>
 
+  <PropertyGroup>
+    <NuGetDir>$(MSBuildThisFileDirectory)..\NuGet.1.2</NuGetDir>
+  </PropertyGroup>
+
   <ItemGroup Condition="@(BuildProfile)==''">
     <BuildProfile Include="Default">
       <Properties>TargetClrVersion=2.0</Properties>
@@ -10,30 +14,30 @@
     </BuildProfile>
   </ItemGroup>
   
-  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn);_CleanExportAssembly">
-    <MSBuild Projects="@(Project)" Targets="Clean" Properties="$(Properties)" />
-  </Target>
-
-  <Target Name="Build" DependsOnTargets="$(BuildDependsOn);_BuildWithProfile">
+  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn);_CleanProject;_CleanNuGetPackage">
     
   </Target>
 
-  <Target Name="Export" DependsOnTargets="$(ExportDependsOn);_ExportAssembly">
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn);_BuildWithProfile;_CopyAssembliesToNuGetStaging;">
+    
   </Target>
 
-  <Target Name="_CleanExportAssembly">
-    <PropertyGroup>
-      <AssemblyName>%(ExportAssembly.Identity)</AssemblyName>
-    </PropertyGroup>
+  <Target Name="Package" DependsOnTargets="$(PackageDependsOn);_CreateNuGetPackage">
+    
+  </Target>
+  
+  <Target Name="Export" DependsOnTargets="$(ExportDependsOn);_ExportNuGetPackage">
+  </Target>
 
-    <Delete Files="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).dll"  />
-    <Delete Files="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).pdb"  />
-    <Delete Files="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).xml"  />
+  <Target Name="_CleanProject">
+    <MSBuild Projects="@(Project)" Targets="Clean" Properties="$(Properties)" />
+  </Target>
 
-    <Delete Files="$(ExportBinDir)\%(BuildProfile.OutputPath)\$(AssemblyName).dll"  />
-    <Delete Files="$(ExportBinDir)\%(BuildProfile.OutputPath)\$(AssemblyName).pdb"  />
-    <Delete Files="$(ExportBinDir)\%(BuildProfile.OutputPath)\$(AssemblyName).xml"  />
-
+  <Target Name="_CleanNuGetPackage">
+    <ItemGroup>
+      <NuGetPackage Include="$(MSBuildProjectDirectory)\*.nupkg" />
+    </ItemGroup>  
+    <Delete Files="@(NuGetPackage)"  />
   </Target>
 
   <Target Name="_BuildWithProfile">
@@ -43,16 +47,41 @@
     <MSBuild Projects="$(ProjectPath)" Targets="Rebuild" Properties="$(Properties);%(BuildProfile.Properties)" />
   </Target>
 
-  <Target Name="_ExportAssembly">
+  <Target Name="_CopyAssembliesToNuGetStaging">
     <PropertyGroup>
       <AssemblyName>%(ExportAssembly.Identity)</AssemblyName>
     </PropertyGroup>
+    <ItemGroup>
+      <PackageAssembly Include="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).dll">
+        <NuGetStagingFolder>$(MSBuildProjectDirectory)\NuGet\lib\%(BuildProfile.OutputPath)</NuGetStagingFolder>
+      </PackageAssembly>
+      <PackageAssembly Include="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).pdb">
+        <NuGetStagingFolder>$(MSBuildProjectDirectory)\NuGet\lib\%(BuildProfile.OutputPath)</NuGetStagingFolder>
+      </PackageAssembly>
+      <PackageAssembly Include="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).xml"
+                       Condition="Exists('bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).xml')">
+        <NuGetStagingFolder>$(MSBuildProjectDirectory)\NuGet\lib\%(BuildProfile.OutputPath)</NuGetStagingFolder>
+      </PackageAssembly>
+    </ItemGroup>
+    <Copy SourceFiles="@(PackageAssembly)" DestinationFolder="%(PackageAssembly.NuGetStagingFolder)" Condition="Exists('$(MSBuildProjectDirectory)\NuGet')" />
+  </Target>
 
-    <Message Text="ExportBinDir is $(ExportBinDir)..." />
+  <Target Name="_CreateNuGetPackage">
+    <ItemGroup>
+      <NuGetSpec Include="$(MSBuildProjectDirectory)\*.nuspec" />
+    </ItemGroup>
+    
+    <Exec Command="$(NuGetDir)\NuGet.exe pack &quot;%(NuGetSpec.FullPath)&quot; -o &quot;$(MSBuildProjectDirectory)\NuGet&quot;"
+          WorkingDirectory="$(MSBuildProjectDirectory)"
+          LogStandardErrorAsError="true" />
+  </Target>
 
-    <Copy SourceFiles="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).dll" DestinationFolder="$(ExportBinDir)\%(BuildProfile.OutputPath)" Condition="Exists('bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).dll')" />
-    <Copy SourceFiles="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).pdb" DestinationFolder="$(ExportBinDir)\%(BuildProfile.OutputPath)" Condition="Exists('bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).pdb')" />
-    <Copy SourceFiles="bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).xml" DestinationFolder="$(ExportBinDir)\%(BuildProfile.OutputPath)" Condition="Exists('bin\$(Configuration)\%(BuildProfile.OutputPath)\$(AssemblyName).xml')" />
+  <Target Name="_ExportNuGetPackage">
+    <Message Text="ExportDir is $(ExportDir)" />
+    <ItemGroup>
+      <NuGetPackage Include="$(MSBuildProjectDirectory)\NuGet\*.nupkg" />
+    </ItemGroup>
+    <Copy SourceFiles="@(NuGetPackage)" DestinationFolder="$(ExportDir)" />
   </Target>
   
 </Project>
