@@ -89,6 +89,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\lib\BuildTools\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AttributeBasedActionFinder.cs" />
     <Compile Include="ConsolidateSparkScriptAttribute.cs" />
     <Compile Include="Registration\InlineBlockOutputScope.cs" />

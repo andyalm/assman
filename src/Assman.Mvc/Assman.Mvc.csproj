@@ -63,6 +63,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\lib\BuildTools\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Registration\DummyStringResult.cs" />
     <Compile Include="Registration\AjaxHelperExtensions.cs" />
     <Compile Include="Registration\HtmlHelperExtensions.cs" />

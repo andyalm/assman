@@ -18,7 +18,7 @@
     
   </Target>
 
-  <Target Name="Build" DependsOnTargets="$(BuildDependsOn);_BuildWithProfile;_CopyAssembliesToNuGetStaging;">
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn);_GenerateCommonAssemblyInfo;_BuildWithProfile;_CopyAssembliesToNuGetStaging;">
     
   </Target>
 
@@ -46,6 +46,10 @@
     <RemoveDir Directories="$(MSBuildProjectDirectory)\NuGet\lib" />
   </Target>
 
+  <Target Name="_GenerateCommonAssemblyInfo">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)\version.proj" />
+  </Target>
+  
   <Target Name="_BuildWithProfile">
     <PropertyGroup>
       <ProjectPath>%(Project.FullPath)</ProjectPath>

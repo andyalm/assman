@@ -1,0 +1,35 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="GenerateCommonAssemblyInfo" ToolsVersion="4.0">
+  <PropertyGroup>
+    <AssmanVersion>1.9.1</AssmanVersion>
+  </PropertyGroup>
+
+  <UsingTask TaskName="GenerateCommonAssemblyInfo" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <Version ParameterType="System.String" Required="true" />
+      <AssemblyInfoContent ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">
+        string assemblyInfoTemplate = @"
+        using System.Reflection;
+        using System.Runtime.InteropServices;
+
+        [assembly: AssemblyCopyright(""Copyright © Andy Alm 2011"")]
+        [assembly: AssemblyTrademark("""")]
+        [assembly: ComVisible(false)]
+        [assembly: AssemblyVersion(""1.0.0.0"")]
+        [assembly: AssemblyFileVersion(""{Version}.0"")]
+        ";
+
+        AssemblyInfoContent = assemblyInfoTemplate.Replace("{Version}", Version);
+      </Code>
+    </Task>
+  </UsingTask>
+  
+  <Target Name="GenerateCommonAssemblyInfo" Outputs="$(AssmanVersion)">
+    <GenerateCommonAssemblyInfo Version="$(AssmanVersion)">
+      <Output TaskParameter="AssemblyInfoContent" PropertyName="AssemblyInfoContent" />
+    </GenerateCommonAssemblyInfo>
+    <WriteLinesToFile Lines="$(AssemblyInfoContent)" File="$(MSBuildProjectDirectory)\CommonAssemblyInfo.cs" Overwrite="true"  /> 
+  </Target>
+</Project>
