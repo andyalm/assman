@@ -14,7 +14,7 @@
     </BuildProfile>
   </ItemGroup>
   
-  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn);_CleanProject;_CleanNuGetPackage">
+  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn);_CleanProject;_CleanNuGetStaging;">
     
   </Target>
 
@@ -33,11 +33,17 @@
     <MSBuild Projects="@(Project)" Targets="Clean" Properties="$(Properties)" />
   </Target>
 
-  <Target Name="_CleanNuGetPackage">
+  <Target Name="_CleanNuGetStaging">
     <ItemGroup>
-      <NuGetPackage Include="$(MSBuildProjectDirectory)\*.nupkg" />
+      <NuGetPackage Include="$(MSBuildProjectDirectory)\NuGet\*.nupkg" />
     </ItemGroup>  
     <Delete Files="@(NuGetPackage)"  />
+
+    <ItemGroup>
+      <LibFile Include="$(MSBuildProjectDirectory)\NuGet\lib\**\*.*" />
+    </ItemGroup>
+    <Delete Files="@(LibFile)" />
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\NuGet\lib" />
   </Target>
 
   <Target Name="_BuildWithProfile">

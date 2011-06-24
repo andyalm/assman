@@ -9,4 +9,8 @@
 
   <Import Project="$(MSBuildProjectDirectory)\lib\BuildTools\tree.targets"/>
 
+  <Target Name="_CleanOutput" AfterTargets="Clean">
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\output" />
+  </Target>
+
 </Project>
