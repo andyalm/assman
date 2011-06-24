@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Export">
 
-  <Import Project="$(MSBuildProjectDirectory)\packages\Build1.0.0\head.targets"/>
+  <Import Project="$(MSBuildProjectDirectory)\lib\BuildTools\head.targets"/>
   
   <ItemGroup>
     <Projects Include="src\Build.proj"/>
   </ItemGroup>
 
-  <Import Project="$(MSBuildProjectDirectory)\packages\Build1.0.0\tree.targets"/>
+  <Import Project="$(MSBuildProjectDirectory)\lib\BuildTools\tree.targets"/>
 
 </Project>

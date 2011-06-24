@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Export">
 
-  <Import Project="$(MSBuildProjectDirectory)\..\..\packages\Build1.0.0\head.targets"/>
+  <Import Project="$(MSBuildProjectDirectory)\..\..\lib\BuildTools\head.targets"/>
 
   <ItemGroup>
     <BuildProfile Include="Mvc3">
@@ -24,6 +24,6 @@
     <ExportAssembly Include="Assman.Mvc" />
   </ItemGroup>
 
-  <Import Project="$(MSBuildProjectDirectory)\..\..\packages\Build1.0.0\project.targets"/>
+  <Import Project="$(MSBuildProjectDirectory)\..\..\lib\BuildTools\project.targets"/>
 
 </Project>

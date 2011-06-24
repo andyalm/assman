@@ -4,7 +4,7 @@
   <Import Project="base.targets"/>
 
   <PropertyGroup>
-    <NuGetDir>$(MSBuildThisFileDirectory)..\NuGet.1.2</NuGetDir>
+    <NuGetDir>$(MSBuildThisFileDirectory)..\NuGet</NuGetDir>
   </PropertyGroup>
 
   <ItemGroup Condition="@(BuildProfile)==''">

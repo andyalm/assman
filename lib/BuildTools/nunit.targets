@@ -4,7 +4,7 @@
   <Import Project="base.targets"/>
 
   <PropertyGroup>
-    <NUnitToolsDir>$(MSBuildThisFileDirectory)..\NUnit.2.5.9.10348\Tools</NUnitToolsDir>
+    <NUnitToolsDir>$(MSBuildThisFileDirectory)..\..\packages\NUnit.2.5.9.10348\Tools</NUnitToolsDir>
   </PropertyGroup>
 
   <Target Name="UnitTest" DependsOnTargets="$(UnitTestDependsOn)">
