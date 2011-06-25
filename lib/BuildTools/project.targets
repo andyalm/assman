@@ -47,7 +47,9 @@
   </Target>
 
   <Target Name="_GenerateCommonAssemblyInfo">
-    <MSBuild Projects="$(MSBuildThisFileDirectory)\version.proj" />
+    <MSBuild Projects="$(MSBuildThisFileDirectory)\version.proj">
+      <Output TaskParameter="TargetOutputs" PropertyName="AssmanVersion"/>
+    </MSBuild>
   </Target>
   
   <Target Name="_BuildWithProfile">
@@ -80,18 +82,18 @@
     <ItemGroup>
       <NuGetSpec Include="$(MSBuildProjectDirectory)\*.nuspec" />
     </ItemGroup>
-    
-    <Exec Command="$(NuGetDir)\NuGet.exe pack &quot;%(NuGetSpec.FullPath)&quot; -o &quot;$(MSBuildProjectDirectory)\NuGet&quot;"
+    <Message Text="AssmanVersion is $(AssmanVersion)" />
+    <Exec Command="$(NuGetDir)\NuGet.exe pack &quot;%(NuGetSpec.FullPath)&quot; -o &quot;$(MSBuildProjectDirectory)\NuGet&quot; -Version $(AssmanVersion)"
           WorkingDirectory="$(MSBuildProjectDirectory)"
           LogStandardErrorAsError="true" />
   </Target>
 
   <Target Name="_ExportNuGetPackage">
-    <Message Text="ExportDir is $(ExportDir)" />
+    <Message Text="ExportDir is $(ExportDir)" Importance="low" />
     <ItemGroup>
       <NuGetPackage Include="$(MSBuildProjectDirectory)\NuGet\*.nupkg" />
     </ItemGroup>
-    <Copy SourceFiles="@(NuGetPackage)" DestinationFolder="$(ExportDir)" />
+    <Copy SourceFiles="%(NuGetPackage.FullPath)" DestinationFolder="$(ExportDir)" Condition="Exists('%(NuGetPackage.FullPath)')" />
   </Target>
   
 </Project>
