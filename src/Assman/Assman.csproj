@@ -244,12 +244,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NuGet\Assman.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Assman.Core.nuspec" />
-    <None Include="NuGet\Content\Assman.config" />
-    <None Include="NuGet\Content\Web.config.transform" />
     <None Include="NuGet\Tools\Assman.MSBuild.tasks" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -82,7 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assman.Mvc2.nuspec" />
-    <None Include="Assman.Mvc3.nuspec" />
+    <None Include="Assman.Mvc3.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="NuGet\Content\Assman.config.transform" />
     <None Include="NuGet\Content\Web.config.transform" />
     <None Include="NuGet\Mvc3\Content\Views\Web.config.transform" />

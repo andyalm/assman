@@ -18,6 +18,9 @@
 				</include>
 			</group>
 		</groups>
+		<globalDependencies>
+			<!-- add scripts that you want to assume are always present here (e.g. jQuery) -->
+		</globalDependencies>
 	</scripts>
 	<stylesheets>
 		<groups>
@@ -38,5 +41,8 @@
 				</include>
 			</group>
 		</groups>
+		<globalDependencies>
+			<!-- add stylesheets you want to always appear first here (e.g. reset stylesheets)-->
+		</globalDependencies>
 	</stylesheets>
 </assman>

@@ -8,7 +8,7 @@ namespace Assman
 {
 	public class VisualStudioScriptDependencyProvider : IDependencyProvider
 	{
-		private static readonly Regex _referenceRegex = new Regex(@"///\s*(<reference .+ />)", RegexOptions.Compiled);
+		private static readonly Regex _referenceRegex = new Regex(@"///\s*(<reference .+/>)", RegexOptions.Compiled);
 		private static readonly Regex _vsDocRegex = new Regex(@"-vsdoc(?=\.js)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		public static VisualStudioScriptDependencyProvider GetInstance()

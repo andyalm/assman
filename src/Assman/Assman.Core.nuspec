@@ -13,7 +13,6 @@
   <files>
     <file src="NuGet\lib\**\Assman.dll" target="lib" />
     <file src="NuGet\lib\**\Assman.xml" target="lib" />
-    <file src="NuGet\Content\**\*.*" target="Content" />
     <file src="NuGet\Tools\*.*" target="Tools" />
   </files>
 </package>

@@ -80,7 +80,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assman.dotLess.nuspec" />
+    <None Include="Assman.dotLess.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="NuGet\Content\Assman.config.transform" />
     <None Include="NuGet\Content\Web.config.transform" />
     <None Include="packages.config" />
