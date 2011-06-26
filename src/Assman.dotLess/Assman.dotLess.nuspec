@@ -11,7 +11,7 @@
     <description>Integrates dotLess with Assman.  This allows you to automatically consolidate your .less files in with other .less or .css files</description>
     <tags>javascript css mash consolidation mvc</tags>
     <dependencies>
-      <dependency id="Assman" version="1.9" />
+      <dependency id="Assman.Core" version="1.9" />
       <dependency id="dotLess" version="[1.1.0,)" />
     </dependencies>
   </metadata>
