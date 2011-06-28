@@ -91,14 +91,14 @@ namespace Assman.Registration
 
             if (!url.Contains("?"))
             {
-                return VirtualPathUtility.ToAppRelative(url);
+                return VirtualPathUtility.ToAppRelative(url, "/");
             }
             else
             {
                 //VirtualPathUtility throws if a query exists in the url.  Strip it
                 //off before calling and then append it back on afterwards.
                 string[] urlParts = url.Split('?');
-                string appRelativeUrl = VirtualPathUtility.ToAppRelative(urlParts[0]);
+                string appRelativeUrl = VirtualPathUtility.ToAppRelative(urlParts[0], "/");
 
                 return appRelativeUrl + "?" + urlParts[1];
             }
