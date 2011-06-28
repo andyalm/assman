@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Assman.Configuration;
+
 namespace Assman
 {
 	public class ResourceGroupManager : IResourceGroupManager
 	{
-		public static IResourceGroupManager GetInstance()
+		public static IResourceGroupManager GetInstance(IResourceCache resourceCache)
 		{
-			return new CachingResourceGroupManager(new ResourceGroupManager(), ResourceCacheFactory.GetCache());
+			return new CachingResourceGroupManager(new ResourceGroupManager(), resourceCache);
 		}
 		
 		private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();

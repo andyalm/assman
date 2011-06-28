@@ -31,7 +31,7 @@ namespace Assman
             _dependencyProvider = new StubDependencyProvider();
             DependencyManagerFactory.ClearDependencyCache();
 
-            _instance = new AssmanContext();
+            _instance = AssmanContext.Create();
 			_instance.ConsolidateScripts = true;
 			_instance.ConfigurationLastModified = DateTime.MinValue;
 		    _instance.AddFinder(_finder);

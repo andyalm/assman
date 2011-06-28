@@ -4,7 +4,6 @@ using System.Linq;
 
 using Assman.Configuration;
 using Assman.PreCompilation;
-using Assman.PreConsolidation;
 using Assman.TestSupport;
 
 using NUnit.Framework;
@@ -29,7 +28,7 @@ namespace Assman
 			_instance.LastModified(DateTime.MinValue);
 		}
 
-        [Test]
+		[Test]
 		public void WhenBuildingContext_EmbeddedResourcesCanBeFoundForConfiguredAssemblies()
 		{
 			_instance.Assemblies.Add(this.GetType().Assembly.GetName().Name);
@@ -51,18 +50,18 @@ namespace Assman
 			context.ConfigurationLastModified.ShouldEqual(lastModified);
 		}
 
-	    [Test]
-	    public void WhenBuildingContext_GlobalDependenciesAreAddedToGroupManager()
-	    {
-	        _instance.Scripts.GlobalDependencies.Add("~/scripts/shared.js");
-	        _instance.Scripts.GlobalDependencies.Add("~/scripts/otherglobal.js");
+		[Test]
+		public void WhenBuildingContext_GlobalDependenciesAreAddedToGroupManager()
+		{
+			_instance.Scripts.GlobalDependencies.Add("~/scripts/shared.js");
+			_instance.Scripts.GlobalDependencies.Add("~/scripts/otherglobal.js");
 
-	        var context = _instance.BuildContext(ResourceFinderFactory.Null, NullPreCompiledPersister.Instance);
+			var context = _instance.BuildContext(ResourceFinderFactory.Null, NullPreCompiledPersister.Instance);
 
-	        List<string> globalDependencies = context.ScriptGroups.GetGlobalDependencies().ToList();
-	        globalDependencies.CountShouldEqual(2);
-            globalDependencies[0].ShouldEqual("~/scripts/shared.js");
-            globalDependencies[1].ShouldEqual("~/scripts/otherglobal.js");
-	    }
+			List<string> globalDependencies = context.ScriptGroups.GetGlobalDependencies().ToList();
+			globalDependencies.CountShouldEqual(2);
+			globalDependencies[0].ShouldEqual("~/scripts/shared.js");
+			globalDependencies[1].ShouldEqual("~/scripts/otherglobal.js");
+		}
 	}
 }

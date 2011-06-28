@@ -5,9 +5,12 @@ namespace Assman
 {
 	public static class ResourceCacheFactory
 	{
-		public static IResourceCache GetCache()
+		public static IResourceCache GetCache(ResourceMode resourceMode)
 		{
-			return new AspNetShortLivedResourceCache(GetHttpContext);
+			if(resourceMode == ResourceMode.Release)
+				return new InMemoryThreadSafeResourceCache();
+			else
+				return new AspNetShortLivedResourceCache(GetHttpContext);
 		}
 
 		private static HttpContextBase GetHttpContext()

@@ -10,11 +10,6 @@ namespace Assman
 		private readonly List<IFinderExcluder> _excluders = new List<IFinderExcluder>(); 
 		private readonly IResourceCache _resourceCache;
 
-		public CompositeResourceFinder() : this(ResourceCacheFactory.GetCache())
-		{
-			
-		}
-
 		public CompositeResourceFinder(IResourceCache resourceCache)
 		{
 			_resourceCache = resourceCache;

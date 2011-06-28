@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-using Assman.PreCompilation;
 using Assman.TestSupport;
 
 using NUnit.Framework;
 
-namespace Assman.PreConsolidation
+namespace Assman.PreCompilation
 {
 	[TestFixture]
 	public class TestCompiledFilePersister

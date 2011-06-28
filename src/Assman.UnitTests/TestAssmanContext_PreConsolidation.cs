@@ -3,7 +3,6 @@ using System.Linq;
 
 using Assman.Configuration;
 using Assman.PreCompilation;
-using Assman.PreConsolidation;
 
 using Moq;
 
@@ -19,14 +18,14 @@ namespace Assman
 		private AssmanContext _context;
 		private Mock<IDependencyProvider> _dependencyProvider;
 		private Mock<IResourceFinder> _finder;
-
+		
 		[SetUp]
 		public void SetupContext()
 		{
 			_dependencyProvider = new Mock<IDependencyProvider>();
 			_finder = new Mock<IResourceFinder>();
 			
-			_context = new AssmanContext();
+			_context = AssmanContext.Create();
 			_context.MapExtensionToDependencyProvider(".js", _dependencyProvider.Object);
 			_context.AddFinder(_finder.Object);
 		}

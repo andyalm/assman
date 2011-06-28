@@ -12,7 +12,7 @@ namespace Assman.Configuration
 	{
 		public static AssmanContext Create()
 		{
-			return new AssmanContext();
+			return new AssmanContext(ConfigDrivenResourceModeProvider.GetInstance());
 		}
 
 		private static AssmanContext _current;
@@ -39,11 +39,14 @@ namespace Assman.Configuration
 		private readonly DependencyManager _dependencyManager;
 		private readonly IResourceModeProvider _resourceModeProvider;
 
-		internal AssmanContext()
+		internal AssmanContext(IResourceModeProvider resourceModeProvider)
 		{
-			_scriptGroups = ResourceGroupManager.GetInstance();
-			_styleGroups = ResourceGroupManager.GetInstance();
-			_finder = new CompositeResourceFinder();
+			var resourceMode = resourceModeProvider.GetCurrentResourceMode();
+			var resourceCache = ResourceCacheFactory.GetCache(resourceMode);
+			
+			_scriptGroups = ResourceGroupManager.GetInstance(resourceCache);
+			_styleGroups = ResourceGroupManager.GetInstance(resourceCache);
+			_finder = new CompositeResourceFinder(resourceCache);
 			_finder.Exclude(new ConsolidatedResourceExcluder(_scriptGroups));
 			_finder.Exclude(new ConsolidatedResourceExcluder(_styleGroups));
 			_finder.Exclude(new PreCompiledResourceExcluder());
@@ -51,7 +54,7 @@ namespace Assman.Configuration
 			_filterPipelineMap = new ContentFilterPipelineMap();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
-			_resourceModeProvider = ConfigDrivenResourceModeProvider.GetInstance();
+			_resourceModeProvider = resourceModeProvider;
 		}
 
 		public DateTime ConfigurationLastModified { get; set; }

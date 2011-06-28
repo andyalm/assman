@@ -15,7 +15,7 @@ namespace Assman
         [SetUp]
         public void Init()
         {
-            _instance = new CompositeResourceFinder();
+            _instance = new CompositeResourceFinder(NullResourceCache.Instance);
         }
         
         [Test]

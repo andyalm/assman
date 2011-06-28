@@ -118,6 +118,7 @@
     <Compile Include="Handlers\HttpHandlerBase.cs" />
     <Compile Include="Handlers\ResourceHandlerBase.cs" />
     <Compile Include="ICompiledResource.cs" />
+    <Compile Include="InMemoryThreadSafeResourceCache.cs" />
     <Compile Include="IO\IFileAccess.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
     <Compile Include="IResourceCache.cs" />
