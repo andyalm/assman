@@ -235,7 +235,8 @@ namespace Assman.Configuration
 
 		public AssmanContext BuildContext(IResourceFinder fileFinder, IPreCompiledReportPersister preCompiledPersister)
 		{
-			var context = AssmanContext.Create();
+		    var resourceMode = ResourceModeProvider.Instance.GetCurrentResourceMode();
+		    var context = AssmanContext.Create(resourceMode);
 
 			context.ConfigurationLastModified = LastModified(PathResolver);
 			context.ConsolidateScripts = Consolidate && Scripts.Groups.Consolidate;

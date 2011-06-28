@@ -25,7 +25,7 @@ namespace Assman
 			_dependencyProvider = new Mock<IDependencyProvider>();
 			_finder = new Mock<IResourceFinder>();
 			
-			_context = AssmanContext.Create();
+			_context = AssmanContext.Create(ResourceMode.Release);
 			_context.MapExtensionToDependencyProvider(".js", _dependencyProvider.Object);
 			_context.AddFinder(_finder.Object);
 		}

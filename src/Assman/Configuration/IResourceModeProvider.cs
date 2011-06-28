@@ -7,6 +7,17 @@ namespace Assman.Configuration
         ResourceMode GetCurrentResourceMode();
     }
 
+    public static class ResourceModeProvider
+    {
+        private static IResourceModeProvider _instance = ConfigDrivenResourceModeProvider.GetInstance();
+
+        public static IResourceModeProvider Instance
+        {
+            get { return _instance; }
+            set { _instance = value; }
+        }
+    }
+
     public class ConfigDrivenResourceModeProvider : IResourceModeProvider
     {
         public static ConfigDrivenResourceModeProvider GetInstance()

@@ -25,7 +25,7 @@ namespace Assman
 		[SetUp]
 		public void SetupContext()
 		{
-			_context = AssmanContext.Create();
+			_context = AssmanContext.Create(ResourceMode.Debug);
 			_groupElement = new ScriptGroupElement();
 			_groupElement.ConsolidatedUrl = "~" + ConsolidatedPath;
 			_context.ScriptGroups.Add(_groupElement);

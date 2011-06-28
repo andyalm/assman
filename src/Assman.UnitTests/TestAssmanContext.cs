@@ -4,8 +4,6 @@ using System.Linq;
 using Assman.Configuration;
 using Assman.TestSupport;
 
-using Moq;
-
 using NUnit.Framework;
 
 namespace Assman
@@ -15,16 +13,13 @@ namespace Assman
 	{
 		private StubResourceFinder _finder;
 		private AssmanContext _context;
-		private Mock<IResourceModeProvider> _resourceModeProvider;
 
 		[SetUp]
 		public void SetupContext()
 		{
 			DependencyManagerFactory.ClearDependencyCache();
 			_finder = new StubResourceFinder();
-			_resourceModeProvider = new Mock<IResourceModeProvider>();
-			_resourceModeProvider.Setup(p => p.GetCurrentResourceMode()).Returns(ResourceMode.Debug);
-			_context = new AssmanContext(_resourceModeProvider.Object);
+			_context = new AssmanContext(ResourceMode.Debug);
 			_context.AddFinder(_finder);
 		}
 		

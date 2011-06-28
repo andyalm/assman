@@ -16,7 +16,7 @@ namespace Assman.Registration
 		[SetUp]
 		public void SetupContext()
 		{
-			_context = AssmanContext.Create();
+			_context = AssmanContext.Create(ResourceMode.Release);
 			_context.ManageDependencies = false;
 			AssmanContext.Current = _context;
 			_innerAccessor = new GenericResourceRegistryAccessor();

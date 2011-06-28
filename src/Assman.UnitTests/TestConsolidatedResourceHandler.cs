@@ -40,10 +40,7 @@ namespace Assman
 			var groupTemplate = new StubResourceGroupTemplate(new ResourceGroup(VirtualPath, resources));
 			groupTemplate.ResourceType = _resourceType;
 
-		    var resourceModeProvider = new Mock<IResourceModeProvider>();
-		    resourceModeProvider.Setup(p => p.GetCurrentResourceMode()).Returns(ResourceMode.Debug);
-
-			var configContext = new AssmanContext(resourceModeProvider.Object);
+		    var configContext = new AssmanContext(ResourceMode.Debug);
 			configContext.AddFinder(_finder.Object);
 
 			_instance = new DynamicallyConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext())

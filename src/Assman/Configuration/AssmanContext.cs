@@ -10,9 +10,9 @@ namespace Assman.Configuration
 {
 	public class AssmanContext
 	{
-		public static AssmanContext Create()
+		public static AssmanContext Create(ResourceMode resourceMode)
 		{
-			return new AssmanContext(ConfigDrivenResourceModeProvider.GetInstance());
+			return new AssmanContext(resourceMode);
 		}
 
 		private static AssmanContext _current;
@@ -37,11 +37,10 @@ namespace Assman.Configuration
 		private IResourceGroupManager _styleGroups;
 		private readonly List<Assembly> _assemblies;
 		private readonly DependencyManager _dependencyManager;
-		private readonly IResourceModeProvider _resourceModeProvider;
+		private readonly ResourceMode _resourceMode;
 
-		internal AssmanContext(IResourceModeProvider resourceModeProvider)
+		internal AssmanContext(ResourceMode resourceMode)
 		{
-			var resourceMode = resourceModeProvider.GetCurrentResourceMode();
 			var resourceCache = ResourceCacheFactory.GetCache(resourceMode);
 			
 			_scriptGroups = ResourceGroupManager.GetInstance(resourceCache);
@@ -54,7 +53,7 @@ namespace Assman.Configuration
 			_filterPipelineMap = new ContentFilterPipelineMap();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
-			_resourceModeProvider = resourceModeProvider;
+		    _resourceMode = resourceMode;
 		}
 
 		public DateTime ConfigurationLastModified { get; set; }
@@ -176,8 +175,7 @@ namespace Assman.Configuration
 			IEnumerable<string> resolvedResourceUrls;
 			if (groupManager.IsGroupUrlWithConsolidationDisabled(resourceUrl))
 			{
-				var resourceMode = _resourceModeProvider.GetCurrentResourceMode();
-				resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, resourceMode, _finder)
+				resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, _resourceMode, _finder)
 					.SortByDependencies(_dependencyManager);
 			}
 			else

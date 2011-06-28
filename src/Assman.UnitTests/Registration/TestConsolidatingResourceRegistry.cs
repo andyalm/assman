@@ -24,7 +24,7 @@ namespace Assman.Registration
         public void SetupContext()
         {
             _innerRegistry = new Mock<IResourceRegistry>();
-            _context = AssmanContext.Create();
+            _context = AssmanContext.Create(ResourceMode.Release);
             _context.ScriptGroups.Add(new ScriptGroupElement
             {
                 ConsolidatedUrl = ConsolidatedUrl,
