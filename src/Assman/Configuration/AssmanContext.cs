@@ -23,7 +23,8 @@ namespace Assman.Configuration
 			{
 				if(_current == null)
 				{
-					_current = AssmanConfiguration.Current.BuildContext();
+					var resourceMode = ResourceModeProvider.Instance.GetCurrentResourceMode();
+					_current = AssmanConfiguration.Current.BuildContext(resourceMode);
 				}
 
 				return _current;
@@ -53,7 +54,7 @@ namespace Assman.Configuration
 			_filterPipelineMap = new ContentFilterPipelineMap();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
-		    _resourceMode = resourceMode;
+			_resourceMode = resourceMode;
 		}
 
 		public DateTime ConfigurationLastModified { get; set; }
@@ -133,7 +134,7 @@ namespace Assman.Configuration
 
 		public ResourceCompiler GetConsolidator()
 		{
-			return new ResourceCompiler(_filterPipelineMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
+			return new ResourceCompiler(_filterPipelineMap, _dependencyManager, _scriptGroups, _styleGroups, _finder, _resourceMode);
 		}
 
 		public IEnumerable<string> GetResourceDependencies(string virtualPath)

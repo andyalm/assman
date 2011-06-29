@@ -75,9 +75,9 @@ namespace Assman.BuildSupport
 
 		private void ConsolidateAll(AssmanConfiguration configSection)
 		{
-			var context = configSection.BuildContext(usePreCompilationReportIfPresent: false);
+			var context = configSection.BuildContext(Mode, usePreCompilationReportIfPresent: false);
 			var consolidator = context.GetConsolidator();
-			var report = consolidator.CompileAll(WriteCompiledResource, Mode);
+			var report = consolidator.CompileAll(WriteCompiledResource);
 			report.Version = this.Version ?? DateTime.Now.ToString("yyMMddHHmm");
 			configSection.SavePreConsolidationReport(report);
 		}

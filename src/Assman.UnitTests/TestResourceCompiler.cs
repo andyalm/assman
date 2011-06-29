@@ -17,7 +17,10 @@ namespace Assman
 		[SetUp]
 		public void SetupContext()
 		{
-			_context = new ResourceTestContext();
+		    _context = new ResourceTestContext
+		    {
+		        Mode = ResourceMode.Release
+		    };
 			_compiler = _context.GetConsolidator();
 		}
 		
@@ -48,7 +51,7 @@ namespace Assman
 			var accountIndex = _context.CreateResource("~/Views/Account/Index.js")
 				.WithDependencies(myothercomponent).Resource;
 
-			var preConsolidatedReport = _compiler.CompileAll(resource => { }, ResourceMode.Release);
+			var preConsolidatedReport = _compiler.CompileAll(resource => { });
 			var homeGroupDepends = preConsolidatedReport.Dependencies.ShouldContain(d => d.ResourcePath == homeGroup.ConsolidatedUrl);
 			
 			homeGroupDepends.Dependencies.CountShouldEqual(3);
@@ -66,7 +69,7 @@ namespace Assman
 			_context.CreateResource("~/file5.js");
 			_context.CreateResource("~/file6.js");
 
-			var report = _compiler.CompileAll(r => {}, ResourceMode.Release);
+			var report = _compiler.CompileAll(r => {});
 
 			report.Scripts.SingleResources.CountShouldEqual(2);
 			report.Scripts.SingleResources[0].OriginalPath.ShouldEqual("~/file5.js");
@@ -84,7 +87,7 @@ namespace Assman
 			_context.CreateResource("~/ms-file.js");
 
 			var compiledResources = new List<ICompiledResource>();
-			var report = _compiler.CompileAll(r => compiledResources.Add(r), ResourceMode.Release);
+			var report = _compiler.CompileAll(compiledResources.Add);
 
 			report.Scripts.SingleResources.CountShouldEqual(0);
 			compiledResources.CountShouldEqual(0);
@@ -106,7 +109,7 @@ namespace Assman
 			groupTemplate.ResourceType = ResourceType.Script;
 
 			var excludeFilter = ToFilter(r => r.VirtualPath.Contains("file2"));
-			var consolidatedResource = _compiler.CompileGroup(group.ConsolidatedUrl, groupTemplate.WithContext(excludeFilter), ResourceMode.Debug);
+			var consolidatedResource = _compiler.CompileGroup(group.ConsolidatedUrl, groupTemplate.WithContext(excludeFilter));
 
 			consolidatedResource.ShouldNotBeNull();
 			consolidatedResource.Resources.Count().ShouldEqual(2);
@@ -132,7 +135,7 @@ namespace Assman
 			_context.DependencyProvider.SetDependencies(dependencyLeaf, "~/dependency-middle.js");
 			_context.DependencyProvider.SetDependencies(dependencyMiddle, "~/dependency-root.js");
 
-			var consolidatedResource = _compiler.CompileGroup(group, ResourceMode.Debug);
+			var consolidatedResource = _compiler.CompileGroup(group);
 			var resources = consolidatedResource.Resources.ToList();
 			resources[0].VirtualPath.ShouldEqual("~/dependency-root.js");
 			resources[1].VirtualPath.ShouldEqual("~/dependency-middle.js");
@@ -154,7 +157,7 @@ namespace Assman
 			var unconsolidatedResource1 = _context.CreateResource("~/unconsolidated1.js").Resource;
 			var unconsolidatedResource2 = _context.CreateResource("~/unconsolidated2.js").Resource;
 
-			var unconsolidatedResourceCompilations = _compiler.CompileUnconsolidatedResources(ResourceType.Script, ResourceMode.Debug, r => {}).ToList();
+			var unconsolidatedResourceCompilations = _compiler.CompileUnconsolidatedResources(ResourceType.Script, r => {}).ToList();
 
 			unconsolidatedResourceCompilations.CountShouldEqual(2);
 			unconsolidatedResourceCompilations[0].Resources.Single().VirtualPath.ShouldEqual(unconsolidatedResource1.VirtualPath);
@@ -177,7 +180,7 @@ namespace Assman
 			var unconsolidatedResource2 = _context.CreateResource("~/unconsolidated2.js").Resource;
 			var unconsolidatedMinifiedResource1 = _context.CreateResource("~/unconsolidated1.min.js").Resource;
 
-			var unconsolidatedResourceCompilations = _compiler.CompileUnconsolidatedResources(ResourceType.Script, ResourceMode.Debug, r => { }).ToList();
+			var unconsolidatedResourceCompilations = _compiler.CompileUnconsolidatedResources(ResourceType.Script, r => { }).ToList();
 
 			unconsolidatedResourceCompilations.CountShouldEqual(1);
 			unconsolidatedResourceCompilations[0].Resources.Single().VirtualPath.ShouldEqual(unconsolidatedResource2.VirtualPath);

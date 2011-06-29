@@ -32,7 +32,7 @@ namespace Assman.Handlers
 
 		private ICompiledResource GetConsolidatedResource()
 		{
-			return _compiler.CompileGroup(_path, _groupTemplateContext, Mode);
+			return _compiler.CompileGroup(_path, _groupTemplateContext);
 		}
 
 		private class DynamicallyConsolidatedHandlerResource : IHandlerResource

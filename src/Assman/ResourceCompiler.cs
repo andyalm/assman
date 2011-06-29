@@ -15,29 +15,31 @@ namespace Assman
 		private readonly IResourceGroupManager _scriptGroups;
 		private readonly IResourceGroupManager _styleGroups;
 		private readonly IResourceFinder _finder;
+	    private readonly ResourceMode _resourceMode;
 
-		public ResourceCompiler(ContentFilterPipelineMap contentFilterPipelineMap, DependencyManager dependencyManager, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups, IResourceFinder finder)
+	    public ResourceCompiler(ContentFilterPipelineMap contentFilterPipelineMap, DependencyManager dependencyManager, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups, IResourceFinder finder, ResourceMode resourceMode)
 		{
 			_contentFilterPipelineMap = contentFilterPipelineMap;
 			_dependencyManager = dependencyManager;
 			_scriptGroups = scriptGroups;
 			_styleGroups = styleGroups;
 			_finder = finder;
+		    _resourceMode = resourceMode;
 		}
 
-		public ICompiledResource CompileGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext, ResourceMode mode)
+		public ICompiledResource CompileGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext)
 		{
-			var group = groupTemplateContext.FindGroupOrDefault(_finder, groupConsolidatedUrl, mode);
+			var group = groupTemplateContext.FindGroupOrDefault(_finder, groupConsolidatedUrl, _resourceMode);
 
 			if (group == null)
 			{
 				throw new Exception("No group with consolidatedUrl '" + groupConsolidatedUrl + "' could be found.");
 			}
 
-			return CompileGroup(group, mode);
+			return CompileGroup(group);
 		}
 
-		public ICompiledResource CompileGroup(IResourceGroup group, ResourceMode mode)
+		public ICompiledResource CompileGroup(IResourceGroup group)
 		{
 			Func<IResource, string> getResourceContent = resource =>
 			{
@@ -45,7 +47,7 @@ namespace Assman
 			    var contentFilterContext = new ContentFilterContext
 			    {
 			        Group = group,
-			        Minify = group.ShouldMinify(mode),
+			        Minify = group.ShouldMinify(_resourceMode),
 			        ResourceVirtualPath = resource.VirtualPath
 			    };
 			    return contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
@@ -56,17 +58,17 @@ namespace Assman
 				.Consolidate(group, getResourceContent, group.ResourceType.Separator);
 		}
 
-		public PreCompilationReport CompileAll(Action<ICompiledResource> handleConsolidatedResource, ResourceMode mode)
+		public PreCompilationReport CompileAll(Action<ICompiledResource> handleConsolidatedResource)
 		{
 			return new PreCompilationReport
 			{
-				Scripts = CompileAllResourcesOfType(ResourceType.Script, mode, handleConsolidatedResource),
-				Stylesheets = CompileAllResourcesOfType(ResourceType.Stylesheet, mode, handleConsolidatedResource),
-				Dependencies = GetAllDependencies(mode).ToList()
+				Scripts = CompileAllResourcesOfType(ResourceType.Script, handleConsolidatedResource),
+				Stylesheets = CompileAllResourcesOfType(ResourceType.Stylesheet, handleConsolidatedResource),
+				Dependencies = GetAllDependencies().ToList()
 			};
 		}
 
-		public IEnumerable<ICompiledResource> CompileUnconsolidatedResources(ResourceType resourceType, ResourceMode resourceMode, Action<ICompiledResource> handleCompiledResource)
+		public IEnumerable<ICompiledResource> CompileUnconsolidatedResources(ResourceType resourceType, Action<ICompiledResource> handleCompiledResource)
 		{
 			var resources = _finder.FindResources(resourceType).ToList();
 			
@@ -85,7 +87,7 @@ namespace Assman
 				var externallyCompiledResource = externallyCompiledResources.SingleOrDefault(r => r.Matches(unconsolidatedResource));
 				if(externallyCompiledResource == null)
 				{
-					var compiledResource = CompileResource(unconsolidatedResource, resourceMode);
+					var compiledResource = CompileResource(unconsolidatedResource);
 					handleCompiledResource(compiledResource);
 					compiledResources.Add(compiledResource);
 				}	
@@ -94,12 +96,12 @@ namespace Assman
 			return compiledResources;
 		}
 
-		public ICompiledResource CompileResource(IResource resource, ResourceMode resourceMode)
+		public ICompiledResource CompileResource(IResource resource)
 		{
 		    var contentFilterPipeline = _contentFilterPipelineMap.GetPipelineForExtension(resource.FileExtension);
 		    var contentFilterContext = new ContentFilterContext
 		    {
-		        Minify = resourceMode == ResourceMode.Release,
+		        Minify = _resourceMode == ResourceMode.Release,
 		        ResourceVirtualPath = resource.VirtualPath
 		    };
 		    var compiledContent = contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
@@ -107,7 +109,7 @@ namespace Assman
 			return new IndividuallyCompiledResource
 			{
 				Resource = resource,
-				Mode = resourceMode,
+				Mode = _resourceMode,
 				CompiledContent = compiledContent
 			};
 		}
@@ -120,15 +122,15 @@ namespace Assman
 			return resource.VirtualPath.StartsWith("~/");
 		}
 
-		private PreCompiledResourceReport CompileAllResourcesOfType(ResourceType resourceType, ResourceMode mode,
+		private PreCompiledResourceReport CompileAllResourcesOfType(ResourceType resourceType,
 																	Action<ICompiledResource> onCompiled)
 		{
 			var groupManager = GroupManagerFor(resourceType);
 
 			return new PreCompiledResourceReport
 			{
-				Groups = ConsolidateGroupsInternal(resourceType, groupManager, mode, onCompiled).ToList(),
-				SingleResources = CompileUnconsolidatedResources(resourceType, mode, onCompiled)
+				Groups = ConsolidateGroupsInternal(resourceType, groupManager, onCompiled).ToList(),
+				SingleResources = CompileUnconsolidatedResources(resourceType, onCompiled)
 					.Select(r => new PreCompiledSingleResource
 					{
 						OriginalPath = r.Resources.Single().VirtualPath,
@@ -139,7 +141,6 @@ namespace Assman
 
 		private IEnumerable<PreCompiledResourceGroup> ConsolidateGroupsInternal(ResourceType resourceType,
 																				IResourceGroupManager groupTemplates,
-																				ResourceMode mode,
 																				Action<ICompiledResource> onCompiled)
 		{
 			if (!groupTemplates.Any())
@@ -148,9 +149,9 @@ namespace Assman
 			var allResources = _finder.FindResources(resourceType);
 
 			var preConsolidatedGroups = new List<PreCompiledResourceGroup>();
-			groupTemplates.EachGroup(allResources, mode, group =>
+			groupTemplates.EachGroup(allResources, _resourceMode, group =>
 			{
-				var consolidatedResource = CompileGroup(group, mode);
+				var consolidatedResource = CompileGroup(group);
 				onCompiled(consolidatedResource);
 				var preConsolidatedGroup = new PreCompiledResourceGroup
 				{
@@ -163,7 +164,7 @@ namespace Assman
 			return preConsolidatedGroups;
 		}
 
-		private IEnumerable<PreCompiledResourceDependencies> GetAllDependencies(ResourceMode mode)
+		private IEnumerable<PreCompiledResourceDependencies> GetAllDependencies()
 		{
 			var allResources = _finder.FindResources(ResourceType.Script)
 				.Union(_finder.FindResources(ResourceType.Stylesheet));
@@ -173,8 +174,8 @@ namespace Assman
 			//In that case, if we did the specific resources first, it would use the IDependencyProvider against the
 			//content of the consolidated resource, which is not what we want.  Then that value is cached and prevents us from finding
 			//the dependencies for the group.
-			var scriptDependenciesByConsolidatedUrl = GetDependenciesForConsolidatedUrls(_scriptGroups, allResources, mode);
-			var styleDependenciesByConsolidatedUrl = GetDependenciesForConsolidatedUrls(_styleGroups, allResources, mode);
+			var scriptDependenciesByConsolidatedUrl = GetDependenciesForConsolidatedUrls(_scriptGroups, allResources);
+			var styleDependenciesByConsolidatedUrl = GetDependenciesForConsolidatedUrls(_styleGroups, allResources);
 
 			var specificResourceDependencies = from resource in allResources
 											   let dependencies = _dependencyManager.GetDependencies(resource)
@@ -199,11 +200,11 @@ namespace Assman
 		}
 
 		private IEnumerable<PreCompiledResourceDependencies> GetDependenciesForConsolidatedUrls(
-			IResourceGroupManager groupTemplates, IEnumerable<IResource> allResources, ResourceMode mode)
+			IResourceGroupManager groupTemplates, IEnumerable<IResource> allResources)
 		{
 			var preConsolidatedDependencies = new List<PreCompiledResourceDependencies>();
 
-			groupTemplates.EachGroup(allResources, mode, @group =>
+			groupTemplates.EachGroup(allResources, _resourceMode, @group =>
 			{
 				var dependencies = _dependencyManager.GetDependencies(@group.ConsolidatedUrl);
 				if (dependencies.Any())

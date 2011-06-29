@@ -25,7 +25,10 @@ namespace Assman.TestSupport
 			_dependencyManager = new DependencyManager(_finder, _dependencyCache, _scriptGroups, _styleGroups);
 			_dependencyManager.MapProvider(".js", _dependencyProvider);
 			_dependencyManager.MapProvider(".css", _dependencyProvider);
+			Mode = ResourceMode.Debug;
 		}
+
+		public ResourceMode Mode { get; set; }
 
 		public StubDependencyProvider DependencyProvider
 		{
@@ -34,7 +37,7 @@ namespace Assman.TestSupport
 
 		public ResourceCompiler GetConsolidator()
 		{
-			return new ResourceCompiler(_contentFilterPipelineMap, _dependencyManager, _scriptGroups, _styleGroups, _finder);
+			return new ResourceCompiler(_contentFilterPipelineMap, _dependencyManager, _scriptGroups, _styleGroups, _finder, Mode);
 		}
 
 		public StubResourceBuilder CreateResource(string virtualPath)
@@ -56,16 +59,16 @@ namespace Assman.TestSupport
 			return group;
 		}
 
-        public StubResourceGroup CreateGroup(string consolidatedUrl, params string[] resourcesInGroup)
-        {
-            var group = CreateGroup(consolidatedUrl);
-            foreach (var resource in resourcesInGroup)
-            {
-                CreateResource(resource).InGroup(group);
-            }
+		public StubResourceGroup CreateGroup(string consolidatedUrl, params string[] resourcesInGroup)
+		{
+			var group = CreateGroup(consolidatedUrl);
+			foreach (var resource in resourcesInGroup)
+			{
+				CreateResource(resource).InGroup(group);
+			}
 
-            return group;
-        }
+			return group;
+		}
 
 		public bool DependencyProviderWasCalled
 		{

@@ -218,7 +218,7 @@ namespace Assman.Configuration
 			_lastModified = value;
 		}
 
-		public AssmanContext BuildContext(bool usePreCompilationReportIfPresent = true)
+		public AssmanContext BuildContext(ResourceMode resourceMode, bool usePreCompilationReportIfPresent = true)
 		{
 			IResourceFinder fileFinder = ResourceFinderFactory.Null;
 			IPreCompiledReportPersister preCompiledPersister = NullPreCompiledPersister.Instance;
@@ -230,12 +230,11 @@ namespace Assman.Configuration
 					preCompiledPersister = CompiledFilePersister.ForWebDirectory(RootFilePath);
 			}
 
-			return BuildContext(fileFinder, preCompiledPersister);
+			return BuildContext(resourceMode, fileFinder, preCompiledPersister);
 		}
 
-		public AssmanContext BuildContext(IResourceFinder fileFinder, IPreCompiledReportPersister preCompiledPersister)
+		public AssmanContext BuildContext(ResourceMode resourceMode, IResourceFinder fileFinder, IPreCompiledReportPersister preCompiledPersister)
 		{
-		    var resourceMode = ResourceModeProvider.Instance.GetCurrentResourceMode();
 		    var context = AssmanContext.Create(resourceMode);
 
 			context.ConfigurationLastModified = LastModified(PathResolver);

@@ -19,7 +19,7 @@ namespace Assman
 		{
 			DependencyManagerFactory.ClearDependencyCache();
 			_finder = new StubResourceFinder();
-			_context = new AssmanContext(ResourceMode.Debug);
+			_context = new AssmanContext(ResourceMode.Release);
 			_context.AddFinder(_finder);
 		}
 		
@@ -51,7 +51,7 @@ namespace Assman
 			_context.ScriptGroups.Add(group1Template);
 			_context.ScriptGroups.Add(group2Template);
 			var consolidator = _context.GetConsolidator();
-			var preConsolidationReport = consolidator.CompileAll((resource) => { }, ResourceMode.Release);
+			var preConsolidationReport = consolidator.CompileAll((resource) => { });
 
 			var group2Consolidated = preConsolidationReport.Scripts.Groups.Where(g => g.ConsolidatedUrl == "~/scripts/everything-else.js").Single();
 
