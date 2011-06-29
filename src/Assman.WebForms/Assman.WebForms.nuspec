@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Assman.WebForms</id>
+    <version>0.0</version>
+    <title>Assman WebForms Integration</title>
+    <authors>Andy Alm</authors>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://assman.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Integrates the Assman web asset management framework with an ASP.NET WebForms site.</description>
+    <tags>javascript css mash consolidation</tags>
+    <dependencies>
+      <dependency id="Assman.Core" version="1.9" />
+      <dependency id="NuGetPowerTools" version="0.26" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="NuGet\lib\**\Assman.WebForms.dll" target="lib" />
+    <file src="NuGet\lib\**\Assman.WebForms.xml" target="lib" />
+  </files>
+</package>
