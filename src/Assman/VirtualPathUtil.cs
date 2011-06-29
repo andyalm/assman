@@ -22,23 +22,33 @@ namespace Assman
 			return path;
 		}
 
-		public static string ToAppPath(this string path, IResource context)
+		public static string ToAppRelativePath(this string path, IResource context)
 		{
-		    return path.ToAppPath(context.VirtualPath);
+			return path.ToAppRelativePath(context.VirtualPath);
 		}
 
-        public static string ToAppPath(this string path, string contextVirtualPath)
-        {
-            if (IsAppPath(path))
-                return path;
+		public static string ToAppRelativePath(this string path, string contextVirtualPath)
+		{
+			if (IsAppPath(path))
+				return path;
 
-            var relativeUri = new Uri(path, UriKind.Relative);
-            var contextUri = new Uri("http://www.website.com" + contextVirtualPath.Substring(1));
+			var relativeUri = new Uri(path, UriKind.Relative);
+			var contextUri = new Uri("http://www.website.com" + contextVirtualPath.Substring(1));
 
-            var resolvedUri = new Uri(contextUri, relativeUri);
+			var resolvedUri = new Uri(contextUri, relativeUri);
 
-            return "~" + resolvedUri.AbsolutePath;
-        }
+			return "~" + resolvedUri.AbsolutePath;
+		}
+
+		public static string ToAppRelativePath(this string virtualPath)
+		{
+			return ResolveVirtualPath(virtualPath, VirtualPathUtility.ToAppRelative);
+		}
+
+		public static string ToAbsolutePath(this string virtualPath)
+		{
+			return ResolveVirtualPath(virtualPath, VirtualPathUtility.ToAbsolute);
+		}
 
 		public static string ChangeExtension(this string path, string newExtension)
 		{
@@ -51,6 +61,29 @@ namespace Assman
 		private static bool IsAppPath(string path)
 		{
 			return path.StartsWith("~");
+		}
+
+		private static string ResolveVirtualPath(string pathToResolve, Func<string,string,string> virtualPathUtilMethod)
+		{
+			//if its a full url, no need to do anything more, just return it.
+			if (Uri.IsWellFormedUriString(pathToResolve, UriKind.Absolute))
+				return pathToResolve;
+
+			var applicationPath = HttpRuntime.AppDomainAppVirtualPath ?? "/";
+			
+			if (!pathToResolve.Contains("?"))
+			{
+				return virtualPathUtilMethod(pathToResolve, applicationPath);
+			}
+			else
+			{
+				//VirtualPathUtility throws if a query exists in the url.  Strip it
+				//off before calling and then append it back on afterwards.
+				string[] urlParts = pathToResolve.Split('?');
+				string appRelativeUrl = virtualPathUtilMethod(urlParts[0], applicationPath);
+
+				return appRelativeUrl + "?" + urlParts[1];
+			}
 		}
 	}
 }

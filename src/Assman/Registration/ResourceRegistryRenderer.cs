@@ -42,19 +42,33 @@ namespace Assman.Registration
 	{
 		private static readonly IResourceWriter _scriptWriter = new ScriptResourceWriter();
 		private static readonly IResourceWriter _styleWriter = new StyleResourceWriter();
-		
-		public static ResourceRegistryRenderer ScriptRenderer(this IResourceRegistryAccessor registryAccessor, string registryName, Func<string,string> urlResolver)
+
+		public static ResourceRegistryRenderer ScriptRenderer(this IResourceRegistryAccessor registryAccessor)
+		{
+			var registeredResources = registryAccessor.GetRegisteredScripts(ResourceRegistryConfiguration.DefaultRegistryName);
+
+			return new ResourceRegistryRenderer(registeredResources, _scriptWriter, ResourceIncludeResolver.Instance.ResolveScriptUrl);
+		}
+
+		public static ResourceRegistryRenderer StyleRenderer(this IResourceRegistryAccessor registryAccessor)
+		{
+			var registeredResources = registryAccessor.GetRegisteredStyles(ResourceRegistryConfiguration.DefaultRegistryName);
+
+			return new ResourceRegistryRenderer(registeredResources, _styleWriter, ResourceIncludeResolver.Instance.ResolveStylesheetUrl);
+		}
+
+		public static ResourceRegistryRenderer ScriptRenderer(this IResourceRegistryAccessor registryAccessor, string registryName)
 		{
 			var registeredResources = registryAccessor.GetRegisteredScripts(registryName);
 			
-			return new ResourceRegistryRenderer(registeredResources, _scriptWriter, urlResolver);
+			return new ResourceRegistryRenderer(registeredResources, _scriptWriter, ResourceIncludeResolver.Instance.ResolveScriptUrl);
 		}
 
-		public static ResourceRegistryRenderer StyleRenderer(this IResourceRegistryAccessor registryAccessor, string registryName, Func<string,string> urlResolver)
+		public static ResourceRegistryRenderer StyleRenderer(this IResourceRegistryAccessor registryAccessor, string registryName)
 		{
 			var registeredResources = registryAccessor.GetRegisteredStyles(registryName);
 
-			return new ResourceRegistryRenderer(registeredResources, _styleWriter, urlResolver);
+			return new ResourceRegistryRenderer(registeredResources, _styleWriter, ResourceIncludeResolver.Instance.ResolveStylesheetUrl);
 		}
 		
 		private class ScriptResourceWriter : IResourceWriter

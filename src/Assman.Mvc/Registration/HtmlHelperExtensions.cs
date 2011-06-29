@@ -42,7 +42,7 @@ namespace Assman.Mvc.Registration
 
 		public static DummyStringResult RenderScripts(this HtmlHelper html, string registryName)
 		{
-			var renderer = html.ResourceRegistries().ScriptRenderer(registryName, html.Resolver());
+			var renderer = html.ResourceRegistries().ScriptRenderer(registryName);
 			renderer.Render(html.ViewContext.Writer);
 			return DummyStringResult.Instance;
 		}
@@ -56,7 +56,7 @@ namespace Assman.Mvc.Registration
 
 		public static DummyStringResult RenderStyles(this HtmlHelper html, string registryName)
 		{
-			var renderer = html.ResourceRegistries().StyleRenderer(registryName, html.Resolver());
+			var renderer = html.ResourceRegistries().StyleRenderer(registryName);
 			renderer.Render(html.ViewContext.Writer);
 
 			return DummyStringResult.Instance;
@@ -85,16 +85,6 @@ namespace Assman.Mvc.Registration
 		public static IResourceRegistryAccessor ResourceRegistries(this HtmlHelper html)
 		{
 			return html.ViewContext.ResourceRegistries();
-		}
-
-		private static Func<string,string> Resolver(this HtmlHelper html)
-		{
-			var urlHelper = new UrlHelper(html.ViewContext.RequestContext);
-			Func<string, string> resolverDelegate = url =>
-			{
-				return ResourceIncludeResolver.Instance.ResolveUrl(urlHelper, url);
-			};
-			return resolverDelegate;
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Assman.ContentFiltering
                 return match.Value;
 
             var consolidatedUri = CreateUri(context.Group.ConsolidatedUrl);
-            var uri = CreateUri(url.ToAppPath(context.ResourceVirtualPath));
+            var uri = CreateUri(url.ToAppRelativePath(context.ResourceVirtualPath));
 
             var fixedRelativePath = consolidatedUri.MakeRelativeUri(uri).ToString();
 

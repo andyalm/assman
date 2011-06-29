@@ -25,9 +25,9 @@ namespace Assman
 		private string ToCanonicalPath(string value, IResource contextResource)
 		{
 			if (value.StartsWith("/"))
-				return "~" + value;	
+				return value.ToAppRelativePath();	
 			
-			return value.ToAppPath(contextResource);
+			return value.ToAppRelativePath(contextResource);
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace Assman.Handlers
 
         public IHttpHandler GetHandler(HttpContext context, string requestType, string url, string pathTranslated)
         {
-            var appRelativePath = "~" + url;
+            var appRelativePath = url.ToAppRelativePath();
 
             return _pathToHandlerCache.GetOrAdd(appRelativePath, () => GetHandlerUncached(pathTranslated, appRelativePath));
         }

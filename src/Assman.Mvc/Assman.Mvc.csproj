@@ -71,7 +71,6 @@
     <Compile Include="Registration\HtmlHelperExtensions.cs" />
     <Compile Include="IgnoreRoutesForConsolidatedUrls.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourceIncludeResolver.cs" />
     <Compile Include="ViewContextExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

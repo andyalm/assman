@@ -179,6 +179,7 @@
     <Compile Include="Registration\NullResourceRegistry.cs" />
     <Compile Include="Registration\ReadableExtensions.cs" />
     <Compile Include="Registration\RegisteredResources.cs" />
+    <Compile Include="Registration\ResourceIncludeResolver.cs" />
     <Compile Include="Registration\ResourceRegistryExtensions.cs" />
     <Compile Include="Registration\ResourceRegistryMap.cs" />
     <Compile Include="Registration\ResourceRegistryConfiguration.cs" />

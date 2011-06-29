@@ -62,7 +62,7 @@ namespace Assman
 
 	    private string ResolvePathToAppRelative(string unresolvedPath, IResource resource)
 	    {
-	        var result = unresolvedPath.ToAppPath(resource);
+	        var result = unresolvedPath.ToAppRelativePath(resource);
 	        return result;
 	    }
 

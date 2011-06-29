@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 
 namespace Assman.Registration
 {
@@ -85,23 +84,7 @@ namespace Assman.Registration
 
         private string ToCanonicalUrl(string url)
         {
-            //if its a full url, no need to do anything more, just return it.
-            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                return url;
-
-            if (!url.Contains("?"))
-            {
-                return VirtualPathUtility.ToAppRelative(url, "/");
-            }
-            else
-            {
-                //VirtualPathUtility throws if a query exists in the url.  Strip it
-                //off before calling and then append it back on afterwards.
-                string[] urlParts = url.Split('?');
-                string appRelativeUrl = VirtualPathUtility.ToAppRelative(urlParts[0], "/");
-
-                return appRelativeUrl + "?" + urlParts[1];
-            }
+            return url.ToAppRelativePath();
         }
     }
 }

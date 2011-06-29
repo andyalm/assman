@@ -156,7 +156,7 @@
   </Target>
   <UsingTask TaskName="PreCompileResources" AssemblyFile="bin\Assman.dll" />
   <Target Name="PreCompileResources" AfterTargets="AfterBuild">
-  <PreCompileResources WebRoot="$(MSBuildProjectDirectory)" Condition="$(Configuration)=='Release'" />
+    <PreCompileResources WebRoot="$(MSBuildProjectDirectory)" Condition="$(Configuration)=='Release'" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>
@@ -165,7 +165,7 @@
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1511</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <DevelopmentServerVPath>/AssmanMvcSite/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
