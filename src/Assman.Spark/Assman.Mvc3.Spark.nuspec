@@ -6,7 +6,7 @@
     <title>Assman Spark Integration (for Mvc3)</title>
     <authors>Andy Alm</authors>
     <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
-    <projectUrl>http://jscssconsolidate.codeplex.com</projectUrl>
+    <projectUrl>http://assman.codeplex.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Integrates the Spark View Engine with Assman.  This provides conveniences like Spark Bindings for including scripts and css files.</description>
     <tags>spark javascript css mash consolidation mvc</tags>

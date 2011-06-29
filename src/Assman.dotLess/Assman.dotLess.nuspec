@@ -6,7 +6,7 @@
     <title>Assman dotLess Integration</title>
     <authors>Andy Alm</authors>
     <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
-    <projectUrl>http://jscssconsolidate.codeplex.com</projectUrl>
+    <projectUrl>http://assman.codeplex.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Integrates dotLess with Assman.  This allows you to automatically consolidate your .less files in with other .less or .css files</description>
     <tags>javascript css mash consolidation mvc</tags>

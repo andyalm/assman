@@ -85,19 +85,11 @@
     <None Include="Assman.Mvc3.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <None Include="NuGet\Content\Assman.config.transform" />
+    <None Include="NuGet\Content\Assman.config" />
     <None Include="NuGet\Content\Web.config.transform" />
     <None Include="NuGet\Mvc3\Content\Views\Web.config.transform" />
     <None Include="NuGet\Tools\Install.ps1" />
     <None Include="NuGet\Tools\Uninstall.ps1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="NuGet\lib\Mvc2\net35\Assman.Mvc.dll" />
-    <Content Include="NuGet\lib\Mvc2\net35\Assman.Mvc.pdb" />
-    <Content Include="NuGet\lib\Mvc2\net40\Assman.Mvc.dll" />
-    <Content Include="NuGet\lib\Mvc2\net40\Assman.Mvc.pdb" />
-    <Content Include="NuGet\lib\Mvc3\net40\Assman.Mvc.dll" />
-    <Content Include="NuGet\lib\Mvc3\net40\Assman.Mvc.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

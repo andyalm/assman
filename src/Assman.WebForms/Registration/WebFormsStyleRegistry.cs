@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Web.UI;
 
-namespace Assman.Registration.WebForms
+using Assman.Registration;
+
+namespace Assman.WebForms.Registration
 {
 	internal class WebFormsStyleRegistry : WebFormsRegistryBase
 	{

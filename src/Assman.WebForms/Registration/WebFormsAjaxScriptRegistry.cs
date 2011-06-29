@@ -1,7 +1,7 @@
 using System;
 using System.Web.UI;
 
-namespace Assman.Registration.WebForms
+namespace Assman.WebForms.Registration
 {
 	internal class WebFormsAjaxScriptRegistry : WebFormsClientScriptRegistry
 	{

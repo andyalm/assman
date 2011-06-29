@@ -203,12 +203,6 @@
     <Compile Include="IResourceFinder.cs" />
     <Compile Include="ResourceFilters.cs" />
     <Compile Include="Handlers\HttpRequestContext.cs" />
-    <Compile Include="Registration\WebForms\RequireStylesheet.cs" />
-    <Compile Include="Registration\WebForms\RequireScript.cs" />
-    <Compile Include="Registration\WebForms\WebFormsStyleRegistry.cs" />
-    <Compile Include="Registration\WebForms\WebFormsRegistryBase.cs" />
-    <Compile Include="Registration\WebForms\WebFormsRegistryAccessor.cs" />
-    <Compile Include="Registration\WebForms\WebResourceIncludeControl.cs" />
     <Compile Include="IResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileResource.cs" />
@@ -220,8 +214,6 @@
     <Compile Include="VirtualPathResolver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Registration\WebForms\WebFormsAjaxScriptRegistry.cs" />
-    <Compile Include="Registration\WebForms\WebFormsClientScriptRegistry.cs" />
     <Compile Include="VirtualPathUtil.cs" />
     <Compile Include="VisualStudioScriptDependencyProvider.cs" />
     <Compile Include="VsDocResourceExcluder.cs" />

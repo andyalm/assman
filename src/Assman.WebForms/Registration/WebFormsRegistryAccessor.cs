@@ -1,9 +1,11 @@
 using System;
 using System.Web.UI;
 
-namespace Assman.Registration.WebForms
+using Assman.Registration;
+
+namespace Assman.WebForms.Registration
 {
-	internal class WebFormsRegistryAccessor : IResourceRegistryAccessor
+	public class WebFormsRegistryAccessor : IResourceRegistryAccessor
 	{
 		private readonly ResourceRegistryMap _scriptRegistries;
 		private readonly ResourceRegistryMap _styleRegistries;

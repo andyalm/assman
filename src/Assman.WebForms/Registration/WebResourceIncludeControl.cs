@@ -1,7 +1,9 @@
 using System;
 using System.Web.UI;
 
-namespace Assman.Registration.WebForms
+using Assman.Registration;
+
+namespace Assman.WebForms.Registration
 {
 	/// <summary>
 	/// Represents a control that includes a web resource.

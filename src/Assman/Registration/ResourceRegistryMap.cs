@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Assman.Registration
 {
-	internal class ResourceRegistryMap
+	public class ResourceRegistryMap
 	{
 		private readonly IDictionary<string, IResourceRegistry> _registries = new Dictionary<string, IResourceRegistry>(Comparers.RegistryNames);
 		private readonly IDictionary<string, string> _includeOwnerMap = new Dictionary<string, string>(Comparers.VirtualPath);

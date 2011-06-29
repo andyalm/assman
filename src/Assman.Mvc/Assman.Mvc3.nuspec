@@ -6,7 +6,7 @@
     <title>Assman Mvc3 Integration</title>
     <authors>Andy Alm</authors>
     <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
-    <projectUrl>http://jscssconsolidate.codeplex.com</projectUrl>
+    <projectUrl>http://assman.codeplex.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A full featured web resource/asset management framework for ASP.NET Mvc.  This edition of the package is targeted at Mvc 3.0</description>
     <tags>javascript css mash consolidation mvc</tags>

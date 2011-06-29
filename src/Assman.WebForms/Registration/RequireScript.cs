@@ -1,4 +1,8 @@
-namespace Assman.Registration.WebForms
+using System;
+
+using Assman.Registration;
+
+namespace Assman.WebForms.Registration
 {
 	/// <summary>
 	/// Includes a client script file on a page.

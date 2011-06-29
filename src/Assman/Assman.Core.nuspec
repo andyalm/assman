@@ -5,7 +5,7 @@
     <version>0.0</version>
     <authors>Andy Alm</authors>
     <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
-    <projectUrl>http://jscssconsolidate.codeplex.com</projectUrl>
+    <projectUrl>http://assman.codeplex.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A full featured web resource/asset management framework for ASP.NET and ASP.NET Mvc.</description>
     <tags>javascript css mash consolidation mvc</tags>
