@@ -31,6 +31,8 @@ namespace Assman
 		{
 			if (IsAppPath(path))
 				return path;
+            if (IsAbsolutePath(path))
+                return path.ToAppRelativePath();
 
 			var relativeUri = new Uri(path, UriKind.Relative);
 			var contextUri = new Uri("http://www.website.com" + contextVirtualPath.Substring(1));
@@ -40,17 +42,17 @@ namespace Assman
 			return "~" + resolvedUri.AbsolutePath;
 		}
 
-		public static string ToAppRelativePath(this string virtualPath)
+	    public static string ToAppRelativePath(this string virtualPath)
 		{
 			return ResolveVirtualPath(virtualPath, VirtualPathUtility.ToAppRelative);
 		}
 
-		public static string ToAbsolutePath(this string virtualPath)
+	    public static string ToAbsolutePath(this string virtualPath)
 		{
 			return ResolveVirtualPath(virtualPath, VirtualPathUtility.ToAbsolute);
 		}
 
-		public static string ChangeExtension(this string path, string newExtension)
+	    public static string ChangeExtension(this string path, string newExtension)
 		{
 			var lastDotIndex = path.LastIndexOf(".");
 			var baseName = path.Substring(0, lastDotIndex);
@@ -58,12 +60,17 @@ namespace Assman
 			return baseName + newExtension;
 		}
 
-		private static bool IsAppPath(string path)
+	    private static bool IsAppPath(string path)
 		{
 			return path.StartsWith("~");
 		}
 
-		private static string ResolveVirtualPath(string pathToResolve, Func<string,string,string> virtualPathUtilMethod)
+	    private static bool IsAbsolutePath(string path)
+	    {
+            return path.StartsWith("/") || Uri.IsWellFormedUriString(path, UriKind.Absolute);
+	    }
+
+	    private static string ResolveVirtualPath(string pathToResolve, Func<string,string,string> virtualPathUtilMethod)
 		{
 			//if its a full url, no need to do anything more, just return it.
 			if (Uri.IsWellFormedUriString(pathToResolve, UriKind.Absolute))

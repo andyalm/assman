@@ -28,7 +28,7 @@ namespace Assman
 			return (from match in matches.Cast<Match>()
 					let virtualPath = ParseReferenceElement(match.Groups[1].Value, resource)
 					where !String.IsNullOrEmpty(virtualPath)
-			        select virtualPath).ToList();
+					select virtualPath).ToList();
 		}
 
 		private string ParseReferenceElement(string serializedReferenceElement, IResource resource)
@@ -45,10 +45,10 @@ namespace Assman
 			var pathAttr = referenceElement.Attribute("path");
 			if (pathAttr != null)
 			{
-                string path = RemoveVsDocIfPresent(pathAttr.Value);
-			    path = ResolvePathToAppRelative(path, resource);
+				string path = RemoveVsDocIfPresent(pathAttr.Value);
+				path = path.ToAppRelativePath(resource);
 
-			    return path;
+				return path;
 			}	
 
 			var nameAttr = referenceElement.Attribute("name");
@@ -60,20 +60,14 @@ namespace Assman
 			return null;
 		}
 
-	    private string ResolvePathToAppRelative(string unresolvedPath, IResource resource)
-	    {
-	        var result = unresolvedPath.ToAppRelativePath(resource);
-	        return result;
-	    }
-
-	    private string RemoveVsDocIfPresent(string path)
+		private string RemoveVsDocIfPresent(string path)
 		{
 			return _vsDocRegex.Replace(path, String.Empty);
 		}
 
 		private string CreateAssemblyVirtualPath(XElement referenceElement, string resourceName)
 		{
-			string assemblyName = "System.Web.Extensions";
+			string assemblyName = "System.Web.Extensions"; //if no assembly is specified, visual studio defaults to System.Web.Extensions
 			var assemblyAttr = referenceElement.Attribute("assembly");
 			if (assemblyAttr != null)
 				assemblyName = assemblyAttr.Value;
