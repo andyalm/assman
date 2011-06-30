@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="GenerateCommonAssemblyInfo" ToolsVersion="4.0">
   <PropertyGroup>
-    <AssmanVersion>1.9.2</AssmanVersion>
+    <AssmanVersion>1.9.3</AssmanVersion>
   </PropertyGroup>
 
   <UsingTask TaskName="GenerateCommonAssemblyInfo" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">

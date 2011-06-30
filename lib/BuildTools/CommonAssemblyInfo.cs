@@ -5,4 +5,4 @@ using System.Reflection;
         [assembly: AssemblyTrademark("")]
         [assembly: ComVisible(false)]
         [assembly: AssemblyVersion("1.0.0.0")]
-        [assembly: AssemblyFileVersion("1.9.2.0")]
+        [assembly: AssemblyFileVersion("1.9.3.0")]

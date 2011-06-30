@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Reflection;
 
 using Assman.Configuration;
 
@@ -68,7 +70,10 @@ namespace Assman.BuildSupport
 			AssmanConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
 			_resolver = GetResolver(configSection.RootFilePath);
 			
-			ConsolidateAll(configSection);
+			using(new AssemblyResolver(ResolveAssemblyPathToWebsiteBinDir))
+			{
+				ConsolidateAll(configSection);
+			}
 			
 			LogMessage("End consolidating resources.");
 		}
@@ -116,6 +121,34 @@ namespace Assman.BuildSupport
 		private VirtualPathResolver GetResolver(string webRoot)
 		{
 			return VirtualPathResolver.GetInstance(webRoot);
+		}
+
+		private Assembly ResolveAssemblyPathToWebsiteBinDir(object sender, ResolveEventArgs args)
+		{
+			var assemblyName = args.Name;
+			if (assemblyName.Contains(","))
+				assemblyName = assemblyName.Substring(0, assemblyName.IndexOf(","));
+
+			var websiteBinPath = Path.Combine(WebsiteRootDirectory, "bin");
+
+			var assemblyPath = Path.Combine(websiteBinPath, assemblyName + ".dll");
+			return Assembly.LoadFrom(assemblyPath);
+		}
+
+		private class AssemblyResolver : IDisposable
+		{
+			private readonly ResolveEventHandler _resolveEventHandler;
+
+			public AssemblyResolver(ResolveEventHandler resolveEventHandler)
+			{
+				_resolveEventHandler = resolveEventHandler;
+				AppDomain.CurrentDomain.AssemblyResolve += _resolveEventHandler;
+			}
+
+			public void Dispose()
+			{
+				AppDomain.CurrentDomain.AssemblyResolve -= _resolveEventHandler;
+			}
 		}
 	}
 }
