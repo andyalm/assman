@@ -12,6 +12,13 @@ namespace Assman.ContentFiltering
     {
         private readonly JavaScriptMinifier _minifier = new JavaScriptMinifier();
 
+        public static JSMinFilter GetInstance()
+        {
+            return new JSMinFilter();
+        }
+
+        internal JSMinFilter() {}
+
         /// <summary>
         /// Minifies javascript content using the JSMin library.
         /// </summary>

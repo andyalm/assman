@@ -16,7 +16,7 @@ namespace Assman.DependencyManagement
 		private readonly IDictionary<string, CacheItem> _longRunningCache = new Dictionary<string, CacheItem>(Comparers.VirtualPath);
 		private static readonly Type _httpItemsKey = typeof (HttpDependencyCache);
 
-		public HttpDependencyCache(Func<HttpContextBase> httpContextAccessor)
+		internal HttpDependencyCache(Func<HttpContextBase> httpContextAccessor)
 		{
 			_httpContextAccessor = httpContextAccessor;
 		}

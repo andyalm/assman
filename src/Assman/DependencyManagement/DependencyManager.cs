@@ -12,7 +12,7 @@ namespace Assman.DependencyManagement
         private readonly IResourceGroupManager _styleGroups;
         private readonly IDictionary<string, IDependencyProvider> _providers = new Dictionary<string, IDependencyProvider>(Comparers.VirtualPath);
 
-        public DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups)
+        internal DependencyManager(IResourceFinder resourceFinder, IDependencyCache dependencyCache, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups)
         {
             _resourceFinder = resourceFinder;
             _dependencyCache = dependencyCache;

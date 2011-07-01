@@ -6,7 +6,14 @@ namespace Assman.ContentFiltering
     public class CssRelativePathFilter : IContentFilter
     {
         private static readonly Regex _urlRegex = new Regex(@"url\((?<url>[^)]+)\)", RegexOptions.Compiled);
-        
+
+        public static CssRelativePathFilter GetInstance()
+        {
+            return new CssRelativePathFilter();
+        }
+
+        internal CssRelativePathFilter() {}
+
         public string FilterContent(string content, ContentFilterContext context)
         {
             if (context.Group == null)
