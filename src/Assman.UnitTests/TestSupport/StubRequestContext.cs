@@ -3,6 +3,8 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Web;
 
+using Assman.Handlers;
+
 namespace Assman.TestSupport
 {
 	public class StubRequestContext : IRequestContext

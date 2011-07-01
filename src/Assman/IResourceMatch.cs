@@ -1,3 +1,5 @@
+using System;
+
 namespace Assman
 {
 	public interface IResourceMatch

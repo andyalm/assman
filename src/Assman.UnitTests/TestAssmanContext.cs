@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 
 using Assman.Configuration;
+using Assman.DependencyManagement;
 using Assman.TestSupport;
 
 using NUnit.Framework;

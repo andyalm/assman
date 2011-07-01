@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+using Assman.DependencyManagement;
+
 namespace Assman.TestSupport
 {
 	public class StubDependencyProvider : IDependencyProvider

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 
-namespace Assman
+namespace Assman.DependencyManagement
 {
 	public class HttpDependencyCache : IDependencyCache
 	{

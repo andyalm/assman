@@ -1,3 +1,4 @@
+using Assman.DependencyManagement;
 using Assman.TestSupport;
 
 using NUnit.Framework;

@@ -1,4 +1,6 @@
-﻿namespace Assman.ContentFiltering
+﻿using System;
+
+namespace Assman.ContentFiltering
 {
     public class ContentFilterContext
     {

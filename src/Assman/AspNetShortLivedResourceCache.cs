@@ -75,7 +75,7 @@ namespace Assman
 		}
 	}
 
-    internal static class AspNetShortLivedCacheHttpContextExtensions
+	internal static class AspNetShortLivedCacheHttpContextExtensions
 	{
 		private static readonly object _httpItemsKey = typeof(AspNetShortLivedResourceCache);
 		

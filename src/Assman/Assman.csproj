@@ -112,7 +112,7 @@
     <Compile Include="Configuration\ResourceConfigurationElement.cs" />
     <Compile Include="Configuration\ScriptsConfigurationElement.cs" />
     <Compile Include="Configuration\StylesheetsConfigurationElement.cs" />
-    <Compile Include="CssDependencyProvider.cs" />
+    <Compile Include="DependencyManagement\CssDependencyProvider.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="GroupTemplateContext.cs" />
     <Compile Include="Handlers\HttpHandlerBase.cs" />
@@ -155,18 +155,18 @@
     <Compile Include="Configuration\DefaultConfigLoader.cs" />
     <Compile Include="Configuration\IConfigLoader.cs" />
     <Compile Include="HttpContextUtils.cs" />
-    <Compile Include="HttpDependencyCache.cs" />
-    <Compile Include="DependencyManager.cs" />
-    <Compile Include="DependencyManagerFactory.cs" />
-    <Compile Include="IDependencyCache.cs" />
-    <Compile Include="IDependencyProvider.cs" />
-    <Compile Include="InMemoryDependencyCache.cs" />
+    <Compile Include="DependencyManagement\HttpDependencyCache.cs" />
+    <Compile Include="DependencyManagement\DependencyManager.cs" />
+    <Compile Include="DependencyManagement\DependencyManagerFactory.cs" />
+    <Compile Include="DependencyManagement\IDependencyCache.cs" />
+    <Compile Include="DependencyManagement\IDependencyProvider.cs" />
+    <Compile Include="DependencyManagement\InMemoryDependencyCache.cs" />
     <Compile Include="IO\IFileFinder.cs" />
     <Compile Include="IResourceGroup.cs" />
     <Compile Include="IResourceGroupTemplate.cs" />
     <Compile Include="PathResourceMatch.cs" />
     <Compile Include="PreCompilation\PreCompiledResourceGroup.cs" />
-    <Compile Include="PreCompiledResourceExcluder.cs" />
+    <Compile Include="PreCompilation\PreCompiledResourceExcluder.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistryAccessor.cs" />
     <Compile Include="Registration\GenericResourceRegistry.cs" />
@@ -198,7 +198,7 @@
     <Compile Include="EmbeddedResourceFinder.cs" />
     <Compile Include="FileResourceFinder.cs" />
     <Compile Include="Registration\IResourceRegistry.cs" />
-    <Compile Include="IRequestContext.cs" />
+    <Compile Include="Handlers\IRequestContext.cs" />
     <Compile Include="Configuration\AssmanConfiguration.cs" />
     <Compile Include="IResourceFilter.cs" />
     <Compile Include="IResourceFinder.cs" />
@@ -216,7 +216,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VirtualPathUtil.cs" />
-    <Compile Include="VisualStudioScriptDependencyProvider.cs" />
+    <Compile Include="DependencyManagement\VisualStudioScriptDependencyProvider.cs" />
     <Compile Include="VsDocResourceExcluder.cs" />
     <Compile Include="Xml\XmlWriterExtensions.cs" />
   </ItemGroup>

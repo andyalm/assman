@@ -1,4 +1,6 @@
-﻿namespace Assman.Configuration
+﻿using System;
+
+namespace Assman.Configuration
 {
     public class StylesheetsConfigurationElement : ResourceConfigurationElement<StylesheetGroupElementCollection>
     {

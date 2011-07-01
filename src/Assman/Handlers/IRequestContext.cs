@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Web;
 
-namespace Assman
+namespace Assman.Handlers
 {
 	internal interface IRequestContext
 	{

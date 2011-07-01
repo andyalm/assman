@@ -1,7 +1,8 @@
+﻿using System;
 using System.Reflection;
-        using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
-        [assembly: AssemblyCopyright("Copyright © Andy Alm 2011")]
+[assembly: AssemblyCopyright("Copyright © Andy Alm 2011")]
         [assembly: AssemblyTrademark("")]
         [assembly: ComVisible(false)]
         [assembly: AssemblyVersion("1.0.0.0")]

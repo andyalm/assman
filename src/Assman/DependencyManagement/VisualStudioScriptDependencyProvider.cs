@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-namespace Assman
+namespace Assman.DependencyManagement
 {
 	public class VisualStudioScriptDependencyProvider : IDependencyProvider
 	{

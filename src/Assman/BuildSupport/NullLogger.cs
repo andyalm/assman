@@ -1,3 +1,5 @@
+using System;
+
 namespace Assman.BuildSupport
 {
     internal class NullLogger : ILogger

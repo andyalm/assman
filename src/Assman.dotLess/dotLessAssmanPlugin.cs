@@ -2,6 +2,7 @@ using System;
 
 using Assman.Configuration;
 using Assman.ContentFiltering;
+using Assman.DependencyManagement;
 
 namespace Assman.dotLess
 {

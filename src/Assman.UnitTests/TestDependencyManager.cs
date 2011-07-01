@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+using Assman.DependencyManagement;
 using Assman.TestObjects;
 using Assman.TestSupport;
 

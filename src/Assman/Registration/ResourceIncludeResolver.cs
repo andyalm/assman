@@ -1,3 +1,5 @@
+using System;
+
 namespace Assman.Registration
 {
 	public abstract class ResourceIncludeResolver

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web;
 
 using Assman.Configuration;
+using Assman.DependencyManagement;
 using Assman.TestSupport;
 
 using NUnit.Framework;

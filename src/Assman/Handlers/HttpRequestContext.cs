@@ -2,7 +2,6 @@ using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Web;
-using System.Linq;
 
 namespace Assman.Handlers
 {

@@ -1,3 +1,5 @@
+using System;
+
 namespace Assman.Configuration
 {
 	internal static class PropertyNames

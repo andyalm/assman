@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 
 using Assman.ContentFiltering;
+using Assman.DependencyManagement;
 using Assman.PreCompilation;
 
 namespace Assman.Configuration

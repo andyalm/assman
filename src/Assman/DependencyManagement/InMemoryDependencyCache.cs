@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Assman
+namespace Assman.DependencyManagement
 {
 	public class InMemoryDependencyCache : IDependencyCache
 	{

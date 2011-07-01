@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assman
+namespace Assman.PreCompilation
 {
     public class PreCompiledResourceExcluder : IFinderExcluder
     {

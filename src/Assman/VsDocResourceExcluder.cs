@@ -1,4 +1,6 @@
-﻿namespace Assman
+﻿using System;
+
+namespace Assman
 {
     public class VsDocResourceExcluder : IFinderExcluder
     {

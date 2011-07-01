@@ -1,5 +1,7 @@
 
 
+using System;
+
 namespace Assman.Configuration
 {
 	/// <summary>

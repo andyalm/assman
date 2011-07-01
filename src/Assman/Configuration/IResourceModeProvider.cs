@@ -1,3 +1,4 @@
+using System;
 using System.Web.Configuration;
 
 namespace Assman.Configuration

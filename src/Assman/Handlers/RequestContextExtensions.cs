@@ -1,4 +1,6 @@
-﻿namespace Assman.Handlers
+﻿using System;
+
+namespace Assman.Handlers
 {
     public static class RequestContextExtensions
     {
