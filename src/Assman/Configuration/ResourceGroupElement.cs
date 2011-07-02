@@ -35,10 +35,10 @@ namespace Assman.Configuration
 		/// <summary>
 		/// Gets or sets whether consolidation is enabled for this group.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.Consolidate, IsRequired = false, DefaultValue = true)]
-		public bool Consolidate
+		[ConfigurationProperty(PropertyNames.Consolidate, IsRequired = false, DefaultValue = ResourceModeCondition.Always)]
+		public ResourceModeCondition Consolidate
 		{
-			get { return (bool)this[PropertyNames.Consolidate]; }
+			get { return (ResourceModeCondition)this[PropertyNames.Consolidate]; }
 			set { this[PropertyNames.Consolidate] = value; }
 		}
 
@@ -56,12 +56,12 @@ namespace Assman.Configuration
 			}
 		}
 
-		private bool? _minify;
+		private ResourceModeCondition? _minify;
 
 		/// <summary>
 		/// Gets or sets whether the scripts/styles will be minified when they are consolidated in Release mode.
 		/// </summary>
-		public bool Minify
+		public ResourceModeCondition Minify
 		{
 			get
 			{
@@ -81,14 +81,14 @@ namespace Assman.Configuration
 			}
 		}
 
-		internal bool MinifyDefaultValue { get; set; }
+		internal ResourceModeCondition MinifyDefaultValue { get; set; }
 
 		public abstract ResourceType ResourceType { get; }
 
 		protected override bool OnDeserializeUnrecognizedAttribute(string name, string value)
 		{
-			bool minify;
-			if (name == PropertyNames.Minify && Boolean.TryParse(value, out minify))
+			ResourceModeCondition minify;
+			if (name == PropertyNames.Minify && value.TryConvertTo(out minify))
 			{
 				_minify = minify;
 				return true;
@@ -126,7 +126,7 @@ namespace Assman.Configuration
 					}
 					group resourceWithUrl by resourceWithUrl.ConsolidatedUrl into @group
 					select CreateGroup(@group.Key,
-						@group.Distinct().Sort(IncludePatternOrder()).Select(r => r.Resource));
+						@group.Distinct().Sort(IncludePatternOrder()).Select(r => r.Resource), mode);
 		}
 
 		private class ResourceWithMatchingPath
@@ -146,10 +146,10 @@ namespace Assman.Configuration
 			}
 		}
 
-		public bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl)
+		public bool TryGetConsolidatedUrl(string virtualPath, ResourceMode resourceMode, out string consolidatedUrl)
 		{
 			consolidatedUrl = null;
-			if (!Consolidate)
+			if (Consolidate.IsFalse(resourceMode))
 				return false;
 
 			var match = GetMatch(virtualPath);
@@ -167,11 +167,11 @@ namespace Assman.Configuration
 			return ConsolidatedUrlTemplate.Format(match);
 		}
 
-		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resourcesInGroup)
+		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resourcesInGroup, ResourceMode resourceMode)
 		{
 			return new ResourceGroup(consolidatedUrl, resourcesInGroup)
 			{
-				Minify = this.Minify
+				Minify = this.Minify.IsTrue(resourceMode)
 			};
 		}
 

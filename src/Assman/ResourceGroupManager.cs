@@ -2,24 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Assman.Configuration;
+
 namespace Assman
 {
 	public class ResourceGroupManager : IResourceGroupManager
 	{
-		public static IResourceGroupManager GetInstance(IResourceCache resourceCache)
+	    public static IResourceGroupManager GetInstance(ResourceMode resourceMode, IResourceCache resourceCache)
 		{
-			return new CachingResourceGroupManager(new ResourceGroupManager(), resourceCache);
-		}
-		
-		private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
-		private readonly List<string> _globalDependencies = new List<string>();
-
-		public ResourceGroupManager()
-		{
-			Consolidate = true;
+			return new CachingResourceGroupManager(new ResourceGroupManager(resourceMode), resourceCache);
 		}
 
-		public void Add(IResourceGroupTemplate template)
+	    private readonly ResourceMode _resourceMode;
+	    private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
+	    private readonly List<string> _globalDependencies = new List<string>();
+
+	    public ResourceGroupManager(ResourceMode resourceMode)
+		{
+		    _resourceMode = resourceMode;
+		    Consolidate = true;
+		}
+
+	    public void Add(IResourceGroupTemplate template)
 		{
 			_templates.Add(template);
 		}
@@ -44,7 +48,7 @@ namespace Assman
 			foreach (var groupTemplate in _templates)
 			{
 				string consolidatedUrl;
-				if (groupTemplate.TryGetConsolidatedUrl(resourceUrl, out consolidatedUrl))
+				if (groupTemplate.TryGetConsolidatedUrl(resourceUrl, _resourceMode, out consolidatedUrl))
 				{
 					return consolidatedUrl;
 				}
@@ -57,12 +61,12 @@ namespace Assman
 		{
 			var groupTemplate = GetGroupTemplateOrDefault(resourceUrl);
 
-			return groupTemplate != null && (!Consolidate || !groupTemplate.GroupTemplate.Consolidate);
+			return groupTemplate != null && (!Consolidate || groupTemplate.GroupTemplate.Consolidate.IsFalse(_resourceMode));
 		}
 
-		public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+		public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, IResourceFinder finder)
 		{
-			var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
+			var group = GetGroupOrDefault(consolidatedUrl, finder);
 			if (group == null)
 				return Enumerable.Empty<string>();
 			else
@@ -90,24 +94,24 @@ namespace Assman
 			return groupTemplateContext;
 		}
 
-		public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+		public IResourceGroup GetGroupOrDefault(string consolidatedUrl, IResourceFinder finder)
 		{
 			var groupTemplateContext = GetGroupTemplateOrDefault(consolidatedUrl);
 			if (groupTemplateContext == null)
 				return null;
 
-			var group = groupTemplateContext.FindGroupOrDefault(finder, consolidatedUrl, mode);
+			var group = groupTemplateContext.FindGroupOrDefault(finder, consolidatedUrl, _resourceMode);
 			if (group == null)
 				return null;
 
 			return group;
 		}
 
-		public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
+		public void EachGroup(IEnumerable<IResource> allResources, Action<IResourceGroup> handler)
 		{
 			EachTemplate(templateContext =>
 			{
-				var groups = templateContext.GetGroups(allResources, mode);
+				var groups = templateContext.GetGroups(allResources, _resourceMode);
 				foreach (var group in groups)
 				{
 					handler(group);
@@ -206,11 +210,11 @@ namespace Assman
 				return _inner.IsGroupUrlWithConsolidationDisabled(resourceUrl);
 			}
 
-			public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+			public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, IResourceFinder finder)
 			{
 				//NOTE: This is basically a duplication of the implementation in _inner.GetResourceUrlsInGroup, but we don't delegate
 				//to it because then it would bypass the _resourceCache
-				var group = GetGroupOrDefault(consolidatedUrl, mode, finder);
+				var group = GetGroupOrDefault(consolidatedUrl, finder);
 				if (group == null)
 					return Enumerable.Empty<string>();
 				else
@@ -227,17 +231,17 @@ namespace Assman
 				return _inner.GetGroupTemplateOrDefault(consolidatedUrl);
 			}
 
-			public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+			public IResourceGroup GetGroupOrDefault(string consolidatedUrl, IResourceFinder finder)
 			{
-				return _resourceCache.GetOrAddGroup(consolidatedUrl, mode, () =>
+				return _resourceCache.GetOrAddGroup(consolidatedUrl, () =>
 				{
-					return _inner.GetGroupOrDefault(consolidatedUrl, mode, finder);
+					return _inner.GetGroupOrDefault(consolidatedUrl, finder);
 				});
 			}
 
-			public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
+			public void EachGroup(IEnumerable<IResource> allResources, Action<IResourceGroup> handler)
 			{
-				_inner.EachGroup(allResources, mode, handler);
+				_inner.EachGroup(allResources, handler);
 			}
 
 			public bool IsPartOfGroup(string virtualPath)

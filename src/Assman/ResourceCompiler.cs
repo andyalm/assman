@@ -48,7 +48,7 @@ namespace Assman
 			    var contentFilterContext = new ContentFilterContext
 			    {
 			        Group = group,
-			        Minify = group.ShouldMinify(_resourceMode),
+			        Minify = group.Minify,
 			        ResourceVirtualPath = resource.VirtualPath
 			    };
 			    return contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
@@ -102,7 +102,7 @@ namespace Assman
 		    var contentFilterPipeline = _contentFilterPipelineMap.GetPipelineForExtension(resource.FileExtension);
 		    var contentFilterContext = new ContentFilterContext
 		    {
-		        Minify = _resourceMode == ResourceMode.Release,
+		        Minify = _resourceMode == ResourceMode.Release, //TODO: obey global Minify settings
 		        ResourceVirtualPath = resource.VirtualPath
 		    };
 		    var compiledContent = contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
@@ -150,7 +150,7 @@ namespace Assman
 			var allResources = _finder.FindResources(resourceType);
 
 			var preConsolidatedGroups = new List<PreCompiledResourceGroup>();
-			groupTemplates.EachGroup(allResources, _resourceMode, group =>
+			groupTemplates.EachGroup(allResources, group =>
 			{
 				var consolidatedResource = CompileGroup(group);
 				onCompiled(consolidatedResource);
@@ -201,11 +201,11 @@ namespace Assman
 		}
 
 		private IEnumerable<PreCompiledResourceDependencies> GetDependenciesForConsolidatedUrls(
-			IResourceGroupManager groupTemplates, IEnumerable<IResource> allResources)
+			IResourceGroupManager groupManager, IEnumerable<IResource> allResources)
 		{
 			var preConsolidatedDependencies = new List<PreCompiledResourceDependencies>();
 
-			groupTemplates.EachGroup(allResources, _resourceMode, @group =>
+			groupManager.EachGroup(allResources, @group =>
 			{
 				var dependencies = _dependencyManager.GetDependencies(@group.ConsolidatedUrl);
 				if (dependencies.Any())

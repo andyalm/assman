@@ -21,7 +21,7 @@ namespace Assman
 		public void Init()
 		{
 			_instance = new AssmanConfiguration();
-			_instance.Scripts.Groups.Consolidate = true;
+			_instance.Scripts.Consolidate = ResourceModeCondition.Always;
 			_instance.Scripts.Groups.Add(new ScriptGroupElement());
 			_instance.Scripts.Groups[0].ConsolidatedUrl = consolidatedScript;
 			_instance.Scripts.Groups[0].Exclude.AddPattern(excludedScript);

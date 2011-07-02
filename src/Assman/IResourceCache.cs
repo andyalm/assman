@@ -7,24 +7,24 @@ namespace Assman
 	{
 		string CurrentCacheKey { get; }
 		bool TryGetResources(ResourceType resourceType, out IEnumerable<IResource> cachedResources);
-		bool TryGetGroup(string consolidatedUrl, ResourceMode mode, out IResourceGroup cachedGroup);
-		void StoreGroup(string consolidatedUrl, ResourceMode mode, IResourceGroup @group);
+		bool TryGetGroup(string consolidatedUrl, out IResourceGroup cachedGroup);
+		void StoreGroup(string consolidatedUrl, IResourceGroup @group);
 		void StoreResources(ResourceType resourceType, IEnumerable<IResource> resources);
 	}
 
 	public static class ResourceCacheExtensions
 	{
-		public static IResourceGroup GetOrAddGroup(this IResourceCache resourceCache, string consolidatedUrl, ResourceMode mode, Func<IResourceGroup> getGroup)
+		public static IResourceGroup GetOrAddGroup(this IResourceCache resourceCache, string consolidatedUrl, Func<IResourceGroup> getGroup)
 		{
 			IResourceGroup group;
-			if (resourceCache.TryGetGroup(consolidatedUrl, mode, out group))
+			if (resourceCache.TryGetGroup(consolidatedUrl, out group))
 				return group;
 
 			group = getGroup();
 
 			if(group != null)
 			{
-				resourceCache.StoreGroup(consolidatedUrl, mode, group);
+				resourceCache.StoreGroup(consolidatedUrl, group);
 			}
 
 			return group;
@@ -63,13 +63,13 @@ namespace Assman
 			return false;
 		}
 
-		public bool TryGetGroup(string consolidatedUrl, ResourceMode mode, out IResourceGroup cachedGroup)
+		public bool TryGetGroup(string consolidatedUrl, out IResourceGroup cachedGroup)
 		{
 			cachedGroup = null;
 			return false;
 		}
 
-		public void StoreGroup(string consolidatedUrl, ResourceMode mode, IResourceGroup group) {}
+		public void StoreGroup(string consolidatedUrl, IResourceGroup group) {}
 		public void StoreResources(ResourceType resourceType, IEnumerable<IResource> resources) {}
 
 		public string CurrentCacheKey

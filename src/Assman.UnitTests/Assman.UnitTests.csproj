@@ -87,7 +87,6 @@
     <Compile Include="Registration\TestConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\TestConsolidatingResourceRegistryAccessor.cs" />
     <Compile Include="Registration\TestGenericResourceRegistryAccessor.cs" />
-    <Compile Include="TestScriptGroupElementCollection.cs" />
     <Compile Include="TestCompositeResourceFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCompositeResourceFilter.cs" />

@@ -15,7 +15,7 @@ namespace Assman
 
 		string ResolveResourceUrl(string resourceUrl);
 
-		IEnumerable<string> GetResourceUrlsInGroup(string groupUrl, ResourceMode mode, IResourceFinder finder);
+		IEnumerable<string> GetResourceUrlsInGroup(string groupUrl, IResourceFinder finder);
 		
 		bool IsGroupUrlWithConsolidationDisabled(string resourceUrl);
 
@@ -23,9 +23,9 @@ namespace Assman
 
 		GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl);
 
-		IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder);
+		IResourceGroup GetGroupOrDefault(string consolidatedUrl, IResourceFinder finder);
 
-		void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler);
+		void EachGroup(IEnumerable<IResource> allResources, Action<IResourceGroup> handler);
 
 		bool IsPartOfGroup(string virtualPath);
 		

@@ -65,7 +65,7 @@ namespace Assman.Handlers
                 var contentFilterPipeline = _assmanContext.GetContentPipelineForExtension(fileExtension);
                 var contentFilterContext = new ContentFilterContext
                 {
-                    Minify = resourceMode == ResourceMode.Release,
+                    Minify = resourceMode == ResourceMode.Release, //TODO: base this off of global minification setting
                     ResourceVirtualPath = appRelativePathToResource
                 };
 

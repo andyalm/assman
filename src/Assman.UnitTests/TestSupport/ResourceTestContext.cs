@@ -15,21 +15,21 @@ namespace Assman.TestSupport
 		private readonly ResourceGroupManager _scriptGroups;
 		private readonly ResourceGroupManager _styleGroups;
 
-		public ResourceTestContext()
+		public ResourceTestContext(ResourceMode resourceMode = ResourceMode.Debug)
 		{
-			_finder = new StubResourceFinder();
-			_contentFilterPipelineMap = new ContentFilterPipelineMap();
-			_scriptGroups = new ResourceGroupManager();
-			_styleGroups = new ResourceGroupManager();
-			_dependencyCache = new InMemoryDependencyCache();
-			_dependencyProvider = new StubDependencyProvider();
-			_dependencyManager = new DependencyManager(_finder, _dependencyCache, _scriptGroups, _styleGroups);
-			_dependencyManager.MapProvider(".js", _dependencyProvider);
-			_dependencyManager.MapProvider(".css", _dependencyProvider);
-			Mode = ResourceMode.Debug;
+		    Mode = resourceMode;
+		    _finder = new StubResourceFinder();
+		    _contentFilterPipelineMap = new ContentFilterPipelineMap();
+		    _scriptGroups = new ResourceGroupManager(Mode);
+		    _styleGroups = new ResourceGroupManager(Mode);
+		    _dependencyCache = new InMemoryDependencyCache();
+		    _dependencyProvider = new StubDependencyProvider();
+		    _dependencyManager = new DependencyManager(_finder, _dependencyCache, _scriptGroups, _styleGroups);
+		    _dependencyManager.MapProvider(".js", _dependencyProvider);
+		    _dependencyManager.MapProvider(".css", _dependencyProvider);
 		}
 
-		public ResourceMode Mode { get; set; }
+		public ResourceMode Mode { get; private set; }
 
 		public StubDependencyProvider DependencyProvider
 		{

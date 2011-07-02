@@ -96,20 +96,20 @@ namespace Assman.Configuration
 		/// <summary>
 		/// Gets or sets whether consolidation should be enabled.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.Consolidate, DefaultValue = true)]
-		public bool Consolidate
+		[ConfigurationProperty(PropertyNames.Consolidate, DefaultValue = ResourceModeCondition.Always)]
+		public ResourceModeCondition Consolidate
 		{
-			get { return (bool) this[PropertyNames.Consolidate]; }
+			get { return (ResourceModeCondition) this[PropertyNames.Consolidate]; }
 			set { this[PropertyNames.Consolidate] = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets whether consolidation should be enabled.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.GZip, DefaultValue = false)]
-		public bool GZip
+		[ConfigurationProperty(PropertyNames.GZip, DefaultValue = ResourceModeCondition.Never)]
+		public ResourceModeCondition GZip
 		{
-			get { return (bool)this[PropertyNames.GZip]; }
+			get { return (ResourceModeCondition)this[PropertyNames.GZip]; }
 			set { this[PropertyNames.GZip] = value; }
 		}
 
@@ -239,9 +239,9 @@ namespace Assman.Configuration
 		    var context = AssmanContext.Create(resourceMode);
 
 			context.ConfigurationLastModified = LastModified(PathResolver);
-			context.ConsolidateScripts = Consolidate && Scripts.Groups.Consolidate;
-			context.ConsolidateStylesheets = Consolidate && Stylesheets.Groups.Consolidate;
-			context.GZip = GZip;
+			context.ConsolidateScripts = Consolidate.IsTrue(resourceMode) && Scripts.Consolidate.IsTrue(resourceMode);
+			context.ConsolidateStylesheets = Consolidate.IsTrue(resourceMode) && Stylesheets.Consolidate.IsTrue(resourceMode);
+			context.GZip = GZip.IsTrue(resourceMode);
 			context.ManageDependencies = ManageDependencies;
 			context.AddFinder(fileFinder);
 			context.AddAssemblies(Assemblies.GetAssemblies());

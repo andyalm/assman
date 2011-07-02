@@ -26,8 +26,8 @@ namespace Assman
 			_dependencyProvider = new StubDependencyProvider();
 			_resourceFinder = new StubResourceFinder();
 			_dependencyCache = new InMemoryDependencyCache();
-			_scriptGroups = new ResourceGroupManager();
-			_styleGroups = new ResourceGroupManager();
+			_scriptGroups = new ResourceGroupManager(ResourceMode.Debug);
+			_styleGroups = new ResourceGroupManager(ResourceMode.Debug);
 
 			_dependencyManager = new DependencyManager(_resourceFinder, _dependencyCache, _scriptGroups, _styleGroups);
 			_dependencyManager.MapProvider(".js", _dependencyProvider);

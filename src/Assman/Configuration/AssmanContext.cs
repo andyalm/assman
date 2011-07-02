@@ -45,8 +45,8 @@ namespace Assman.Configuration
 		{
 			var resourceCache = ResourceCacheFactory.GetCache(resourceMode);
 			
-			_scriptGroups = ResourceGroupManager.GetInstance(resourceCache);
-			_styleGroups = ResourceGroupManager.GetInstance(resourceCache);
+			_scriptGroups = ResourceGroupManager.GetInstance(resourceMode, resourceCache);
+			_styleGroups = ResourceGroupManager.GetInstance(resourceMode, resourceCache);
 			_finder = new CompositeResourceFinder(resourceCache);
 			_finder.Exclude(new ConsolidatedResourceExcluder(_scriptGroups));
 			_finder.Exclude(new ConsolidatedResourceExcluder(_styleGroups));
@@ -177,7 +177,7 @@ namespace Assman.Configuration
 			IEnumerable<string> resolvedResourceUrls;
 			if (groupManager.IsGroupUrlWithConsolidationDisabled(resourceUrl))
 			{
-				resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, _resourceMode, _finder)
+				resolvedResourceUrls = groupManager.GetResourceUrlsInGroup(resourceUrl, _finder)
 					.SortByDependencies(_dependencyManager);
 			}
 			else

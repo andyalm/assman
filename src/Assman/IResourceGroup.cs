@@ -11,7 +11,7 @@ namespace Assman
 		string ConsolidatedUrl { get; }
 		
 		/// <summary>
-		/// Indicates whether to minify the resources contents when in Release mode.
+		/// Indicates whether to minify the resources contents.
 		/// </summary>
 		bool Minify { get; }
 
@@ -29,13 +29,5 @@ namespace Assman
 		/// Gets the resources that belong to the group.
 		/// </summary>
 		IEnumerable<IResource> GetResources();
-	}
-
-	public static class ResourceGroupExtensions
-	{
-		public static bool ShouldMinify(this IResourceGroup group, ResourceMode mode)
-		{
-			return group.Minify && mode == ResourceMode.Release;
-		}
 	}
 }

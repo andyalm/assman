@@ -21,14 +21,14 @@ namespace Assman
 			return GetInnerCache().TryGetResources(resourceType, out cachedResources);
 		}
 
-		public bool TryGetGroup(string consolidatedUrl, ResourceMode mode, out IResourceGroup cachedGroup)
+		public bool TryGetGroup(string consolidatedUrl, out IResourceGroup cachedGroup)
 		{
-			return GetInnerCache().TryGetGroup(consolidatedUrl, mode, out cachedGroup);
+			return GetInnerCache().TryGetGroup(consolidatedUrl, out cachedGroup);
 		}
 
-		public void StoreGroup(string consolidatedUrl, ResourceMode mode, IResourceGroup group)
+		public void StoreGroup(string consolidatedUrl, IResourceGroup group)
 		{
-			GetInnerCache().StoreGroup(consolidatedUrl, mode, group);
+			GetInnerCache().StoreGroup(consolidatedUrl, group);
 		}
 
 		public void StoreResources(ResourceType resourceType, IEnumerable<IResource> resources)

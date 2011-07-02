@@ -108,7 +108,7 @@ namespace Assman
 			
 			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)
 			string consolidatedUrl;
-			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), out consolidatedUrl), Times.Never());
+			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), It.IsAny<ResourceMode>(), out consolidatedUrl), Times.Never());
 		}
 
 		[Test]
@@ -135,7 +135,7 @@ namespace Assman
 
 			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)
 			string consolidatedUrl;
-			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), out consolidatedUrl), Times.Never());
+			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), It.IsAny<ResourceMode>(), out consolidatedUrl), Times.Never());
 		}
 
         [Test]

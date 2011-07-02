@@ -89,6 +89,7 @@
     <Compile Include="BuildSupport\MSBuild\PreCompileResources.cs" />
     <Compile Include="BuildSupport\NullLogger.cs" />
     <Compile Include="Comparers.cs" />
+    <Compile Include="ResourceModeCondition.cs" />
     <Compile Include="ConsolidatedResourceExcluder.cs" />
     <Compile Include="ContentFiltering\ContentFilterContext.cs" />
     <Compile Include="ContentFiltering\ContentFilterPipeline.cs" />

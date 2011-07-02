@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Assman.Configuration;
+
 namespace Assman.TestSupport
 {
 	public class StubResourceGroupTemplate : IResourceGroupTemplate
@@ -36,26 +38,26 @@ namespace Assman.TestSupport
 
 		public ResourceType ResourceType { get; set; }
 
-		public bool Minify { get; set; }
+		public ResourceModeCondition Minify { get; set; }
 
-		public bool Consolidate { get; set; }
+		public ResourceModeCondition Consolidate { get; set; }
 
 		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{
 			return from @group in _groups
-				   select CreateGroup(@group.ConsolidatedUrl, allResources.Where(@group.Contains));
+				   select CreateGroup(@group.ConsolidatedUrl, allResources.Where(@group.Contains), mode);
 		}
 
-		public bool TryGetConsolidatedUrl(string virtualPath, out string consolidatedUrl)
+		public bool TryGetConsolidatedUrl(string virtualPath, ResourceMode resourceMode, out string consolidatedUrl)
 		{
 			throw new NotImplementedException();
 		}
 
-		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resources)
+		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resources, ResourceMode mode)
 		{
 			return new ResourceGroup(consolidatedUrl, resources)
 			{
-				Minify = this.Minify
+				Minify = this.Minify.IsTrue(mode)
 			};
 		}
 	}

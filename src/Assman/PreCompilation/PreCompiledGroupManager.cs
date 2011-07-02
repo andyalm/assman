@@ -45,7 +45,7 @@ namespace Assman.PreCompilation
 			return !Consolidate && IsConsolidatedUrl(resourceUrl);
 		}
 
-		public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+		public IEnumerable<string> GetResourceUrlsInGroup(string consolidatedUrl, IResourceFinder finder)
 		{
 			IEnumerable<string> resourceUrls;
 			if (_consolidatedUrlMap.TryGetValue(consolidatedUrl, out resourceUrls))
@@ -64,12 +64,12 @@ namespace Assman.PreCompilation
 			throw NotSupported();
 		}
 
-		public IResourceGroup GetGroupOrDefault(string consolidatedUrl, ResourceMode mode, IResourceFinder finder)
+		public IResourceGroup GetGroupOrDefault(string consolidatedUrl, IResourceFinder finder)
 		{
 			throw NotSupported();
 		}
 
-		public void EachGroup(IEnumerable<IResource> allResources, ResourceMode mode, Action<IResourceGroup> handler)
+		public void EachGroup(IEnumerable<IResource> allResources, Action<IResourceGroup> handler)
 		{
 			throw NotSupported();
 		}

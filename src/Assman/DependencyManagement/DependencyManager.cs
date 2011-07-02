@@ -107,7 +107,7 @@ namespace Assman.DependencyManagement
 
         private bool IsConsolidatedUrl(string virtualPath, IResourceGroupManager groupTemplates, out IEnumerable<IResource> resourcesInGroup)
         {
-            var group = groupTemplates.GetGroupOrDefault(virtualPath, ResourceMode.Debug, _resourceFinder); //the ResourceMode value shouldn't matter here, we'll use Debug because this code will only be executed when you haven't pre-consolidated.
+            var group = groupTemplates.GetGroupOrDefault(virtualPath, _resourceFinder);
             
             if (group == null)
             {

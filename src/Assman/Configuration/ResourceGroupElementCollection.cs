@@ -24,33 +24,6 @@ namespace Assman.Configuration
 		}
 
 		/// <summary>
-		/// Gets or sets whether consolidation is enabled for this type of resource.
-		/// </summary>
-		[ConfigurationProperty(PropertyNames.Consolidate, IsRequired = false, DefaultValue = true)]
-		public bool Consolidate
-		{
-			get { return (bool)this[PropertyNames.Consolidate]; }
-			set { this[PropertyNames.Consolidate] = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets whether the scripts/styles will be minified when they are consolidated in Release mode.
-		/// </summary>
-		[ConfigurationProperty(PropertyNames.Minify, DefaultValue = true)]
-		public bool Minify
-		{
-			get { return (bool)this[PropertyNames.Minify]; }
-			set
-			{
-				this[PropertyNames.Minify] = value;
-				foreach (ResourceGroupElement groupElement in this)
-				{
-					groupElement.MinifyDefaultValue = value;
-				}
-			}
-		}
-
-		/// <summary>
 		/// Adds the given <see cref="ResourceGroupElement"/> to the collection.
 		/// </summary>
 		/// <param name="element"></param>
@@ -66,15 +39,10 @@ namespace Assman.Configuration
 		/// <returns></returns>
 		protected override sealed ConfigurationElement CreateNewElement()
 		{
-			var element = CreateGroupElement();
-			//set the minify property so that it defaults to the value
-			//set by its parent (i.e. this collection).
-			element.MinifyDefaultValue = Minify;
-
-			return element;
+		    return CreateGroupElement();
 		}
 
-	    protected abstract ResourceGroupElement CreateGroupElement();
+		protected abstract ResourceGroupElement CreateGroupElement();
 
 		/// <summary>
 		/// 

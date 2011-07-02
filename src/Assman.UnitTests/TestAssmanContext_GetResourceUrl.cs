@@ -157,7 +157,7 @@ namespace Assman
 	    {
             _groupElement.Include.AddPath(myScript);
             _groupElement.Include.AddPath(mySecondScript);
-	        _groupElement.Consolidate = false;
+	        _groupElement.Consolidate = ResourceModeCondition.Never;
 
 	        var resolvedScriptPaths = _instance.GetScriptUrls(consolidatedScript).ToList();
 
@@ -172,7 +172,7 @@ namespace Assman
 	        _dependencyProvider.SetDependencies(myScript, mySecondScript);
             _groupElement.Include.AddPath(myScript);
             _groupElement.Include.AddPath(mySecondScript);
-            _groupElement.Consolidate = false;
+            _groupElement.Consolidate = ResourceModeCondition.Never;
 
             var resolvedScriptPaths = _instance.GetScriptUrls(consolidatedScript).ToList();
 

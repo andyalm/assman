@@ -143,7 +143,7 @@ namespace Assman
 			CreateResources("file1.js", "file2.js", "file3.js",
 				"file4.js", "file5.js");
 
-			_element.Consolidate = true;
+			_element.Consolidate = ResourceModeCondition.Always;
 			_element.Include.AddPattern("file3.js");
 			_element.Include.AddPattern("file2.js");
 			_element.Include.AddPattern("file1.js");
@@ -166,7 +166,7 @@ namespace Assman
 		{
 			CreateResources("file1.js", "file2.js", "file3.js", "file4.js", "file5.js");
 
-			_element.Consolidate = true;
+			_element.Consolidate = ResourceModeCondition.Always;
 			_element.Include.AddPattern("file2.js");
 			_element.Include.AddPattern("file3.js");
 			_element.Include.AddPattern("file4.js");
@@ -239,7 +239,7 @@ namespace Assman
 		public void GroupHasMinificationSetCorrectly()
 		{
 			CreateResources("file1.js", "file2.js");
-			_element.Minify = true;
+			_element.Minify = ResourceModeCondition.Always;
 
 			var group = _element.GetGroups(_allResources, ResourceMode.Release).Single();
 
@@ -254,14 +254,14 @@ namespace Assman
 		private void VerifyUrlIsConsolidated(string virtualPath, string expectedConsolidatedUrl)
 		{
 			string consolidatedUrl;
-			_element.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl).ShouldBeTrue();
+			_element.TryGetConsolidatedUrl(virtualPath, ResourceMode.Debug, out consolidatedUrl).ShouldBeTrue();
 			consolidatedUrl.ShouldEqual(expectedConsolidatedUrl);
 		}
 
 		private void VerifyUrlIsNotConsolidated(string virtualPath)
 		{
 			string consolidatedUrl;
-			_element.TryGetConsolidatedUrl(virtualPath, out consolidatedUrl).ShouldBeFalse();
+			_element.TryGetConsolidatedUrl(virtualPath, ResourceMode.Debug, out consolidatedUrl).ShouldBeFalse();
 		}
 
 		private void CreateResources(params string[] paths)

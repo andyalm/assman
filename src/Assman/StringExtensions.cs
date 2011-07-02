@@ -24,5 +24,19 @@ namespace Assman
 
             return sb.ToString();
         }
+
+        public static bool TryConvertTo<TEnum>(this string str, out TEnum value)
+        {
+            try
+            {
+                value = (TEnum) Enum.Parse(typeof (TEnum), str, ignoreCase : true);
+                return true;
+            }
+            catch (Exception)
+            {
+                value = default(TEnum);
+                return false;
+            }
+        }
     }
 }

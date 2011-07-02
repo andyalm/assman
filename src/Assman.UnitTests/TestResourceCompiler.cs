@@ -17,10 +17,7 @@ namespace Assman
 		[SetUp]
 		public void SetupContext()
 		{
-		    _context = new ResourceTestContext
-		    {
-		        Mode = ResourceMode.Release
-		    };
+		    _context = new ResourceTestContext(ResourceMode.Release);
 			_compiler = _context.GetConsolidator();
 		}
 		
