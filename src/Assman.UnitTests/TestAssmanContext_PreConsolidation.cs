@@ -137,5 +137,30 @@ namespace Assman
 			string consolidatedUrl;
 			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), out consolidatedUrl), Times.Never());
 		}
+
+        [Test]
+        public void AfterPreConsolidatedReportIsLoaded_WhenUrlForFileThatDoesNotExistButWhosePatternMatchesGroup_ItResolvesToGroupUrl()
+        {
+            var group = new ScriptGroupElement();
+            group.ConsolidatedUrl = "~/scripts/consolidated/common.js";
+            group.Include.AddPattern("~/scripts/.+");
+            _context.ScriptGroups.Add(group);
+
+            var preConsolidationReport = new PreCompilationReport();
+            var scriptGroup = new PreCompiledResourceGroup
+            {
+                ConsolidatedUrl = "~/scripts/consolidated/common.js",
+                Resources = new List<string>
+				{
+					 "~/scripts/myscript.js"
+				}
+            };
+            preConsolidationReport.Scripts.Groups.Add(scriptGroup);
+
+            _context.LoadPreCompilationReport(preConsolidationReport);
+
+            var resolvedUrl = _context.GetScriptUrls("~/scripts/bogusscript.js").Single();
+            resolvedUrl.ShouldEqual("~/scripts/consolidated/common.js");
+        }
 	}
 }

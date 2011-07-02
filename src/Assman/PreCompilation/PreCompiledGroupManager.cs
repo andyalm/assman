@@ -6,11 +6,14 @@ namespace Assman.PreCompilation
 {
 	public class PreCompiledGroupManager : IResourceGroupManager
 	{
+		private readonly IResourceGroupManager _inner;
 		private readonly IDictionary<string,string> _resourceUrlMap = new Dictionary<string, string>(Comparers.VirtualPath);
+		private readonly IThreadSafeInMemoryCache<string,string> _unconsolidatedResourceUrlMap = new ThreadSafeInMemoryCache<string, string>(Comparers.VirtualPath); 
 		private readonly IDictionary<string, IEnumerable<string>> _consolidatedUrlMap = new Dictionary<string,IEnumerable<string>>(Comparers.VirtualPath);
 
-		public PreCompiledGroupManager(PreCompiledResourceReport resourceReport)
+		public PreCompiledGroupManager(PreCompiledResourceReport resourceReport, IResourceGroupManager inner)
 		{
+			_inner = inner;
 			PopulateResourceUrlMap(resourceReport);
 			Consolidate = true;
 		}
@@ -29,8 +32,12 @@ namespace Assman.PreCompilation
 			string resolvedPath;
 			if (_resourceUrlMap.TryGetValue(resourceUrl, out resolvedPath))
 				return resolvedPath;
-			else
-				return resourceUrl;
+			
+			//if the url was not in the prepopulated resource url map, then it is still possible that it matches a pattern
+			//of a group.  Thus, we need to check the inner group manager.  This is an edge case that should really only happen
+			//if you are trying to include a resource path that does not actually exist.  However, we need to handle it
+			//because otherwise things will work differently when running in a precompiled state, and that would not be good.
+			return _unconsolidatedResourceUrlMap.GetOrAdd(resourceUrl, () => _inner.ResolveResourceUrl(resourceUrl));
 		}
 
 		public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)

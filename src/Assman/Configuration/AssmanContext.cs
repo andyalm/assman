@@ -160,8 +160,8 @@ namespace Assman.Configuration
 
 		public void LoadPreCompilationReport(PreCompilationReport preCompilationReport)
 		{
-			_scriptGroups = new PreCompiledGroupManager(preCompilationReport.Scripts);
-			_styleGroups = new PreCompiledGroupManager(preCompilationReport.Stylesheets);
+			_scriptGroups = new PreCompiledGroupManager(preCompilationReport.Scripts, _scriptGroups);
+			_styleGroups = new PreCompiledGroupManager(preCompilationReport.Stylesheets, _styleGroups);
 			_dependencyManager.SetCache(new PreCompiledDependencyCache(preCompilationReport.Dependencies));
 			Version = preCompilationReport.Version;
 			PreCompiled = true;
