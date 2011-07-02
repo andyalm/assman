@@ -92,7 +92,7 @@ namespace Assman.Handlers
 
 		public string Vary
 		{
-			set { _httpContext.Response.Cache.SetVaryByCustom(value); }
+			set { _httpContext.Response.AppendHeader("Vary", value); }
 		}
 
 		public string ContentEncoding

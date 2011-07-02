@@ -42,7 +42,8 @@ namespace Assman.Handlers
             {
                 return new PreCompiledResourceHandler(physicalPathToResource, resourceType, resourceMode)
                 {
-                    EnableGZip = _assmanContext.GZip
+                    EnableGZip = _assmanContext.GZip,
+                    Mode = resourceMode
                 };
             }
             

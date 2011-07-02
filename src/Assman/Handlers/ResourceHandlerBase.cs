@@ -47,7 +47,7 @@ namespace Assman.Handlers
                 if(gzip)
                 {
                     context.ContentEncoding = "gzip";
-                    context.Vary = "Accept-Encoding";
+                    context.Vary = "Content-Encoding";
                 }
                 resource.WriteContent(context.OutputStream);
             }
