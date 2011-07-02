@@ -165,7 +165,7 @@ namespace Assman
 			_instance.Mode = ResourceMode.Release;
 			_instance.HandleRequest(request);
 
-			request.Vary.ShouldEqual("Accept-Encoding");
+			request.Vary.ShouldEqual("Content-Encoding");
 			request.ContentEncoding.ShouldEqual("gzip");
 			request.OutputStream.Position = 0;
 			var content = request.OutputStream.Decompress().ReadToEnd();
