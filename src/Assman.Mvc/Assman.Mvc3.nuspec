@@ -11,7 +11,7 @@
     <description>A full featured web resource/asset management framework for ASP.NET Mvc.  This edition of the package is targeted at Mvc 3.0</description>
     <tags>javascript css mash consolidation mvc</tags>
     <dependencies>
-      <dependency id="Assman.Core" version="1.9" />
+      <dependency id="Assman.Core" version="2.0" />
       <dependency id="NuGetPowerTools" version="0.26" />
     </dependencies>
   </metadata>

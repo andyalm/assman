@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="GenerateCommonAssemblyInfo" ToolsVersion="4.0">
   <PropertyGroup>
-    <AssmanVersion>1.9.4</AssmanVersion>
+    <AssmanVersion>2.0.0</AssmanVersion>
   </PropertyGroup>
 
   <UsingTask TaskName="GenerateCommonAssemblyInfo" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -17,7 +17,7 @@
         [assembly: AssemblyCopyright(""Copyright © Andy Alm 2011"")]
         [assembly: AssemblyTrademark("""")]
         [assembly: ComVisible(false)]
-        [assembly: AssemblyVersion(""1.0.0.0"")]
+        [assembly: AssemblyVersion(""2.0.0.0"")]
         [assembly: AssemblyFileVersion(""{Version}.0"")]
         ";
 

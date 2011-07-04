@@ -11,7 +11,7 @@
     <description>Integrates the Spark View Engine with Assman.  This provides conveniences like Spark Bindings for including scripts and css files.</description>
     <tags>spark javascript css mash consolidation mvc</tags>
     <dependencies>
-      <dependency id="Assman.Mvc3" version="1.9" />
+      <dependency id="Assman.Mvc3" version="2.0" />
       <dependency id="Spark.Web.Mvc3" version="[1.5.0,)" />
     </dependencies>
   </metadata>

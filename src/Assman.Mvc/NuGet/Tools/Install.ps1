@@ -40,8 +40,16 @@ function Install
 
 	# Call save against Get-Project instead of the Get-MSBuildProject
 	# because then VS won't prompt you to reload the project
-	$(Get-Project).Save()
+	$thisProj = Get-Project
+	$thisProj.Save()
 
+	$frameworkMoniker = $thisProj.Properties.Item("TargetFrameworkMoniker").Value
+	$frameworkVersion = $(new-object System.Runtime.Versioning.FrameworkName $frameworkMoniker).Version
+	Write-Host "$frameworkVersion framework detected"
+	if($frameworkVersion.Major -lt 4)
+	{
+		Write-Warning "It was detected that your project is targeting .NET 3.5 or below.  To ensure that Assman.Mvc2 works correctly, please follow the instructions listed here: http://assman.codeplex.com/wikipage?title=Mvc2"
+	}
 	popd
 }
 

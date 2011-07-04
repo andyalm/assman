@@ -11,7 +11,7 @@
     <description>Integrates dotLess with Assman.  This allows you to automatically consolidate your .less files in with other .less or .css files</description>
     <tags>javascript css mash consolidation mvc</tags>
     <dependencies>
-      <dependency id="Assman.Core" version="1.9" />
+      <dependency id="Assman.Core" version="2.0" />
       <dependency id="dotLess" version="[1.1.0,)" />
     </dependencies>
   </metadata>
@@ -19,5 +19,6 @@
     <file src="NuGet\lib\**\Assman.dotLess.dll" target="lib" />
     <file src="NuGet\lib\**\Assman.dotLess.xml" target="lib" />
     <file src="NuGet\Content\**\*.*" target="Content" />
+    <file src="NuGet\Tools\**\*.*" target="Tools" />
   </files>
 </package>

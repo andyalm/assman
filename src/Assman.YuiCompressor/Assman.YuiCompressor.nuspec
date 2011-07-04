@@ -11,7 +11,7 @@
     <description>Integrates the YUI Css and Javascript Compressor with Assman.  This tells Assman to use the YUI libraries to minify both javascript and css</description>
     <tags>javascript css mash minify consolidation yui yuicompressor</tags>
     <dependencies>
-      <dependency id="Assman.Core" version="1.9" />
+      <dependency id="Assman.Core" version="2.0" />
       <dependency id="YUICompressor.NET" version="1.5.0.0" />
     </dependencies>
   </metadata>

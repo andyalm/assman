@@ -11,7 +11,7 @@
     <description>Integrates the Assman web asset management framework with an ASP.NET WebForms site.</description>
     <tags>javascript css mash consolidation</tags>
     <dependencies>
-      <dependency id="Assman.Core" version="1.9" />
+      <dependency id="Assman.Core" version="2.0" />
       <dependency id="NuGetPowerTools" version="0.26" />
     </dependencies>
   </metadata>
