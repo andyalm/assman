@@ -67,33 +67,52 @@ namespace Assman
 			dependencies[2].ShouldEqual(jquerypluginB.VirtualPath);
 		}
 
-	    [Test]
-	    public void GlobalDependenciesAreReturnedBeforeAllOthers()
-	    {
-            var jquery = StubResource.WithPath("~/scripts/jquery.js");
-            var jquerypluginA = StubResource.WithPath("~/scripts/jquery-plugin-a.js");
-            var myscript = StubResource.WithPath("~/scripts/myscript.js");
+		[Test]
+		public void GlobalDependenciesAreReturnedBeforeAllOthers()
+		{
+			var jquery = StubResource.WithPath("~/scripts/jquery.js");
+			var jquerypluginA = StubResource.WithPath("~/scripts/jquery-plugin-a.js");
+			var myscript = StubResource.WithPath("~/scripts/myscript.js");
 
-            _resourceFinder.AddResources(jquery, jquerypluginA, myscript);
-            _scriptGroups.AddGlobalDependencies(new[] { jquery.VirtualPath });
+			_resourceFinder.AddResources(jquery, jquerypluginA, myscript);
+			_scriptGroups.AddGlobalDependencies(new[] { jquery.VirtualPath });
 
-            SetDependencies(myscript, jquerypluginA.VirtualPath);
+			SetDependencies(myscript, jquerypluginA.VirtualPath);
 
-	        var dependencies = _dependencyManager.GetDependencies(myscript.VirtualPath).ToList();
-            dependencies.CountShouldEqual(2);
-            dependencies[0].ShouldEqual(jquery.VirtualPath);
-            dependencies[1].ShouldEqual(jquerypluginA.VirtualPath);
-	    }
+			var dependencies = _dependencyManager.GetDependencies(myscript.VirtualPath).ToList();
+			dependencies.CountShouldEqual(2);
+			dependencies[0].ShouldEqual(jquery.VirtualPath);
+			dependencies[1].ShouldEqual(jquerypluginA.VirtualPath);
+		}
 
-	    [Test]
-	    public void GlobalDependenciesAreReturnedEvenIfResourceDoesNotExist()
-	    {
-	        _scriptGroups.AddGlobalDependencies(new[] { "~/Scripts/GlobalScript.js" });
+		[Test]
+		public void GlobalDependenciesAreReturnedEvenIfResourceDoesNotExist()
+		{
+			_scriptGroups.AddGlobalDependencies(new[] { "~/Scripts/GlobalScript.js" });
 
-	        var dependencies = _dependencyManager.GetDependencies("~/BogusScript.js").ToList();
-            dependencies.CountShouldEqual(1);
-            dependencies[0].ShouldEqual("~/Scripts/GlobalScript.js");
-	    }
+			var dependencies = _dependencyManager.GetDependencies("~/BogusScript.js").ToList();
+			dependencies.CountShouldEqual(1);
+			dependencies[0].ShouldEqual("~/Scripts/GlobalScript.js");
+		}
+
+		[Test]
+		public void GetDependenciesReturnsEmptyForFirstGlobalDependency()
+		{
+			_scriptGroups.AddGlobalDependencies(new[] { "~/Scripts/GlobalScript1.js", "~/Scripts/GlobalScript2.js", "~/Scripts/GlobalScript3.js" });
+
+			var dependencies = _dependencyManager.GetDependencies("~/Scripts/GlobalScript1.js");
+			dependencies.ShouldBeEmpty();
+		}
+
+		[Test]
+		public void GetDependenciesReturnsOnlyGlobalDependenciesAboveItForAGlobalDependency()
+		{
+			_scriptGroups.AddGlobalDependencies(new[] { "~/Scripts/GlobalScript1.js", "~/Scripts/GlobalScript2.js", "~/Scripts/GlobalScript3.js" });
+
+			var dependencies = _dependencyManager.GetDependencies("~/Scripts/GlobalScript2.js");
+			dependencies.CountShouldEqual(1);
+			dependencies.First().ShouldEqual("~/Scripts/GlobalScript1.js");
+		}
 
 		[Test]
 		public void GetDependenciesReturnsEmptyWhenNoDependencyProviderExistsForFileExtension()

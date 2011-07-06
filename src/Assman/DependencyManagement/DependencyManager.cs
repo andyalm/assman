@@ -205,7 +205,8 @@ namespace Assman.DependencyManagement
             
             if(groupManager != null)
             {
-                return groupManager.GetGlobalDependencies();
+                var allGlobalDependencies = groupManager.GetGlobalDependencies();
+                return allGlobalDependencies.TakeWhile(p => !p.Equals(path, Comparisons.VirtualPath));
             }
 
             return Enumerable.Empty<string>();
