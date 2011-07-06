@@ -47,7 +47,7 @@
   </Target>
 
   <Target Name="_GenerateCommonAssemblyInfo">
-    <MSBuild Projects="$(MSBuildThisFileDirectory)\version.proj">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)\version.proj" Properties="ProjectVersion=$(ProjectVersion)">
       <Output TaskParameter="TargetOutputs" PropertyName="AssmanVersion"/>
     </MSBuild>
   </Target>
