@@ -1,25 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assman
 {
-	public static class EnumerableExtensions
-	{
-		public static void AddRange<TKey,TValue>(this IDictionary<TKey,TValue> dictionary, IEnumerable<KeyValuePair<TKey,TValue>> pairs)
-		{
-			foreach (var pair in pairs)
-			{
-				dictionary.Add(pair);
-			}
-		}
+    public static class EnumerableExtensions
+    {
+        public static void AddRange<TKey,TValue>(this IDictionary<TKey,TValue> dictionary, IEnumerable<KeyValuePair<TKey,TValue>> pairs)
+        {
+            foreach (var pair in pairs)
+            {
+                dictionary.Add(pair);
+            }
+        }
 
-		public static void AddRange<T>(this ICollection<T> set, IEnumerable<T> values)
-		{
-			foreach (var value in values)
-			{
-				set.Add(value);
-			}
-		}
+        public static void AddRange<T>(this ICollection<T> set, IEnumerable<T> values)
+        {
+            foreach (var value in values)
+            {
+                set.Add(value);
+            }
+        }
 
         public static IEnumerable<T> Sort<T>(this IEnumerable<T> collection, Comparison<T> comparison)
         {
@@ -69,5 +70,36 @@ namespace Assman
 
             return false;
         }
-	}
+
+        // this algorithm based on the stackoverflow question here: http://stackoverflow.com/questions/1982592/topological-sorting-using-linq
+        public static IEnumerable<TSource> PartialOrderBy<TSource, TKey>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            Comparison<TKey> comparer)
+        {
+            var values = source.ToArray();
+            var keys = values.Select(keySelector).ToArray();
+            int count = values.Length;
+            var notYieldedIndexes = Enumerable.Range(0, count).ToArray();
+            int valuesToGo = count;
+
+            while (valuesToGo > 0)
+            {
+                //Start with first value not yielded yet
+                int minIndex = notYieldedIndexes.First(i => i >= 0);
+
+                //Find minimum value amongst the values not yielded yet
+                for (int i = 0; i < count; i++)
+                    if (notYieldedIndexes[i] >= 0)
+                        if (comparer(keys[i], keys[minIndex]) < 0)
+                        {
+                            minIndex = i;
+                        }
+
+                //Yield minimum value and mark it as yielded
+                yield return values[minIndex];
+                notYieldedIndexes[minIndex] = -1;
+                valuesToGo--;
+            }
+        }
+    }
 }

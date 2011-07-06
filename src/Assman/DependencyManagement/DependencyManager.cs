@@ -71,6 +71,9 @@ namespace Assman.DependencyManagement
 
         internal int Comparer(IResource x, IResource y)
         {
+            if (x.VirtualPath.EqualsVirtualPath(y.VirtualPath))
+                return 0;
+            
             var xDepends = GetDependencies(x);
             var yDepends = GetDependencies(y);
 
@@ -84,6 +87,9 @@ namespace Assman.DependencyManagement
 
         internal int Comparer(string virtualPath1, string virtualPath2)
         {
+            if (virtualPath1.EqualsVirtualPath(virtualPath2))
+                return 0;
+            
             var xDepends = GetDependencies(virtualPath1);
             var yDepends = GetDependencies(virtualPath2);
 
@@ -208,17 +214,18 @@ namespace Assman.DependencyManagement
 
     public static class DependencyManagerExtensions
     {
-        //we use a stable sort here because the resources are already sorted within their groups (by the order in which they are included in the config), so we should try to preserve that order unless
-        //the dependencies instruct otherwise
+        //we use a partial order by here, as we want to do a topological sort based on our dependency graph
+        //the resources are already sorted within their groups (by the order in which they are included in the config),
+        //so we should try to preserve that order unless the dependencies instruct otherwise
         
         public static IEnumerable<IResource> SortByDependencies(this IEnumerable<IResource> resources, DependencyManager dependencyManager)
         {
-            return resources.StableSort(dependencyManager.Comparer);
+            return resources.PartialOrderBy(r => r.VirtualPath, dependencyManager.Comparer);
         }
 
         public static IEnumerable<string> SortByDependencies(this IEnumerable<string> resourcePaths, DependencyManager dependencyManager)
         {
-            return resourcePaths.StableSort(dependencyManager.Comparer);
+            return resourcePaths.PartialOrderBy(p => p, dependencyManager.Comparer);
         }
     }
 }
