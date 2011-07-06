@@ -115,28 +115,55 @@ namespace Assman
         [Test]
         public void ConsolidateGroupSortsResourcesByDependencies()
         {
-            var dependencyLeaf = _context.CreateResource("~/dependency-leaf.js").Resource;
-            var dependencyRoot = _context.CreateResource("~/dependency-root.js").Resource;
-            var dependencyMiddle = _context.CreateResource("~/dependency-middle.js").Resource;
-
+            var dependencyLeaf1 = _context.CreateResource("~/dependency-leaf1.js").Resource;
+            var dependencyLeaf2 = _context.CreateResource("~/dependency-leaf2.js").Resource;
+            var dependencyRoot3 = _context.CreateResource("~/dependency-root3.js").Resource;
+            var dependencyRoot1 = _context.CreateResource("~/dependency-root1.js").Resource;
+            var dependencyBranch1 = _context.CreateResource("~/dependency-branch1.js").Resource;
+            var dependencyLeaf5 = _context.CreateResource("~/dependency-leaf5.js").Resource;
+            var dependencyRoot2 = _context.CreateResource("~/dependency-root2.js").Resource;
+            var dependencyBranch2 = _context.CreateResource("~/dependency-branch2.js").Resource;
+            var dependencyLeaf4 = _context.CreateResource("~/dependency-leaf4.js").Resource;
+            var dependencyLeaf3 = _context.CreateResource("~/dependency-leaf3.js").Resource;
+            
+            
             var group = new ResourceGroup("~/consolidated.js", new IResource[]
             {
-                dependencyLeaf,
-                dependencyRoot,
-                dependencyMiddle
+                dependencyLeaf1,
+                dependencyLeaf2,
+                dependencyRoot1,
+                dependencyRoot2,
+                dependencyBranch1,
+                dependencyLeaf3,
+                dependencyRoot3,
+                dependencyBranch2,
+                dependencyLeaf4,
+                dependencyLeaf5
             });
 
             var groupTemplate = new StubResourceGroupTemplate(group);
             groupTemplate.ResourceType = ResourceType.Script;
 
-            _context.DependencyProvider.SetDependencies(dependencyLeaf, "~/dependency-middle.js");
-            _context.DependencyProvider.SetDependencies(dependencyMiddle, "~/dependency-root.js");
+            _context.AddGlobalScriptDependencies(dependencyRoot1, dependencyRoot2, dependencyRoot3);
+            _context.DependencyProvider.SetDependencies(dependencyBranch2, dependencyBranch1.VirtualPath);
+            _context.DependencyProvider.SetDependencies(dependencyLeaf1, dependencyBranch1.VirtualPath);
+            _context.DependencyProvider.SetDependencies(dependencyLeaf2, dependencyBranch1.VirtualPath);
+            _context.DependencyProvider.SetDependencies(dependencyLeaf3, dependencyBranch2.VirtualPath);
+            _context.DependencyProvider.SetDependencies(dependencyLeaf4, dependencyBranch2.VirtualPath);
+            _context.DependencyProvider.SetDependencies(dependencyLeaf5, dependencyBranch1.VirtualPath, dependencyBranch2.VirtualPath);
 
             var consolidatedResource = _compiler.CompileGroup(group);
             var resources = consolidatedResource.Resources.ToList();
-            resources[0].VirtualPath.ShouldEqual("~/dependency-root.js");
-            resources[1].VirtualPath.ShouldEqual("~/dependency-middle.js");
-            resources[2].VirtualPath.ShouldEqual("~/dependency-leaf.js");
+            resources[0].VirtualPath.ShouldEqual(dependencyRoot1.VirtualPath);
+            resources[1].VirtualPath.ShouldEqual(dependencyRoot2.VirtualPath);
+            resources[2].VirtualPath.ShouldEqual(dependencyRoot3.VirtualPath);
+            resources[3].VirtualPath.ShouldEqual(dependencyBranch1.VirtualPath);
+            resources[4].VirtualPath.ShouldEqual(dependencyLeaf1.VirtualPath);
+            resources[5].VirtualPath.ShouldEqual(dependencyLeaf2.VirtualPath);
+            resources[6].VirtualPath.ShouldEqual(dependencyBranch2.VirtualPath);
+            resources[7].VirtualPath.ShouldEqual(dependencyLeaf3.VirtualPath);
+            resources[8].VirtualPath.ShouldEqual(dependencyLeaf4.VirtualPath);
+            resources[9].VirtualPath.ShouldEqual(dependencyLeaf5.VirtualPath);
         }
 
         [Test]

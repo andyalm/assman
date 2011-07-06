@@ -220,12 +220,12 @@ namespace Assman.DependencyManagement
         
         public static IEnumerable<IResource> SortByDependencies(this IEnumerable<IResource> resources, DependencyManager dependencyManager)
         {
-            return resources.PartialOrderBy(r => r.VirtualPath, dependencyManager.Comparer);
+            return resources.PartialOrderBy(dependencyManager.Comparer);
         }
 
         public static IEnumerable<string> SortByDependencies(this IEnumerable<string> resourcePaths, DependencyManager dependencyManager)
         {
-            return resourcePaths.PartialOrderBy(p => p, dependencyManager.Comparer);
+            return resourcePaths.PartialOrderBy(dependencyManager.Comparer);
         }
     }
 }

@@ -71,9 +71,9 @@ namespace Assman.TestSupport
 			return group;
 		}
 
-		public bool DependencyProviderWasCalled
+		public void AddGlobalScriptDependencies(params IResource[] globalDependencies)
 		{
-			get { return _dependencyProvider.GetDependenciesWasCalled; }
+		    _scriptGroups.AddGlobalDependencies(globalDependencies.Select(r => r.VirtualPath));
 		}
 	}
 

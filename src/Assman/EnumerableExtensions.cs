@@ -30,31 +30,6 @@ namespace Assman
             return list;
         }
 
-        /// <summary>
-        /// Sorts the given collection of items while preserving the order of items that are equal
-        /// </summary>
-        public static IEnumerable<T> StableSort<T>(this IEnumerable<T> collection, Comparison<T> comparison)
-        {
-            //this uses an insertion sort algorithm.
-            //implementation adapted from http://www.csharp411.com/c-stable-sort/
-            
-            var list = new List<T>(collection);
-            int count = list.Count;
-            for (int j = 1; j < count; j++)
-            {
-                T key = list[j];
-
-                int i = j - 1;
-                for (; i >= 0 && comparison(list[i], key) > 0; i--)
-                {
-                    list[i + 1] = list[i];
-                }
-                list[i + 1] = key;
-            }
-
-            return list;
-        }
-
         public static bool HasAtLeast<T>(this IEnumerable<T> collection, int minimum)
         {
             if (collection is ICollection<T>)
@@ -72,12 +47,10 @@ namespace Assman
         }
 
         // this algorithm based on the stackoverflow question here: http://stackoverflow.com/questions/1982592/topological-sorting-using-linq
-        public static IEnumerable<TSource> PartialOrderBy<TSource, TKey>(this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector,
-            Comparison<TKey> comparer)
+        public static IEnumerable<T> PartialOrderBy<T>(this IEnumerable<T> source,
+            Comparison<T> comparer)
         {
             var values = source.ToArray();
-            var keys = values.Select(keySelector).ToArray();
             int count = values.Length;
             var notYieldedIndexes = Enumerable.Range(0, count).ToArray();
             int valuesToGo = count;
@@ -90,7 +63,7 @@ namespace Assman
                 //Find minimum value amongst the values not yielded yet
                 for (int i = 0; i < count; i++)
                     if (notYieldedIndexes[i] >= 0)
-                        if (comparer(keys[i], keys[minIndex]) < 0)
+                        if (comparer(values[i], values[minIndex]) < 0)
                         {
                             minIndex = i;
                         }
