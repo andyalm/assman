@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Assman.Configuration;
-
 namespace Assman
 {
 	public class ResourceGroupManager : IResourceGroupManager
@@ -201,8 +199,7 @@ namespace Assman
 
 			public string ResolveResourceUrl(string resourceUrl)
 			{
-				var resolvedUrl = _resolvedResourceUrls.GetOrAdd(resourceUrl, () => _inner.ResolveResourceUrl(resourceUrl));
-				return AppendCacheKey(resolvedUrl);
+				return _resolvedResourceUrls.GetOrAdd(resourceUrl, () => _inner.ResolveResourceUrl(resourceUrl));
 			}
 
 			public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
@@ -218,7 +215,7 @@ namespace Assman
 				if (group == null)
 					return Enumerable.Empty<string>();
 				else
-					return group.GetResources().Select(r => AppendCacheKey(r.VirtualPath));
+					return group.GetResources().Select(r => r.VirtualPath);
 			}
 
 			public bool IsConsolidatedUrl(string virtualPath)
@@ -257,16 +254,6 @@ namespace Assman
 			public void AddGlobalDependencies(IEnumerable<string> paths)
 			{
 				_inner.AddGlobalDependencies(paths);
-			}
-
-			private string AppendCacheKey(string resourceUrl)
-			{
-				var resourceCacheKey = _resourceCache.CurrentCacheKey;
-
-				if (!String.IsNullOrEmpty(resourceCacheKey))
-					return resourceUrl.AddQueryParam(AspNetShortLivedResourceCache.QueryStringKey, resourceCacheKey);
-				else
-					return resourceUrl;
 			}
 		}
 	}

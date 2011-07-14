@@ -35,22 +35,29 @@ namespace Assman.Handlers
                 context.StatusDescription = "Not Modified";
                 return;
             }
+
+            context.LastModified = lastModified;
+            context.ContentType = resource.ResourceType.ContentType;
+            if(context.IsRequestVersioned())
+            {
+                context.Cacheability = HttpCacheability.Public;
+                context.Expires = Now().AddYears(1);
+            }
             else
             {
-                context.LastModified = lastModified;
-                context.ContentType = resource.ResourceType.ContentType;
-                if(context.IsRequestVersioned())
+                if (Mode == ResourceMode.Release)
                 {
-                    context.Expires = Now().AddYears(1);
                     context.Cacheability = HttpCacheability.Public;
+                    //TODO: Consider making this configurable
+                    context.Expires = Now().AddDays(7);
                 }
-                if(gzip)
-                {
-                    context.ContentEncoding = "gzip";
-                    context.Vary = "Content-Encoding";
-                }
-                resource.WriteContent(context.OutputStream);
             }
+            if(gzip)
+            {
+                context.ContentEncoding = "gzip";
+                context.Vary = "Content-Encoding";
+            }
+            resource.WriteContent(context.OutputStream);
         }
 
         public ResourceMode Mode { get; set; }
@@ -158,6 +165,4 @@ namespace Assman.Handlers
         ResourceType ResourceType { get; }
         void WriteContent(Stream outputStream);
     }
-
-    
 }

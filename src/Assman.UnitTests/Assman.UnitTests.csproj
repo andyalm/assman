@@ -97,7 +97,7 @@
     <Compile Include="TestEmbeddedResourceFinder.cs" />
     <Compile Include="TestPluginElement.cs" />
     <Compile Include="TestResourceCompiler.cs" />
-    <Compile Include="TestResourceHttpHandlerFactory.cs" />
+    <Compile Include="Handlers\TestResourceHttpHandlerFactory.cs" />
     <Compile Include="TestAssmanContext.cs" />
     <Compile Include="TestAssmanContext_GetResourceUrl.cs" />
     <Compile Include="TestAssmanContext_PreConsolidation.cs" />
@@ -118,7 +118,7 @@
     <Compile Include="TestResourceCollection.cs" />
     <Compile Include="TestResourceGroupElement.cs" />
     <Compile Include="TestResourceFinder.cs" />
-    <Compile Include="TestConsolidatedResourceHandler.cs" />
+    <Compile Include="Handlers\TestConsolidatedResourceHandler.cs" />
     <Compile Include="TestAssmanConfiguration.cs" />
     <Compile Include="TestVirtualPathExtensions.cs" />
     <Compile Include="TestVirtualPathResolver.cs" />

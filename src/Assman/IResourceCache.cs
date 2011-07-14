@@ -5,8 +5,7 @@ namespace Assman
 {
 	public interface IResourceCache
 	{
-		string CurrentCacheKey { get; }
-		bool TryGetResources(ResourceType resourceType, out IEnumerable<IResource> cachedResources);
+	    bool TryGetResources(ResourceType resourceType, out IEnumerable<IResource> cachedResources);
 		bool TryGetGroup(string consolidatedUrl, out IResourceGroup cachedGroup);
 		void StoreGroup(string consolidatedUrl, IResourceGroup @group);
 		void StoreResources(ResourceType resourceType, IEnumerable<IResource> resources);
@@ -71,10 +70,5 @@ namespace Assman
 
 		public void StoreGroup(string consolidatedUrl, IResourceGroup group) {}
 		public void StoreResources(ResourceType resourceType, IEnumerable<IResource> resources) {}
-
-		public string CurrentCacheKey
-		{
-			get { return null; }
-		}
 	}
 }

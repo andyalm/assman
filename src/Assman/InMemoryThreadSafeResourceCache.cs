@@ -8,11 +8,6 @@ namespace Assman
         private readonly IThreadSafeInMemoryCache<ResourceType, IEnumerable<IResource>> _resources = new ThreadSafeInMemoryCache<ResourceType, IEnumerable<IResource>>();
         private readonly IThreadSafeInMemoryCache<string, IResourceGroup> _groups = new ThreadSafeInMemoryCache<string, IResourceGroup>(Comparers.VirtualPath);
 
-        public string CurrentCacheKey
-        {
-            get { return null; }
-        }
-
         public bool TryGetResources(ResourceType resourceType, out IEnumerable<IResource> cachedResources)
         {
             return _resources.TryGetValue(resourceType, out cachedResources);

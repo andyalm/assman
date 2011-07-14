@@ -3,14 +3,13 @@ using System.Web;
 using System.Web.Configuration;
 
 using Assman.Configuration;
-using Assman.Handlers;
 using Assman.TestSupport;
 
 using Moq;
 
 using NUnit.Framework;
 
-namespace Assman
+namespace Assman.Handlers
 {
 	[TestFixture]
 	public class TestResourceHttpHandlerFactory
