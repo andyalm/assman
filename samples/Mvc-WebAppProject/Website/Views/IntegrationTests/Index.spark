@@ -25,6 +25,7 @@
       return (includedIndex === expectedIndex);
     }
   </ScriptBlock>
+  <RequireStylesheet path="~/Views/IntegrationTests/Index.scss" />
   <dl>
     <dt>&lt;ScriptBlock&gt; binding</dt>
     <dd id="script-block-binding" class="test">running...</dd>

@@ -12,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Website</RootNamespace>
     <AssemblyName>Website</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <TargetFrameworkProfile />
     <UseIISExpress>false</UseIISExpress>
@@ -43,6 +43,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\src\Assman.dotLess\bin\$(Configuration)\net35\Assman.dotLess.dll</HintPath>
     </Reference>
+    <Reference Include="Assman.SassAndCoffee, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\src\Assman.SassAndCoffee\bin\$(Configuration)\net40\Assman.SassAndCoffee.dll</HintPath>
+    </Reference>
     <Reference Include="Assman.YuiCompressor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\src\Assman.YuiCompressor\bin\$(Configuration)\Assman.YuiCompressor.dll</HintPath>
@@ -70,6 +74,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
@@ -108,6 +113,7 @@
     <Content Include="Views\bindings.xml" />
     <Content Include="Scripts\Dependency.js" />
     <Content Include="Scripts\DependencyLeaf.js" />
+    <Content Include="Views\IntegrationTests\Index.scss" />
     <Content Include="Views\IntegrationTests\ScriptIncludeBinding.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

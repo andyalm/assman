@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Export">
+
+  <Import Project="$(MSBuildProjectDirectory)\..\..\lib\BuildTools\head.targets"/>
+
+  <PropertyGroup>
+	<ProjectVersion>0.1.0</ProjectVersion>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <BuildProfile Include="NET40">
+      <Properties>TargetClrVersion=4.0</Properties>
+      <OutputPath>net40</OutputPath>
+    </BuildProfile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Project Include="Assman.SassAndCoffee.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ExportAssembly Include="Assman.SassAndCoffee" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)\..\..\lib\BuildTools\project.targets"/>
+
+</Project>
