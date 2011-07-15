@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Assman.SassAndCoffee</id>
+    <version>0.0</version>
+    <title>Assman SassAndCoffee Integration</title>
+    <authors>Andy Alm</authors>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://assman.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Integrates SassAndCoffee with Assman.  This allows you to automatically include .sass, .scss, and .coffee files in with the fully automated asset pipeline that Assman provides.</description>
+    <tags>css sass scss coffee coffeescript mash consolidation mvc</tags>
+    <dependencies>
+      <dependency id="Assman.Core" version="2.0" />
+      <dependency id="SassAndCoffee.Core" version="1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="NuGet\lib\**\Assman.SassAndCoffee.dll" target="lib" />
+    <file src="NuGet\lib\**\Assman.SassAndCoffee.xml" target="lib" />
+    <file src="NuGet\Content\**\*.*" target="Content" />
+  </files>
+</package>

@@ -8,6 +8,7 @@
     <Projects Include="Assman.Mvc\Build.proj"/>
     <Projects Include="Assman.WebForms\Build.proj"/>
     <Projects Include="Assman.Spark\Build.proj"/>
+	<Projects Include="Assman.SassAndCoffee\Build.proj"/>
     <Projects Include="Assman.dotLess\Build.proj"/>
     <Projects Include="Assman.YuiCompressor\Build.proj"/>
     <Projects Include="Assman.UnitTests\Build.proj"/>

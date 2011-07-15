@@ -1,95 +1,96 @@
 <content name="main">
-	<RequireStylesheet path="~/Content/Consolidated/Shared.css" />
-	<ScriptBlock>
-		function IsScriptIncluded(path)
-		{
-			return $('script[src*="' + path + '"]').length == 1;
-		}
-		
-		function IsStylesheetIncluded(path)
-		{
-			return $('link[href*="' + path + '"]').length == 1;
-		}
-		
-		function IsIncludedAtIndex(path, expectedIndex)
-		{
-			var includedIndex = -1;
-			$("script").each(function(index) {
-					if($(this).is('script[src*="' + path + '"]'))
-					{
-						includedIndex = index;
-						return false;
-					}
-			});
-			
-			return (includedIndex === expectedIndex);
-		}
-	</ScriptBlock>
-	<dl>
-		<dt>&lt;ScriptBlock&gt; binding</dt>
-		<dd id="script-block-binding" class="test">running...</dd>
-		<ScriptBlock>
-			$("#script-block-binding").addClass("pass");
-		</ScriptBlock>
-		
-		<dt>&lt;RequireScript&gt; binding</dt>
-		<dd id="script-include-binding" class="test">running...</dd>
-		<RequireScript path="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
-		
-		<dt>RequireScript is consolidated</dt>
-		<dd id="script-include-consolidated" class="test">running...</dd>
-		<ScriptBlock>
-			if($('script[src*="/Scripts/Consolidated/Controllers/IntegrationTests.js"]').length == 1
-			&& $('script[src*="ScriptIncludeBinding.js"]').length == 0)
-			{
-			$("#script-include-consolidated").addClass("pass");
-			}
-		</ScriptBlock>
-		
-		<dt>Dependencies are automatically included</dt>
-		<dd id="script-include-dependencies" class="test">running...</dd>
-		<RequireScript path="~/scripts/DependencyLeaf.js" />
+  <RequireStylesheet path="~/Content/Consolidated/Shared.css" />
+  <ScriptBlock>
+    function IsScriptIncluded(path)
+    {
+      return $('script[src*="' + path + '"]').length == 1;
+    }
+    
+    function IsStylesheetIncluded(path)
+    {
+      return $('link[href*="' + path + '"]').length == 1;
+    }
+    
+    function IsIncludedAtIndex(path, expectedIndex)
+    {
+      var includedIndex = -1;
+      $("script").each(function(index) {
+          if($(this).is('script[src*="' + path + '"]'))
+          {
+            includedIndex = index;
+            return false;
+          }
+      });
+      
+      return (includedIndex === expectedIndex);
+    }
+  </ScriptBlock>
+  <RequireStylesheet path="~/Views/IntegrationTests/Index.scss" />
+  <dl>
+    <dt>&lt;ScriptBlock&gt; binding</dt>
+    <dd id="script-block-binding" class="test">running...</dd>
+    <ScriptBlock>
+      $("#script-block-binding").addClass("pass");
+    </ScriptBlock>
+    
+    <dt>&lt;RequireScript&gt; binding</dt>
+    <dd id="script-include-binding" class="test">running...</dd>
+    <RequireScript path="~/Views/IntegrationTests/ScriptIncludeBinding.js" />
+    
+    <dt>RequireScript is consolidated</dt>
+    <dd id="script-include-consolidated" class="test">running...</dd>
+    <ScriptBlock>
+      if($('script[src*="/Scripts/Consolidated/Controllers/IntegrationTests.js"]').length == 1
+      && $('script[src*="ScriptIncludeBinding.js"]').length == 0)
+      {
+      $("#script-include-consolidated").addClass("pass");
+      }
+    </ScriptBlock>
+    
+    <dt>Dependencies are automatically included</dt>
+    <dd id="script-include-dependencies" class="test">running...</dd>
+    <RequireScript path="~/scripts/DependencyLeaf.js" />
 
-		<dt>Scripts included in two script registries only renders once</dt>
-		<dd id="script-include-two-registries" class="test">running...</dd>
-		<ScriptBlock>
-			if($('script[src*="/Scripts/Consolidated/Shared/JQuery.js"]').length == 1)
-			{
-				$("#script-include-two-registries").addClass("pass");
-			}
-		</ScriptBlock>
+    <dt>Scripts included in two script registries only renders once</dt>
+    <dd id="script-include-two-registries" class="test">running...</dd>
+    <ScriptBlock>
+      if($('script[src*="/Scripts/Consolidated/Shared/JQuery.js"]').length == 1)
+      {
+        $("#script-include-two-registries").addClass("pass");
+      }
+    </ScriptBlock>
 
-		<RequireScript path="~/Scripts/Consolidated/Disabled.js" />
-		<dt>Group with consolidation disabled that is included by ConsolidatedUrl includes all children</dt>
-		<dd id="include-unconsolidated-group" class="test">running...</dd>
-		<ScriptBlock>
-			if(IsScriptIncluded("MyScript1.js") && IsScriptIncluded("MyScript2.js"))
-			{
-				$("#include-unconsolidated-group").addClass("pass");
-			}
-		</ScriptBlock>
-		
-		<dt>Global dependencies are included first on the page</dt>
-		<dd id="global-dependency-first" class="test">running...</dd>
-		<ScriptBlock>
-			if(IsIncludedAtIndex("Global-Dependency.js", 0))
-			{
-				$("#global-dependency-first").addClass("pass");
-			}
-		</ScriptBlock>
+    <RequireScript path="~/Scripts/Consolidated/Disabled.js" />
+    <dt>Group with consolidation disabled that is included by ConsolidatedUrl includes all children</dt>
+    <dd id="include-unconsolidated-group" class="test">running...</dd>
+    <ScriptBlock>
+      if(IsScriptIncluded("MyScript1.js") && IsScriptIncluded("MyScript2.js"))
+      {
+        $("#include-unconsolidated-group").addClass("pass");
+      }
+    </ScriptBlock>
+    
+    <dt>Global dependencies are included first on the page</dt>
+    <dd id="global-dependency-first" class="test">running...</dd>
+    <ScriptBlock>
+      if(IsIncludedAtIndex("Global-Dependency.js", 0))
+      {
+        $("#global-dependency-first").addClass("pass");
+      }
+    </ScriptBlock>
 
-		<RequireStylesheet path="~/Content/Unconsolidated/TestHelper.less" />
-		<dt>Less file can be included without being consolidated</dt>
-		<dd id="less-unconsolidated" class="test">running...</dd>
-		<dd class="hidden-by-less" style="color:red">YOU SHOULD NOT SEE THIS</dd>
-		<ScriptBlock>
-			if(IsStylesheetIncluded("TestHelper.less"))
-			{
-				$("#less-unconsolidated").addClass("pass");
-			}
-		</ScriptBlock>
-	</dl>
-	
-	<!-- don't use Resource Registries here so that it tests will fail appropriately if necessary --> 
-	<script type="text/javascript" src="${Url.Content('~/Scripts/Assman-TestBootstrapper.js')}"></script>
+    <RequireStylesheet path="~/Content/Unconsolidated/TestHelper.less" />
+    <dt>Less file can be included without being consolidated</dt>
+    <dd id="less-unconsolidated" class="test">running...</dd>
+    <dd class="hidden-by-less" style="color:red">YOU SHOULD NOT SEE THIS</dd>
+    <ScriptBlock>
+      if(IsStylesheetIncluded("TestHelper.less"))
+      {
+        $("#less-unconsolidated").addClass("pass");
+      }
+    </ScriptBlock>
+  </dl>
+  
+  <!-- don't use Resource Registries here so that it tests will fail appropriately if necessary --> 
+  <script type="text/javascript" src="${Url.Content('~/Scripts/Assman-TestBootstrapper.js')}"></script>
 </content>

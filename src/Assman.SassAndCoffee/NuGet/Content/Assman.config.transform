@@ -1,0 +1,5 @@
+<assman>
+	<plugins>
+		<add type="Assman.SassAndCoffee.SassAssmanPlugin, Assman.SassAndCoffee, Version=1.0.0.0, Culture=neutral" />
+	</plugins>
+</assman>
