@@ -11,7 +11,12 @@ namespace Assman.Configuration
 	public abstract class ResourceGroupElement : ConfigurationElement, IResourceGroupTemplate
 	{
 		private ConsolidatedUrlTemplate _consolidatedUrlTemplate;
-		
+
+		public ResourceGroupElement()
+		{
+			Minify = ResourceModeCondition.ReleaseOnly;
+		}
+
 		/// <summary>
 		/// Gets or sets the resources that are to be included from consolidation.
 		/// </summary>
@@ -56,19 +61,10 @@ namespace Assman.Configuration
 			}
 		}
 
-		private ResourceModeCondition? _minify;
-
 		/// <summary>
 		/// Gets or sets whether the scripts/styles will be minified when they are consolidated in Release mode.
 		/// </summary>
-		public ResourceModeCondition Minify
-		{
-			get
-			{
-				return _minify ?? MinifyDefaultValue;
-			}
-			set { _minify = value; }
-		}
+		public ResourceModeCondition Minify { get; set; }
 
 		private ConsolidatedUrlTemplate ConsolidatedUrlTemplate
 		{
@@ -81,8 +77,6 @@ namespace Assman.Configuration
 			}
 		}
 
-		internal ResourceModeCondition MinifyDefaultValue { get; set; }
-
 		public abstract ResourceType ResourceType { get; }
 
 		protected override bool OnDeserializeUnrecognizedAttribute(string name, string value)
@@ -90,7 +84,7 @@ namespace Assman.Configuration
 			ResourceModeCondition minify;
 			if (name == PropertyNames.Minify && value.TryConvertTo(out minify))
 			{
-				_minify = minify;
+				Minify = minify;
 				return true;
 			}
 			else
