@@ -107,26 +107,24 @@ namespace Assman.Configuration
 		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{
 			//prevent multiple enumerations of potentially expensive IEnumerable
-			allResources = allResources.ToList();
+			var externallyCompiledResources = allResources.ExternallyCompiled().ToList();
 
-			var externallyCompiledResources = allResources.ExternallyCompiled();
-			
-			return  from resource in allResources
-					let match = GetMatch(resource.VirtualPath)
-					let resourceOfCorrectMode = resource.WithMode(mode, externallyCompiledResources)
-					let relatedMatch = GetMatch(resourceOfCorrectMode.VirtualPath)
-					let isMatch = match.IsMatch()
-					let isRelatedMatch = relatedMatch.IsMatch()
-					where isMatch || isRelatedMatch
-					let resourceWithUrl = new ResourceWithMatchingPath
-					{
-						Resource = resourceOfCorrectMode,
-						ConsolidatedUrl = GetConsolidatedUrl(match),
-						MatchingPath = isMatch ? resource.VirtualPath : resourceOfCorrectMode.VirtualPath
-					}
-					group resourceWithUrl by resourceWithUrl.ConsolidatedUrl into @group
-					select CreateGroup(@group.Key,
-						@group.Distinct().Sort(IncludePatternOrder()).Select(r => r.Resource), mode);
+			return from resource in allResources
+				   let match = GetMatch(resource.VirtualPath)
+				   let resourceOfCorrectMode = resource.WithMode(mode, externallyCompiledResources)
+				   let relatedMatch = GetMatch(resourceOfCorrectMode.VirtualPath)
+				   let isMatch = match.IsMatch()
+				   let isRelatedMatch = relatedMatch.IsMatch()
+				   where isMatch || isRelatedMatch
+				   let resourceWithUrl = new ResourceWithMatchingPath
+				   {
+					   Resource = resourceOfCorrectMode,
+					   ConsolidatedUrl = GetConsolidatedUrl(match),
+					   MatchingPath = isMatch ? resource.VirtualPath : resourceOfCorrectMode.VirtualPath
+				   }
+				   group resourceWithUrl by resourceWithUrl.ConsolidatedUrl into @group
+				   select CreateGroup(@group.Key,
+					   @group.Distinct().Sort(IncludePatternOrder()).Select(r => r.Resource), mode);
 		}
 
 		private class ResourceWithMatchingPath
@@ -153,7 +151,7 @@ namespace Assman.Configuration
 				return false;
 
 			var match = GetMatch(virtualPath);
-			if(match.IsMatch())
+			if (match.IsMatch())
 			{
 				consolidatedUrl = GetConsolidatedUrl(match);
 				return true;
@@ -188,7 +186,7 @@ namespace Assman.Configuration
 
 		private IResourceMatch GetMatch(string resourceUrl)
 		{
-			if(Include.Count == 0)
+			if (Include.Count == 0)
 			{
 				return Exclude.GetMatch(resourceUrl).Inverse();
 			}
