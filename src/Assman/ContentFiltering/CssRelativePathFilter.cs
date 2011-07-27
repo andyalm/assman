@@ -25,7 +25,7 @@ namespace Assman.ContentFiltering
         private string FixPath(Match match, ContentFilterContext context)
         {
             var url = match.Groups["url"].Value;
-            if (url.StartsWith("/"))
+            if (url.StartsWith("/") || url.StartsWith("http://", Comparisons.VirtualPath) || url.StartsWith("https://", Comparisons.VirtualPath))
                 return match.Value;
 
             var consolidatedUri = CreateUri(context.Group.ConsolidatedUrl);
