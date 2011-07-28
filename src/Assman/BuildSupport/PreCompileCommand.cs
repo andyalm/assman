@@ -23,7 +23,6 @@ namespace Assman.BuildSupport
 		}
 
 		private readonly string _websiteRootDirectory;
-		private VirtualPathResolver _resolver;
 		private ILogger _logger = NullLogger.Instance;
 		
 		private PreCompileCommand(string websiteRootDirectory)
@@ -60,7 +59,22 @@ namespace Assman.BuildSupport
 			set { _logger = value; }
 		}
 
-		/// <summary>
+	    private IPathResolver _pathResolver;
+	    public IPathResolver PathResolver
+	    {
+	        get
+	        {
+	            if (_pathResolver == null)
+	            {
+	                _pathResolver = VirtualPathResolver.GetInstance(WebsiteRootDirectory);
+	            }
+
+	            return _pathResolver;
+	        }
+            set { _pathResolver = value; }
+	    }
+
+	    /// <summary>
 		/// Executes the task.
 		/// </summary>
 		/// <returns></returns>
@@ -68,7 +82,6 @@ namespace Assman.BuildSupport
 		{
 			LogMessage("Begin consolidating resources...");
 			AssmanConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
-			_resolver = GetResolver(configSection.RootFilePath);
 			
 			using(new AssemblyResolver(ResolveAssemblyPathToWebsiteBinDir))
 			{
@@ -89,7 +102,7 @@ namespace Assman.BuildSupport
 
 		private void WriteCompiledResource(ICompiledResource compiledResource)
 		{
-			string consolidatedPath = _resolver.MapPath(compiledResource.CompiledPath);
+			string consolidatedPath = PathResolver.MapPath(compiledResource.CompiledPath);
 			compiledResource.WriteToFile(consolidatedPath);
 			LogCompilation(compiledResource);
 		}
@@ -116,11 +129,6 @@ namespace Assman.BuildSupport
 			configSection.RootFilePath = webRoot;
 
 			return configSection;
-		}
-
-		private VirtualPathResolver GetResolver(string webRoot)
-		{
-			return VirtualPathResolver.GetInstance(webRoot);
 		}
 
 		private Assembly ResolveAssemblyPathToWebsiteBinDir(object sender, ResolveEventArgs args)

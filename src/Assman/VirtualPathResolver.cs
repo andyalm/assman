@@ -3,7 +3,12 @@ using System.IO;
 
 namespace Assman
 {
-	public class VirtualPathResolver
+    public interface IPathResolver
+    {
+        string MapPath(string path);
+    }
+
+	public class VirtualPathResolver : IPathResolver
 	{
 		public static VirtualPathResolver GetInstance(string appPath)
 		{
