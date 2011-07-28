@@ -107,6 +107,11 @@ namespace Assman.Configuration
 			_finder.AddFinders(finders);
 		}
 
+        public void AddExcluder(IFinderExcluder excluder)
+        {
+            _finder.Exclude(excluder);
+        }
+
 		public void AddAssembly(Assembly assembly)
 		{
 			_assemblies.Add(assembly);
