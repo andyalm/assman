@@ -77,5 +77,47 @@ namespace Assman
                 background-image:url(https://www.mydomain.com/Images/MyImage.png);
             }");
         }
+
+        [Test]
+        public void DoubleQuotesAroundUrlAreHandled()
+        {
+            var content = @".myclass {
+                background-image:url(""https://www.mydomain.com/Images/MyImage.png"");
+            }";
+
+            var filteredContent = _filter.FilterContent(content, _context);
+
+            filteredContent.ShouldEqual(@".myclass {
+                background-image:url(""https://www.mydomain.com/Images/MyImage.png"");
+            }");
+        }
+
+        [Test]
+        public void SingleQuotesAroundUrlAreHandled()
+        {
+            var content = @".myclass {
+                background-image:url('../Images/MyImage.png');
+            }";
+
+            var filteredContent = _filter.FilterContent(content, _context);
+
+            filteredContent.ShouldEqual(@".myclass {
+                background-image:url('../../Images/MyImage.png');
+            }");
+        }
+
+        [Test]
+        public void LeadingAndTrailingWhitespaceInUrlIsIgnoredAndStripped()
+        {
+            var content = @".myclass {
+                background-image:url( '../Images/MyImage.png'  );
+            }";
+
+            var filteredContent = _filter.FilterContent(content, _context);
+
+            filteredContent.ShouldEqual(@".myclass {
+                background-image:url('../../Images/MyImage.png');
+            }");
+        }
     }
 }
