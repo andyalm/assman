@@ -9,7 +9,7 @@ namespace Assman.dotLess
 {
 	public class VirtualPathFileReader : IFileReader
 	{
-		private readonly VirtualPathResolver _pathResolver;
+		private readonly IPathResolver _pathResolver;
 
 		public VirtualPathFileReader()
 		{

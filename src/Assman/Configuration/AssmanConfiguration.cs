@@ -56,9 +56,9 @@ namespace Assman.Configuration
 			}
 		}
 
-		private VirtualPathResolver _pathResolver;
+		private IPathResolver _pathResolver;
 
-		private VirtualPathResolver PathResolver
+		private IPathResolver PathResolver
 		{
 			get
 			{
@@ -209,7 +209,7 @@ namespace Assman.Configuration
 		}
 
 		private DateTime? _lastModified;
-		public DateTime LastModified(VirtualPathResolver pathResolver)
+		public DateTime LastModified(IPathResolver pathResolver)
 		{
 			return _lastModified ?? ConfigurationHelper.LastModified(this, pathResolver);
 		}

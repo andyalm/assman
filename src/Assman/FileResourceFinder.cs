@@ -7,7 +7,7 @@ namespace Assman
 	internal class FileResourceFinder : IResourceFinder
 	{
 		private readonly string _directory;
-		private readonly VirtualPathResolver _pathResolver;
+		private readonly IPathResolver _pathResolver;
 
 		/// <summary>
 		/// Constructs a new <see cref="FileResourceFinder"/>.

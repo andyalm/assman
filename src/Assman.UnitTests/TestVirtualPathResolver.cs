@@ -8,7 +8,7 @@ namespace Assman
 	public class TestVirtualPathResolver
 	{
 		private const string _appPath = "C:\\MyTestDir\\";
-		private VirtualPathResolver _resolver = new VirtualPathResolver(_appPath);
+		private IPathResolver _resolver = new VirtualPathResolver(_appPath);
 
 		[Test]
 		public void MapsApplicationPath()
