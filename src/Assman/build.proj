@@ -4,7 +4,7 @@
   <Import Project="$(MSBuildProjectDirectory)\..\..\lib\BuildTools\head.targets"/>
   
   <PropertyGroup>
-	<ProjectVersion>2.0.3</ProjectVersion>
+	<ProjectVersion>2.0.4</ProjectVersion>
   </PropertyGroup>
   
   <ItemGroup>
