@@ -80,7 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AssmanSassAndCoffeeHost.cs" />
     <Compile Include="SassAssmanPlugin.cs" />
-    <Compile Include="SassAndCoffeeFilter.cs" />
+    <Compile Include="SassContentFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assman.SassAndCoffee.nuspec" />
