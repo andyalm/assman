@@ -10,7 +10,7 @@ namespace Assman
 
     public class VirtualPathResolver : IPathResolver
     {
-        public static IPathResolver GetInstance(string appPath)
+        public static VirtualPathResolver GetInstance(string appPath)
         {
             return new VirtualPathResolver(appPath);
         }

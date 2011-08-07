@@ -15,10 +15,10 @@ namespace Assman.SassAndCoffee
 
             var sassPipeline = new ContentFilterPipeline();
             sassPipeline.Add(CreateSassContentFilter(pathResolver));
-            ResourceType.Stylesheet.AddFileExtension(".scss");
             context.MapExtensionToContentPipeline(".scss", sassPipeline);
-            ResourceType.Stylesheet.AddFileExtension(".sass");
+            ResourceType.Stylesheet.AddFileExtension(".scss");
             context.MapExtensionToContentPipeline(".sass", sassPipeline);
+            ResourceType.Stylesheet.AddFileExtension(".sass");
         }
 
         public static IContentFilter CreateSassContentFilter()
