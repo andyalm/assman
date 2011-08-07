@@ -29,10 +29,10 @@ namespace Assman.SassAndCoffee
 
         public static IContentFilter CreateSassContentFilter(VirtualPathResolver pathResolver)
         {
-            return new SassAndCoffeeFilter(CreateSassCompiler(pathResolver), pathResolver);
+            return new SassContentFilter(CreateSassCompiler(pathResolver));
         }
 
-        private static ISimpleFileCompiler CreateSassCompiler(VirtualPathResolver pathResolver)
+        private static SassFileCompiler CreateSassCompiler(VirtualPathResolver pathResolver)
         {
             var host = new AssmanSassAndCoffeeHost(pathResolver);
             var compiler = new SassFileCompiler();
