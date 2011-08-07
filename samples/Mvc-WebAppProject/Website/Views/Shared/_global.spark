@@ -6,6 +6,8 @@
 <use namespace="Assman.Mvc.Registration" />
 <use namespace="Assman.Spark.Registration" />
 
+<use assembly="Assman" />
+<use assembly="Assman.Spark" />
 <use assembly="Spark.Web.Mvc"/>
 <use assembly="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/>
 <use assembly="System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/>
