@@ -3,6 +3,10 @@
 
   <Import Project="$(MSBuildProjectDirectory)\..\..\lib\BuildTools\head.targets"/>
 
+  <PropertyGroup>
+	<ProjectVersion>2.0.1</ProjectVersion>
+  </PropertyGroup>
+  
   <ItemGroup>
     <BuildProfile Include="Mvc3">
       <Properties>TargetClrVersion=4.0;MvcVersion=3.0</Properties>
