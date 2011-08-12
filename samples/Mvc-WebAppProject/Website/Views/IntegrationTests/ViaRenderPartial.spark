@@ -1,0 +1,3 @@
+﻿<ScriptBlock>
+	$("#render-partial").addClass("pass");
+</ScriptBlock>

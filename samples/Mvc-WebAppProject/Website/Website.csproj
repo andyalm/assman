@@ -131,6 +131,8 @@
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Views\Web.config" />
+    <None Include="Views\IntegrationTests\ViaRenderAction.spark" />
+    <None Include="Views\IntegrationTests\ViaRenderPartial.spark" />
     <None Include="Views\Layouts\Application.spark" />
   </ItemGroup>
   <ItemGroup>

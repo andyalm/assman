@@ -1,0 +1,3 @@
+﻿<ScriptBlock>
+	$("#render-action").addClass("pass");
+</ScriptBlock>
