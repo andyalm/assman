@@ -1,0 +1,13 @@
+_ReSharper.Assman/*
+bin/Debug/*
+bin/Release/*
+*.user
+*.suo
+*.cache
+*.docstates
+*.nupkg
+NuGet/lib/*
+samples/LessIntegration/bin/*
+Website/Bin/*
+output/*
+
