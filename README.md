@@ -16,7 +16,8 @@ Feature Overview
 Getting Started
 --------------------
 
-*NOTE: These instructions are for Mvc3.  If you are using Mvc2, please see these [instructions|Mvc2]*
+*NOTE: These instructions are for Mvc3.  If you are using Mvc2, please see these [instructions](http://assman.codeplex.com/wikipage?title=Mvc2)
+
 1. Install the Assman.Mvc3 NuGet package:
 
 	Install-Package Assman.Mvc3
@@ -25,7 +26,7 @@ Getting Started
 
 	Install-Package Assman.YuiCompressor
 
-3. Open your site's layout/master page, and add the following inside the <head> element of your page:
+3. Open your site's layout/master page, and add the following inside the head element of your page:
 
 	@Html.RenderStylesheets()
 	@Html.RenderScripts("head")
