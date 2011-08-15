@@ -19,34 +19,48 @@ Getting Started
 *NOTE: These instructions are for Mvc3.  If you are using Mvc2, please see these [instructions](http://assman.codeplex.com/wikipage?title=Mvc2)
 
 1. Install the Assman.Mvc3 NuGet package:
-
+<pre>
+	<code>
 	Install-Package Assman.Mvc3
-
+	</code>
+</pre>
 2. While Assman ships with a light javascript minifier (JSMin), it does not ship with a css minifier.  If you want to enable css minification as well as better js minification, then install the Assman.YuiCompressor NuGet package
-
+<pre>
+	<code>
 	Install-Package Assman.YuiCompressor
-
+	</code>
+</pre>
 3. Open your site's layout/master page, and add the following inside the head element of your page:
-
+<pre>
+	<code>
 	@Html.RenderStylesheets()
 	@Html.RenderScripts("head")
-
+	</code>
+</pre>
 4. Also add the following line right before the closing body tag
-
+<pre>
+	<code>
 	@Html.RenderScripts()
-
+	</code>
+</pre>
 5. To include a stylesheet on your page, you can place this anywhere in a view or partial view:
-
+<pre>
+	<code>
 	@Html.RequireStylesheet("~/path/to/my/stylesheet.css")
-
+	</code>
+</pre>
 6. To include a script at the bottom of your page (preferred):
-
+<pre>
+	<code>
 	@Html.RequireScript("~/path/to/my/script.js")
-
+	</code>
+</pre>
 7. If you would like an individual script to be included in the head of your page, you can call RequireScript and specify "head" like this:
-
+<pre>
+	<code>
 	@Html.RequireScript("~/path/to/my/script.js", "head")
-
+	</code>
+</pre>
 For more info/recomendations on best practices/locations for including scripts, [click here](http://assman.codeplex.com/wikipage?title=ScriptLocation)
 
 How It Works
