@@ -17,32 +17,32 @@ Getting Started
 --------------------
 
 *NOTE: These instructions are for Mvc3.  If you are using Mvc2, please see these [instructions|Mvc2]*
-# Install the Assman.Mvc3 NuGet package:
+1. Install the Assman.Mvc3 NuGet package:
 
 	Install-Package Assman.Mvc3
 
-# While Assman ships with a light javascript minifier (JSMin), it does not ship with a css minifier.  If you want to enable css minification as well as better js minification, then install the Assman.YuiCompressor NuGet package
+2. While Assman ships with a light javascript minifier (JSMin), it does not ship with a css minifier.  If you want to enable css minification as well as better js minification, then install the Assman.YuiCompressor NuGet package
 
 	Install-Package Assman.YuiCompressor
 
-# Open your site's layout/master page, and add the following inside the <head> element of your page:
+3. Open your site's layout/master page, and add the following inside the <head> element of your page:
 
 	@Html.RenderStylesheets()
 	@Html.RenderScripts("head")
 
-# Also add the following line right before the closing </body> tag
+4. Also add the following line right before the closing body tag
 
 	@Html.RenderScripts()
 
-# To include a stylesheet on your page, you can place this anywhere in a view or partial view:
+5. To include a stylesheet on your page, you can place this anywhere in a view or partial view:
 
 	@Html.RequireStylesheet("~/path/to/my/stylesheet.css")
 
-# To include a script at the bottom of your page (preferred):
+6. To include a script at the bottom of your page (preferred):
 
 	@Html.RequireScript("~/path/to/my/script.js")
 
-# If you would like an individual script to be included in the head of your page, you can call RequireScript and specify "head" like this:
+7. If you would like an individual script to be included in the head of your page, you can call RequireScript and specify "head" like this:
 
 	@Html.RequireScript("~/path/to/my/script.js", "head")
 
@@ -57,23 +57,23 @@ This library provides a configuration section where you can create groups in whi
 
 	<assman>
 		<scripts>
-            		<groups>
+        	<groups>
 				<group consolidatedUrl="~/Scripts/Consolidated/Mvc/{controller}.js">
-      					<include>
-        						<add regex="~/Views/(?'controller'\w+)/.+" />
-      					</include>
-    				</group>
-	    		</groups>
-        		</scripts>
+      				<include>
+        				<add regex="~/Views/(?'controller'\w+)/.+" />
+      				</include>
+    			</group>
+	    	</groups>
+    	</scripts>
 		<stylesheets>
-            		<groups>	
-                			<group consolidatedUrl="~/Content/Consolidated/Mvc/{controller}.css">
+        	<groups>	
+        		<group consolidatedUrl="~/Content/Consolidated/Mvc/{controller}.css">
 					<include>
 						<add regex="~/Views/(?'controller'\w+)/.+" />
 					</include>
 				</group>
-            		</groups>
-        		</stylesheets>
+        	</groups>
+        </stylesheets>
 	</assman>
 
 ### Manages and respects dependencies
