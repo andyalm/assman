@@ -10,7 +10,7 @@ Feature Overview
 * [Manages the inclusion/rendering of Scripts and Stylesheets](http://assman.codeplex.com/wikipage?title=Registration) so that they can be rendered in the most optimal section of the page
 * [Contains a hook to support including resources from a CDN when your site uses one](http://assman.codeplex.com/wikipage?title=CDN)
 * [Extensible plugin architecture](http://assman.codeplex.com/wikipage?title=Plugins) to support extending the library (CoffeeScript and dotLess plugins already exist)
-* [Optimizes development experience in Debug mode, optimizes website performance in Release mode]http://assman.codeplex.com/wikipage?title=ResourceMode)
+* [Optimizes development experience in Debug mode, optimizes website performance in Release mode](http://assman.codeplex.com/wikipage?title=ResourceMode)
 * Does not require any tools to be installed
 
 Getting Started
