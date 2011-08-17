@@ -88,15 +88,16 @@
       {
         $("#less-unconsolidated").addClass("pass");
       }
-    </ScriptBlock>
-
-    <dt>Script is included via RenderAction</dt>
+	</ScriptBlock>
+    
+	<dt>Script is included via RenderAction</dt>
     <dd id="render-action" class="test">running...</dd>
     #Html.RenderAction("ViaRenderAction");
     
     <dt>Script is included via RenderPartial</dt>
     <dd id="render-partial" class="test">running...</dd>
     #Html.RenderPartial("ViaRenderPartial");
+
   </dl>
   
   <!-- don't use Resource Registries here so that it tests will fail appropriately if necessary --> 
