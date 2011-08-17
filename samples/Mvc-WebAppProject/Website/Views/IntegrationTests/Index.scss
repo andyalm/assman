@@ -1,7 +1,9 @@
-﻿dl
+﻿@import '../Shared/sass_styles';
+
+dl
 {
 	dd
 	{
-		font-size:24px;
+		@include large-font;
 	}
 }

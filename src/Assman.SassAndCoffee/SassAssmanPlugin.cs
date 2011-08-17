@@ -29,7 +29,7 @@ namespace Assman.SassAndCoffee
 
         public static IContentFilter CreateSassContentFilter(VirtualPathResolver pathResolver)
         {
-            return new SassContentFilter(CreateSassCompiler(pathResolver));
+            return new SassContentFilter(CreateSassCompiler(pathResolver), pathResolver);
         }
 
         private static SassFileCompiler CreateSassCompiler(VirtualPathResolver pathResolver)

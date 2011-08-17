@@ -115,6 +115,7 @@
     <Content Include="Scripts\DependencyLeaf.js" />
     <Content Include="Views\IntegrationTests\Index.scss" />
     <Content Include="Views\IntegrationTests\ScriptIncludeBinding.js" />
+    <Content Include="Views\Shared\_sass_styles.scss" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
