@@ -1,6 +1,7 @@
 _ReSharper.Assman/*
 [Bb]in
 obj
+.sass-cache
 *.user
 *.suo
 *.cache
