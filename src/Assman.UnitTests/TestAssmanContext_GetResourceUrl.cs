@@ -18,25 +18,25 @@ namespace Assman
 		private const string consolidatedScript = "~/consolidated.js";
 		private const string excludedScript = "~/excluded.js";
 		private ScriptGroupElement _groupElement;
-	    private StubResourceFinder _finder;
-	    private StubDependencyProvider _dependencyProvider;
+		private StubResourceFinder _finder;
+		private StubDependencyProvider _dependencyProvider;
 
 		[SetUp]
 		public void Init()
 		{
-		    _finder = new StubResourceFinder();
-		    _finder.CreateResource(myScript);
-		    _finder.CreateResource(mySecondScript);
-		    _finder.CreateResource(excludedScript);
+			_finder = new StubResourceFinder();
+			_finder.CreateResource(myScript);
+			_finder.CreateResource(mySecondScript);
+			_finder.CreateResource(excludedScript);
 
-            _dependencyProvider = new StubDependencyProvider();
-            DependencyManagerFactory.ClearDependencyCache();
+			_dependencyProvider = new StubDependencyProvider();
+			DependencyManagerFactory.ClearDependencyCache();
 
-            _instance = AssmanContext.Create(ResourceMode.Debug);
+			_instance = AssmanContext.Create(ResourceMode.Debug);
 			_instance.ConsolidateScripts = true;
 			_instance.ConfigurationLastModified = DateTime.MinValue;
-		    _instance.AddFinder(_finder);
-		    _instance.MapExtensionToDependencyProvider(".js", _dependencyProvider);
+			_instance.AddFinder(_finder);
+			_instance.MapExtensionToDependencyProvider(".js", _dependencyProvider);
 			_groupElement = new ScriptGroupElement();
 			_groupElement.ConsolidatedUrl = consolidatedScript;
 			_groupElement.Exclude.AddPattern(excludedScript);
@@ -144,41 +144,55 @@ namespace Assman
 		[Test]
 		public void WhenGroupUrlIsPassedIntoGetResourceUrlAndConsolidationIsEnabled_GroupUrlIsReturned()
 		{
+			_groupElement.Include.AddPattern("~/Scripts/.+");
+
+			var secondGroup = new ScriptGroupElement();
+			secondGroup.ConsolidatedUrl = "~/Scripts/Consolidated/SecondGroup.js";
+			_instance.ScriptGroups.Add(secondGroup);
+			
+			var resolvedScriptPath = _instance.GetScriptUrls(secondGroup.ConsolidatedUrl).Single();
+			
+			resolvedScriptPath.ShouldEqual(secondGroup.ConsolidatedUrl);
+		}
+
+		[Test]
+		public void WhenGroupUrlIsPassedIntoGetResourceUrlThatMatchesThePatternOfAPreviousGroup_TheGroupUrlIsReturned()
+		{
 			_groupElement.Include.AddPath(myScript);
 			_groupElement.Include.AddPath(mySecondScript);
-			
+
 			var resolvedScriptPath = _instance.GetScriptUrls(consolidatedScript).Single();
-			
+
 			resolvedScriptPath.ShouldEqual(consolidatedScript);
 		}
 
-	    [Test]
-	    public void WhenGroupUrlIsPassedInAndConsolidationForThatGroupIsDisabled_PathToEachResourceInGroupIsReturned()
-	    {
-            _groupElement.Include.AddPath(myScript);
-            _groupElement.Include.AddPath(mySecondScript);
-	        _groupElement.Consolidate = ResourceModeCondition.Never;
+		[Test]
+		public void WhenGroupUrlIsPassedInAndConsolidationForThatGroupIsDisabled_PathToEachResourceInGroupIsReturned()
+		{
+			_groupElement.Include.AddPath(myScript);
+			_groupElement.Include.AddPath(mySecondScript);
+			_groupElement.Consolidate = ResourceModeCondition.Never;
 
-	        var resolvedScriptPaths = _instance.GetScriptUrls(consolidatedScript).ToList();
+			var resolvedScriptPaths = _instance.GetScriptUrls(consolidatedScript).ToList();
 
-            resolvedScriptPaths.CountShouldEqual(2);
-            resolvedScriptPaths[0].ShouldEqual(myScript);
-            resolvedScriptPaths[1].ShouldEqual(mySecondScript);
-	    }
+			resolvedScriptPaths.CountShouldEqual(2);
+			resolvedScriptPaths[0].ShouldEqual(myScript);
+			resolvedScriptPaths[1].ShouldEqual(mySecondScript);
+		}
 
-	    [Test]
-	    public void WhenGroupUrlIsPassedInAndConsolidationForThatGroupIsDisabled_PathToEachResourceIsReturnedRespectingDependencies()
-	    {
-	        _dependencyProvider.SetDependencies(myScript, mySecondScript);
-            _groupElement.Include.AddPath(myScript);
-            _groupElement.Include.AddPath(mySecondScript);
-            _groupElement.Consolidate = ResourceModeCondition.Never;
+		[Test]
+		public void WhenGroupUrlIsPassedInAndConsolidationForThatGroupIsDisabled_PathToEachResourceIsReturnedRespectingDependencies()
+		{
+			_dependencyProvider.SetDependencies(myScript, mySecondScript);
+			_groupElement.Include.AddPath(myScript);
+			_groupElement.Include.AddPath(mySecondScript);
+			_groupElement.Consolidate = ResourceModeCondition.Never;
 
-            var resolvedScriptPaths = _instance.GetScriptUrls(consolidatedScript).ToList();
+			var resolvedScriptPaths = _instance.GetScriptUrls(consolidatedScript).ToList();
 
-            resolvedScriptPaths.CountShouldEqual(2);
-            resolvedScriptPaths[0].ShouldEqual(mySecondScript);
-            resolvedScriptPaths[1].ShouldEqual(myScript);
-	    }
+			resolvedScriptPaths.CountShouldEqual(2);
+			resolvedScriptPaths[0].ShouldEqual(mySecondScript);
+			resolvedScriptPaths[1].ShouldEqual(myScript);
+		}
 	}
 }

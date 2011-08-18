@@ -6,22 +6,22 @@ namespace Assman
 {
 	public class ResourceGroupManager : IResourceGroupManager
 	{
-	    public static IResourceGroupManager GetInstance(ResourceMode resourceMode, IResourceCache resourceCache)
+		public static IResourceGroupManager GetInstance(ResourceMode resourceMode, IResourceCache resourceCache)
 		{
 			return new CachingResourceGroupManager(new ResourceGroupManager(resourceMode), resourceCache);
 		}
 
-	    private readonly ResourceMode _resourceMode;
-	    private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
-	    private readonly List<string> _globalDependencies = new List<string>();
+		private readonly ResourceMode _resourceMode;
+		private readonly List<IResourceGroupTemplate> _templates = new List<IResourceGroupTemplate>();
+		private readonly List<string> _globalDependencies = new List<string>();
 
-	    public ResourceGroupManager(ResourceMode resourceMode)
+		public ResourceGroupManager(ResourceMode resourceMode)
 		{
-		    _resourceMode = resourceMode;
-		    Consolidate = true;
+			_resourceMode = resourceMode;
+			Consolidate = true;
 		}
 
-	    public void Add(IResourceGroupTemplate template)
+		public void Add(IResourceGroupTemplate template)
 		{
 			_templates.Add(template);
 		}
@@ -38,9 +38,18 @@ namespace Assman
 
 		public bool Consolidate { get; set; }
 
+		//TODO: Look into simplifying this interface a little.  It seems like there is a tight relationship
+		//between ResolveResourceUrl, IsGroupUrlWithConsolidationDisabled, and GetResourceUrlsInGroup.
+		//in the spirit of tell, don't ask, it seems like we may be able to hide more of these details behind a
+		//simpler interface.
+
 		public string ResolveResourceUrl(string resourceUrl)
 		{
 			if (!Consolidate)
+				return resourceUrl;
+
+			var groupTemplateByConsolidatedUrl = GetGroupTemplateOrDefault(consolidatedUrl : resourceUrl);
+			if (groupTemplateByConsolidatedUrl != null)
 				return resourceUrl;
 			
 			foreach (var groupTemplate in _templates)
