@@ -3,30 +3,25 @@
 <head>
   <meta charset='utf-8'>
 
-  <title>andyalm/assman @ GitHub</title>
-
+  <title>Assman - Frictionless Web Asset Management for ASP.NET MVC - @ GitHub</title>
+  <link href="site.css" rel="stylesheet">
   <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #b40b52;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #ffffff;
-    }
     #container {
       margin: 0 auto;
       width: 700px;
     }
-    h1 { font-size: 3.8em; color: #4bf4ad; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #4bf4ad; }
-    h3 { text-align: center; color: #4bf4ad; }
-    a { color: #4bf4ad; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
+    ul.feature-overview li {
+      margin-bottom: 10px;
+    }
+
+    ul.feature-overview a {
+        color: #111;
+          text-decoration: none;
+      }
+      ul.feature-overview a:hover {
+        color: #111;
+        text-decoration: underline;
+      }
   </style>
 </head>
 
@@ -42,27 +37,46 @@
         <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
     </div>
 
-    <h1><a href="http://github.com/andyalm/assman">Assman</a>
-      <span class="small">by <a href="http://github.com/andyalm">andyalm</a></span></h1>
+    <h1><a href="http://github.com/andyalm/assman">Assman</a></h1>
 
     <div class="description">
       Frictionless Web Asset Management for ASP.NET Mvc. Easily manage dependencies and compile scripts and stylesheets.
     </div>
 
-    <h2>Authors</h2>
-<p>andyalm<br/>gmusick<br/><br/>      </p>
+      <h2>Overview</h2>
+      <p>
+          <ul class="feature-overview">
+      <li>
+          <a href="http://assman.codeplex.com/wikipage?title=Dependency-Management&referringTitle=Home">Manages dependencies between scripts and automatically includes the dependencies when you request a script on the page</a></li>
+<li><a href="http://assman.codeplex.com/wikipage?title=Compilation&referringTitle=Home">Scripts and Styles consolidated by convention</a> (you define the convention that works for your project), and thus requires minimal configuration/maintenence</li>
+<li><a href="http://assman.codeplex.com/wikipage?title=Minification&referringTitle=Home">Minifies your scripts and stylesheets</a></li>
+<li><a href="http://assman.codeplex.com/wikipage?title=Registration&referringTitle=Home">Manages the inclusion&#47;rendering of Scripts and Stylesheets</a> so that they can be rendered in the most optimal section of the page</li>
+<li><a href="http://assman.codeplex.com/wikipage?title=CDN&referringTitle=Home">Contains a hook to support including resources from a CDN when your site uses one</a></li>
+<li><a href="http://assman.codeplex.com/wikipage?title=Plugins&referringTitle=Home">Extensible plugin architecture</a> to support extending the library (dotLess plugin already exists, CoffeeScript and Sass on the way)</li>
+<li><a href="http://assman.codeplex.com/wikipage?title=ResourceMode&referringTitle=Home">Optimizes development experience in Debug mode, optimizes website performance in Release mode</a></li>
+<li>Does not require any tools to be installed</li></ul>
+      </p>
 
+      <h2>Getting started</h2>
+      <p>
+         Install instructions for:
+          <ul>
+              <li><a href="http://assman.codeplex.com">ASP.NET MVC 3</a></li>
+              <li><a href="http://assman.codeplex.com/wikipage?title=Mvc2">ASP.NET MVC 2</a></li>
+          </ul>
+      </p>
 
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/andyalm/assman/zipball/master">zip</a> or
-      <a href="http://github.com/andyalm/assman/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
+    <h2>Download the source</h2>
+    <p>You can clone the project with <a href="http://git-scm.com">Git</a>
       by running:
       <pre>$ git clone git://github.com/andyalm/assman</pre>
     </p>
+
+      <h2>Authors</h2>
+<p>Andy Alm
+<br/>Greg Musick
+<br/>
+<br/>      </p>
 
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/andyalm/assman">andyalm/assman</a>
