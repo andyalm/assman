@@ -3,6 +3,10 @@
 
   <Import Project="$(MSBuildProjectDirectory)\..\..\lib\BuildTools\head.targets"/>
 
+  <PropertyGroup>
+    <ProjectVersion>2.0.1</ProjectVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <BuildProfile Include="NET40">
       <Properties>TargetClrVersion=4.0</Properties>
