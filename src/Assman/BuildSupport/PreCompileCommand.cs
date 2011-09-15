@@ -81,11 +81,10 @@ namespace Assman.BuildSupport
 		public void Execute()
 		{
 			LogMessage("Begin consolidating resources...");
-			AssmanConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
-			
 			using(new AssemblyResolver(ResolveAssemblyPathToWebsiteBinDir))
-			{
-				ConsolidateAll(configSection);
+            {
+                AssmanConfiguration configSection = GetConfigSection(WebsiteRootDirectory);
+			    ConsolidateAll(configSection);
 			}
 			
 			LogMessage("End consolidating resources.");
