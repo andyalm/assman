@@ -8,6 +8,28 @@ namespace Assman
         public IResource DebugResource { get; set; }
         public IResource ReleaseResource { get; set; }
 
+        public string CanonicalPath
+        {
+            get
+            {
+                if (DebugResource.VirtualPath.Contains(".debug."))
+                    return ReleaseResource.VirtualPath;
+                else
+                    return DebugResource.VirtualPath;
+            }
+        }
+
+        public IResource ResourceWithCanonicalPath
+        {
+            get
+            {
+                if (DebugResource.VirtualPath.Contains(".debug."))
+                    return ReleaseResource;
+                else
+                    return DebugResource;
+            }
+        }
+
         public bool Matches(IResource resource)
         {
             return Matches(resource.VirtualPath);
@@ -35,36 +57,60 @@ namespace Assman
                    || potentialDebugResource.VirtualPath == ToDebugPath(potentialReleaseResource.VirtualPath, potentialReleaseResource.FileExtension);
         }
 
-        public static bool TryGetRelatedPath(string resourcePath, ResourceMode mode, Func<string, bool> resourceExists, out string pathToOtherResourceInPair)
+        public static bool MatchesMode(string resourcePath, ResourceMode mode)
         {
-            string fileExtension = Path.GetExtension(resourcePath);
             if(mode == ResourceMode.Release)
             {
+                return resourcePath.Contains(".min.") || resourcePath.Contains(".compiled.");
+            }
+            else
+            {
+                return resourcePath.Contains(".debug.");
+            }
+        }
+
+        public static bool TryGetRelatedResource(string resourcePath, ResourceMode mode, Func<string, bool> resourceExists, out RelatedResourceInfo otherResourceInfo)
+        {
+            string fileExtension = Path.GetExtension(resourcePath);
+            if (mode == ResourceMode.Release)
+            {
                 var compiledResource = ToCompiledPath(resourcePath, fileExtension);
-                if(resourceExists(compiledResource))
+                if (resourceExists(compiledResource))
                 {
-                    pathToOtherResourceInPair = compiledResource;
+                    otherResourceInfo = new RelatedResourceInfo
+                    {
+                        ModeOfRelatedPath = ResourceMode.Release,
+                        RelatedPath = compiledResource
+                    };
                     return true;
                 }
-                
+
                 var minResource = ToMinPath(resourcePath, fileExtension);
-                if(resourceExists(minResource))
+                if (resourceExists(minResource))
                 {
-                    pathToOtherResourceInPair = minResource;
+                    otherResourceInfo = new RelatedResourceInfo
+                    {
+                        ModeOfRelatedPath = ResourceMode.Release,
+                        RelatedPath = minResource
+                    };
                     return true;
                 }
             }
             else
             {
                 var debugResource = ToDebugPath(resourcePath, fileExtension);
-                if(resourceExists(debugResource))
+                if (resourceExists(debugResource))
                 {
-                    pathToOtherResourceInPair = debugResource;
+                    otherResourceInfo = new RelatedResourceInfo
+                    {
+                        ModeOfRelatedPath = ResourceMode.Debug,
+                        RelatedPath = debugResource
+                    };
                     return true;
                 }
             }
 
-            pathToOtherResourceInPair = null;
+            otherResourceInfo = null;
             return false;
         }
 
@@ -82,5 +128,11 @@ namespace Assman
         {
             return standardPath.ChangeExtension(".debug" + fileExtension);
         }
+    }
+
+    internal class RelatedResourceInfo
+    {
+        public ResourceMode ModeOfRelatedPath { get; set; }
+        public string RelatedPath { get; set; }
     }
 }

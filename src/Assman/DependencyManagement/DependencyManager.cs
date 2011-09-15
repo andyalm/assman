@@ -38,12 +38,11 @@ namespace Assman.DependencyManagement
 
             var dependencyList = new List<IEnumerable<string>>();
             IEnumerable<IResource> resourcesInGroup;
-            var externallyCompiledResources = GetExternallyCompiledResourcesOfType(virtualPath);
             if(IsConsolidatedUrl(virtualPath, out resourcesInGroup))
             {
                 foreach (var resource in resourcesInGroup)
                 {
-                    AccumulateDependencies(dependencyList, resource, externallyCompiledResources);
+                    AccumulateDependencies(dependencyList, resource);
                 }
 
                 //filter out dependencies within the group
@@ -52,7 +51,7 @@ namespace Assman.DependencyManagement
             }
             else
             {
-                AccumulateDependencies(dependencyList, virtualPath, externallyCompiledResources);
+                AccumulateDependencies(dependencyList, virtualPath);
                 return CollapseDependencies(dependencyList);
             }	
         }
@@ -63,9 +62,8 @@ namespace Assman.DependencyManagement
             if (_dependencyCache.TryGetDependencies(resource.VirtualPath, out cachedDependencies))
                 return cachedDependencies;
 
-            var externallyCompiledResources = GetExternallyCompiledResourcesOfType(resource.VirtualPath);
             var dependencyList = new List<IEnumerable<string>>();
-            AccumulateDependencies(dependencyList, resource, externallyCompiledResources);
+            AccumulateDependencies(dependencyList, resource);
 
             return CollapseDependencies(dependencyList);
         }
@@ -131,7 +129,7 @@ namespace Assman.DependencyManagement
             return true;
         }
 
-        private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, string virtualPath, CompiledResourcePair[] externallyCompiledResources)
+        private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, string virtualPath)
         {
             IEnumerable<string> cachedDependencies;
             if (_dependencyCache.TryGetDependencies(virtualPath, out cachedDependencies))
@@ -143,15 +141,15 @@ namespace Assman.DependencyManagement
             var resource = _resourceFinder.FindResource(virtualPath);
             if(resource == null)
             {
-                var globalDependencies = GlobalDependenciesFor(virtualPath, externallyCompiledResources);
+                var globalDependencies = GlobalDependenciesFor(virtualPath);
                 dependencyList.Insert(0, globalDependencies);
                 return;
             }
 
-            AccumulateDependencies(dependencyList, resource, externallyCompiledResources);
+            AccumulateDependencies(dependencyList, resource);
         }
 
-        private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, IResource resource, CompiledResourcePair[] externallyCompiledResources)
+        private void AccumulateDependencies(List<IEnumerable<string>> dependencyList, IResource resource)
         {
             IEnumerable<string> cachedDependencies;
             if (_dependencyCache.TryGetDependencies(resource, out cachedDependencies))
@@ -167,18 +165,18 @@ namespace Assman.DependencyManagement
             IDependencyProvider provider;
             if (_providers.TryGetValue(resource.FileExtension, out provider))
             {
-                var dependencies = provider.GetDependencies(resource).WithMode(_resourceMode, externallyCompiledResources).ToList();
+                var dependencies = provider.GetDependencies(resource).ToList();
                 if (dependencies.Any())
                 {
                     dependencyList.Insert(0, dependencies);
                     foreach (var dependency in dependencies)
                     {
-                        AccumulateDependencies(dependencyList, dependency, externallyCompiledResources);
+                        AccumulateDependencies(dependencyList, dependency);
                     }
                 }
             }
 
-            var globalDependencies = GlobalDependenciesFor(resource.VirtualPath, externallyCompiledResources);
+            var globalDependencies = GlobalDependenciesFor(resource.VirtualPath);
             if(globalDependencies.Any())
             {
                 dependencyList.Insert(0, globalDependencies);
@@ -195,7 +193,7 @@ namespace Assman.DependencyManagement
                 .ToList();
         }
 
-        private IEnumerable<string> GlobalDependenciesFor(string path, CompiledResourcePair[] externallyCompiledResources)
+        private IEnumerable<string> GlobalDependenciesFor(string path)
         {
             var resourceType = ResourceType.FromPath(path);
             IResourceGroupManager groupManager = null;
@@ -210,18 +208,11 @@ namespace Assman.DependencyManagement
             
             if(groupManager != null)
             {
-                var allGlobalDependencies = groupManager.GetGlobalDependencies().WithMode(_resourceMode, externallyCompiledResources);
+                var allGlobalDependencies = groupManager.GetGlobalDependencies();
                 return allGlobalDependencies.TakeWhile(p => !p.Equals(path, Comparisons.VirtualPath));
             }
 
             return Enumerable.Empty<string>();
-        }
-
-        private CompiledResourcePair[] GetExternallyCompiledResourcesOfType(string dependencyUrl)
-        {
-            var resourceType = ResourceType.FromPath(dependencyUrl);
-
-            return _resourceFinder.FindResources(resourceType).ExternallyCompiled().ToArray();
         }
     }
 

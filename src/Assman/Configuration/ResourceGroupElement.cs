@@ -100,21 +100,14 @@ namespace Assman.Configuration
 
 		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{
-			//prevent multiple enumerations of potentially expensive IEnumerable
-			var externallyCompiledResources = allResources.ExternallyCompiled().ToList();
-
 			return from resource in allResources
 				   let match = GetMatch(resource.VirtualPath)
-				   let resourceOfCorrectMode = resource.WithMode(mode, externallyCompiledResources)
-				   let relatedMatch = GetMatch(resourceOfCorrectMode.VirtualPath)
-				   let isMatch = match.IsMatch()
-				   let isRelatedMatch = relatedMatch.IsMatch()
-				   where isMatch || isRelatedMatch
+				   where match.IsMatch()
 				   let resourceWithUrl = new ResourceWithMatchingPath
 				   {
-					   Resource = resourceOfCorrectMode,
+					   Resource = resource,
 					   ConsolidatedUrl = GetConsolidatedUrl(match),
-					   MatchingPath = isMatch ? resource.VirtualPath : resourceOfCorrectMode.VirtualPath
+					   MatchingPath = resource.VirtualPath
 				   }
 				   group resourceWithUrl by resourceWithUrl.ConsolidatedUrl into @group
 				   select CreateGroup(@group.Key,

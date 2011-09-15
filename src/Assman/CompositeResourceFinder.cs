@@ -8,29 +8,20 @@ namespace Assman
 	{
 		private readonly List<IResourceFinder> _finders = new List<IResourceFinder>();
 		private readonly List<IFinderExcluder> _excluders = new List<IFinderExcluder>(); 
-		private readonly IResourceCache _resourceCache;
-
-		public CompositeResourceFinder(IResourceCache resourceCache)
-		{
-			_resourceCache = resourceCache;
-		}
 
 		public IEnumerable<IResource> FindResources(ResourceType resourceType)
 		{
-			return _resourceCache.GetOrAddResources(resourceType, () =>
-			{
-				var combined = new List<IResource>();
-				foreach (IResourceFinder finder in _finders)
-				{
-					var found = finder.FindResources(resourceType).Where(IsNotExcluded);
-					combined.AddRange(found);
-				}
+		    var combined = new List<IResource>();
+		    foreach (IResourceFinder finder in _finders)
+		    {
+		        var found = finder.FindResources(resourceType).Where(IsNotExcluded);
+		        combined.AddRange(found);
+		    }
 
-				return combined;
-			});
+		    return combined;
 		}
 
-		public IResource FindResource(string virtualPath)
+	    public IResource FindResource(string virtualPath)
 		{
 			//don't need to cache the results of this method currently
 			foreach (var finder in _finders)

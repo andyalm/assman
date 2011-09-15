@@ -15,7 +15,7 @@ namespace Assman
         [SetUp]
         public void Init()
         {
-            _instance = new CompositeResourceFinder(NullResourceCache.Instance);
+            _instance = new CompositeResourceFinder();
         }
         
         [Test]
@@ -37,6 +37,12 @@ namespace Assman
             Assert.That(resources[0].VirtualPath, Is.EqualTo("~/myfile1.js"));
             Assert.That(resources[1].VirtualPath, Is.EqualTo("~/myfile2.js"));
             Assert.That(resources[2].VirtualPath, Is.EqualTo("assembly://MyAssembly/MyNamespace.Myfile1.js"));
+        }
+
+        [Test]
+        public void FindResourcesFiltersOutExternallyMinifiedFilesNotMatchingTheCurrent()
+        {
+            
         }
     }
 }

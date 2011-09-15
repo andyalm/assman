@@ -118,7 +118,7 @@ namespace Assman
             var dependencyLeaf1 = _context.CreateResource("~/dependency-leaf1.js").Resource;
             var dependencyLeaf2 = _context.CreateResource("~/dependency-leaf2.js").Resource;
             var dependencyRoot3 = _context.CreateResource("~/dependency-root3.js").Resource;
-            var dependencyRoot1 = _context.CreateResource("~/dependency-root1.js").Resource;
+            var dependencyRoot1 = StubResource.WithPath("~/dependency-root1.js");
             var dependencyRoot1Minified = _context.CreateResource("~/dependency-root1.min.js").Resource;
             var dependencyBranch1 = _context.CreateResource("~/dependency-branch1.js").Resource;
             var dependencyLeaf5 = _context.CreateResource("~/dependency-leaf5.js").Resource;
@@ -201,7 +201,7 @@ namespace Assman
             _context.CreateResource("~/file3.js")
                 .InGroup(group);
 
-            var unconsolidatedResource1 = _context.CreateResource("~/unconsolidated1.js").Resource;
+            
             var unconsolidatedResource2 = _context.CreateResource("~/unconsolidated2.js").Resource;
             var unconsolidatedMinifiedResource1 = _context.CreateResource("~/unconsolidated1.min.js").Resource;
 

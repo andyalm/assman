@@ -16,16 +16,16 @@ namespace Assman
 		private readonly IResourceGroupManager _scriptGroups;
 		private readonly IResourceGroupManager _styleGroups;
 		private readonly IResourceFinder _finder;
-	    private readonly ResourceMode _resourceMode;
+		private readonly ResourceMode _resourceMode;
 
-	    public ResourceCompiler(ContentFilterPipelineMap contentFilterPipelineMap, DependencyManager dependencyManager, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups, IResourceFinder finder, ResourceMode resourceMode)
+		public ResourceCompiler(ContentFilterPipelineMap contentFilterPipelineMap, DependencyManager dependencyManager, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups, IResourceFinder finder, ResourceMode resourceMode)
 		{
 			_contentFilterPipelineMap = contentFilterPipelineMap;
 			_dependencyManager = dependencyManager;
 			_scriptGroups = scriptGroups;
 			_styleGroups = styleGroups;
 			_finder = finder;
-		    _resourceMode = resourceMode;
+			_resourceMode = resourceMode;
 		}
 
 		public ICompiledResource CompileGroup(string groupConsolidatedUrl, GroupTemplateContext groupTemplateContext)
@@ -45,13 +45,13 @@ namespace Assman
 			Func<IResource, string> getResourceContent = resource =>
 			{
 				var contentFilterPipeline = _contentFilterPipelineMap.GetPipelineForExtension(resource.FileExtension);
-			    var contentFilterContext = new ContentFilterContext
-			    {
-			        Group = group,
-			        Minify = group.Minify,
-			        ResourceVirtualPath = resource.VirtualPath
-			    };
-			    return contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
+				var contentFilterContext = new ContentFilterContext
+				{
+					Group = group,
+					Minify = group.Minify,
+					ResourceVirtualPath = resource.VirtualPath
+				};
+				return contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
 			};
 
 			return group.GetResources()
@@ -80,13 +80,10 @@ namespace Assman
 												 && CanCompileIndividually(resource)
 										   select resource).ToList();
 
-			var externallyCompiledResources = resources.ExternallyCompiled().ToList();
-
 			var compiledResources = new List<ICompiledResource>();
 			foreach (var unconsolidatedResource in unconsolidatedResources)
 			{
-				var externallyCompiledResource = externallyCompiledResources.SingleOrDefault(r => r.Matches(unconsolidatedResource));
-				if(externallyCompiledResource == null)
+				if(!CompiledResourcePair.MatchesMode(unconsolidatedResource.VirtualPath, _resourceMode))
 				{
 					var compiledResource = CompileResource(unconsolidatedResource);
 					handleCompiledResource(compiledResource);
@@ -99,13 +96,13 @@ namespace Assman
 
 		public ICompiledResource CompileResource(IResource resource)
 		{
-		    var contentFilterPipeline = _contentFilterPipelineMap.GetPipelineForExtension(resource.FileExtension);
-		    var contentFilterContext = new ContentFilterContext
-		    {
-		        Minify = _resourceMode == ResourceMode.Release, //TODO: obey global Minify settings
-		        ResourceVirtualPath = resource.VirtualPath
-		    };
-		    var compiledContent = contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
+			var contentFilterPipeline = _contentFilterPipelineMap.GetPipelineForExtension(resource.FileExtension);
+			var contentFilterContext = new ContentFilterContext
+			{
+				Minify = _resourceMode == ResourceMode.Release, //TODO: obey global Minify settings
+				ResourceVirtualPath = resource.VirtualPath
+			};
+			var compiledContent = contentFilterPipeline.FilterContent(resource.GetContent(), contentFilterContext);
 
 			return new IndividuallyCompiledResource
 			{

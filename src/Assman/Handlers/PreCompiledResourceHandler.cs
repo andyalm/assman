@@ -27,10 +27,10 @@ namespace Assman.Handlers
 
         protected override IHandlerResource GetResource()
         {
-            string relatedResourcePath;
-            if(CompiledResourcePair.TryGetRelatedPath(_physicalResourcePath, _resourceMode, _fileAccess.Exists, out relatedResourcePath))
+            RelatedResourceInfo relatedResourceInfo;
+            if(CompiledResourcePair.TryGetRelatedResource(_physicalResourcePath, _resourceMode, _fileAccess.Exists, out relatedResourceInfo))
             {
-                return CreateHandler(relatedResourcePath);
+                return CreateHandler(relatedResourceInfo.RelatedPath);
             }
             else
             {

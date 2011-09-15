@@ -17,16 +17,16 @@ namespace Assman.TestSupport
 
 		public ResourceTestContext(ResourceMode resourceMode = ResourceMode.Debug)
 		{
-		    Mode = resourceMode;
-		    _finder = new StubResourceFinder();
-		    _contentFilterPipelineMap = new ContentFilterPipelineMap();
-		    _scriptGroups = new ResourceGroupManager(Mode);
-		    _styleGroups = new ResourceGroupManager(Mode);
-		    _dependencyCache = new InMemoryDependencyCache();
-		    _dependencyProvider = new StubDependencyProvider();
-		    _dependencyManager = new DependencyManager(_finder, _dependencyCache, _scriptGroups, _styleGroups, resourceMode);
-		    _dependencyManager.MapProvider(".js", _dependencyProvider);
-		    _dependencyManager.MapProvider(".css", _dependencyProvider);
+			Mode = resourceMode;
+			_finder = new StubResourceFinder();
+			_contentFilterPipelineMap = new ContentFilterPipelineMap();
+			_scriptGroups = new ResourceGroupManager(Mode);
+			_styleGroups = new ResourceGroupManager(Mode);
+			_dependencyCache = new InMemoryDependencyCache();
+			_dependencyProvider = new StubDependencyProvider();
+			_dependencyManager = new DependencyManager(_finder, _dependencyCache, _scriptGroups, _styleGroups, resourceMode);
+			_dependencyManager.MapProvider(".js", _dependencyProvider);
+			_dependencyManager.MapProvider(".css", _dependencyProvider);
 		}
 
 		public ResourceMode Mode { get; private set; }
@@ -73,7 +73,12 @@ namespace Assman.TestSupport
 
 		public void AddGlobalScriptDependencies(params IResource[] globalDependencies)
 		{
-		    _scriptGroups.AddGlobalDependencies(globalDependencies.Select(r => r.VirtualPath));
+			_scriptGroups.AddGlobalDependencies(globalDependencies.Select(r => r.VirtualPath));
+		}
+
+		public void AddGlobalScriptDependencies(params string[] globalDependencyPath)
+		{
+			_scriptGroups.AddGlobalDependencies(globalDependencyPath);
 		}
 	}
 

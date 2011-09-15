@@ -33,7 +33,8 @@ namespace Assman.Configuration
 			set { _current = value; }
 		}
 
-		private readonly CompositeResourceFinder _finder;
+		private readonly IResourceFinder _finder;
+		private readonly CompositeResourceFinder _compositeFinder;
 		private readonly ContentFilterPipelineMap _filterPipelineMap;
 		private IResourceGroupManager _scriptGroups;
 		private IResourceGroupManager _styleGroups;
@@ -47,11 +48,12 @@ namespace Assman.Configuration
 			
 			_scriptGroups = ResourceGroupManager.GetInstance(resourceMode, resourceCache);
 			_styleGroups = ResourceGroupManager.GetInstance(resourceMode, resourceCache);
-			_finder = new CompositeResourceFinder(resourceCache);
-			_finder.Exclude(new ConsolidatedResourceExcluder(_scriptGroups));
-			_finder.Exclude(new ConsolidatedResourceExcluder(_styleGroups));
-			_finder.Exclude(new PreCompiledResourceExcluder());
-			_finder.Exclude(new VsDocResourceExcluder());
+			_compositeFinder = new CompositeResourceFinder();
+			_compositeFinder.Exclude(new ConsolidatedResourceExcluder(_scriptGroups));
+			_compositeFinder.Exclude(new ConsolidatedResourceExcluder(_styleGroups));
+			_compositeFinder.Exclude(new PreCompiledResourceExcluder());
+			_compositeFinder.Exclude(new VsDocResourceExcluder());
+			_finder = new ResourceModeFilteringFinder(resourceMode, new CachingResourceFinder(resourceCache, _compositeFinder));
 			_filterPipelineMap = new ContentFilterPipelineMap();
 			_assemblies = new List<Assembly>();
 			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups, resourceMode);
@@ -99,23 +101,23 @@ namespace Assman.Configuration
 
 		public void AddFinder(IResourceFinder finder)
 		{
-			_finder.AddFinder(finder);
+			_compositeFinder.AddFinder(finder);
 		}
 
 		public void AddFinders(IEnumerable<IResourceFinder> finders)
 		{
-			_finder.AddFinders(finders);
+			_compositeFinder.AddFinders(finders);
 		}
 
 		public void AddExcluder(IFinderExcluder excluder)
 		{
-			_finder.Exclude(excluder);
+			_compositeFinder.Exclude(excluder);
 		}
 
 		public void AddAssembly(Assembly assembly)
 		{
 			_assemblies.Add(assembly);
-			_finder.AddFinder(ResourceFinderFactory.GetInstance(assembly));
+			_compositeFinder.AddFinder(ResourceFinderFactory.GetInstance(assembly));
 		}
 
 		public void AddAssemblies(IEnumerable<Assembly> assemblies)
