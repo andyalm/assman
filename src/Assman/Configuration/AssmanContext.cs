@@ -54,7 +54,7 @@ namespace Assman.Configuration
 			_finder.Exclude(new VsDocResourceExcluder());
 			_filterPipelineMap = new ContentFilterPipelineMap();
 			_assemblies = new List<Assembly>();
-			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups);
+			_dependencyManager = DependencyManagerFactory.GetDependencyManager(_finder, _scriptGroups, _styleGroups, resourceMode);
 			_resourceMode = resourceMode;
 		}
 
@@ -107,10 +107,10 @@ namespace Assman.Configuration
 			_finder.AddFinders(finders);
 		}
 
-        public void AddExcluder(IFinderExcluder excluder)
-        {
-            _finder.Exclude(excluder);
-        }
+		public void AddExcluder(IFinderExcluder excluder)
+		{
+			_finder.Exclude(excluder);
+		}
 
 		public void AddAssembly(Assembly assembly)
 		{

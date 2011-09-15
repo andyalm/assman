@@ -10,8 +10,13 @@ namespace Assman
 
         public bool Matches(IResource resource)
         {
-            return DebugResource.VirtualPath.EqualsVirtualPath(resource.VirtualPath)
-                   || ReleaseResource.VirtualPath.EqualsVirtualPath(resource.VirtualPath);
+            return Matches(resource.VirtualPath);
+        }
+
+        public bool Matches(string virtualPath)
+        {
+            return DebugResource.VirtualPath.EqualsVirtualPath(virtualPath)
+                   || ReleaseResource.VirtualPath.EqualsVirtualPath(virtualPath);
         }
 
         public bool WasMinifiedFrom(IResource resource)

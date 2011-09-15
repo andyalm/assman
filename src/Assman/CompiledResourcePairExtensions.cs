@@ -31,9 +31,26 @@ namespace Assman
             return resource;
         }
 
+        public static IEnumerable<string> WithMode(this IEnumerable<string> resourcePaths, ResourceMode mode, IEnumerable<CompiledResourcePair> externallyCompiledResources)
+        {
+            return resourcePaths.Select(path =>
+            {
+                var compiledResourcePair = externallyCompiledResources.SingleOrDefault(path);
+                if (compiledResourcePair != null)
+                    return compiledResourcePair.WithMode(mode).VirtualPath;
+                else
+                    return path;
+            });
+        }
+
         public static CompiledResourcePair SingleOrDefault(this IEnumerable<CompiledResourcePair> resources, IResource resource)
         {
             return resources.SingleOrDefault(r => r.Matches(resource));
+        }
+
+        public static CompiledResourcePair SingleOrDefault(this IEnumerable<CompiledResourcePair> resources, string virtualPath)
+        {
+            return resources.SingleOrDefault(r => r.Matches(virtualPath));
         }
 
         public static IEnumerable<IResource> WithMode(this IEnumerable<CompiledResourcePair> compiledResourcePair, ResourceMode mode)

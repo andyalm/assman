@@ -23,13 +23,19 @@ namespace Assman
 		[SetUp]
 		public void SetupContext()
 		{
+			SetupWithMode(ResourceMode.Debug);
+		}
+
+		private void SetupWithMode(ResourceMode resourceMode)
+		{
 			_dependencyProvider = new StubDependencyProvider();
 			_resourceFinder = new StubResourceFinder();
 			_dependencyCache = new InMemoryDependencyCache();
-			_scriptGroups = new ResourceGroupManager(ResourceMode.Debug);
-			_styleGroups = new ResourceGroupManager(ResourceMode.Debug);
+			_scriptGroups = new ResourceGroupManager(resourceMode);
+			_styleGroups = new ResourceGroupManager(resourceMode);
 
-			_dependencyManager = new DependencyManager(_resourceFinder, _dependencyCache, _scriptGroups, _styleGroups);
+			_dependencyManager = new DependencyManager(_resourceFinder, _dependencyCache, _scriptGroups, _styleGroups,
+													   resourceMode);
 			_dependencyManager.MapProvider(".js", _dependencyProvider);
 		}
 
@@ -199,6 +205,23 @@ namespace Assman
 			dependencies[0].ShouldEqual(jquery.VirtualPath);
 			dependencies[1].ShouldEqual(jquerypluginA.VirtualPath);
 			dependencies[2].ShouldEqual(jquerypluginB.VirtualPath);
+		}
+
+		[Test]
+		public void WhenDependencyIsDeclaredOnFileThatIsExternallyMinified_TheProperVersionIsReturnedByGetDependencies()
+		{
+			SetupWithMode(ResourceMode.Release);
+			
+			var jquery = StubResource.WithPath("~/scripts/jquery.js");
+			var jqueryMin = StubResource.WithPath("~/scripts/jquery.min.js");
+			var component = StubResource.WithPath("~/scripts/mycomponent.js");
+
+			_resourceFinder.AddResources(component, jquery, jqueryMin);
+
+			SetDependencies(component, jquery.VirtualPath);
+
+			var dependencies = _dependencyManager.GetDependencies(component.VirtualPath).ToList();
+			dependencies[0].ShouldEqual(jqueryMin.VirtualPath);
 		}
 
 		private void VerifyDependenciesAreCached(string resourcePath, params string[] expectedDependencies)

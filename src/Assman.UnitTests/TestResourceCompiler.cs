@@ -119,6 +119,7 @@ namespace Assman
             var dependencyLeaf2 = _context.CreateResource("~/dependency-leaf2.js").Resource;
             var dependencyRoot3 = _context.CreateResource("~/dependency-root3.js").Resource;
             var dependencyRoot1 = _context.CreateResource("~/dependency-root1.js").Resource;
+            var dependencyRoot1Minified = _context.CreateResource("~/dependency-root1.min.js").Resource;
             var dependencyBranch1 = _context.CreateResource("~/dependency-branch1.js").Resource;
             var dependencyLeaf5 = _context.CreateResource("~/dependency-leaf5.js").Resource;
             var dependencyRoot2 = _context.CreateResource("~/dependency-root2.js").Resource;
@@ -131,7 +132,7 @@ namespace Assman
             {
                 dependencyLeaf1,
                 dependencyLeaf2,
-                dependencyRoot1,
+                dependencyRoot1Minified,
                 dependencyRoot2,
                 dependencyBranch1,
                 dependencyLeaf3,
@@ -154,7 +155,7 @@ namespace Assman
 
             var consolidatedResource = _compiler.CompileGroup(group);
             var resources = consolidatedResource.Resources.ToList();
-            resources[0].VirtualPath.ShouldEqual(dependencyRoot1.VirtualPath);
+            resources[0].VirtualPath.ShouldEqual(dependencyRoot1Minified.VirtualPath);
             resources[1].VirtualPath.ShouldEqual(dependencyRoot2.VirtualPath);
             resources[2].VirtualPath.ShouldEqual(dependencyRoot3.VirtualPath);
             resources[3].VirtualPath.ShouldEqual(dependencyBranch1.VirtualPath);

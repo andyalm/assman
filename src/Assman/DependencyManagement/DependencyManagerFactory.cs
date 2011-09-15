@@ -7,9 +7,9 @@ namespace Assman.DependencyManagement
 	{
 		private static readonly IDependencyCache _dependencyCache = CreateDependencyCache();
 
-		public static DependencyManager GetDependencyManager(IResourceFinder finder, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups)
+		public static DependencyManager GetDependencyManager(IResourceFinder finder, IResourceGroupManager scriptGroups, IResourceGroupManager styleGroups, ResourceMode resourceMode)
 		{
-			return new DependencyManager(finder, _dependencyCache, scriptGroups, styleGroups);
+			return new DependencyManager(finder, _dependencyCache, scriptGroups, styleGroups, resourceMode);
 		}
 
 		private static IDependencyCache CreateDependencyCache()
@@ -24,9 +24,9 @@ namespace Assman.DependencyManagement
 			}
 		}
 
-        public static void ClearDependencyCache()
-        {
-            _dependencyCache.Clear();
-        }
+		public static void ClearDependencyCache()
+		{
+			_dependencyCache.Clear();
+		}
 	}
 }

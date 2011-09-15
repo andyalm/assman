@@ -24,7 +24,7 @@ namespace Assman.TestSupport
 		    _styleGroups = new ResourceGroupManager(Mode);
 		    _dependencyCache = new InMemoryDependencyCache();
 		    _dependencyProvider = new StubDependencyProvider();
-		    _dependencyManager = new DependencyManager(_finder, _dependencyCache, _scriptGroups, _styleGroups);
+		    _dependencyManager = new DependencyManager(_finder, _dependencyCache, _scriptGroups, _styleGroups, resourceMode);
 		    _dependencyManager.MapProvider(".js", _dependencyProvider);
 		    _dependencyManager.MapProvider(".css", _dependencyProvider);
 		}
