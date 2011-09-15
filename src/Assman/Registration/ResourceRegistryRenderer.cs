@@ -93,7 +93,7 @@ namespace Assman.Registration
 		{
 			public void WriteIncludeTag(TextWriter writer, string url)
 			{
-				writer.Write("<link rel=\"Stylesheet\" type=\"text/css\" href=\"{0}\"></link>", url);
+				writer.Write("<link rel=\"Stylesheet\" type=\"text/css\" href=\"{0}\" />", url);
 			}
 
 			public void WriteBeginBlock(TextWriter writer)
