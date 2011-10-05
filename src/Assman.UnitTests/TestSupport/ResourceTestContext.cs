@@ -7,7 +7,8 @@ namespace Assman.TestSupport
 {
 	public class ResourceTestContext
 	{
-		private readonly StubResourceFinder _finder;
+		private readonly StubResourceFinder _innerFinder;
+		private readonly IResourceFinder _outerFinder;
 		private readonly ContentFilterPipelineMap _contentFilterPipelineMap;
 		private readonly InMemoryDependencyCache _dependencyCache;
 		private readonly StubDependencyProvider _dependencyProvider;
@@ -18,13 +19,14 @@ namespace Assman.TestSupport
 		public ResourceTestContext(ResourceMode resourceMode = ResourceMode.Debug)
 		{
 			Mode = resourceMode;
-			_finder = new StubResourceFinder();
+			_innerFinder = new StubResourceFinder();
+			_outerFinder = new ResourceModeFilteringFinder(resourceMode, _innerFinder);
 			_contentFilterPipelineMap = new ContentFilterPipelineMap();
 			_scriptGroups = new ResourceGroupManager(Mode);
 			_styleGroups = new ResourceGroupManager(Mode);
 			_dependencyCache = new InMemoryDependencyCache();
 			_dependencyProvider = new StubDependencyProvider();
-			_dependencyManager = new DependencyManager(_finder, _dependencyCache, _scriptGroups, _styleGroups, resourceMode);
+			_dependencyManager = new DependencyManager(_outerFinder, _dependencyCache, _scriptGroups, _styleGroups, resourceMode);
 			_dependencyManager.MapProvider(".js", _dependencyProvider);
 			_dependencyManager.MapProvider(".css", _dependencyProvider);
 		}
@@ -38,13 +40,13 @@ namespace Assman.TestSupport
 
 		public ResourceCompiler GetConsolidator()
 		{
-			return new ResourceCompiler(_contentFilterPipelineMap, _dependencyManager, _scriptGroups, _styleGroups, _finder, Mode);
+			return new ResourceCompiler(_contentFilterPipelineMap, _dependencyManager, _scriptGroups, _styleGroups, _outerFinder, Mode);
 		}
 
 		public StubResourceBuilder CreateResource(string virtualPath)
 		{
 			var builder = new StubResourceBuilder(virtualPath, _dependencyProvider);
-			_finder.AddResource(builder.Resource);
+			_innerFinder.AddResource(builder.Resource);
 
 			return builder;
 		}

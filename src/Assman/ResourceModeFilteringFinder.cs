@@ -22,7 +22,7 @@ namespace Assman
 
             foreach (var resource in resources)
             {
-                var externallyCompiledPair = externallyCompiledPairs.SingleOrDefault(resource);
+                var externallyCompiledPair = externallyCompiledPairs.SingleOrDefault(resource.VirtualPath);
                 if(externallyCompiledPair == null)
                 {
                     yield return resource;

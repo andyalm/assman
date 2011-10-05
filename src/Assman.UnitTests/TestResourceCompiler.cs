@@ -132,7 +132,7 @@ namespace Assman
             {
                 dependencyLeaf1,
                 dependencyLeaf2,
-                dependencyRoot1Minified,
+                dependencyRoot1.ExternallyCompiledWith(dependencyRoot1Minified, ResourceMode.Release),
                 dependencyRoot2,
                 dependencyBranch1,
                 dependencyLeaf3,
@@ -155,7 +155,7 @@ namespace Assman
 
             var consolidatedResource = _compiler.CompileGroup(group);
             var resources = consolidatedResource.Resources.ToList();
-            resources[0].VirtualPath.ShouldEqual(dependencyRoot1Minified.VirtualPath);
+            resources[0].VirtualPath.ShouldEqual(dependencyRoot1.VirtualPath);
             resources[1].VirtualPath.ShouldEqual(dependencyRoot2.VirtualPath);
             resources[2].VirtualPath.ShouldEqual(dependencyRoot3.VirtualPath);
             resources[3].VirtualPath.ShouldEqual(dependencyBranch1.VirtualPath);
@@ -203,6 +203,7 @@ namespace Assman
 
             
             var unconsolidatedResource2 = _context.CreateResource("~/unconsolidated2.js").Resource;
+            var unconsolidatedResource1 = _context.CreateResource("~/unconsolidated1.js").Resource;
             var unconsolidatedMinifiedResource1 = _context.CreateResource("~/unconsolidated1.min.js").Resource;
 
             var unconsolidatedResourceCompilations = _compiler.CompileUnconsolidatedResources(ResourceType.Script, r => { }).ToList();

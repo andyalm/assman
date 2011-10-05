@@ -76,19 +76,17 @@ namespace Assman
 			var groupManager = GroupManagerFor(resourceType);
 
 			var unconsolidatedResources = (from resource in resources
-										   where !groupManager.IsPartOfGroup(resource.VirtualPath)
+										   where !resource.IsExternallyCompiled()
+												 && !groupManager.IsPartOfGroup(resource.VirtualPath)
 												 && CanCompileIndividually(resource)
 										   select resource).ToList();
 
 			var compiledResources = new List<ICompiledResource>();
 			foreach (var unconsolidatedResource in unconsolidatedResources)
 			{
-				if(!CompiledResourcePair.MatchesMode(unconsolidatedResource.VirtualPath, _resourceMode))
-				{
-					var compiledResource = CompileResource(unconsolidatedResource);
-					handleCompiledResource(compiledResource);
-					compiledResources.Add(compiledResource);
-				}	
+				var compiledResource = CompileResource(unconsolidatedResource);
+				handleCompiledResource(compiledResource);
+				compiledResources.Add(compiledResource);
 			}
 
 			return compiledResources;

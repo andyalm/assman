@@ -103,6 +103,7 @@
     <Compile Include="TestAssmanContext_PreConsolidation.cs" />
     <Compile Include="TestResourceType.cs" />
     <Compile Include="TestSupport\AssertionExtensions.cs" />
+    <Compile Include="TestSupport\ExternallyCompiledExtensions.cs" />
     <Compile Include="TestSupport\ResourceTestContext.cs" />
     <Compile Include="TestSupport\StubDependencyProvider.cs" />
     <Compile Include="TestSupport\StubFileAccess.cs" />

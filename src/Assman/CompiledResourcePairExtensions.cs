@@ -1,46 +1,25 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Assman
 {
     internal static class CompiledResourcePairExtensions
     {
-        public static IEnumerable<CompiledResourcePair> ExternallyCompiled(this IEnumerable<IResource> resources)
+        public static CompiledResourcePairCollection ExternallyCompiled(this IResource[] resources)
         {
-            return resources.CompiledPair(CompiledResourcePair.IsExternallyCompiledPair);
-        }
-
-        private static IEnumerable<CompiledResourcePair> CompiledPair(this IEnumerable<IResource> resources, Func<IResource,IResource,bool> isPairPredicate)
-        {
-            //prevent multiple enumerations over potentially slow enumerable
-            resources = resources.ToList();
-
-            return from resource1 in resources
+            return (from resource1 in resources
                    from resource2 in resources
-                   where isPairPredicate(resource1, resource2)
-                   select new CompiledResourcePair { DebugResource = resource2, ReleaseResource = resource1 };
-        } 
-
-        public static IResource WithMode(this IResource resource, ResourceMode mode, IEnumerable<CompiledResourcePair> resources)
-        {
-            var compiledResourcePair = resources.SingleOrDefault(resource);
-            if (compiledResourcePair != null)
-                return compiledResourcePair.WithMode(mode);
-            
-            return resource;
+                   where CompiledResourcePair.IsExternallyCompiledPair(resource1, resource2)
+                   select new CompiledResourcePair { DebugResource = resource2, ReleaseResource = resource1 })
+                   .ToResourcePairCollection();
         }
 
-        public static IEnumerable<string> WithMode(this IEnumerable<string> resourcePaths, ResourceMode mode, IEnumerable<CompiledResourcePair> externallyCompiledResources)
+        public static bool IsExternallyCompiled(this IResource resource)
         {
-            return resourcePaths.Select(path =>
-            {
-                var compiledResourcePair = externallyCompiledResources.SingleOrDefault(path);
-                if (compiledResourcePair != null)
-                    return compiledResourcePair.WithMode(mode).VirtualPath;
-                else
-                    return path;
-            });
+            return resource is ExternallyCompiledResource;
         }
 
         public static CompiledResourcePair SingleOrDefault(this IEnumerable<CompiledResourcePair> resources, IResource resource)
@@ -48,17 +27,48 @@ namespace Assman
             return resources.SingleOrDefault(r => r.Matches(resource));
         }
 
-        public static CompiledResourcePair SingleOrDefault(this IEnumerable<CompiledResourcePair> resources, string virtualPath)
+        internal static CompiledResourcePairCollection ToResourcePairCollection(this IEnumerable<CompiledResourcePair> pairs)
         {
-            return resources.SingleOrDefault(r => r.Matches(virtualPath));
+            return new CompiledResourcePairCollection(pairs);
+        }
+    }
+
+    internal class CompiledResourcePairCollection : IEnumerable<CompiledResourcePair>
+    {
+        private readonly List<CompiledResourcePair> _pairs = new List<CompiledResourcePair>();
+        private readonly Dictionary<string,CompiledResourcePair> _debugIndex = new Dictionary<string, CompiledResourcePair>(Comparers.VirtualPath); 
+        private readonly Dictionary<string,CompiledResourcePair> _releaseIndex = new Dictionary<string, CompiledResourcePair>(Comparers.VirtualPath);
+
+        public CompiledResourcePairCollection(IEnumerable<CompiledResourcePair> pairs)
+        {
+            foreach (var pair in pairs)
+            {
+                _pairs.Add(pair);
+                _debugIndex.Add(pair.DebugResource.VirtualPath, pair);
+                _releaseIndex.Add(pair.ReleaseResource.VirtualPath, pair);
+            }
         }
 
-        public static IEnumerable<IResource> WithMode(this IEnumerable<CompiledResourcePair> compiledResourcePair, ResourceMode mode)
+        public CompiledResourcePair SingleOrDefault(string virtualPath)
         {
-            if (mode == ResourceMode.Debug)
-                return compiledResourcePair.Select(r => r.DebugResource);
-            else
-                return compiledResourcePair.Select(r => r.ReleaseResource);
+            CompiledResourcePair value;
+
+            if (_debugIndex.TryGetValue(virtualPath, out value))
+                return value;
+            if (_releaseIndex.TryGetValue(virtualPath, out value))
+                return value;
+
+            return null;
+        }
+        
+        public IEnumerator<CompiledResourcePair> GetEnumerator()
+        {
+            return _pairs.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
