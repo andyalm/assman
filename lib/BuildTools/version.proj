@@ -19,9 +19,14 @@
         [assembly: AssemblyTrademark("""")]
         [assembly: ComVisible(false)]
         [assembly: AssemblyVersion(""2.0.0.0"")]
-        [assembly: AssemblyFileVersion(""{Version}.0"")]
+        [assembly: AssemblyFileVersion(""{Version}"")]
         ";
 
+        var versionParts = Version.Split('.');
+        for(int i = versionParts.Length; i &lt;= 3; i++)
+        {
+          Version += ".0";          
+        }
         AssemblyInfoContent = assemblyInfoTemplate.Replace("{Version}", Version);
       </Code>
     </Task>
