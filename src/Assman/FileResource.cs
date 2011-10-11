@@ -11,6 +11,7 @@ namespace Assman
 		private FileInfo _fileInfo;
 		private readonly string _filePath;
 		private readonly string _basePath;
+		private string _virtualPath;
 
 		/// <summary>
 		/// Creates a new instance of a <see cref="FileResource"/>.
@@ -38,9 +39,13 @@ namespace Assman
 		{
 			get
 			{
-				var virtualPath = _filePath.Replace(_basePath, "~/", Comparisons.VirtualPath);
-				virtualPath = virtualPath.Replace(@"\", "/");
-				return virtualPath;
+				if(_virtualPath == null)
+				{
+					var virtualPath = _filePath.Replace(_basePath, "~/", Comparisons.VirtualPath);
+					_virtualPath = virtualPath.Replace(@"\", "/");
+				}
+
+				return _virtualPath;
 			}
 		}
 
