@@ -71,7 +71,7 @@ namespace Assman
 
 		public IEnumerable<ICompiledResource> CompileUnconsolidatedResources(ResourceType resourceType, Action<ICompiledResource> handleCompiledResource)
 		{
-			var resources = _finder.FindResources(resourceType).ToList();
+			var resources = _finder.FindResources(resourceType).ToArray();
 			
 			var groupManager = GroupManagerFor(resourceType);
 
@@ -142,7 +142,7 @@ namespace Assman
 			if (!groupTemplates.Any())
 				return Enumerable.Empty<PreCompiledResourceGroup>();
 
-			var allResources = _finder.FindResources(resourceType);
+			var allResources = _finder.FindResources(resourceType).ToArray();
 
 			var preConsolidatedGroups = new List<PreCompiledResourceGroup>();
 			groupTemplates.EachGroup(allResources, group =>
@@ -163,7 +163,8 @@ namespace Assman
 		private IEnumerable<PreCompiledResourceDependencies> GetAllDependencies()
 		{
 			var allResources = _finder.FindResources(ResourceType.Script)
-				.Union(_finder.FindResources(ResourceType.Stylesheet));
+				.Union(_finder.FindResources(ResourceType.Stylesheet))
+				.ToArray();
 
 			//we must gather the dependencies for the consolidated url's before we gather them for specific url's
 			//because the consolidated url's could actually exist on disk if pre-consolidation was run before.

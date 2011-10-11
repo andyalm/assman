@@ -23,7 +23,7 @@ namespace Assman
 
 		public IResourceGroup FindGroupOrDefault(IResourceFinder finder, string consolidatedUrl, ResourceMode mode)
 		{
-			var resources = finder.FindResources(GroupTemplate.ResourceType);
+			var resources = finder.FindResources(GroupTemplate.ResourceType).ToArray();
 
 			return FindGroupOrDefault(resources, consolidatedUrl, mode);
 		}
@@ -43,7 +43,7 @@ namespace Assman
 
 		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{
-			return GroupTemplate.GetGroups(allResources.Exclude(_excludeFilter), mode);
+			return GroupTemplate.GetGroups(allResources.Exclude(_excludeFilter).ToArray(), mode);
 		}
 	}
 
