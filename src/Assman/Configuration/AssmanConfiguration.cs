@@ -124,6 +124,16 @@ namespace Assman.Configuration
 		}
 
 		/// <summary>
+		/// Gets or sets whether the same file is allowed to be part of multiple groups or not.
+		/// </summary>
+		[ConfigurationProperty(PropertyNames.MutuallyExclusiveGroups, DefaultValue = true)]
+		public bool MutuallyExclusiveGroups
+		{
+			get { return (bool)this[PropertyNames.MutuallyExclusiveGroups]; }
+			set { this[PropertyNames.MutuallyExclusiveGroups] = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets the version number that will be appended to the end of all resource url's.
 		/// </summary>
 		[ConfigurationProperty(PropertyNames.Version)]
@@ -236,13 +246,14 @@ namespace Assman.Configuration
 
 		public AssmanContext BuildContext(ResourceMode resourceMode, IResourceFinder fileFinder, IPreCompiledReportPersister preCompiledPersister)
 		{
-		    var context = AssmanContext.Create(resourceMode);
+			var context = AssmanContext.Create(resourceMode);
 
 			context.ConfigurationLastModified = LastModified(PathResolver);
 			context.ConsolidateScripts = Consolidate.IsTrue(resourceMode) && Scripts.Consolidate.IsTrue(resourceMode);
 			context.ConsolidateStylesheets = Consolidate.IsTrue(resourceMode) && Stylesheets.Consolidate.IsTrue(resourceMode);
 			context.GZip = GZip.IsTrue(resourceMode);
 			context.ManageDependencies = ManageDependencies;
+			context.MutuallyExclusiveGroups = MutuallyExclusiveGroups;
 			context.AddFinder(fileFinder);
 			context.AddAssemblies(Assemblies.GetAssemblies());
 			context.ScriptGroups.AddGlobalDependencies(Scripts.GlobalDependencies.Cast<GlobalDependenciesElement>().Select(e => e.Path));

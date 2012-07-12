@@ -16,6 +16,7 @@ namespace Assman.PreCompilation
 			_inner = inner;
 			PopulateResourceUrlMap(resourceReport);
 			Consolidate = true;
+		    MutuallyExclusiveGroups = inner.MutuallyExclusiveGroups;
 		}
 
 		public void Add(IResourceGroupTemplate template) {}
@@ -26,6 +27,8 @@ namespace Assman.PreCompilation
 		}
 
 		public bool Consolidate { get; set; }
+
+	    public bool MutuallyExclusiveGroups { get; set; }
 
 		public string ResolveResourceUrl(string resourceUrl)
 		{

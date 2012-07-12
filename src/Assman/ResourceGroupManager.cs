@@ -19,6 +19,9 @@ namespace Assman
 		{
 			_resourceMode = resourceMode;
 			Consolidate = true;
+			//TODO: Based on user feedback, this should probably be changed to false by default.  However, that would be a significant breaking change
+			//so it should wait until the next major release.
+			MutuallyExclusiveGroups = true;
 		}
 
 		public void Add(IResourceGroupTemplate template)
@@ -37,6 +40,8 @@ namespace Assman
 		}
 
 		public bool Consolidate { get; set; }
+
+		public bool MutuallyExclusiveGroups { get; set; }
 
 		//TODO: Look into simplifying this interface a little.  It seems like there is a tight relationship
 		//between ResolveResourceUrl, IsGroupUrlWithConsolidationDisabled, and GetResourceUrlsInGroup.
@@ -154,7 +159,8 @@ namespace Assman
 				if(!handler(templateContext))
 					break;
 
-				excludeFilter.AddFilter(groupTemplate);
+				if(MutuallyExclusiveGroups)
+					excludeFilter.AddFilter(groupTemplate);
 			}
 		}
 
@@ -204,6 +210,12 @@ namespace Assman
 			{
 				get { return _inner.Consolidate; }
 				set { _inner.Consolidate = value; }
+			}
+
+			public bool MutuallyExclusiveGroups
+			{
+				get { return _inner.MutuallyExclusiveGroups; }
+				set { _inner.MutuallyExclusiveGroups = value; }
 			}
 
 			public string ResolveResourceUrl(string resourceUrl)

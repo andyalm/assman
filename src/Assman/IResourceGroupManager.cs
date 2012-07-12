@@ -13,6 +13,8 @@ namespace Assman
 
 		bool Consolidate { get; set; }
 
+		bool MutuallyExclusiveGroups { get; set; }
+
 		string ResolveResourceUrl(string resourceUrl);
 
 		IEnumerable<string> GetResourceUrlsInGroup(string groupUrl, IResourceFinder finder);

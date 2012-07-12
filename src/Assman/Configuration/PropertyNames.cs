@@ -23,5 +23,6 @@ namespace Assman.Configuration
 		public const string Path = "path";
 		public const string Mode = "mode";
 	    public const string GlobalDependencies = "globalDependencies";
+	    public const string MutuallyExclusiveGroups = "mutuallyExclusiveGroups";
 	}
 }

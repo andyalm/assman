@@ -77,6 +77,16 @@ namespace Assman.Configuration
 
         public bool ManageDependencies { get; set; }
 
+        public bool MutuallyExclusiveGroups
+        {
+            get { return _scriptGroups.MutuallyExclusiveGroups && _styleGroups.MutuallyExclusiveGroups; }
+            set
+            {
+                _scriptGroups.MutuallyExclusiveGroups = value;
+                _styleGroups.MutuallyExclusiveGroups = value;
+            }
+        }
+
         public string Version { get; set; }
 
         public void MapExtensionToContentPipeline(string fileExtension, ContentFilterPipeline filterPipeline)
