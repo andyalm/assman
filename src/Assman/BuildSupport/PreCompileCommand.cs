@@ -93,8 +93,8 @@ namespace Assman.BuildSupport
 		private void ConsolidateAll(AssmanConfiguration configSection)
 		{
 			var context = configSection.BuildContext(Mode, usePreCompilationReportIfPresent: false);
-			var consolidator = context.GetConsolidator();
-			var report = consolidator.CompileAll(WriteCompiledResource);
+			var compiler = context.GetCompiler();
+			var report = compiler.CompileAll(WriteCompiledResource);
 			report.Version = this.Version ?? DateTime.Now.ToString("yyMMddHHmm");
 			configSection.SavePreConsolidationReport(report);
 		}

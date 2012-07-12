@@ -50,7 +50,7 @@ namespace Assman.Handlers
             var groupTemplate = _assmanContext.FindGroupTemplate(appRelativePathToResource);
             if (groupTemplate != null)
             {
-                return new DynamicallyConsolidatedResourceHandler(appRelativePathToResource, _assmanContext.GetConsolidator(),
+                return new DynamicallyConsolidatedResourceHandler(appRelativePathToResource, _assmanContext.GetCompiler(),
                                                        groupTemplate)
                 {
                     MinLastModified = _assmanContext.ConfigurationLastModified,

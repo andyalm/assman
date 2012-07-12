@@ -42,7 +42,7 @@ namespace Assman.Handlers
             var configContext = new AssmanContext(ResourceMode.Debug);
             configContext.AddFinder(_finder.Object);
 
-            _instance = new DynamicallyConsolidatedResourceHandler(VirtualPath, configContext.GetConsolidator(), groupTemplate.WithEmptyContext())
+            _instance = new DynamicallyConsolidatedResourceHandler(VirtualPath, configContext.GetCompiler(), groupTemplate.WithEmptyContext())
             {
                 Now = () => _now
             };

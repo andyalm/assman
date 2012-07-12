@@ -51,8 +51,8 @@ namespace Assman
 			var group2Template = new StubResourceGroupTemplate(group2) { ResourceType = ResourceType.Script };
 			_context.ScriptGroups.Add(group1Template);
 			_context.ScriptGroups.Add(group2Template);
-			var consolidator = _context.GetConsolidator();
-			var preConsolidationReport = consolidator.CompileAll((resource) => { });
+			var compiler = _context.GetCompiler();
+			var preConsolidationReport = compiler.CompileAll((resource) => { });
 
 			var group2Consolidated = preConsolidationReport.Scripts.Groups.Where(g => g.ConsolidatedUrl == "~/scripts/everything-else.js").Single();
 
