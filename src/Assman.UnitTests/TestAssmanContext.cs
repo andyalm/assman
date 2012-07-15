@@ -54,80 +54,80 @@ namespace Assman
 			_context.ScriptGroups.Add(group2Template);
 			var preConsolidationReport = CompileAll();
 
-		    var group2Consolidated = preConsolidationReport.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/everything-else.js");
+			var group2Consolidated = preConsolidationReport.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/everything-else.js");
 
 			group2Consolidated.Resources.CountShouldEqual(1);
 			group2Consolidated.Resources[0].ShouldEqual("~/scripts/otherscript.js");
 		}
 
-	    [Test]
-	    public void ResourceCanOnlyBeInOneGroupByDefault()
-	    {
-	        var jquery = StubResource.WithPath("~/scripts/jquery.js");
-	        var componentA = StubResource.WithPath("~/scripts/componentA.js");
-	        var componentB = StubResource.WithPath("~/scripts/componentB.js");
-	        var finder = new StubResourceFinder();
-            finder.AddResources(jquery, componentA, componentB);
-            _context.AddFinder(finder);
+		[Test]
+		public void ResourceCanOnlyBeInOneGroupByDefault()
+		{
+			var jquery = StubResource.WithPath("~/scripts/jquery.js");
+			var componentA = StubResource.WithPath("~/scripts/componentA.js");
+			var componentB = StubResource.WithPath("~/scripts/componentB.js");
+			var finder = new StubResourceFinder();
+			finder.AddResources(jquery, componentA, componentB);
+			_context.AddFinder(finder);
 
-	        var pageAGroup = new ResourceGroup("~/scripts/compiled/pageA.js", new[]
-	        {
-	            jquery,
-	            componentA
-	        });
-            _context.ScriptGroups.Add(new StubResourceGroupTemplate(pageAGroup) { ResourceType = ResourceType.Script });
-	        var pageBGroup = new ResourceGroup("~/scripts/compiled/pageB.js", new[]
-	        {
-	            jquery,
-	            componentB
-	        });
-            _context.ScriptGroups.Add(new StubResourceGroupTemplate(pageBGroup) { ResourceType = ResourceType.Script });
-	        var report = CompileAll();
+			var pageAGroup = new ResourceGroup("~/scripts/compiled/pageA.js", new[]
+			{
+				jquery,
+				componentA
+			});
+			_context.ScriptGroups.Add(new StubResourceGroupTemplate(pageAGroup) { ResourceType = ResourceType.Script });
+			var pageBGroup = new ResourceGroup("~/scripts/compiled/pageB.js", new[]
+			{
+				jquery,
+				componentB
+			});
+			_context.ScriptGroups.Add(new StubResourceGroupTemplate(pageBGroup) { ResourceType = ResourceType.Script });
+			var report = CompileAll();
 
-	        var pageAGroupReport = report.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/compiled/pageA.js");
-	        var pageBGroupReport = report.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/compiled/pageB.js");
+			var pageAGroupReport = report.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/compiled/pageA.js");
+			var pageBGroupReport = report.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/compiled/pageB.js");
 
-            pageAGroupReport.Resources.CountShouldEqual(2);
-            pageBGroupReport.Resources.CountShouldEqual(1);
-	    }
+			pageAGroupReport.Resources.CountShouldEqual(2);
+			pageBGroupReport.Resources.CountShouldEqual(1);
+		}
 
-        [Test]
-        public void ResourceCanBeInMultipleGroupsIfExplicitlyAllowed()
-        {
-            var jquery = StubResource.WithPath("~/scripts/jquery.js");
-            var componentA = StubResource.WithPath("~/scripts/componentA.js");
-            var componentB = StubResource.WithPath("~/scripts/componentB.js");
-            var finder = new StubResourceFinder();
-            finder.AddResources(jquery, componentA, componentB);
-            _context.AddFinder(finder);
-            _context.MutuallyExclusiveGroups = false;
+		[Test]
+		public void ResourceCanBeInMultipleGroupsIfExplicitlyAllowed()
+		{
+			var jquery = StubResource.WithPath("~/scripts/jquery.js");
+			var componentA = StubResource.WithPath("~/scripts/componentA.js");
+			var componentB = StubResource.WithPath("~/scripts/componentB.js");
+			var finder = new StubResourceFinder();
+			finder.AddResources(jquery, componentA, componentB);
+			_context.AddFinder(finder);
+			_context.MutuallyExclusiveGroups = false;
 
-            var pageAGroup = new ResourceGroup("~/scripts/compiled/pageA.js", new[]
-	        {
-	            jquery,
-	            componentA
-	        });
-            _context.ScriptGroups.Add(new StubResourceGroupTemplate(pageAGroup) { ResourceType = ResourceType.Script });
-            var pageBGroup = new ResourceGroup("~/scripts/compiled/pageB.js", new[]
-	        {
-	            jquery,
-	            componentB
-	        });
-            _context.ScriptGroups.Add(new StubResourceGroupTemplate(pageBGroup) { ResourceType = ResourceType.Script });
-            var report = CompileAll();
+			var pageAGroup = new ResourceGroup("~/scripts/compiled/pageA.js", new[]
+			{
+				jquery,
+				componentA
+			});
+			_context.ScriptGroups.Add(new StubResourceGroupTemplate(pageAGroup) { ResourceType = ResourceType.Script });
+			var pageBGroup = new ResourceGroup("~/scripts/compiled/pageB.js", new[]
+			{
+				jquery,
+				componentB
+			});
+			_context.ScriptGroups.Add(new StubResourceGroupTemplate(pageBGroup) { ResourceType = ResourceType.Script });
+			var report = CompileAll();
 
-            var pageAGroupReport = report.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/compiled/pageA.js");
-            var pageBGroupReport = report.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/compiled/pageB.js");
+			var pageAGroupReport = report.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/compiled/pageA.js");
+			var pageBGroupReport = report.Scripts.Groups.Single(g => g.ConsolidatedUrl == "~/scripts/compiled/pageB.js");
 
-            pageAGroupReport.Resources.CountShouldEqual(2);
-            pageBGroupReport.Resources.CountShouldEqual(2);
-        }
+			pageAGroupReport.Resources.CountShouldEqual(2);
+			pageBGroupReport.Resources.CountShouldEqual(2);
+		}
 
-	    private PreCompilationReport CompileAll()
-	    {
-	        var compiler = _context.GetCompiler();
-	        var preConsolidationReport = compiler.CompileAll((resource) => { });
-	        return preConsolidationReport;
-	    }
+		private PreCompilationReport CompileAll()
+		{
+			var compiler = _context.GetCompiler();
+			var preConsolidationReport = compiler.CompileAll((resource) => { });
+			return preConsolidationReport;
+		}
 	}
 }
