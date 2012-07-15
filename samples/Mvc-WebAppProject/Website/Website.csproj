@@ -97,7 +97,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <None Include="Content\Unconsolidated\TestHelper.less" />
-    <None Include="Views\Home\Index.spark" />
+    <None Include="Views\Home\Index.spark">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Views\IntegrationTests\Index.spark">
       <SubType>Designer</SubType>
     </None>

@@ -103,7 +103,7 @@ namespace Assman
 
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
-			var resolvedUrl = _context.GetScriptUrls("~/scripts/myscript.js").Single();
+			var resolvedUrl = _context.ScriptPathResolver.GetMatchingGroupUrls("~/scripts/myscript.js").Single();
 			resolvedUrl.ShouldEqual("~/scripts/consolidated/common.js");
 			
 			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)
@@ -130,7 +130,7 @@ namespace Assman
 
 			_context.LoadPreCompilationReport(preConsolidationReport);
 
-			var resolvedUrl = _context.GetScriptUrls("~/scripts/consolidated/common.js").Single();
+			var resolvedUrl = _context.ScriptPathResolver.GetMatchingGroupUrls("~/scripts/consolidated/common.js").Single();
 			resolvedUrl.ShouldEqual("~/scripts/consolidated/common.js");
 
 			//verify that the group template was not looked at (that proves the value came from the prepopulated cache)
@@ -138,29 +138,29 @@ namespace Assman
 			groupTemplate.Verify(t => t.TryGetConsolidatedUrl(It.IsAny<string>(), It.IsAny<ResourceMode>(), out consolidatedUrl), Times.Never());
 		}
 
-        [Test]
-        public void AfterPreConsolidatedReportIsLoaded_WhenUrlForFileThatDoesNotExistButWhosePatternMatchesGroup_ItResolvesToGroupUrl()
-        {
-            var group = new ScriptGroupElement();
-            group.ConsolidatedUrl = "~/scripts/consolidated/common.js";
-            group.Include.AddPattern("~/scripts/.+");
-            _context.ScriptGroups.Add(group);
+		[Test]
+		public void AfterPreConsolidatedReportIsLoaded_WhenUrlForFileThatDoesNotExistButWhosePatternMatchesGroup_ItsGroupUrlCanStillBeResolved()
+		{
+			var group = new ScriptGroupElement();
+			group.ConsolidatedUrl = "~/scripts/consolidated/common.js";
+			group.Include.AddPattern("~/scripts/.+");
+			_context.ScriptGroups.Add(group);
 
-            var preConsolidationReport = new PreCompilationReport();
-            var scriptGroup = new PreCompiledResourceGroup
-            {
-                ConsolidatedUrl = "~/scripts/consolidated/common.js",
-                Resources = new List<string>
+			var preConsolidationReport = new PreCompilationReport();
+			var scriptGroup = new PreCompiledResourceGroup
+			{
+				ConsolidatedUrl = "~/scripts/consolidated/common.js",
+				Resources = new List<string>
 				{
 					 "~/scripts/myscript.js"
 				}
-            };
-            preConsolidationReport.Scripts.Groups.Add(scriptGroup);
+			};
+			preConsolidationReport.Scripts.Groups.Add(scriptGroup);
 
-            _context.LoadPreCompilationReport(preConsolidationReport);
+			_context.LoadPreCompilationReport(preConsolidationReport);
 
-            var resolvedUrl = _context.GetScriptUrls("~/scripts/bogusscript.js").Single();
-            resolvedUrl.ShouldEqual("~/scripts/consolidated/common.js");
-        }
+			var resolvedUrl = _context.ScriptPathResolver.GetMatchingGroupUrls("~/scripts/bogusscript.js").Single();
+			resolvedUrl.ShouldEqual("~/scripts/consolidated/common.js");
+		}
 	}
 }

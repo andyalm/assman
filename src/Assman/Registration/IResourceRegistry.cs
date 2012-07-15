@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Assman.Registration
@@ -9,15 +8,7 @@ namespace Assman.Registration
 	/// </summary>
 	public interface IResourceRegistry
 	{
-		/// <summary>
-		/// Tries to resolve the given path into a true virtual file path.
-		/// </summary>
-		/// <param name="resourcePath"></param>
-		/// <param name="resolvedResourcePaths"></param>
-		/// <returns></returns>
-        bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths);
-
-		/// <summary>
+	    /// <summary>
 		/// Registers the fact that the given resource is required on the current page.
 		/// </summary>
 		/// <param name="resourcePath">The virtual path of the resource to be included.</param>

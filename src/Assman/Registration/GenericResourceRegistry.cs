@@ -9,13 +9,7 @@ namespace Assman.Registration
 		private readonly HashSet<string> _includes = new HashSet<string>(Comparers.VirtualPath);
 		private readonly Dictionary<object, Action<TextWriter>> _inlineBlocks = new Dictionary<object, Action<TextWriter>>();
 
-		public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
-		{
-			resolvedResourcePaths = new[] {resourcePath};
-			return true;
-		}
-
-		public IEnumerable<string> GetIncludes()
+	    public IEnumerable<string> GetIncludes()
 		{
 			return _includes;
 		}

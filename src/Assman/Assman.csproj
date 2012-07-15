@@ -90,6 +90,8 @@
     <Compile Include="BuildSupport\NullLogger.cs" />
     <Compile Include="CachingResourceFinder.cs" />
     <Compile Include="Comparers.cs" />
+    <Compile Include="IResourceVersioningStrategy.cs" />
+    <Compile Include="Registration\ResourceRequirement.cs" />
     <Compile Include="ResourceModeCondition.cs" />
     <Compile Include="ConsolidatedResourceExcluder.cs" />
     <Compile Include="ContentFiltering\ContentFilterContext.cs" />
@@ -195,6 +197,7 @@
     <Compile Include="Handlers\ResourceHttpHandlerFactory.cs" />
     <Compile Include="ResourceMode.cs" />
     <Compile Include="ResourceModeFilteringFinder.cs" />
+    <Compile Include="ResourceUrlResolver.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="ThreadSafeInMemoryCache.cs" />
     <Compile Include="EmbeddedResource.cs" />

@@ -48,25 +48,36 @@ namespace Assman
 		//in the spirit of tell, don't ask, it seems like we may be able to hide more of these details behind a
 		//simpler interface.
 
-		public string ResolveResourceUrl(string resourceUrl)
-		{
-			if (!Consolidate)
-				return resourceUrl;
+		//TODO: kill this method, it doesn't make sense if a file can be in more than one group
+//		public string ResolveResourceUrl(string resourceUrl)
+//		{
+//			if (!Consolidate)
+//				return resourceUrl;
+//
+//			var groupTemplateByConsolidatedUrl = GetGroupTemplateOrDefault(consolidatedUrl : resourceUrl);
+//			if (groupTemplateByConsolidatedUrl != null)
+//				return resourceUrl;
+//			
+//			foreach (var groupTemplate in _templates)
+//			{
+//				string consolidatedUrl;
+//				if (groupTemplate.TryGetConsolidatedUrl(resourceUrl, _resourceMode, out consolidatedUrl))
+//				{
+//					return consolidatedUrl;
+//				}
+//			}
+//
+//			return resourceUrl;
+//		}
 
-			var groupTemplateByConsolidatedUrl = GetGroupTemplateOrDefault(consolidatedUrl : resourceUrl);
-			if (groupTemplateByConsolidatedUrl != null)
-				return resourceUrl;
-			
+		public IEnumerable<string> GetMatchingConsolidatedUrls(string resourceUrl)
+		{
 			foreach (var groupTemplate in _templates)
 			{
 				string consolidatedUrl;
 				if (groupTemplate.TryGetConsolidatedUrl(resourceUrl, _resourceMode, out consolidatedUrl))
-				{
-					return consolidatedUrl;
-				}
+					yield return consolidatedUrl;
 			}
-
-			return resourceUrl;
 		}
 
 		public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
@@ -117,7 +128,7 @@ namespace Assman
 				return null;
 
 			return group;
-		}
+		} 
 
 		public void EachGroup(IEnumerable<IResource> allResources, Action<IResourceGroup> handler)
 		{
@@ -183,7 +194,6 @@ namespace Assman
 		{
 			private readonly IResourceGroupManager _inner;
 			private readonly IResourceCache _resourceCache;
-			private readonly ThreadSafeInMemoryCache<string, string> _resolvedResourceUrls = new ThreadSafeInMemoryCache<string, string>(Comparers.VirtualPath);
 
 			public CachingResourceGroupManager(IResourceGroupManager inner, IResourceCache resourceCache)
 			{
@@ -216,11 +226,6 @@ namespace Assman
 			{
 				get { return _inner.MutuallyExclusiveGroups; }
 				set { _inner.MutuallyExclusiveGroups = value; }
-			}
-
-			public string ResolveResourceUrl(string resourceUrl)
-			{
-				return _resolvedResourceUrls.GetOrAdd(resourceUrl, () => _inner.ResolveResourceUrl(resourceUrl));
 			}
 
 			public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
@@ -275,6 +280,12 @@ namespace Assman
 			public void AddGlobalDependencies(IEnumerable<string> paths)
 			{
 				_inner.AddGlobalDependencies(paths);
+			}
+
+			public IEnumerable<string> GetMatchingConsolidatedUrls(string resourceUrl)
+			{
+				//TODO: Do some perf testing here to see if it should be cached
+				return _inner.GetMatchingConsolidatedUrls(resourceUrl);
 			}
 		}
 	}

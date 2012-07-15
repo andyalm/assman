@@ -7,8 +7,7 @@ namespace Assman.PreCompilation
 	public class PreCompiledGroupManager : IResourceGroupManager
 	{
 		private readonly IResourceGroupManager _inner;
-		private readonly IDictionary<string,string> _resourceUrlMap = new Dictionary<string, string>(Comparers.VirtualPath);
-		private readonly IThreadSafeInMemoryCache<string,string> _unconsolidatedResourceUrlMap = new ThreadSafeInMemoryCache<string, string>(Comparers.VirtualPath); 
+		private readonly IDictionary<string,List<string>> _unconsolidatedUrlMap = new Dictionary<string, List<string>>(Comparers.VirtualPath);
 		private readonly IDictionary<string, IEnumerable<string>> _consolidatedUrlMap = new Dictionary<string,IEnumerable<string>>(Comparers.VirtualPath);
 
 		public PreCompiledGroupManager(PreCompiledResourceReport resourceReport, IResourceGroupManager inner)
@@ -16,7 +15,7 @@ namespace Assman.PreCompilation
 			_inner = inner;
 			PopulateResourceUrlMap(resourceReport);
 			Consolidate = true;
-		    MutuallyExclusiveGroups = inner.MutuallyExclusiveGroups;
+			MutuallyExclusiveGroups = inner.MutuallyExclusiveGroups;
 		}
 
 		public void Add(IResourceGroupTemplate template) {}
@@ -28,20 +27,7 @@ namespace Assman.PreCompilation
 
 		public bool Consolidate { get; set; }
 
-	    public bool MutuallyExclusiveGroups { get; set; }
-
-		public string ResolveResourceUrl(string resourceUrl)
-		{
-			string resolvedPath;
-			if (_resourceUrlMap.TryGetValue(resourceUrl, out resolvedPath))
-				return resolvedPath;
-			
-			//if the url was not in the prepopulated resource url map, then it is still possible that it matches a pattern
-			//of a group.  Thus, we need to check the inner group manager.  This is an edge case that should really only happen
-			//if you are trying to include a resource path that does not actually exist.  However, we need to handle it
-			//because otherwise things will work differently when running in a precompiled state, and that would not be good.
-			return _unconsolidatedResourceUrlMap.GetOrAdd(resourceUrl, () => _inner.ResolveResourceUrl(resourceUrl));
-		}
+		public bool MutuallyExclusiveGroups { get; set; }
 
 		public bool IsGroupUrlWithConsolidationDisabled(string resourceUrl)
 		{
@@ -62,6 +48,25 @@ namespace Assman.PreCompilation
 			return _consolidatedUrlMap.ContainsKey(virtualPath);
 		}
 
+		public IEnumerable<string> GetMatchingConsolidatedUrls(string resourceUrl)
+		{
+			List<string> consolidatedUrls;
+			if (_unconsolidatedUrlMap.TryGetValue(resourceUrl, out consolidatedUrls))
+			{
+				return consolidatedUrls;
+			}
+			else
+			{
+				//if the url was not in the prepopulated resource url map, then it is still possible that it matches a pattern
+				//of a group.  Thus, we need to check the inner group manager.  This is an edge case that should really only happen
+				//if you are trying to include a resource path that does not actually exist.  However, we need to handle it
+				//because otherwise things will work differently when running in a precompiled state, and that would not be good.
+				consolidatedUrls = _inner.GetMatchingConsolidatedUrls(resourceUrl).ToList();
+				_unconsolidatedUrlMap[resourceUrl] = consolidatedUrls;
+				return consolidatedUrls;
+			}
+		}
+
 		public GroupTemplateContext GetGroupTemplateOrDefault(string consolidatedUrl)
 		{
 			throw NotSupported();
@@ -79,7 +84,7 @@ namespace Assman.PreCompilation
 
 		public bool IsPartOfGroup(string virtualPath)
 		{
-			throw new NotImplementedException();
+			throw NotSupported();
 		}
 
 		public IEnumerable<string> GetGlobalDependencies()
@@ -103,11 +108,18 @@ namespace Assman.PreCompilation
 								 from resourcePath in @group.Resources
 								 select new KeyValuePair<string, string>(resourcePath, @group.ConsolidatedUrl);
 
-			_resourceUrlMap.AddRange(resourceUrlMap);
+			foreach (var map in resourceUrlMap)
+			{
+				List<string> consolidatedUrls;
+				if(_unconsolidatedUrlMap.TryGetValue(map.Key, out consolidatedUrls))
+					consolidatedUrls.Add(map.Value);
+				else
+					_unconsolidatedUrlMap.Add(map.Key, new List<string> { map.Value });
+			}
 
 			foreach (var @group in resourceReport.Groups)
 			{
-				_resourceUrlMap.Add(@group.ConsolidatedUrl, @group.ConsolidatedUrl);
+				_unconsolidatedUrlMap.Add(@group.ConsolidatedUrl, new List<string> { @group.ConsolidatedUrl});
 				_consolidatedUrlMap.Add(@group.ConsolidatedUrl, @group.Resources);
 			}
 		}

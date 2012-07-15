@@ -84,7 +84,6 @@
     <Compile Include="TestCssDependencyProvider.cs" />
     <Compile Include="TestCssRelativePathFilter.cs" />
     <Compile Include="TestHttpDependencyCache.cs" />
-    <Compile Include="Registration\TestConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\TestConsolidatingResourceRegistryAccessor.cs" />
     <Compile Include="Registration\TestGenericResourceRegistryAccessor.cs" />
     <Compile Include="TestCompositeResourceFinder.cs" />
@@ -99,7 +98,7 @@
     <Compile Include="TestResourceCompiler.cs" />
     <Compile Include="Handlers\TestResourceHttpHandlerFactory.cs" />
     <Compile Include="TestAssmanContext.cs" />
-    <Compile Include="TestAssmanContext_GetResourceUrl.cs" />
+    <Compile Include="Registration\TestConsolidatingResourceRegistry.cs" />
     <Compile Include="TestAssmanContext_PreConsolidation.cs" />
     <Compile Include="TestResourceType.cs" />
     <Compile Include="TestSupport\AssertionExtensions.cs" />

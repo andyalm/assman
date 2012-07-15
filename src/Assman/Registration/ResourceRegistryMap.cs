@@ -9,9 +9,9 @@ namespace Assman.Registration
 	{
 		private readonly IDictionary<string, IResourceRegistry> _registries = new Dictionary<string, IResourceRegistry>(Comparers.RegistryNames);
 		private readonly IDictionary<string, string> _includeOwnerMap = new Dictionary<string, string>(Comparers.VirtualPath);
-		private readonly Func<IResourceRegistry> _createRegistry;
+		private readonly Func<string,IResourceRegistry> _createRegistry;
 
-		public ResourceRegistryMap(Func<IResourceRegistry> createRegistry)
+		public ResourceRegistryMap(Func<string,IResourceRegistry> createRegistry)
 		{
 			_createRegistry = createRegistry;
 		}
@@ -27,7 +27,7 @@ namespace Assman.Registration
 			if (_registries.TryGetValue(name, out registry))
 				return registry;
 
-			registry = _createRegistry();
+			registry = _createRegistry(name);
 			_registries[name] = registry;
 
 			return registry;

@@ -59,7 +59,7 @@ namespace Assman.WebForms.Registration
 			return new NotSupportedException("The WebForms implementations of IResourceRegistry write to the ScriptManager and/or ClientScriptManager, which take care of rendering the scripts themselves.  Thus methods of the IResourceRegistryAccessor that read includes and script blocks are not supported in this scenario.");
 		}
 
-		private IResourceRegistry CreateScriptRegistry()
+		private IResourceRegistry CreateScriptRegistry(string registryName)
 		{
 			ScriptManager scriptManager = ScriptManager.GetCurrent(_control.Page);
 			if (scriptManager == null)
@@ -72,7 +72,7 @@ namespace Assman.WebForms.Registration
 			}
 		}
 
-		private IResourceRegistry CreateStyleRegistry()
+		private IResourceRegistry CreateStyleRegistry(string registryName)
 		{
 			return new WebFormsStyleRegistry(_control);
 		}

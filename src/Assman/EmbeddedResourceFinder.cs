@@ -24,7 +24,7 @@ namespace Assman
 		public IResource FindResource(string virtualPath)
 		{
 			//TODO: Unit test this method
-			if(!virtualPath.StartsWith("assembly://"))
+			if(!EmbeddedResource.IsVirtualPath(virtualPath))
 			{
 				return null;
 			}

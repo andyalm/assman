@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Assman.Configuration;
@@ -8,6 +7,7 @@ namespace Assman.Registration
 {
 	public static class ConsolidationResourceRegistryExtensions
 	{
+		//TODO: collapse this with the inner IResourceRegistryAccessor to simplify things
 		public static IResourceRegistryAccessor UseConsolidation(this IResourceRegistryAccessor registryAccessor)
 		{
 			if(registryAccessor is ConsolidatingResourceRegistryAccessor)
@@ -16,92 +16,62 @@ namespace Assman.Registration
 			}
 			else
 			{
-				return new ConsolidatingResourceRegistryAccessor(registryAccessor, AssmanContext.Current);
+				return new ConsolidatingResourceRegistryAccessor(AssmanContext.Current);
 			}
 		}
 
 		private class ConsolidatingResourceRegistryAccessor : IResourceRegistryAccessor
 		{
-			private readonly IResourceRegistryAccessor _inner;
-			private readonly AssmanContext _context;
-			private IResourceRegistry _scriptRegistry;
-			private IResourceRegistry _styleRegistry;
-			private readonly IDictionary<string, IResourceRegistry> _namedScriptRegistries = new Dictionary<string, IResourceRegistry>(Comparers.RegistryNames);
-			private readonly IDictionary<string, IResourceRegistry> _namedStyleRegistries = new Dictionary<string, IResourceRegistry>(Comparers.RegistryNames);
+			private readonly ResourceRequirementCollection _requirements;
+			private readonly ResourceRegistryMap _scriptRegistries;
+			private readonly ResourceRegistryMap _styleRegistries;
 			
-			public ConsolidatingResourceRegistryAccessor(IResourceRegistryAccessor inner, AssmanContext context)
+			public ConsolidatingResourceRegistryAccessor(AssmanContext context)
 			{
-				_inner = inner;
-				_context = context;
+				//TODO: Consider lessening dependency from AssmanContext to just the path resolvers
+				_requirements = new ResourceRequirementCollection();
+			    var versioningStrategy = new ConfiguredVersioningStrategy(() => context.Version);
+				_scriptRegistries = new ResourceRegistryMap(registryName => new ConsolidatingResourceRegistry(_requirements, registryName, context.ScriptPathResolver, versioningStrategy));
+				_styleRegistries = new ResourceRegistryMap(registryName => new ConsolidatingResourceRegistry(_requirements, registryName, context.StylePathResolver, versioningStrategy));
 			}
 
 			public IResourceRegistry ScriptRegistry
 			{
-				get { return WrapDefaultWithConsolidation(_inner.ScriptRegistry, _context.GetScriptUrls, _context.GetResourceDependencies, ref _scriptRegistry); }
+				get { return _scriptRegistries.GetDefaultRegistry(); }
 			}
 
 			public IResourceRegistry NamedScriptRegistry(string name)
 			{
-				return WrapNamedWithConsolidation(name, _inner.NamedScriptRegistry, _context.GetScriptUrls, _context.GetResourceDependencies, _namedScriptRegistries);
+				return _scriptRegistries.GetRegistryWithName(name);
 			}
 
 			public IResourceRegistry StyleRegistry
 			{
-				get { return WrapDefaultWithConsolidation(_inner.StyleRegistry, _context.GetStylesheetUrls, _context.GetResourceDependencies, ref _styleRegistry); }
+				get { return _styleRegistries.GetDefaultRegistry(); }
 			}
 
 			public IResourceRegistry NamedStyleRegistry(string name)
 			{
-				return WrapNamedWithConsolidation(name, _inner.NamedStyleRegistry, _context.GetStylesheetUrls, _context.GetResourceDependencies, _namedStyleRegistries);
+				return _styleRegistries.GetRegistryWithName(name);
 			}
 
 			public RegisteredResources GetRegisteredScripts(string registryName)
 			{
-				return _inner.GetRegisteredScripts(registryName);
+				return GetRegisteredResources(_scriptRegistries, registryName);
 			}
 
 			public RegisteredResources GetRegisteredStyles(string registryName)
 			{
-				return _inner.GetRegisteredStyles(registryName);
+				return GetRegisteredResources(_styleRegistries, registryName);
 			}
 
-			private IResourceRegistry WrapNamedWithConsolidation(string name, Func<string,IResourceRegistry> getNamedRegistry, Func<string, IEnumerable<string>> getResourceUrls, Func<string, IEnumerable<string>> getDependencies, IDictionary<string, IResourceRegistry> registryCache)
+			private RegisteredResources GetRegisteredResources(ResourceRegistryMap registryMap, string registryName)
 			{
-				IResourceRegistry consolidatingRegistry;
-				if(registryCache.TryGetValue(name, out consolidatingRegistry))
+				return new RegisteredResources
 				{
-					return consolidatingRegistry;
-				}
-
-				consolidatingRegistry = WrapWithConsolidation(getNamedRegistry(name), getResourceUrls, getDependencies);
-				registryCache[name] = consolidatingRegistry;
-
-				return consolidatingRegistry;
-			}
-
-			private IResourceRegistry WrapDefaultWithConsolidation(IResourceRegistry registry, Func<string, IEnumerable<string>> getResourceUrls, Func<string, IEnumerable<string>> getDependencies, ref IResourceRegistry field)
-			{
-				if (field != null)
-					return field;
-
-				field = WrapWithConsolidation(registry, getResourceUrls, getDependencies);
-
-				return field;
-			}
-
-			private IResourceRegistry WrapWithConsolidation(IResourceRegistry registry, Func<string, IEnumerable<string>> getResourceUrls, Func<string,IEnumerable<string>> getDependencies)
-			{
-				if (registry is ConsolidatingResourceRegistry)
-				{
-					return registry;
-				}
-				else
-				{
-					if (!_context.ManageDependencies)
-						getDependencies = path => Enumerable.Empty<string>();
-
-					return new ConsolidatingResourceRegistry(registry, getResourceUrls, getDependencies);
-				}
+					Includes = registryMap.GetIncludesFor(registryName).ToList(),
+					InlineBlocks = registryMap.GetInlineBlocksFor(registryName).ToList()
+				};
 			}
 		}
 	}

@@ -5,8 +5,8 @@ namespace Assman.Registration
 {
 	public class GenericResourceRegistryAccessor : IResourceRegistryAccessor
 	{
-		private readonly ResourceRegistryMap _scriptRegistries = new ResourceRegistryMap(() => new GenericResourceRegistry());
-		private readonly ResourceRegistryMap _styleRegistries = new ResourceRegistryMap(() => new GenericResourceRegistry());
+		private readonly ResourceRegistryMap _scriptRegistries = new ResourceRegistryMap(n => new GenericResourceRegistry());
+		private readonly ResourceRegistryMap _styleRegistries = new ResourceRegistryMap(n => new GenericResourceRegistry());
 		
 		public IResourceRegistry ScriptRegistry
 		{

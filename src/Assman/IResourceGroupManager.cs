@@ -15,8 +15,6 @@ namespace Assman
 
 		bool MutuallyExclusiveGroups { get; set; }
 
-		string ResolveResourceUrl(string resourceUrl);
-
 		IEnumerable<string> GetResourceUrlsInGroup(string groupUrl, IResourceFinder finder);
 		
 		bool IsGroupUrlWithConsolidationDisabled(string resourceUrl);
@@ -34,6 +32,7 @@ namespace Assman
 		IEnumerable<string> GetGlobalDependencies();
 
 		void AddGlobalDependencies(IEnumerable<string> paths);
+	    IEnumerable<string> GetMatchingConsolidatedUrls(string resourceUrl);
 	}
 
 	public static class ResourceGroupManagerExtensions

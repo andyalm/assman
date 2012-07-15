@@ -22,12 +22,7 @@ namespace Assman.Registration
 				_inner = inner;
 			}
 
-			public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
-			{
-				return _inner.TryResolvePath(resourcePath, out resolvedResourcePaths);
-			}
-
-			public IEnumerable<string> GetIncludes()
+		    public IEnumerable<string> GetIncludes()
 			{
 				return ReadableOrDefault().GetIncludes();
 			}

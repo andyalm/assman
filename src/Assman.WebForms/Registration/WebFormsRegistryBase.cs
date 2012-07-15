@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Web.UI;
 
@@ -16,13 +15,7 @@ namespace Assman.WebForms.Registration
 			_control = control;
 		}
 
-		public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
-		{
-			resolvedResourcePaths = new [] {resourcePath};
-			return true;
-		}
-
-		public abstract void Require(string resourcePath);
+	    public abstract void Require(string resourcePath);
 
 		public abstract void RegisterInlineBlock(Action<TextWriter> block, object key);
 

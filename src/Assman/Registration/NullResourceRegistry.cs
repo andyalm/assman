@@ -30,13 +30,7 @@ namespace Assman.Registration
 			yield break;
 		}
 
-		public bool TryResolvePath(string resourcePath, out IEnumerable<string> resolvedResourcePaths)
-		{
-			resolvedResourcePaths = new [] {resourcePath};
-			return true;
-		}
-
-		public void Require(string resourcePath) {}
+	    public void Require(string resourcePath) {}
 		public void RegisterInlineBlock(Action<TextWriter> block, object key) {}
 		public bool IsInlineBlockRegistered(object key)
 		{
