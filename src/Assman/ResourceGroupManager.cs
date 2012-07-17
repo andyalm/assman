@@ -19,9 +19,7 @@ namespace Assman
 		{
 			_resourceMode = resourceMode;
 			Consolidate = true;
-			//TODO: Based on user feedback, this should probably be changed to false by default.  However, that would be a significant breaking change
-			//so it should wait until the next major release.
-			MutuallyExclusiveGroups = true;
+			MutuallyExclusiveGroups = false;
 		}
 
 		public void Add(IResourceGroupTemplate template)

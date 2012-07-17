@@ -61,7 +61,7 @@ namespace Assman
 		}
 
 		[Test]
-		public void ResourceCanOnlyBeInOneGroupByDefault()
+		public void ResourceCanOnlyBeInOneGroupIfExplicitlyPrevented()
 		{
 			var jquery = StubResource.WithPath("~/scripts/jquery.js");
 			var componentA = StubResource.WithPath("~/scripts/componentA.js");
@@ -69,6 +69,7 @@ namespace Assman
 			var finder = new StubResourceFinder();
 			finder.AddResources(jquery, componentA, componentB);
 			_context.AddFinder(finder);
+            _context.MutuallyExclusiveGroups = true;
 
 			var pageAGroup = new ResourceGroup("~/scripts/compiled/pageA.js", new[]
 			{
@@ -92,7 +93,7 @@ namespace Assman
 		}
 
 		[Test]
-		public void ResourceCanBeInMultipleGroupsIfExplicitlyAllowed()
+		public void ResourceCanBeInMultipleGroupsByDefault()
 		{
 			var jquery = StubResource.WithPath("~/scripts/jquery.js");
 			var componentA = StubResource.WithPath("~/scripts/componentA.js");
@@ -100,7 +101,6 @@ namespace Assman
 			var finder = new StubResourceFinder();
 			finder.AddResources(jquery, componentA, componentB);
 			_context.AddFinder(finder);
-			_context.MutuallyExclusiveGroups = false;
 
 			var pageAGroup = new ResourceGroup("~/scripts/compiled/pageA.js", new[]
 			{

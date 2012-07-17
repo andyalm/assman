@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A full featured web resource/asset management framework for ASP.NET and ASP.NET Mvc.</description>
     <tags>javascript css mash consolidation mvc</tags>
-    <releaseNotes>Contains more performance fixes for local developer scenarios on medium to large sized projects.</releaseNotes>
+    <releaseNotes>Added support for including individual assets in multiple groups.</releaseNotes>
   </metadata>
   <files>
     <file src="NuGet\lib\**\Assman.dll" target="lib" />
