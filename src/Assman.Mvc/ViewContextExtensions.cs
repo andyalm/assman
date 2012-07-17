@@ -1,6 +1,7 @@
 using System;
 using System.Web.Mvc;
 
+using Assman.Configuration;
 using Assman.Registration;
 
 namespace Assman.Mvc
@@ -16,7 +17,7 @@ namespace Assman.Mvc
             var resourceRegistries = viewContext.HttpContext.Items[key] as IResourceRegistryAccessor;
             if (resourceRegistries == null)
             {
-                resourceRegistries = new GenericResourceRegistryAccessor().UseConsolidation();
+                resourceRegistries = new ConsolidatingResourceRegistryAccessor(AssmanContext.Current);
                 viewContext.HttpContext.Items[key] = resourceRegistries;
             }
 

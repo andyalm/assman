@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Assman.Registration
 {
 	public class ResourceRegistryMap
 	{
 		private readonly IDictionary<string, IResourceRegistry> _registries = new Dictionary<string, IResourceRegistry>(Comparers.RegistryNames);
-		private readonly IDictionary<string, string> _includeOwnerMap = new Dictionary<string, string>(Comparers.VirtualPath);
 		private readonly Func<string,IResourceRegistry> _createRegistry;
 
 		public ResourceRegistryMap(Func<string,IResourceRegistry> createRegistry)
@@ -35,21 +33,12 @@ namespace Assman.Registration
 
 		public IEnumerable<string> GetIncludesFor(string registryName)
 		{
-			var includes = from include in GetRegistryWithName(registryName).AsReadable().GetIncludes()
-						   where !_includeOwnerMap.ContainsKey(include) 
-								 || _includeOwnerMap[include].EqualsVirtualPath(registryName)
-						   select include;
-
-			foreach (var include in includes)
-			{
-				_includeOwnerMap[include] = registryName;
-				yield return include;
-			}
+			return GetRegistryWithName(registryName).GetIncludes();
 		}
 
 		public IEnumerable<Action<TextWriter>> GetInlineBlocksFor(string registryName)
 		{
-			return GetRegistryWithName(registryName).AsReadable().GetInlineBlocks();
+			return GetRegistryWithName(registryName).GetInlineBlocks();
 		}
 	}
 }

@@ -32,6 +32,7 @@ namespace Assman.Registration
 		public void Require(string resourcePath)
 		{
 			var canonicalPath = ToCanonicalUrl(resourcePath);
+			RequireDependencies(canonicalPath);
 			ResourceRequirement requirement;
 			if(_requirements.TryGetRequirement(canonicalPath, out requirement))
 			{
@@ -39,11 +40,15 @@ namespace Assman.Registration
 			}
 			else
 			{
-				foreach (var dependencyUrl in _pathResolver.GetDependencyUrls(canonicalPath))
-				{
-					_requirements.AddOrRequireRegistry(dependencyUrl, _registryName, ResourceRequirementReason.Dependency);
-				}
 				_requirements.Add(new ResourceRequirement(canonicalPath, _registryName, ResourceRequirementReason.Explicit));
+			}
+		}
+
+		private void RequireDependencies(string canonicalPath)
+		{
+			foreach (var dependencyUrl in _pathResolver.GetDependencyUrls(canonicalPath))
+			{
+				_requirements.AddOrRequireRegistry(dependencyUrl, _registryName, ResourceRequirementReason.Dependency);
 			}
 		}
 

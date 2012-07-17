@@ -173,15 +173,12 @@
     <Compile Include="PreCompilation\PreCompiledResourceExcluder.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistry.cs" />
     <Compile Include="Registration\ConsolidatingResourceRegistryAccessor.cs" />
-    <Compile Include="Registration\GenericResourceRegistry.cs" />
-    <Compile Include="Registration\GenericResourceRegistryAccessor.cs" />
     <Compile Include="Registration\IReadableResourceRegistry.cs" />
     <Compile Include="Registration\IResourceRegistryAccessor.cs" />
     <Compile Include="IResourceMatch.cs" />
     <Compile Include="RegexResourceMatch.cs" />
     <Compile Include="Registration\IResourceWriter.cs" />
     <Compile Include="Registration\NullResourceRegistry.cs" />
-    <Compile Include="Registration\ReadableExtensions.cs" />
     <Compile Include="Registration\RegisteredResources.cs" />
     <Compile Include="Registration\ResourceIncludeResolver.cs" />
     <Compile Include="Registration\ResourceRegistryExtensions.cs" />

@@ -9,8 +9,7 @@ namespace Assman.Registration
 	[TestFixture]
 	public class TestConsolidatingResourceRegistryAccessor
 	{
-		private GenericResourceRegistryAccessor _innerAccessor;
-		private IResourceRegistryAccessor _consolidatingAccessor;
+		private IResourceRegistryAccessor _accessor;
 		private AssmanContext _context;
 
 		[SetUp]
@@ -18,9 +17,7 @@ namespace Assman.Registration
 		{
 			_context = AssmanContext.Create(ResourceMode.Release);
 			_context.ManageDependencies = false;
-			AssmanContext.Current = _context;
-			_innerAccessor = new GenericResourceRegistryAccessor();
-			_consolidatingAccessor = _innerAccessor.UseConsolidation();
+			_accessor = new ConsolidatingResourceRegistryAccessor(_context);
 		}
 
 		[TearDown]
@@ -32,18 +29,15 @@ namespace Assman.Registration
 		[Test]
 		public void WhenGettingInstanceOfScriptRegistry_ItsWrappedInAConsolidatingDecorator()
 		{
-			if(_innerAccessor.ScriptRegistry is ConsolidatingResourceRegistry)
-				Assert.Inconclusive();
-			
-			var scriptRegistry = _consolidatingAccessor.ScriptRegistry;
+			var scriptRegistry = _accessor.ScriptRegistry;
 			scriptRegistry.ShouldBeInstanceOf<ConsolidatingResourceRegistry>();
 		}
 
 		[Test]
 		public void InstanceOfConsolidatingRegistryIsReused()
 		{
-			var scriptRegistry = _consolidatingAccessor.ScriptRegistry;
-			_consolidatingAccessor.ScriptRegistry.ShouldBeSameAs(scriptRegistry);
+			var scriptRegistry = _accessor.ScriptRegistry;
+			_accessor.ScriptRegistry.ShouldBeSameAs(scriptRegistry);
 		}
 
 		[Test]
@@ -51,10 +45,7 @@ namespace Assman.Registration
 		{
 			const string name = "head";
 			
-			if (_innerAccessor.NamedScriptRegistry(name) is ConsolidatingResourceRegistry)
-				Assert.Inconclusive();
-
-			var scriptRegistry = _consolidatingAccessor.NamedScriptRegistry(name);
+			var scriptRegistry = _accessor.NamedScriptRegistry(name);
 			scriptRegistry.ShouldBeInstanceOf<ConsolidatingResourceRegistry>();
 		}
 
@@ -63,8 +54,46 @@ namespace Assman.Registration
 		{
 			const string name = "head";
 			
-			var scriptRegistry = _consolidatingAccessor.NamedScriptRegistry(name);
-			_consolidatingAccessor.NamedScriptRegistry(name).ShouldBeSameAs(scriptRegistry);
+			var scriptRegistry = _accessor.NamedScriptRegistry(name);
+			_accessor.NamedScriptRegistry(name).ShouldBeSameAs(scriptRegistry);
+		}
+
+		[Test]
+		public void WhenGettingRegisteredScripts_IncludesAndScriptBlocksAssociatedWithNamedRegistryAreReturned()
+		{
+			var scriptRegistry = _accessor.NamedScriptRegistry("MyScriptRegistry");
+			scriptRegistry.Require("~/myscript.js");
+			scriptRegistry.Require("~/myotherscript.js");
+			scriptRegistry.RegisterInlineBlock("alert('do something');");
+			scriptRegistry.RegisterInlineBlock("alert('do something else');");
+
+			var registeredScripts = _accessor.GetRegisteredScripts("MyScriptRegistry");
+			registeredScripts.Includes[0].ShouldEqual("~/myscript.js");
+			registeredScripts.Includes[1].ShouldEqual("~/myotherscript.js");
+
+			registeredScripts.InlineBlocks[0].RenderToString().ShouldEqual("alert('do something');");
+			registeredScripts.InlineBlocks[1].RenderToString().ShouldEqual("alert('do something else');");
+		}
+
+		[Test]
+		public void WhenAScriptFileIsRegisteredInTwoRegistries_ItIsOnlyReturnedAsPartOfTheFirstOneRequested()
+		{
+			var scriptRegistry1 = _accessor.NamedScriptRegistry("MyScriptRegistry1");
+			scriptRegistry1.Require("~/common.js");
+			scriptRegistry1.Require("~/myscript1.js");
+
+			var scriptRegistry2 = _accessor.NamedScriptRegistry("MyScriptRegistry2");
+			scriptRegistry2.Require("~/common.js");
+			scriptRegistry2.Require("~/myscript2.js");
+
+			var registeredScripts1 = _accessor.GetRegisteredScripts("MyScriptRegistry1");
+			registeredScripts1.Includes.CountShouldEqual(2);
+			registeredScripts1.Includes[0].ShouldEqual("~/common.js");
+			registeredScripts1.Includes[1].ShouldEqual("~/myscript1.js");
+
+			var registeredScripts2 = _accessor.GetRegisteredScripts("MyScriptRegistry2");
+			registeredScripts2.Includes.CountShouldEqual(1);
+			registeredScripts2.Includes[0].ShouldEqual("~/myscript2.js");
 		}
 	}
 }
