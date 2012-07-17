@@ -1,3 +1,5 @@
+using System.Linq;
+
 using Assman.Configuration;
 
 using NUnit.Framework;
@@ -11,12 +13,16 @@ namespace Assman.Registration
 	{
 		private IResourceRegistryAccessor _accessor;
 		private AssmanContext _context;
+		private StubResourceFinder _finder;
 
 		[SetUp]
 		public void SetupContext()
 		{
+			_finder = new StubResourceFinder();
+			
 			_context = AssmanContext.Create(ResourceMode.Release);
-			_context.ManageDependencies = false;
+			_context.ManageDependencies = true;
+			_context.AddFinder(_finder);
 			_accessor = new ConsolidatingResourceRegistryAccessor(_context);
 		}
 
@@ -94,6 +100,34 @@ namespace Assman.Registration
 			var registeredScripts2 = _accessor.GetRegisteredScripts("MyScriptRegistry2");
 			registeredScripts2.Includes.CountShouldEqual(1);
 			registeredScripts2.Includes[0].ShouldEqual("~/myscript2.js");
+		}
+
+		[Test]
+		public void WhenAScriptIsInMoreThanOneGroup_AndOneGroupWasExplicitlyRequired_ThenGroupExplicitlyRequiredGroupIsIncluded()
+		{
+			var aOnlyFile = _finder.CreateResource("~/a/script.js");
+			var bOnlyFile = _finder.CreateResource("~/b/scripts.js");
+			var fileInBothGroups = _finder.CreateResource("~/shared/script.js");
+			
+			var groupA = new ScriptGroupElement();
+			groupA.ConsolidatedUrl = "~/groups/groupA.js";
+			groupA.Include.AddPath(aOnlyFile.VirtualPath);
+			groupA.Include.AddPath(fileInBothGroups.VirtualPath);
+			_context.ScriptGroups.Add(groupA);
+
+			var groupB = new ScriptGroupElement();
+			groupB.ConsolidatedUrl = "~/groups/groupB.js";
+			groupB.Include.AddPath(bOnlyFile.VirtualPath);
+			groupB.Include.AddPath(fileInBothGroups.VirtualPath);
+			_context.ScriptGroups.Add(groupB);
+			
+			var scriptRegistry1 = _accessor.ScriptRegistry;
+			scriptRegistry1.Require(fileInBothGroups.VirtualPath);
+			scriptRegistry1.Require(groupB.ConsolidatedUrl);
+
+			var includedScripts = scriptRegistry1.GetIncludes().ToList();
+			includedScripts.CountShouldEqual(1);
+			includedScripts[0].ShouldEqual(groupB.ConsolidatedUrl);
 		}
 	}
 }

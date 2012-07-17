@@ -109,8 +109,22 @@ namespace Assman.Registration
             {
                 if (requirement.ChosenGroupUrl == null)
                 {
-                    //TODO: Make choosing algorithm smarter by looking at other matches
-                    requirement.ChosenGroupUrl = requirement.ResolvedGroupUrls.First();
+                    var explicitlyRequiredGroups = requirement.ResolvedGroupUrls
+                        .Where(url => this.Contains(url) && this[url].Reasons.Contains(ResourceRequirementReason.Explicit))
+                        .ToList();
+                    if(explicitlyRequiredGroups.Count == 0)
+                    {
+                        requirement.ChosenGroupUrl = requirement.ResolvedGroupUrls.First();
+                    }
+                    else if(explicitlyRequiredGroups.Count == 1)
+                    {
+                        requirement.ChosenGroupUrl = explicitlyRequiredGroups[0];
+                    }
+                    else
+                    {
+                        //TODO: Improved this error message
+                        throw new NotSupportedException("The resource '" + requirement.VirtualPath + "' resolves to multiple groups and more than one of those groups was explicitly required on the page.  This is not allowed.");
+                    }
                 }
             }
         }
