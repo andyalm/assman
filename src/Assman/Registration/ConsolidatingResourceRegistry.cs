@@ -138,7 +138,7 @@ namespace Assman.Registration
 			{
 				if (requirement.RequiredInRegistry(_registryName) && requirement.IsUnclaimed)
 				{
-					requirement.Claim(_registryName);
+				    _requirements.ClaimAllWithChosenGroup(requirement.ChosenGroupUrl, _registryName);
 				}
 			}
 		}

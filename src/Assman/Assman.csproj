@@ -241,7 +241,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assman.Core.nuspec" />
+    <None Include="Assman.Core.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="NuGet\Tools\Assman.MSBuild.tasks" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

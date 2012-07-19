@@ -128,6 +128,15 @@ namespace Assman.Registration
                 }
             }
         }
+
+        public void ClaimAllWithChosenGroup(string chosenGroupUrl, string registryName)
+        {
+            var requirementsToClaim = this.Where(r => r.ChosenGroupUrl.EqualsVirtualPath(chosenGroupUrl));
+            foreach (var requirement in requirementsToClaim)
+            {
+                requirement.Claim(registryName);
+            }
+        }
     }
 
     public enum ResourceRequirementReason
