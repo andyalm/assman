@@ -15,5 +15,7 @@ namespace Assman.Registration
 		RegisteredResources GetRegisteredScripts(string registryName);
 
 		RegisteredResources GetRegisteredStyles(string registryName);
+	    
+        string Diagnostics();
 	}
 }

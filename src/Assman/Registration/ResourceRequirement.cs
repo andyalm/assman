@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace Assman.Registration
 {
-    public class ResourceRequirement
+    internal class ResourceRequirement
     {
         public ResourceRequirement(string virtualPath, string registryName, ResourceRequirementReason reason)
         {
             VirtualPath = virtualPath;
-            RegistryNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {registryName};
+            _registryNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {registryName};
             Reasons = new HashSet<ResourceRequirementReason> { reason };
         }
         
@@ -25,14 +25,18 @@ namespace Assman.Registration
         
         public string[] ResolvedIncludeUrls { get; set; }
 
-        private HashSet<string> RegistryNames { get; set; }
+        private readonly HashSet<string> _registryNames;
+        public IEnumerable<string> RegistryNames
+        {
+            get { return _registryNames; }
+        } 
 
         public HashSet<ResourceRequirementReason> Reasons { get; private set; }
 
         public void RequireRegistry(string registryName, ResourceRequirementReason reason)
         {
-            if (!RegistryNames.Contains(registryName))
-                RegistryNames.Add(registryName);
+            if (!_registryNames.Contains(registryName))
+                _registryNames.Add(registryName);
             
             if (!Reasons.Contains(reason))
                 Reasons.Add(reason);
@@ -40,7 +44,7 @@ namespace Assman.Registration
 
         public bool RequiredInRegistry(string registryName)
         {
-            return RegistryNames.Contains(registryName);
+            return _registryNames.Contains(registryName);
         }
 
         public void Claim(string registryName)
@@ -66,7 +70,7 @@ namespace Assman.Registration
         }
     }
 
-    public class ResourceRequirementCollection : KeyedCollection<string,ResourceRequirement>
+    internal class ResourceRequirementCollection : KeyedCollection<string,ResourceRequirement>
     {
         public ResourceRequirementCollection() : base(StringComparer.OrdinalIgnoreCase) {}
         

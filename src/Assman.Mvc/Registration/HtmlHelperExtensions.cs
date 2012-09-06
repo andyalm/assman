@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 using System.Web.Mvc;
 
 using Assman.Registration;
@@ -86,5 +87,17 @@ namespace Assman.Mvc.Registration
 		{
 			return html.ViewContext.ResourceRegistries();
 		}
+
+        public static DummyStringResult RenderResourceDiagnostics(this HtmlHelper html)
+        {
+            if(html.ViewContext.HttpContext.Request.QueryString["__AssmanDiag"] != null)
+            {
+                html.ViewContext.Writer.Write("<textarea cols=\"150\" rows=\"30\">");
+                var diagnostics = html.ResourceRegistries().Diagnostics();
+                HttpUtility.HtmlEncode(diagnostics, html.ViewContext.Writer);
+                html.ViewContext.Writer.Write("</textarea>");
+            }
+            return DummyStringResult.Instance;
+        }
 	}
 }

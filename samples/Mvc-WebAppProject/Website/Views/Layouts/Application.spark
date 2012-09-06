@@ -10,6 +10,7 @@
 </head>
 <body>
 	<use content="main" />
-	#Html.RenderScripts();
+    #Html.RenderScripts();
+	#Html.RenderResourceDiagnostics();
 </body>
 </html>

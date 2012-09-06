@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Web.Script.Serialization;
 
 using Assman.Configuration;
 
@@ -56,6 +58,17 @@ namespace Assman.Registration
         public RegisteredResources GetRegisteredStyles(string registryName)
         {
             return GetRegisteredResources(_styleRegistries, registryName);
+        }
+
+        public string Diagnostics()
+        {
+            var serializer = new JavaScriptSerializer();
+            var diagnostics = new
+            {
+                ScriptRequirements = _scriptRequirements,
+                StyleRequirements = _styleRequirements
+            };
+            return serializer.Serialize(diagnostics);
         }
 
         private RegisteredResources GetRegisteredResources(ResourceRegistryMap registryMap, string registryName)
