@@ -141,6 +141,31 @@ namespace Assman.Registration
                 requirement.Claim(registryName);
             }
         }
+
+        public void RetroactivelyClaimRequirementsForClaimedGroups()
+        {
+            foreach (var requirement in this)
+            {
+                string claimingRegistry;
+                if(requirement.IsUnclaimed && IsGroupClaimed(requirement.ChosenGroupUrl, out claimingRegistry))
+                {
+                    requirement.Claim(claimingRegistry);
+                }
+            }
+        }
+
+        private bool IsGroupClaimed(string chosenGroupUrl, out string claimingRegistry)
+        {
+            var claimedRequirementInGroup = this.FirstOrDefault(r => r.IsClaimed && r.ChosenGroupUrl.EqualsVirtualPath(chosenGroupUrl));
+            if (claimedRequirementInGroup != null)
+            {
+                claimingRegistry = claimedRequirementInGroup.ClaimingRegistry;
+                return true;
+            }
+
+            claimingRegistry = null;
+            return false;
+        }
     }
 
     public enum ResourceRequirementReason

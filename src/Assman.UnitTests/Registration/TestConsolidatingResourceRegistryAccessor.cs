@@ -154,5 +154,30 @@ namespace Assman.Registration
 
             scriptRegistry2.GetIncludes().CountShouldEqual(0);
 	    }
+
+        [Test]
+        public void WhenAScriptIsRequiredThatIsPartOfAGroupAlreadyClaimed_ItIsIgnored()
+        {
+            var scriptA = _finder.CreateResource("~/scriptA.js");
+            var scriptB = _finder.CreateResource("~/scriptB.js");
+
+            var group = new ScriptGroupElement();
+            group.ConsolidatedUrl = "~/groups.js";
+            group.Include.AddPath(scriptA.VirtualPath);
+            group.Include.AddPath(scriptB.VirtualPath);
+            _context.ScriptGroups.Add(group);
+
+            var scriptRegistry1 = _accessor.ScriptRegistry;
+            scriptRegistry1.Require(scriptA.VirtualPath);
+
+            var includedScripts1 = scriptRegistry1.GetIncludes().ToList();
+            includedScripts1.CountShouldEqual(1);
+            includedScripts1[0].ShouldEqual(group.ConsolidatedUrl);
+
+            var scriptRegistry2 = _accessor.NamedScriptRegistry("another");
+            scriptRegistry2.Require(scriptB.VirtualPath);
+
+            scriptRegistry2.GetIncludes().CountShouldEqual(0);
+        }
 	}
 }

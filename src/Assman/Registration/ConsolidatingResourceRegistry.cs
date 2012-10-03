@@ -81,6 +81,7 @@ namespace Assman.Registration
 		{
 			GetMatchingGroupUrls();
 			DisambiguateMultipleGroupMatches();
+		    RetroactivelyClaimRequirementsForClaimedGroups();
 			ExpandGroupsIfConsolidationDisabled();
 			ClaimRequirementsForThisRegistry();
 
@@ -91,12 +92,12 @@ namespace Assman.Registration
 				.ToList();
 		}
 
-		private string ToCanonicalUrl(string url)
+	    private string ToCanonicalUrl(string url)
 		{
 			return url.ToAppRelativePath();
 		}
 
-		private void GetMatchingGroupUrls()
+	    private void GetMatchingGroupUrls()
 		{
 			foreach (var requirement in _requirements)
 			{
@@ -109,7 +110,7 @@ namespace Assman.Registration
 			}
 		}
 
-		private void ExpandGroupsIfConsolidationDisabled()
+	    private void ExpandGroupsIfConsolidationDisabled()
 		{
 			foreach (var requirement in _requirements)
 			{
@@ -127,16 +128,21 @@ namespace Assman.Registration
 			}
 		}
 
-		private void DisambiguateMultipleGroupMatches()
+	    private void DisambiguateMultipleGroupMatches()
 		{
 			_requirements.DisambiguateMultipleGroupMatches();
 		}
 
-		private void ClaimRequirementsForThisRegistry()
+	    private void RetroactivelyClaimRequirementsForClaimedGroups()
+	    {
+	        _requirements.RetroactivelyClaimRequirementsForClaimedGroups();
+	    }
+
+	    private void ClaimRequirementsForThisRegistry()
 		{
 			foreach (var requirement in _requirements)
 			{
-				if (requirement.RequiredInRegistry(_registryName) && requirement.IsUnclaimed)
+                if (requirement.RequiredInRegistry(_registryName) && requirement.IsUnclaimed)
 				{
 				    _requirements.ClaimAllWithChosenGroup(requirement.ChosenGroupUrl, _registryName);
 				}
