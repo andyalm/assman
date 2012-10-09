@@ -19,7 +19,7 @@ namespace Assman
 		{
 			_resourceMode = resourceMode;
 			Consolidate = true;
-			MutuallyExclusiveGroups = false;
+			MutuallyExclusiveGroups = true;
 		}
 
 		public void Add(IResourceGroupTemplate template)

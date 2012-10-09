@@ -126,7 +126,7 @@ namespace Assman.Configuration
 		/// <summary>
 		/// Gets or sets whether the same file is allowed to be part of multiple groups or not.
 		/// </summary>
-		[ConfigurationProperty(PropertyNames.MutuallyExclusiveGroups, DefaultValue = false)]
+		[ConfigurationProperty(PropertyNames.MutuallyExclusiveGroups, DefaultValue = true)]
 		public bool MutuallyExclusiveGroups
 		{
 			get { return (bool)this[PropertyNames.MutuallyExclusiveGroups]; }
