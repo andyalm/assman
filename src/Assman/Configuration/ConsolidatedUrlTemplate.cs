@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Assman.Configuration
@@ -6,7 +8,7 @@ namespace Assman.Configuration
 	internal class ConsolidatedUrlTemplate
 	{
 		private readonly string _consolidatedUrlString;
-		private readonly MatchCollection _matches;
+		private readonly List<string> _placeholders;
 		private static readonly Regex _templateItemRegex = new Regex(@"\{(?<name>\w+)\}", RegexOptions.Compiled);
 		private Regex _matchRegex;
 
@@ -18,12 +20,13 @@ namespace Assman.Configuration
 		private ConsolidatedUrlTemplate(string consolidatedUrlString)
 		{
 			_consolidatedUrlString = consolidatedUrlString;
-			_matches = _templateItemRegex.Matches(consolidatedUrlString);
+			_placeholders = (from match in _templateItemRegex.Matches(consolidatedUrlString).Cast<Match>()
+                            select match.Groups["name"].Value).ToList();
 		}
 
 		public bool HasParameters
 		{
-			get { return _matches.Count > 0; }
+			get { return _placeholders.Count > 0; }
 		}
 
 		public string Format(IResourceMatch match)
@@ -32,11 +35,10 @@ namespace Assman.Configuration
 				return _consolidatedUrlString;
 
 			var formattedString = _consolidatedUrlString;
-			foreach (Match rxMatch in _matches)
+			foreach (var placeholder in _placeholders)
 			{
-				var name = rxMatch.Groups["name"].Value;
-				var replacementValue = match.GetSubValue(name);
-				formattedString = formattedString.Replace("{" + name + "}", replacementValue);
+				var replacementValue = match.GetSubValue(placeholder);
+				formattedString = formattedString.Replace("{" + placeholder + "}", replacementValue);
 			}
 
 			return formattedString;
@@ -50,7 +52,12 @@ namespace Assman.Configuration
 			return MatchRegex.IsMatch(consolidatedUrl);
 		}
 
-		private Regex MatchRegex
+	    public bool Matches(IResourceMatch resourceMatch)
+	    {
+	        return _placeholders.All(resourceMatch.HasSubValue);
+	    }
+
+	    private Regex MatchRegex
 		{
 			get
 			{

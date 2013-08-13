@@ -23,7 +23,12 @@ namespace Assman
 			return null;
 		}
 
-		public string Value
+	    public bool HasSubValue(string name)
+	    {
+	        return false;
+	    }
+
+	    public string Value
 		{
 			get
 			{

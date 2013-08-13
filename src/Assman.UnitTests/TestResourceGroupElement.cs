@@ -159,6 +159,23 @@ namespace Assman
 			VerifyUrlIsConsolidated("~/Views/Search/Landing.js", "~/consolidated/bycontroller/Search.js");
 		}
 
+	    [Test]
+	    public void WhenPathIsIncludedInTemplatedGroup_ThatResourceIsIncludedInEveryGroupFromThatTemplate()
+	    {
+            CreateResources("scripts/affresources.js", "scripts/en-GB/stage/file1.js", "scripts/en-GB/stage/file2.js",
+                "scripts/en-GB/production/file1.js", "scripts/en-GB/production/file2.js",
+                "scripts/de-de/stage/file1.js", "scripts/de-de/stage/file2.js",
+                "scripts/de-de/production/file1.js", "scripts/de-de/production/file2.js");
+            
+            _element.ConsolidatedUrl = "~/scripts/{country}/{env}/dcstorm_in_head.js";
+            _element.Include.AddPattern(@"~/scripts/(?'country'[^\/]+)/(?'env'\w+)/.+");
+            _element.Include.AddPath("~/scripts/affresources.js");
+
+	        var groups = _element.GetGroups(_allResources, ResourceMode.Release).ToList();
+            groups.Count.ShouldEqual(4);
+	    }
+
+
 		[Test]
 		public void MatchesUrlTemplate_NonTemplatePositiveCase()
 		{

@@ -17,6 +17,11 @@ namespace Assman
 			return _match.Success;
 		}
 
+	    public bool HasSubValue(string name)
+	    {
+	        return _match.Groups[name].Success;
+	    }
+
 	    public string GetSubValue(string name)
 		{
 			var group = _match.Groups[name];

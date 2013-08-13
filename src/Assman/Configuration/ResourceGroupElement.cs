@@ -100,38 +100,25 @@ namespace Assman.Configuration
 
 		public IEnumerable<IResourceGroup> GetGroups(IEnumerable<IResource> allResources, ResourceMode mode)
 		{
-			return from resource in allResources
-				   let match = GetMatch(resource.VirtualPath)
-				   where match.IsMatch()
-				   let resourceWithUrl = new ResourceWithMatchingPath
-				   {
-					   Resource = resource,
-					   ConsolidatedUrl = GetConsolidatedUrl(match),
-					   MatchingPath = resource.VirtualPath
-				   }
-				   group resourceWithUrl by resourceWithUrl.ConsolidatedUrl into @group
-				   select CreateGroup(@group.Key,
-					   @group.Distinct().Sort(IncludePatternOrder()).Select(r => r.Resource), mode);
+		    var consolidatedUrls =
+                (from resource in allResources
+		        let match = GetMatch(resource.VirtualPath)
+		        where match.IsMatch() && ConsolidatedUrlTemplate.Matches(match)
+		        select ConsolidatedUrlTemplate.Format(match)).Distinct();
+
+		    foreach (var consolidatedUrl in consolidatedUrls)
+		    {
+		        var resourcesInGroup = (from resource in allResources
+		            let match = GetMatch(resource.VirtualPath)
+		            let matchingConsolidatedUrl = GetConsolidatedUrl(match)
+		            where match.IsMatch() && consolidatedUrl.EqualsVirtualPath(matchingConsolidatedUrl)
+		            select resource).Sort(IncludePatternOrder());
+
+		        yield return CreateGroup(consolidatedUrl, resourcesInGroup, mode);
+		    }
 		}
 
-		private class ResourceWithMatchingPath
-		{
-			public IResource Resource { get; set; }
-			public string ConsolidatedUrl { get; set; }
-			public string MatchingPath { get; set; }
-
-			public override bool Equals(object obj)
-			{
-				return Resource.VirtualPath.Equals(((ResourceWithMatchingPath)obj).Resource.VirtualPath);
-			}
-
-			public override int GetHashCode()
-			{
-				return Resource.VirtualPath.GetHashCode();
-			}
-		}
-
-		public bool TryGetConsolidatedUrl(string virtualPath, ResourceMode resourceMode, out string consolidatedUrl)
+	    public bool TryGetConsolidatedUrl(string virtualPath, ResourceMode resourceMode, out string consolidatedUrl)
 		{
 			consolidatedUrl = null;
 			if (Consolidate.IsFalse(resourceMode))
@@ -151,6 +138,12 @@ namespace Assman.Configuration
 		{
 			return ConsolidatedUrlTemplate.Format(match);
 		}
+
+	    private class GroupMatch
+	    {
+	        public string ConsolidatedUrl { get; private set; }
+	        public IResourceMatch ResourceMatch { get; private set; }
+	    }
 
 		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resourcesInGroup, ResourceMode resourceMode)
 		{
@@ -186,12 +179,12 @@ namespace Assman.Configuration
 			return ResourceMatches.False(resourceUrl);
 		}
 
-		private Comparison<ResourceWithMatchingPath> IncludePatternOrder()
+		private Comparison<IResource> IncludePatternOrder()
 		{
-			return (ResourceWithMatchingPath x, ResourceWithMatchingPath y) =>
+			return (x, y) =>
 			{
-				int xIndex = Include.GetMatchIndex(x.MatchingPath);
-				int yIndex = Include.GetMatchIndex(y.MatchingPath);
+				int xIndex = Include.GetMatchIndex(x.VirtualPath);
+				int yIndex = Include.GetMatchIndex(y.VirtualPath);
 
 				return xIndex - yIndex;
 			};
