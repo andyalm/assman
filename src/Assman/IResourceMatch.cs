@@ -6,6 +6,8 @@ namespace Assman
 	{
 		bool IsMatch();
 
+	    bool MatchesConsolidatedUrl(string consolidatedUrl);
+
 	    string GetSubValue(string name);
 
 		string Value { get; }
@@ -37,6 +39,11 @@ namespace Assman
 				return false;
 			}
 
+		    public bool MatchesConsolidatedUrl(string consolidatedUrl)
+		    {
+		        return false;
+		    }
+
 		    public string GetSubValue(string name)
 			{
 				return null;
@@ -61,6 +68,11 @@ namespace Assman
 			{
 				return !_inner.IsMatch();
 			}
+
+		    public bool MatchesConsolidatedUrl(string consolidatedUrl)
+		    {
+		        return !_inner.MatchesConsolidatedUrl(consolidatedUrl);
+		    }
 
 		    public string GetSubValue(string name)
 			{

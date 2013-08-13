@@ -18,6 +18,12 @@ namespace Assman
 			return _pathToMatch.EqualsVirtualPath(_actualValue);
 		}
 
+	    public bool MatchesConsolidatedUrl(string consolidatedUrl)
+	    {
+	        //a path is compatible with any consolidated url because it contains no named values that constrain it.
+            return true;
+	    }
+
 	    public string GetSubValue(string name)
 		{
 			return null;
