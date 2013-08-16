@@ -6,7 +6,9 @@ namespace Assman
 	{
 		bool IsMatch();
 
-	    string GetSubValue(string name);
+	    bool HasSubValue(string name);
+        
+        string GetSubValue(string name);
 
 		string Value { get; }
 	}
@@ -42,6 +44,11 @@ namespace Assman
 				return null;
 			}
 
+		    public bool HasSubValue(string name)
+		    {
+		        return false;
+		    }
+
 			public string Value
 			{
 				get { return _value; }
@@ -67,7 +74,12 @@ namespace Assman
 				return _inner.GetSubValue(name);
 			}
 
-			public string Value
+		    public bool HasSubValue(string name)
+		    {
+		        return _inner.HasSubValue(name);
+		    }
+
+		    public string Value
 			{
 				get { return _inner.Value; }
 			}
