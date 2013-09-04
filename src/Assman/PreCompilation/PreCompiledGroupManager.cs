@@ -119,7 +119,9 @@ namespace Assman.PreCompilation
 
 			foreach (var @group in resourceReport.Groups)
 			{
+                if (!_unconsolidatedUrlMap.ContainsKey(@group.ConsolidatedUrl))
 				_unconsolidatedUrlMap.Add(@group.ConsolidatedUrl, new List<string> { @group.ConsolidatedUrl});
+                if (!_consolidatedUrlMap.ContainsKey(@group.ConsolidatedUrl))
 				_consolidatedUrlMap.Add(@group.ConsolidatedUrl, @group.Resources);
 			}
 		}
