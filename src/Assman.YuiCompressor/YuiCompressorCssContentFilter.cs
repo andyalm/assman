@@ -17,9 +17,9 @@ namespace Assman.YuiCompressor
                 {
                     return CssCompressor.Compress(content);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    throw new ArgumentException("Css Yui compressor was unable to compress the following file: " + context.ResourceVirtualPath);
+                    throw new ArgumentException("Css Yui compressor was unable to compress the following file: " + context.ResourceVirtualPath, ex);
                 }
             }
 
