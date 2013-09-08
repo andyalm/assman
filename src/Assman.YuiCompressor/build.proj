@@ -3,6 +3,10 @@
 
   <Import Project="$(MSBuildProjectDirectory)\..\..\lib\BuildTools\head.targets"/>
   
+  <PropertyGroup>
+	<ProjectVersion>2.0.1</ProjectVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <Project Include="Assman.YuiCompressor.csproj"/>
   </ItemGroup>
