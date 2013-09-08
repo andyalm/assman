@@ -139,13 +139,7 @@ namespace Assman.Configuration
 			return ConsolidatedUrlTemplate.Format(match);
 		}
 
-	    private class GroupMatch
-	    {
-	        public string ConsolidatedUrl { get; private set; }
-	        public IResourceMatch ResourceMatch { get; private set; }
-	    }
-
-		private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resourcesInGroup, ResourceMode resourceMode)
+	    private IResourceGroup CreateGroup(string consolidatedUrl, IEnumerable<IResource> resourcesInGroup, ResourceMode resourceMode)
 		{
 			return new ResourceGroup(consolidatedUrl, resourcesInGroup)
 			{
