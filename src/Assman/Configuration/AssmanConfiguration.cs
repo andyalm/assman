@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -93,7 +94,7 @@ namespace Assman.Configuration
 			}
 		}
 
-		/// <summary>
+        /// <summary>
 		/// Gets or sets whether consolidation should be enabled.
 		/// </summary>
 		[ConfigurationProperty(PropertyNames.Consolidate, DefaultValue = ResourceModeCondition.Always)]

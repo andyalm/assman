@@ -1,10 +1,13 @@
 using System;
+using System.Configuration;
 
 namespace Assman.Configuration
 {
 	internal static class PropertyNames
 	{
-		public const string Consolidate = "consolidate";
+	    public const string Culture = "culture";
+        public const string JsCompressionOverride = "jsCompressionOverride";
+	    public const string Consolidate = "consolidate";
 		public const string GZip = "gzip";
 		public const string Exclude = "exclude";
 		public const string Include = "include";
